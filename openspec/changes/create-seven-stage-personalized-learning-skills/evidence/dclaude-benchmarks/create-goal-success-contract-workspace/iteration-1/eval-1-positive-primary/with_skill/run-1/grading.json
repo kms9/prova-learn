@@ -1,0 +1,92 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a goal_success_contract inside a stage S1 handoff envelope.",
+      "passed": true,
+      "evidence": "response.txt contains a full S1 handoff envelope with schema_version, stage_id=S1, run_id, status=completed, and positive_artifact.type=goal_success_contract with artifact_id=gsc-pg-opt-0001. The contract contains target_problem, target_scene, terminology_corrections, observable_capabilities, final_assessment, pass_rules, scope, exclusions, constraints, external_research_seed, open_questions, and confirmed_items. The envelope also includes input_contract, input_validation, assumptions, requirement_gaps, confirmation, evidence_collected, processing_record, quality_evaluation, and traceability."
+    },
+    {
+      "text": "Every target capability has observable evidence and the final assessment distinguishes recall from transfer.",
+      "passed": true,
+      "evidence": "5 observable_capabilities defined: cap-explain-read (4 observable_evidence items), cap-scan-diagnosis (4 items), cap-index-design (4 items), cap-statistics-check (3 items), cap-systematic-workflow (4 items). Total 19 specific observable evidence items. final_assessment.unseen_or_transfer_required=true with 3 unseen query tasks covering different failure modes: scan diagnosis, statistics deviation, and composite filter+sort+paginate. Pass rules require all 3 tasks to include EXPLAIN ANALYZE output interpretation, bottleneck identification, optimization design with justification, and post-optimization verification."
+    },
+    {
+      "text": "The output records actually executed live pre-research, query or retrieval details, source-category coverage, and evidence provenance rather than treating model memory as external evidence.",
+      "passed": true,
+      "evidence": "external_research_seed.search_executed=true. 9 search queries listed (e.g., 'PostgreSQL EXPLAIN ANALYZE query optimization basics 2025', 'site:postgresql.org/docs/18 index types overview'). 10 sources with full URLs and provenance tags (external_evidence, market_signal). category_coverage with 5 categories: wikipedia_encyclopedia (covered), official_academic (covered), recruiting_jd (covered, 2 JD samples), interview_selection (covered, 2 assessment samples), adversarial_frontier (not_applicable with auditable reason). evidence_collected array has 12 entries with provenance field distinguishing external_evidence (10), market_signal (2), and model_hypothesis (1, explicitly marked status=unknown). Model knowledge is segregated as e-model-cap with provenance=model_hypothesis, source_ref=null, status=unknown."
+    },
+    {
+      "text": "The output records sandbox constraints, at least one explicit exclusion, and mandatory confirmation as resolved.",
+      "passed": true,
+      "evidence": "constraints documented: duration=4周, effort_per_period=每周约6小时, total_effort=约24小时, environment=PostgreSQL 18 沙箱, production_access=禁止, assessment=三个未见查询的独立实操验收, pass_threshold=三题中至少两题全部正确. 8 exclusions listed (源码级优化器开发, 复杂多表连接, 分区表, 生产环境操作, 非B-tree索引高级应用, 服务器参数调优, DBA运维, PL/pgSQL优化). confirmation.mode=mandatory, 7 confirmation questions asked, response covers all 7 items, status=confirmed, confirmed_at=2026-07-27T00:00:00Z."
+    },
+    {
+      "text": "G1 is evaluated dimension by dimension and passes only if all required dimensions pass.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results contains 8 dimensions: 目标可观察性, 成功标准可判定性, 场景真实性, 外部现实校准度, 强制类别覆盖, 边界清晰, 约束完整, 目标—验收一致. Each dimension has evidence array, score, threshold, passed, failure_action, route_to fields. All 8 dimensions passed=true. quality_evaluation.verdict=pass because all dimensions pass."
+    },
+    {
+      "text": "The deterministic route is S2 when G1 passes.",
+      "passed": true,
+      "evidence": "quality_evaluation.verdict=pass, quality_evaluation.route_to=S2. The route is explicitly S2 as G1 passes with all 8 dimensions passing."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "num_turns": 24,
+    "output_chars": 28848,
+    "transcript_chars": 29730,
+    "total_tokens": 244310,
+    "web_search_requests": 9,
+    "cost_usd": 1.937186
+  },
+  "timing": {
+    "executor_duration_seconds": 213,
+    "total_duration_seconds": 210.066
+  },
+  "claims": [
+    {
+      "claim": "PostgreSQL 18.4 is the current stable version (2026-05-14)",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Cannot verify from available outputs alone; this claim comes from external Wikipedia retrieval. The evidence is recorded under e-wiki with source_ref URL provided but the grader cannot independently confirm the Wikipedia content matches this claim."
+    },
+    {
+      "claim": "9 web searches and 10 sources were consulted",
+      "type": "process",
+      "verified": true,
+      "evidence": "outer.json modelUsage shows webSearchRequests=9. external_research_seed.sources lists 10 entries with URLs. processing_record step 4 describes the search categories matching the recorded queries."
+    },
+    {
+      "claim": "All 8 G1 dimensions passed",
+      "type": "quality",
+      "verified": true,
+      "evidence": "quality_evaluation.rubric_results shows all 8 dimensions with passed=true and verdict=pass."
+    },
+    {
+      "claim": "Output was returned as raw JSON with no prose prefix or markdown fence (per executor instruction: 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary')",
+      "type": "quality",
+      "verified": false,
+      "evidence": "response.txt starts with the prose line 'Now I have all the external research completed. Let me compile the full S1 handoff envelope JSON.' followed by a blank line and then a ```json markdown fence opener. The JSON content ends with a ``` markdown fence closer. This violates the executor's instruction to return ONLY one valid JSON object with no markdown fence and no evaluation commentary."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output records actually executed live pre-research, query or retrieval details, source-category coverage, and evidence provenance rather than treating model memory as external evidence.",
+        "reason": "The existence of 9 web_search_requests in outer.json confirms tool-based searches were attempted, but the grader cannot verify the retrieved content actually matches what was recorded. The assertions pass on process evidence from the transcript — consider adding a content-verification assertion that checks whether recorded summaries are plausible given the source URLs (e.g., checking that a JD source URL actually points to a job posting)."
+      }
+    ],
+    "overall": "Assertions are well-designed and discriminating for this positive case. The with_skill run clearly meets all expectations with substantive evidence. One minor gap: no assertion verifies that the output JSON is valid and parseable (though the fact that outer.json contains a complete result string suggests it is)."
+  }
+}

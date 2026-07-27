@@ -1,0 +1,96 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+      "passed": true,
+      "evidence": "response.txt contains a complete handoff envelope with stage_id='S2', positive_artifact.type='domain_evidence_landscape'. research_run_manifest records online=true, execution_status='completed', rounds=3, 6 perspectives (terminology_history, theory_standards, practice_tasks, recruiting_market, interview_assessment, criticism_frontier) each with questions and query_ids, 14 queries each with query_id, query, executed_at, result_summary, and follow_up_of markers, plus 6 follow_up_triggers documenting conflict-driven follow-up chains. The queries include real search strings like 'PostgreSQL 18 EXPLAIN ANALYZE BUFFERS official documentation 2025 2026'."
+    },
+    {
+      "text": "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+      "passed": true,
+      "evidence": "category_coverage array explicitly lists all 6 categories, each with status='covered', reason, criticality, gate_effect, and sample_count. wikipedia_encyclopedia: 1 (PostgreSQL Wiki), official_academic: 7 (PG18 docs for EXPLAIN, Indexes, Multicolumn, Partial, Index-Only, Planner Stats, Release Notes), practice_case: 6, recruiting_jd: 4 (3+ distinct organizations), interview_selection: 2, adversarial_frontier: 5. Product-behavior claims (C1-C7, C14-C17) trace to evidence_refs pointing to PG18 official documentation entries (E-PG-EXPLAIN, E-PG-INDEXES, E-PG-MULTI, E-PG-PARTIAL, E-PG-INDEXONLY, E-PG-STATS, E-PG18-RELEASE) with URLs like postgresql.org/docs/18/."
+    },
+    {
+      "text": "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+      "passed": true,
+      "evidence": "17 claims (C1-C17) each have status (supported/unsupported/partially_supported) and evidence_refs. C8 '所有慢查询都应优先创建索引' is marked unsupported with evidence_refs [E-CRIT-SEQSCAN, E-PG-INDEXES, E-CRIT-OVERINDEX]. C9 'EXPLAIN 中的 cost 等于运行毫秒' is marked unsupported with evidence_refs [E-PG-EXPLAIN]. C10 'Seq Scan 出现在 EXPLAIN 中意味着查询有问题' is marked unsupported. All evidence_refs cross-reference source_ledger evidence_id entries."
+    },
+    {
+      "text": "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+      "passed": true,
+      "evidence": "3 disagreements recorded, each with side_a and side_b, both having position, strong_arguments arrays, and evidence_refs. Specifically: (1) multicolumn index column-order debate includes side_b arguing 'PG18 skip scan已改变旧有行为边界' supported by E-PG18-SKIPSCAN, E-PGEDGE-SKIPSCAN; (2) EXPLAIN ANALYZE side-effect debate with side_b citing official documentation; (3) DBA vs backend capability boundary debate. The INDEX_ALWAYS_FASTER position is identified as unsupported C8 with rebuttal evidence in E-CRIT-SEQSCAN showing Seq Scan wins for 60-80% row returns or small tables. consensus array lists 5 genuine points with evidence_refs."
+    },
+    {
+      "text": "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+      "passed": true,
+      "evidence": "In source_ledger, JD entries (E-JD-PGCN, E-JD-MODB, E-JD-LIEPIN, E-JD-TARYARTAR) all carry provenance='market_signal' and source_category='recruiting_jd'. In claims, C12 and C13 are explicitly claim_type='market_signal' with limits noting 'JD 是市场快照且随组织变化'. No model_hypothesis provenance appears in the source_ledger; all external_evidence entries have retrievable URLs to external sources. The evidence_collected array distinguishes 'market_signal' provenance from 'external_evidence' consistently."
+    },
+    {
+      "text": "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results contains 11 dimension-by-dimension evaluations, each with evidence array, score, threshold, passed, failure_action, route_to. All 11 dimensions passed=true. research_executed=true. evidence_gaps lists G1 (material, gate_effect='lower_confidence') as the worst gap — none have gate_effect='block'. verdict='pass', route_to='S3'. The G1 gap is explicitly noted as 'lower_confidence' not blocking."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {
+      "Read": 1,
+      "Write": 0,
+      "Bash": 0,
+      "WebSearch": 14,
+      "WebFetch": 0
+    },
+    "total_tool_calls": 15,
+    "total_steps": 31,
+    "errors_encountered": 0,
+    "output_chars": 44600,
+    "transcript_chars": 2500
+  },
+  "timing": {
+    "executor_duration_seconds": 310,
+    "grader_duration_seconds": 0,
+    "total_duration_seconds": 307.36
+  },
+  "claims": [
+    {
+      "claim": "14 live web searches were executed across 3 rounds with 6 perspectives",
+      "type": "factual",
+      "verified": true,
+      "evidence": "research_run_manifest.queries contains 14 entries with query_id, query string, executed_at timestamp, result_summary, and follow_up_of references. processing_record logs round timestamps from 14:05 to 14:50 across 3 rounds."
+    },
+    {
+      "claim": "30 source_ledger entries with retrievable URLs",
+      "type": "factual",
+      "verified": true,
+      "evidence": "source_ledger array contains 30 entries, each with evidence_id, url (e.g. https://www.postgresql.org/docs/18/using-explain.html), title, publisher, source_category, published_at, retrieved_at, reliability, provenance, applicability."
+    },
+    {
+      "claim": "Response contains markdown fence wrapping the JSON output (prose prefix + ```json + JSON + ```)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "response.txt line 1: 'Now I have all the data needed. Let me construct the complete handoff envelope JSON.' Line 3: '```json'. Final line 377: '```'. This violates the executor instruction 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary.'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded",
+        "reason": "The assertion checks for presence of the manifest structure but does not verify whether the queries actually hit distinct sources vs returning the same top results. The research_run_manifest records 14 queries but the outer.json shows server_tool_use.web_search_requests=0, suggesting the search tool calls may not be captured in the API-level metrics — the grading cannot confirm whether these were actual tool-call searches or synthesized records."
+      },
+      {
+        "reason": "No assertion checks that the output format complies with the executor's instruction to return 'ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary.' Both the with_skill and without_skill outputs for case-1 include a prose prefix and markdown fence, which is a format compliance defect."
+      }
+    ],
+    "overall": "Assertions are well-designed and discriminating. The two format-compliance issues (markdown fence + prose prefix) are not covered by any assertion but represent a genuine output defect."
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "skill_name": "check-instructional-interaction",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给定一个 S6 移交信封：节点 N10 多列索引与排序，session_goal 与 exit_criteria 对齐且匹配学习者前沿；explanations 覆盖 understand/apply/analyze 且每条 evidence_refs≥1（PostgreSQL 18 多列索引/skip scan 文档）；examples 正反例+边界+常见误解齐全；hint_ladder 逐级含 fading_condition、strong 提示不直接给最终顺序；independent_transfer 的 answer_leakage_control=提交前不公布；interaction_events 记录 evt-3 无提示独立给出顺序与沙箱验证步骤；candidate_mastery_evidence 非空 status=candidate；confirmation.mode=inform/status=acknowledged。请用 check-instructional-interaction 独立复核并输出 quality_check_result。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 正向例子1 / 七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S6] An independent G6 pass: all eight dimensions pass, real candidate mastery evidence present (not a mastery claim), route S7.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the verdict rather than echoing the envelope's self-reported pass.",
+        "Structural validation confirms both the handoff envelope and the session_package_and_trace positive_artifact against their schemas.",
+        "Content correctness and source-traceability are verified: every explanation has at least one audited evidence_ref and model hypotheses are not counted as content sources.",
+        "Activities produce judgeable evidence (independent_transfer requires learner output) and the interaction trace is recorded with response, hints used, and correction trajectory.",
+        "Answer-leakage control and hint-ladder quality are verified: hints do not substitute for the learner's key reasoning and no answer is published before submission.",
+        "The verdict is pass with route S7, and the result explicitly treats candidate_mastery_evidence as candidate (not a mastery claim) and validates against quality-check-result.schema.json."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "给定一个 S6 移交信封：节点为分数除法，session_goal 与节点 exit_criteria 对齐；explanations 含核心概念（understand）与程序（apply）两层且均可追溯；examples 同时给出正例/反例/边界/常见误解；activities 包含 retrieval_pretest、worked_example、completion_problem、independent_transfer，independent_transfer.requires_learner_output=true 且 answer_leakage_control 不即时公布；hint_ladder 含 light/medium 两级与 fading_condition；interaction_events 记录学习者从口诀化错误到独立给出推理的修正轨迹；candidate_mastery_evidence status=candidate；confirmation.mode=inform/status=acknowledged。请用 check-instructional-interaction 独立复核。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 正向例子风格] An independent G6 pass routing to S7 with candidate (not confirmed) mastery evidence.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the verdict rather than echoing the envelope's self-reported pass.",
+        "Structural validation checks both the envelope schema and the session_package_and_trace artifact schema and records any errors.",
+        "Content correctness and source-traceability are verified across all explanations, with audited evidence_refs only.",
+        "Activities are verified to produce judgeable evidence and the interaction trace captures the learner's correction trajectory.",
+        "Hint quality and answer-leakage control are verified: scaffolding fades by condition and no answer leaks before independent submission.",
+        "The deterministic route is pass→S7, mastery is not claimed (only candidate evidence), and the result validates against quality-check-result.schema.json."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "给定一个 S6 移交信封：positive_artifact=null；系统连续输出 5000 字索引理论、每道题后立即显示标准答案；学习者只回复“懂了”；无 hint_ladder、无 feedback_rules、无 interaction_events、无 candidate_mastery_evidence；confirmation.mode=inform/status=acknowledged。请用 check-instructional-interaction 独立复核。",
+      "expected_output": "[negative/revise_here fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 反向例子] The checker must NOT pass G6: answer leak, no scaffolding, no independent learner output, no candidate mastery evidence; route stays S6.",
+      "files": [],
+      "expectations": [
+        "The checker does not return pass and does not echo any self-reported pass.",
+        "Structural validation marks artifact_valid=false because positive_artifact is null, with the error recorded.",
+        "Answer-leakage control and hint quality are identified as failed: immediate answers after each item and absence of a hint ladder mean hints/scaffolding are missing.",
+        "Learner agency is identified as failed: “懂了” alone is not learner_behavior evidence, interaction_events is empty, and no candidate mastery evidence exists.",
+        "The interaction trace and judgeable-evidence requirements are preserved as failed rather than coerced to pass, and mastery is not claimed.",
+        "At least one dimension carries failure_action and route_to S6, the verdict is revise_here (or blocked) with route S6, and the result validates against quality-check-result.schema.json."
+      ]
+    }
+  ]
+}

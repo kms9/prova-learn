@@ -1,0 +1,82 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a versioned learner_snapshot inside a stage S4 handoff envelope with the strict {type, schema_version, artifact_id, content} wrapper.",
+      "passed": true,
+      "evidence": "Graded artifact outputs/result.json: the envelope carries schema_version \"1.0.0\" and stage_id \"S4\"; positive_artifact is exactly the four-key wrapper {type:\"learner_snapshot\", schema_version:\"1.0.0\", artifact_id:\"ls-pg-0001\", content:{...}} and content.model_version=3, so the snapshot is versioned and the wrapper is strict."
+    },
+    {
+      "text": "Node states are decided by behavioral observations, and the self-rating 8/10 does not override behavior evidence or mark any disputed node tested_mastered.",
+      "passed": true,
+      "evidence": "All six node_states carry evidence_refs to learner_behavior D1-D4. The disputed node explain_analyze_safety is status \"insufficient_evidence\" (NOT tested_mastered), error_type \"partial_reasoning\". The self-rating 8/10 appears only in confidence_calibration.self_confidence (planner_statistics_reasoning 0.85, multicolumn_index_order 0.8), both flagged observed_alignment \"overconfident\"; assumptions[3] and processing_record S4.4 state the self-rating is used only as a calibration cue. G4 dimension \"偏差控制\" documents this and passed."
+    },
+    {
+      "text": "The snapshot distinguishes answered-correctly, independent-without-prompts, and transferable outcomes, including a recorded transfer failure on the distribution-change task.",
+      "passed": true,
+      "evidence": "processing_record S4.3 separates 答对 (D1/D2), 独立 (hint=none) and 迁移 (D4 failed). workload_change_transfer is status \"tested_not_mastered\", error_type \"transfer_failure\", evidence_refs [\"D4\"]. transfer_performance.status=\"not_demonstrated\", evidence_refs [\"D4\"], summary states the distribution-change (workload-change) scenario was not transferred."
+    },
+    {
+      "text": "Each node state records hint dependency and confidence calibration, and the overconfident index-rule belief is captured as a coded misconception with evidence.",
+      "passed": true,
+      "evidence": "Every node_state has hint_dependency {level, evidence_refs} and confidence_calibration {self_confidence, observed_alignment}. The overconfident selectivity-first index belief is misconception code \"SELECTIVITY_FIRST_ALWAYS\" with evidence_refs [\"D3\"] and related_node_ids including multicolumn_index_order; that node records self_confidence 0.8, observed_alignment \"overconfident\", hint_dependency level \"high\"."
+    },
+    {
+      "text": "The learning frontier names a nearest learnable node with traceable evidence refs and a rationale, not the final goal.",
+      "passed": true,
+      "evidence": "learning_frontier.nearest_learnable_node_id=\"planner_statistics_reasoning\", evidence_refs [\"D2\",\"D3\"], with a rationale explaining it is the nearest learnable node (learner can already read the plan and spot estimate skew; filling in statistics reasoning unlocks index judgment). alternative_candidate_node_ids=[\"multicolumn_index_order\"]; it is a concrete graph node, not the final goal."
+    },
+    {
+      "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results lists seven dimensions (测量与目标对齐度, 证据充分性, 猜对识别, 提示依赖记录, 错误分类一致性, 偏差控制, 结论可解释性), each with passed:true; verdict=\"pass\", route_to=\"S5\"."
+    }
+  ],
+  "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 14097,
+    "transcript_chars": 1062,
+    "num_turns": 10,
+    "duration_ms": 78817,
+    "graded_artifact": "outputs/result.json",
+    "usage": { "input_tokens": 68103, "output_tokens": 6346, "cache_read_input_tokens": 141696, "cost_usd": 0.570013, "model": "deepseek-v4-pro[1m]" },
+    "note": "No metrics.json or tool-call log exists; the executor ran as an isolated LLM completion (web_search/fetch = 0, exit_code 0, api_error_status null). transcript_chars is the executor_prompt size; output_chars is the char count of the graded artifact outputs/result.json."
+  },
+  "timing": {
+    "executor_duration_seconds": 82,
+    "total_duration_seconds": 78.817,
+    "grader_duration_seconds": null,
+    "timing_source": "timing.json (graded artifact is the original outputs/result.json)"
+  },
+  "claims": [
+    {
+      "claim": "The graded artifact is a complete, contract-clean S4 handoff JSON matching the learner_snapshot schema.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/result.json is a bare JSON object (no prose preamble, no markdown fence) wrapping a learner_snapshot with node_states, learning_frontier, misconceptions, capability_gaps, transfer_performance, diagnosis_evidence_mapping, evidence_validity; quality_evaluation routes to S5."
+    },
+    {
+      "claim": "The self-rating 8/10 did not override behavior evidence for any node status.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "All status values derive from D1-D4 behavior evidence; the self-rating appears only in confidence_calibration and is flagged overconfident on the two relevant nodes."
+    },
+    {
+      "claim": "Two distinct coded misconceptions are captured.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "misconceptions[] contains SELECTIVITY_FIRST_ALWAYS (evidence_refs [D3]) and EXPLAIN_ANALYZE_READ_ONLY_ASSUMED (evidence_refs [D1]), each with related_node_ids."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this run directory."
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Content expectations are discriminating and all pass on genuine substance against the contract-clean graded artifact outputs/result.json. (Note: the raw response.txt for this run carries a prose preamble + ```json fence; since the task selects outputs/result.json as the graded artifact, that raw-defect is out of scope here, but no assertion in the eval set tests the raw output contract.)"
+  }
+}

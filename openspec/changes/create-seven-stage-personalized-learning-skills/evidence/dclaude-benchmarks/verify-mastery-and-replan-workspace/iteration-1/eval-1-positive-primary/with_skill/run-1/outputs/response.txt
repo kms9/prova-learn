@@ -1,0 +1,388 @@
+Now I have all the required schemas and references. The user's scenario directly matches Example A — the PostgreSQL learner shows partial mastery but the primary issue is `STRATEGY_OR_SEQUENCE` (strategy didn't connect statistics/distribution to index decisions). Let me construct the complete S7 handoff envelope.
+
+Key adjustments from Example A: the user states there IS a real persistent backend, so `persistence` = `"applied"`, `update.status` = `"applied"`, `update_status` = `"applied"`; `fixture_type` = `"observed"`.
+
+```json
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S7",
+  "run_id": "s7-pg-n10-20260727-001",
+  "learner_id": "learner-pg-01",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": ["g6-session-package-pg-20260727"],
+    "expected_schema_versions": {
+      "handoff-envelope": "1.0.0",
+      "session-package-and-trace": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G6 已通过，会话记录完整",
+    "掌握规则在测评前已确定",
+    "内容/来源/图谱/诊断均经复核正确",
+    "expected_model_version=1，加载版本为 1，版本匹配",
+    "存在真实持久化后端"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": null,
+    "questions": [],
+    "response": null,
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "Q1",
+      "provenance": "learner_behavior",
+      "source_ref": "g6-session-interaction-Q1",
+      "summary": "同结构新查询独立选择合理多列索引 (tenant_id,status,created_at) 并解释前导列，无提示",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "Q2",
+      "provenance": "learner_behavior",
+      "source_ref": "g6-session-interaction-Q2",
+      "summary": "数据分布改变后仍沿用原方案，未要求重新 ANALYZE；经二级提示后修正",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "D3",
+      "provenance": "learner_behavior",
+      "source_ref": "g6-session-interaction-D3",
+      "summary": "三日延迟复测能解释前导列，不能解释估算误差来源",
+      "status": "partially_supported"
+    }
+  ],
+  "processing_record": [
+    "G6 输入契约校验通过",
+    "子流程一 mastery_verification：采集多维证据并判定两个节点掌握状态",
+    "子流程二 learner_model_update_and_replan：版本匹配 (1=1)，原子更新 applied",
+    "按上游优先级确定主归因 STRATEGY_OR_SEQUENCE，路由 S5"
+  ],
+  "positive_artifact": {
+    "type": "mastery_and_replanning_bundle",
+    "schema_version": "1.0.0",
+    "artifact_id": "mrb-pg-n10-20260727-001",
+    "content": {
+      "mastery_verification": {
+        "node_mastery_evidence": [
+          {
+            "node_id": "multicolumn_index_order",
+            "correctness": {
+              "result": "correct",
+              "detail": "独立为同结构新查询选择 (tenant_id,status,created_at) 多列索引",
+              "evidence_event_ids": ["Q1"]
+            },
+            "reasoning_quality": {
+              "result": "sound",
+              "detail": "能解释前导列 (tenant_id) 与等值谓词的对应关系",
+              "evidence_event_ids": ["Q1"]
+            },
+            "hint_dependency": {
+              "level": "none",
+              "detail": "第一题无提示独立完成",
+              "evidence_event_ids": ["Q1"]
+            },
+            "transfer": {
+              "result": "partial",
+              "detail": "同结构迁移通过；数据分布变化后仍沿用原方案，未适应新分布",
+              "evidence_event_ids": ["Q2"]
+            },
+            "confidence": {
+              "result": "calibrated",
+              "detail": "结论与多维证据一致，未夸大掌握程度",
+              "evidence_event_ids": ["Q1", "Q2", "D3"]
+            },
+            "delayed_retention": {
+              "result": "partial",
+              "detail": "三日延迟复测能解释前导列原则，不能解释估算误差来源",
+              "evidence_event_ids": ["D3"]
+            }
+          },
+          {
+            "node_id": "statistics_and_distribution_transfer",
+            "correctness": {
+              "result": "incorrect",
+              "detail": "数据分布显著变化后仍沿用原方案，未要求重新 ANALYZE 检查统计信息",
+              "evidence_event_ids": ["Q2"]
+            },
+            "reasoning_quality": {
+              "result": "partial",
+              "detail": "未把选择性/基数变化与索引方案更新建立因果联系",
+              "evidence_event_ids": ["Q2"]
+            },
+            "hint_dependency": {
+              "level": "moderate",
+              "detail": "经二级提示后修正，未自主识别分布变化需重新 ANALYZE",
+              "evidence_event_ids": ["Q2"]
+            },
+            "transfer": {
+              "result": "fail",
+              "detail": "数据分布迁移未通过，不能在新分布下独立调整索引决策",
+              "evidence_event_ids": ["Q2"]
+            },
+            "confidence": {
+              "result": "calibrated",
+              "detail": "判定未掌握，与多维证据一致",
+              "evidence_event_ids": ["Q2", "D3"]
+            },
+            "delayed_retention": {
+              "result": "fail",
+              "detail": "三日延迟复测不能解释估算误差来源，无法独立诊断统计信息缺口",
+              "evidence_event_ids": ["D3"]
+            }
+          }
+        ],
+        "mastery_judgment": [
+          {
+            "node_id": "multicolumn_index_order",
+            "status": "partial"
+          },
+          {
+            "node_id": "statistics_and_distribution_transfer",
+            "status": "not_mastered"
+          }
+        ],
+        "attribution": {
+          "primary": "STRATEGY_OR_SEQUENCE",
+          "secondary": ["EVIDENCE_INSUFFICIENT"]
+        },
+        "not_mastered_cause": "数据分布迁移与延迟保持证据不足，无法满足 statistics_and_distribution_transfer 的掌握规则；根因是策略未把统计信息与分布变化接入索引决策，导致学习者在分布变化后缺少 ANALYZE→估算→方案更新的行为链"
+      },
+      "learner_model_update_and_replan": {
+        "load": {
+          "learner_id": "learner-pg-01",
+          "as_of": "2026-07-27T00:00:00Z",
+          "current_model_version": 1,
+          "missing_fields": [],
+          "evidence_validity": "valid"
+        },
+        "append_evidence": [
+          {
+            "event_id": "Q1",
+            "immutable": true,
+            "source_evidence_ids": ["Q1"],
+            "summary": "同结构新查询独立迁移：选择合理多列索引并解释前导列，无提示"
+          },
+          {
+            "event_id": "Q2",
+            "immutable": true,
+            "source_evidence_ids": ["Q2"],
+            "summary": "数据分布变化迁移失败：沿用原方案未要求 ANALYZE，二级提示后修正"
+          },
+          {
+            "event_id": "D3",
+            "immutable": true,
+            "source_evidence_ids": ["D3"],
+            "summary": "三日延迟复测：能解释前导列，不能解释估算误差来源"
+          }
+        ],
+        "update": {
+          "expected_model_version": 1,
+          "loaded_model_version": 1,
+          "proposed_model_version": 2,
+          "status": "applied",
+          "before": {
+            "model_version": 1
+          },
+          "after": {
+            "model_version": 2,
+            "route_to": "S5"
+          },
+          "reason": "版本匹配 (1=1)，按多维证据原子更新节点状态：multicolumn_index_order partial、statistics_and_distribution_transfer not_mastered，主归因 STRATEGY_OR_SEQUENCE 路由 S5",
+          "persistence": "applied"
+        },
+        "history": [
+          {
+            "event_id": "h-pg-Q1",
+            "event_type": "evidence",
+            "created_at": "2026-07-27T00:01:00Z",
+            "evidence_event_ids": ["Q1"],
+            "decision": null,
+            "model_version": 1
+          },
+          {
+            "event_id": "h-pg-inference",
+            "event_type": "state_inference",
+            "created_at": "2026-07-27T00:02:00Z",
+            "evidence_event_ids": ["Q1", "Q2", "D3"],
+            "decision": "partial/not_mastered",
+            "model_version": 1
+          },
+          {
+            "event_id": "h-pg-route",
+            "event_type": "route_decision",
+            "created_at": "2026-07-27T00:03:00Z",
+            "evidence_event_ids": ["Q1", "Q2", "D3"],
+            "decision": "return S5",
+            "model_version": 1
+          }
+        ],
+        "learner_id": "learner-pg-01",
+        "expected_model_version": 1,
+        "model_version": 2,
+        "model_patch": [
+          {
+            "node_id": "multicolumn_index_order",
+            "before": "not_mastered",
+            "after": "partial",
+            "evidence_event_ids": ["Q1", "D3"],
+            "rationale": "独立同结构迁移通过且能解释前导列原则，延迟复测保留前导列知识；但分布迁移未通过，不升 mastered"
+          },
+          {
+            "node_id": "statistics_and_distribution_transfer",
+            "before": "not_mastered",
+            "after": "not_mastered",
+            "evidence_event_ids": ["Q2", "D3"],
+            "rationale": "分布变化后未独立要求 ANALYZE、延迟复测不能解释估算误差，无证据支持状态提升，保持 not_mastered"
+          },
+          {
+            "node_id": "misconception_INDEX_INDEPENDENT_OF_STATS",
+            "before": "active",
+            "after": "weakened_but_active",
+            "evidence_event_ids": ["Q2"],
+            "rationale": "分布变化后仍沿用原方案表明迷思仍存在，但二级提示后可修正显示有所松动"
+          },
+          {
+            "node_id": "planner_statistics_reasoning",
+            "before": 0.30,
+            "after": 0.42,
+            "evidence_event_ids": ["D3"],
+            "rationale": "延迟复测显示能解释前导列选择原则，估算偏差解释仍缺失，总体小幅提升但远未达标"
+          }
+        ],
+        "update_status": "applied",
+        "decision": "remediate",
+        "adjusted_path": "在下一学习单元前插入分布对比模块：同一查询在三种数据分布 (5%/50%/80%) 下预测计划→检查 pg_statistic→决定是否新增或拒绝索引；把 ANALYZE 与估算偏差诊断重新纳入检索队列；压缩已通过的等值谓词语法练习",
+        "next_session_contract": {
+          "next_session_id": "W2S2-R-pg",
+          "target_node_id": "statistics_and_distribution_transfer",
+          "objective": "在数据分布变化下先预测执行计划、检查统计信息 (ANALYZE/pg_statistic)、再决定是否新增或拒绝索引",
+          "required_evidence": [
+            "分布变化下的独立索引方案选择",
+            "估算行数与实际行数差异的解释",
+            "一周后延迟复测"
+          ],
+          "hint_policy": "先要求学习者预测计划并自行测量统计信息，仅给一级提示（'查看 pg_statistic 或 EXPLAIN ANALYZE 的 estimated vs actual rows'），不直接给最终方案"
+        },
+        "review_schedule": {
+          "retrieval": [
+            "multicolumn_index_order 次日混合检索",
+            "前导列选择原则与前缀匹配规则"
+          ],
+          "spacing": "已通过语法练习间隔拉长至 3 天，集中时间分配给分布对比模块",
+          "interleaving": "把等值查询、排序查询与分布变化查询交错练习",
+          "delayed_retest": {
+            "scheduled": true,
+            "interval_days": 7,
+            "target_nodes": ["statistics_and_distribution_transfer"]
+          }
+        }
+      },
+      "route": {
+        "attribution": "STRATEGY_OR_SEQUENCE",
+        "route_to": "S5"
+      },
+      "applicability_limits": [
+        "基于 PostgreSQL 单学习者观察证据",
+        "延迟证据仅三日，一周复测待执行",
+        "分布迁移仅一种分布变化场景，需更多变体验证"
+      ]
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "证据充分性",
+        "evidence": ["Q1 独立迁移与推理通过", "Q2 分布变化迁移失败并记录提示依赖", "D3 三日延迟复测部分保留"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "掌握规则一致性",
+        "evidence": ["multicolumn_index_order: partial (同结构通过、分布未通过、延迟部分)", "statistics_and_distribution_transfer: not_mastered (分布迁移失败、提示依赖 moderate、延迟 fail)"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "提示影响控制",
+        "evidence": ["Q1 无提示 (none)", "Q2 二级提示后修正 (moderate)", "D3 无提示延迟复测"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "迁移与延迟证据",
+        "evidence": ["Q1 同结构近迁移通过", "Q2 分布变化远迁移失败", "D3 三日延迟复测部分通过"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "更新前后一致性",
+        "evidence": ["model_patch 每项变更可经 evidence_event_ids 追溯到 Q1/Q2/D3", "version 1→2 原子更新 applied"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "调整可解释性",
+        "evidence": ["主归因 STRATEGY_OR_SEQUENCE → S5", "adjusted_path 在分布对比模块补策略缺口", "next_session_contract 要求预测→测量→决策链"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "避免单次结果过度反应",
+        "evidence": ["Q1 正确未升 mastered (分布证据缺失)", "D3 延迟 partial 未升 mastered", "confidence 维度均为 calibrated"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "所有 G7 量规维度 passed=true",
+      "多维证据充分：correctness/reasoning/hint/transfer/confidence/delayed 六维均采集",
+      "判定与预设掌握规则一致",
+      "提示依赖已记录且计入判定",
+      "更新前后一致：每项 patch 可追溯至证据事件",
+      "决策与归因匹配：STRATEGY_OR_SEQUENCE → remediate → S5",
+      "未因 Q1 局部成功即升 mastered"
+    ],
+    "verdict": "return_upstream",
+    "route_to": "S5"
+  },
+  "traceability": {
+    "source_artifact_ids": ["g6-session-package-pg-20260727"],
+    "source_evidence_ids": ["Q1", "Q2", "D3"],
+    "source_sections": ["S7 掌握验证子流程", "S7 学习者模型更新与重规划子流程", "S7 确定性归因路由表 §7"],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}
+```

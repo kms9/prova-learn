@@ -1,0 +1,495 @@
+{
+  "metadata": {
+    "skill_name": "verify-mastery-and-replan",
+    "skill_path": ".agents/skills/verify-mastery-and-replan",
+    "executor_model": "dclaude: deepseek-v4-pro[1m]",
+    "analyzer_model": "local deterministic post-hoc analysis",
+    "timestamp": "2026-07-26T19:40:33Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3,
+    "runs_per_eval_per_configuration": 1,
+    "total_runs": 6
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 70.373,
+        "tokens": 78912,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope, with mastery_verification completed before and referenced by learner_model_update_and_replan.",
+          "passed": true,
+          "evidence": "Outer envelope has stage_id=\"S7\". positive_artifact.type=\"mastery_and_replanning_bundle\" (artifact_id mrb-pg-n10-20260727-001); content.mastery_verification appears before content.learner_model_update_and_replan. The update section references the same evidence the verification collected: append_evidence[].source_evidence_ids are [Q1],[Q2],[D3] and model_patch[].evidence_event_ids tie back to Q1/D3 and Q2/D3 — the same events gathered in mastery_verification.node_mastery_evidence and evidence_collected."
+        },
+        {
+          "text": "Mastery evidence is multidimensional (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) and does not collapse to a single correct result; the not-mastered node stays partial/not_mastered.",
+          "passed": true,
+          "evidence": "node_mastery_evidence for both multicolumn_index_order and statistics_and_distribution_transfer contains all six dimensions (correctness, reasoning_quality, hint_dependency, transfer, confidence, delayed_retention). It does not collapse to a single correct result: Q1's independent success yields only 'partial' for multicolumn_index_order, and mastery_judgment assigns multicolumn_index_order='partial' and statistics_and_distribution_transfer='not_mastered'."
+        },
+        {
+          "text": "Every model_patch entry records before/after values and ties to new evidence event IDs rather than asserting mastery without evidence.",
+          "passed": true,
+          "evidence": "model_patch has 4 entries, each with before/after/evidence_event_ids/rationale: multicolumn_index_order (not_mastered→partial, [Q1,D3]); statistics_and_distribution_transfer (not_mastered→not_mastered, [Q2,D3]); misconception_INDEX_INDEPENDENT_OF_STATS (active→weakened_but_active, [Q2]); planner_statistics_reasoning (0.30→0.42, [D3]). No entry asserts mastery, and every entry is tied to concrete evidence_event_ids."
+        },
+        {
+          "text": "The model update is version-checked (expected_model_version matched, update_status=applied); the schema and output also honestly support version_conflict and not_executed states when conditions differ.",
+          "passed": true,
+          "evidence": "update.expected_model_version=1, update.loaded_model_version=1, update.status='applied', update.persistence='applied', update_status='applied' — version-checked with matched versions and an applied atomic update (before model_version 1 → after 2). The status is an enum field rather than a boolean success flag, and the same skill schema (mastery-and-replanning-bundle.schema.json) defines version_conflict and not_executed as members of that enum; the sibling case-3 with_skill run renders version_conflict/not_executed under mismatched conditions, confirming the fallback states are real rather than the output hard-coding success. Caveat: THIS output does not itself enumerate the fallback tokens (conditions matched, so 'applied' is the honest value)."
+        },
+        {
+          "text": "Primary attribution STRATEGY_OR_SEQUENCE with secondary EVIDENCE_INSUFFICIENT follows the documented upstream priority (path before evidence), routes to S5, and matches the remediate decision.",
+          "passed": true,
+          "evidence": "Output has mastery_verification.attribution.primary='STRATEGY_OR_SEQUENCE' and secondary=['EVIDENCE_INSUFFICIENT'], matching the documented path-before-evidence priority. route.route_to and quality_evaluation.route_to are both S5, and learner_model_update_and_replan.decision='remediate'."
+        },
+        {
+          "text": "Content-quality problems are distinguished from learner-knowledge gaps; here content/graph/diagnosis are verified correct, so the issue is not misread as learner inability.",
+          "passed": true,
+          "evidence": "assumptions include '掌握规则在测评前已确定' and '内容/来源/图谱/诊断均经复核正确'; requirement_gaps is empty. not_mastered_cause states the root cause is '策略未把统计信息与分布变化接入索引决策，导致学习者在分布变化后缺少 ANALYZE→估算→方案更新的行为链' — attributing the gap to strategy incompleteness, not learner inability or a content/graph/diagnosis error."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude+gclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]",
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 91.6,
+        "tokens": 79938,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope with both ordered sections present.",
+          "passed": true,
+          "evidence": "Envelope has stage_id=\"S7\". positive_artifact.type=\"mastery_and_replanning_bundle\" (artifact_id mrb-g6-frac-s7-001). content contains both mastery_verification and learner_model_update_and_replan, with mastery_verification appearing first ('both ordered sections present')."
+        },
+        {
+          "text": "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+          "passed": true,
+          "evidence": "Four distinct evidence events support mastery: F1 '不看材料独立解释 3/5 > 3/7' (independent, no materials); F2 '近迁移比较 4/9 与 4/11' (near transfer); F3 '表征从图形转到数轴' (representation transfer) AND '一周后延迟复测' (delayed retention); F4 '食谱缩放中正确使用分数关系' (far/functional transfer). Both nodes show transfer.result='pass' and delayed_retention.result='pass'; hint_dependency.level='none' throughout. Mastery rests on all four events together, not one item."
+        },
+        {
+          "text": "Each model_patch change from partial to mastered is backed by explicit evidence event IDs and rationale.",
+          "passed": true,
+          "evidence": "model_patch[0] unit_fraction_magnitude: before='partial', after='mastered', evidence_event_ids=['F1','F2','F3','F4'] with rationale; model_patch[1] same_numerator_comparison: before='partial', after='mastered', evidence_event_ids=['F1','F2','F3','F4'] with rationale. Each partial→mastered transition is tied to explicit event IDs and reasoning."
+        },
+        {
+          "text": "The update is version-checked (expected_model_version matched, update_status=applied); version_conflict and not_executed remain the honest fallback states defined by the schema.",
+          "passed": true,
+          "evidence": "update.expected_model_version=6, update.loaded_model_version=6, update.status='applied', update.persistence='applied', update_status='applied' (before model_version 6 → after 7). The status field is an enum that the skill schema (mastery-and-replanning-bundle.schema.json) defines to include version_conflict and not_executed, and the sibling case-3 run renders those states under mismatched conditions; this output honestly emits 'applied' because versions matched rather than hard-coding success. Caveat: THIS output does not itself enumerate the fallback tokens."
+        },
+        {
+          "text": "Attribution NODE_MASTERED routes deterministically to S6 (next node), with a maintenance plan in review_schedule; complete is reserved for true goal-level achievement.",
+          "passed": true,
+          "evidence": "attribution.primary='NODE_MASTERED', secondary=[]. route.attribution='NODE_MASTERED', route.route_to='S6'; quality_evaluation.verdict='pass', route_to='S6'. review_schedule is present with retrieval, spacing, interleaving, and delayed_retest {scheduled:true, interval_days:14}. decision='continue' — NOT 'complete'; the top-level run 'status' is 'completed' but the mastery decision field is 'continue', so 'complete' is correctly reserved (Example B notes GOAL_ACHIEVED→complete only at a terminal goal node)."
+        },
+        {
+          "text": "Content-quality vs learner-knowledge are distinguished: because content and graph are verified correct, mastery is attributed to the learner rather than to a content fix.",
+          "passed": true,
+          "evidence": "assumptions include '内容质量问题与图谱错误已在上游排除，非学习者能力问题'; processing_record records distinguishing content质量(S6)/策略(S5)/诊断(S4)/图谱(S3)/来源(S2)/目标(S1) and '确认无上游污染'; requirement_gaps=[]. attribution.primary='NODE_MASTERED' credits the learner; no content-fix or source-correction action is proposed."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude+gclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]",
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 154.323,
+        "tokens": 84748,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The single recognition item is classified as evidence insufficient rather than mastery, and no node is marked mastered.",
+          "passed": true,
+          "evidence": "evidence_collected E1 (the recognition item 'B-tree 适合等值查询吗？— 是') has status='partially_supported'. processing_record records '掌握判定：6 维证据中 5 维缺失，无法满足任何预定义掌握规则 → status=evidence_insufficient'. positive_artifact=null, so there is no mastery_judgment array and no node is marked mastered. The requirement_gap GAP-EVID-001 (criticality 'critical', gate_effect 'block') records the insufficiency."
+        },
+        {
+          "text": "Mastery evidence is required to be multidimensional; missing reasoning, transfer and delayed retention are recorded as not_executed/unknown, not inferred from one correct answer.",
+          "passed": true,
+          "evidence": "processing_record records per-dimension status: 'correctness=correct（仅识别题正确），reasoning_quality=unknown（无推理记录），hint_dependency=not_executed（未记录提示层级），transfer=not_executed（无近/远迁移），confidence=unknown（未记录猜测概率或校准），delayed_retention=not_executed（无延迟保持证据）'. The five missing dimensions are explicitly marked unknown/not_executed, not inferred from the single correct recognition answer."
+        },
+        {
+          "text": "No model update or persistence success is claimed; with expected_version=4 and loaded=5 the update_status is version_conflict and no patch is applied.",
+          "passed": true,
+          "evidence": "VER_CHECK_001 records expected_model_version=4 vs current_model_version=5. processing_record: '版本冲突。不应用任何补丁，model_patch=[]' and 'update.status=version_conflict，update.persistence=not_executed'. requirement_gap GAP-VER-001 ('版本冲突阻止原子更新'). confirmation.response.decision='rejected'. No mastery update or persistence success is claimed; version_conflict is reported and no patch is applied. (positive_artifact=null per the Example C pattern, so version_conflict is conveyed via processing_record/requirement_gaps rather than a structured update object.)"
+        },
+        {
+          "text": "The claimed 0.95 mastery probability is treated as uncalibrated confidence and rejected as an overreaction to a single result.",
+          "passed": true,
+          "evidence": "MODEL_CLAIM_001 ('模型主张将掌握概率改为 0.95 并推进到下一章，无推理、独立应用、迁移或延迟证据支撑') has status='unsupported'. processing_record records confidence=unknown ('未记录猜测概率或校准'). confirmation.response.decision='rejected' with basis '单次正确不得越级写为高掌握概率'. The rubric '避免单次结果过度反应' reads '从单次识别题正确直接跳至 0.95 掌握概率并推进到下一章，构成严重过度反应', passed=false. The 0.95 claim is rejected as uncalibrated at multiple levels."
+        },
+        {
+          "text": "Primary attribution EVIDENCE_INSUFFICIENT yields the deterministic route revise_here to S7 for retesting, not progression to the next chapter.",
+          "passed": true,
+          "evidence": "processing_record: '归因路由：primary=EVIDENCE_INSUFFICIENT（最早污染源），secondary=[]。按路由表 route_to=S7 补测'. quality_evaluation.verdict='revise_here', route_to='S7'; every rubric dimension that fails has failure_action='revise_here', route_to='S7'. The output stays at S7 for retesting and does not progress to the next chapter (confirmation.response.decision='rejected', approved advancement refused)."
+        },
+        {
+          "text": "Raw evidence, inferred mastery state and route decision remain separated; the output requires independent, transfer and delayed evidence before any mastery update.",
+          "passed": true,
+          "evidence": "Three distinct layers are kept separate: evidence_collected (raw E1/MODEL_CLAIM_001/VER_CHECK_001), processing_record (inferred mastery state with per-dimension analysis), and quality_evaluation (route decision revise_here→S7). The fail-closed rule is explicit: '无独立应用、迁移或必要延迟证据时不得标为 mastered', and processing_record requires '需以 expected_model_version=5 重新加载学习者模型后再执行 S7' — independent/transfer/delayed evidence is required before any mastery update."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude+gclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]",
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.16666666666666666,
+        "passed": 1,
+        "failed": 5,
+        "total": 6,
+        "time_seconds": 80.656,
+        "tokens": 34928,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope, with mastery_verification completed before and referenced by learner_model_update_and_replan.",
+          "passed": false,
+          "evidence": "The output is a custom object with top-level keys pipeline_step, learner_profile, assessment_evidence, root_cause, model_version, personalized_learning_s7, strategy_update, handoff. There is no positive_artifact of type mastery_and_replanning_bundle, no mastery_verification section, and no learner_model_update_and_replan section. pipeline_step='S7' is labelled but the required bundle envelope and its two ordered sub-sections are absent."
+        },
+        {
+          "text": "Mastery evidence is multidimensional (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) and does not collapse to a single correct result; the not-mastered node stays partial/not_mastered.",
+          "passed": false,
+          "evidence": "assessment_evidence has three flat entries (Q1 result='passed', Q2 'corrected_after_L2_hint', D3_delayed_retest 'partial'), each a single outcome string. The six named dimensions (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) are not structured per node, and there is no node-level partial/not_mastered mastery judgment."
+        },
+        {
+          "text": "Every model_patch entry records before/after values and ties to new evidence event IDs rather than asserting mastery without evidence.",
+          "passed": false,
+          "evidence": "No model_patch array exists. strategy_update records previous_version=1/new_version=2 and an updated_decision_flow, but there are no per-node before/after state values and no evidence_event_ids tying changes to Q1/Q2/D3."
+        },
+        {
+          "text": "The model update is version-checked (expected_model_version matched, update_status=applied); the schema and output also honestly support version_conflict and not_executed states when conditions differ.",
+          "passed": false,
+          "evidence": "model_version reports expected=1, loaded=1, match=true, persistent_backend=true, but there is no update object, no update_status field with value 'applied', and no representation of the version_conflict or not_executed fallback states. The version match is noted yet the structured version-checked update and its honest fallback states (required by the schema) are absent."
+        },
+        {
+          "text": "Primary attribution STRATEGY_OR_SEQUENCE with secondary EVIDENCE_INSUFFICIENT follows the documented upstream priority (path before evidence), routes to S5, and matches the remediate decision.",
+          "passed": false,
+          "evidence": "There is no attribution object with primary STRATEGY_OR_SEQUENCE and secondary EVIDENCE_INSUFFICIENT. root_cause.category='strategy_incompleteness' is only a prose analogue. The handoff routes forward to handoff.target_step='S8_reassessment' rather than S5 and has no remediate decision, so the deterministic multi-attribution protocol is not followed."
+        },
+        {
+          "text": "Content-quality problems are distinguished from learner-knowledge gaps; here content/graph/diagnosis are verified correct, so the issue is not misread as learner inability.",
+          "passed": true,
+          "evidence": "root_cause.verified_components reports content='correct', source='correct', knowledge_graph='correct', diagnosis='correct', strategy='incomplete', and root_cause.detail states '内容、来源、图谱、诊断均无错误。问题在于索引选择策略缺少前置步骤' — correctly attributing the gap to strategy incompleteness rather than learner inability or a content/graph/diagnosis error."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude+gclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]",
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.3333333333333333,
+        "passed": 2,
+        "failed": 4,
+        "total": 6,
+        "time_seconds": 40.355,
+        "tokens": 32524,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope with both ordered sections present.",
+          "passed": false,
+          "evidence": "The output is a custom object with top-level keys execution_id, stage, timestamp, model_version, preceding_unit, indicator_results, scaffolding_profile, mastery_rules, s7_decision, handoff. There is no positive_artifact of type mastery_and_replanning_bundle, and neither mastery_verification nor learner_model_update_and_replan sections exist. stage='S7' is labelled but the required bundle envelope is absent."
+        },
+        {
+          "text": "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+          "passed": true,
+          "evidence": "Mastery rests on four distinct items spanning every evidence type the assertion names: F1 '不看材料独立解释 3/5 > 3/7' (independent — scaffolding_profile.prompts_delivered=0, hints_requested=0, independence='full'); F2 '比较 4/9 与 4/11' (near transfer — conditions_evaluated near_transfer_demonstrated=true); F3 '图形表征转到数轴表征' (representation transfer) plus '一周后延迟复测' (delayed retention — delayed_retention_confirmed=true); F4 '食谱缩放中正确使用分数关系' (far transfer — far_transfer_demonstrated=true). This is explicitly 'not one classroom item alone' — it is four independent items. NOTE: this expectation (unlike case-1's) names evidence TYPES, not the six-dimensional schema, so the flat indicator layout still satisfies the literal text; the six-dimension structure is not required here."
+        },
+        {
+          "text": "Each model_patch change from partial to mastered is backed by explicit evidence event IDs and rationale.",
+          "passed": false,
+          "evidence": "No model_patch array exists. There is no per-node before→mastered transition recorded with evidence_event_ids; s7_decision.action='advance' merely asserts an advancement decision with no traceable per-node patches."
+        },
+        {
+          "text": "The update is version-checked (expected_model_version matched, update_status=applied); version_conflict and not_executed remain the honest fallback states defined by the schema.",
+          "passed": false,
+          "evidence": "model_version reports expected=6, loaded=6, match=true, backend='persistent', backend_status='operational', but there is no update object, no update_status='applied' field, and no representation of the version_conflict or not_executed fallback states. The version match is noted but not structured as a schema-conformant version-checked update."
+        },
+        {
+          "text": "Attribution NODE_MASTERED routes deterministically to S6 (next node), with a maintenance plan in review_schedule; complete is reserved for true goal-level achievement.",
+          "passed": false,
+          "evidence": "There is no attribution object with primary='NODE_MASTERED'. s7_decision.action='advance' (not 'continue'); handoff.target_unit='G7', target_domain='分数运算（乘除）' — it routes forward to the next content unit G7, not to pipeline stage S6. No review_schedule (retrieval/spacing/interleaving/delayed_retest) is produced, and the continue-vs-complete distinction is not exercised (a generic 'advance' is used)."
+        },
+        {
+          "text": "Content-quality vs learner-knowledge are distinguished: because content and graph are verified correct, mastery is attributed to the learner rather than to a content fix.",
+          "passed": true,
+          "evidence": "mastery_rules.content_graph_alignment='correct', validated_at_load=true, pre_determined=true; conditions_evaluated are all favourable (all_indicators_mastered=true, zero_prompt_requirement=true, delayed_retention_confirmed=true, near_transfer_demonstrated=true, far_transfer_demonstrated=true). All four indicators are marked outcome='mastered' and attributed to the learner; no content-fix or source-correction action is suggested; handoff.prerequisites_satisfied lists learner achievements, not content corrections."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude+gclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]",
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333333333333334,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 25.058,
+        "tokens": 31021,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The single recognition item is classified as evidence insufficient rather than mastery, and no node is marked mastered.",
+          "passed": true,
+          "evidence": "evidence_inventory[0] (the yes/no recognition item) has credibility_assessment='weak_single_recognition'. evidence_sufficiency_judgment.sufficient_for_mastery_0_95=false and sufficient_for_chapter_advance=false. decision.approved_mastery_update=false, decision.rejected_mastery_target=0.95. No node is marked mastered; the run status is 'rejected_with_remediation_plan'."
+        },
+        {
+          "text": "Mastery evidence is required to be multidimensional; missing reasoning, transfer and delayed retention are recorded as not_executed/unknown, not inferred from one correct answer.",
+          "passed": true,
+          "evidence": "quality_indicators records has_reasoning=false, has_independent_application=false, has_cue_hierarchy_data=false, has_transfer_evidence=false, has_delayed_recall=false, has_guessing_probability=false — the missing dimensions are explicitly marked absent, not inferred from the single correct answer. evidence_sufficiency_judgment.rationale states '缺少推理过程、独立应用场景、提示层级数据、迁移任务和延迟测试'. NOTE: the baseline uses boolean false flags rather than the skill's literal tokens 'not_executed'/'unknown', but the substance (missing dimensions recorded, not inferred) is satisfied."
+        },
+        {
+          "text": "No model update or persistence success is claimed; with expected_version=4 and loaded=5 the update_status is version_conflict and no patch is applied.",
+          "passed": true,
+          "evidence": "version_mismatch reports expected=4, actual=5, severity='blocking', action_required='halt_progression', rationale '在此不一致解决前任何状态变更均不可靠'. decision.approved_mastery_update=false, decision.blocking_issue='resolve_version_mismatch_first', and run status='rejected_with_remediation_plan'. No model update or persistence success is claimed and no patch is applied. NOTE: the baseline names this 'version_mismatch.severity=blocking' rather than the skill's literal field 'update_status=version_conflict', but it detects the 4≠5 conflict and blocks the write, satisfying the behavioral substance of the assertion."
+        },
+        {
+          "text": "The claimed 0.95 mastery probability is treated as uncalibrated confidence and rejected as an overreaction to a single result.",
+          "passed": true,
+          "evidence": "input_state.candidate_mastery_probability=0.95; decision.rejected_mastery_target=0.95; decision.recommended_mastery=0.55 with rationale '基于一条弱正反馈（再认正确），在无猜测概率记录的情况下，采用保守贝叶斯先验更新，掌握概率上限不超过0.55；该值反映可能知道但远未确认的状态'. The 0.95 is explicitly rejected as an overreaction to a single weak positive and replaced with a conservative, uncalibrated-conservative estimate."
+        },
+        {
+          "text": "Primary attribution EVIDENCE_INSUFFICIENT yields the deterministic route revise_here to S7 for retesting, not progression to the next chapter.",
+          "passed": false,
+          "evidence": "There is no attribution object and no EVIDENCE_INSUFFICIENT code, and crucially the reroute target is wrong: handoff.target_stage='S1_or_S2', target_action='evidence_collection_loop' — it routes BACKWARD to the foundation stages S1/S2 to restart evidence collection, not to S7 (revise_here, same-stage retesting) as the assertion requires. The output does correctly block chapter progression (decision.approved_chapter_advance=false, next_action='collect_stronger_evidence'), but the deterministic route revise_here→S7 is not produced; S1/S2 ≠ S7."
+        },
+        {
+          "text": "Raw evidence, inferred mastery state and route decision remain separated; the output requires independent, transfer and delayed evidence before any mastery update.",
+          "passed": true,
+          "evidence": "Layers are separated: evidence_inventory (raw evidence e1), evidence_sufficiency_judgment (inferred state), version_mismatch (blocking condition), decision (route/action). decision.prescribed_evidence_collection lists four prioritised evidence types required before any mastery update — reasoning_explanation, independent_application, transfer, delayed_recall — and carry_forward.minimum_evidence_required specifies reasoning_trials:2, application_trials:2, transfer_trials:1, delayed_recall_passed:true, guessing_probability_recorded:true. Independent/transfer/delayed evidence is required before any mastery update."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude+gclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]",
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": 105.432,
+        "stddev": 43.6508,
+        "min": 70.373,
+        "max": 154.323
+      },
+      "tokens": {
+        "mean": 81199.3333,
+        "stddev": 3115.7576,
+        "min": 78912.0,
+        "max": 84748.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.4444,
+        "stddev": 0.3469,
+        "min": 0.1667,
+        "max": 0.8333
+      },
+      "time_seconds": {
+        "mean": 48.6897,
+        "stddev": 28.7208,
+        "min": 25.058,
+        "max": 80.656
+      },
+      "tokens": {
+        "mean": 32824.3333,
+        "stddev": 1970.739,
+        "min": 31021.0,
+        "max": 34928.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.56",
+      "time_seconds": "+56.7",
+      "tokens": "+48375"
+    }
+  },
+  "notes": [
+    "**Discrimination:** after correcting the grader-identified contradictory attribution assertion and adjudicating the cross-route baseline disagreement, with-skill mean pass rate is `1.0000`; without-skill is `0.4444`; delta is `+0.56`.",
+    "**Variance:** with-skill standard deviation is `0.0000`; without-skill is `0.3469`. Baseline answers sometimes notice insufficient evidence or version mismatch, but do not implement the ordered verification/update bundle, event-sourced patch or complete route protocol.",
+    "**Time:** with-skill mean is `105.4320s`, without-skill `48.6897s` (`+56.7s`).",
+    "**Tokens:** actual outer `modelUsage` totals average `81,199.3` with the skill and `32,824.3` without it (`+48,375`). The ordered verification/update bundle, history and routing protocol have a material token cost.",
+    "**Contract repair provenance:** the original dclaude grader gave expectation 5 a failure while explicitly reporting that “path before evidence” made the assertion internally contradictory. The pre-fix grading is retained as `grading.before-eval-contract-fix.json`; the canonical grading changes only the exact assertion text, its supported verdict and reconciled summary.",
+    "**Cross-route adjudication:** for eval-2 without-skill, gclaude correctly observed that expectation 2 asks for evidence-type plurality, not six-dimensional field names. F1–F4 satisfy the literal semantic assertion, so canonical grading records 2/6; the original dclaude judgment is retained as `grading.before-cross-route-adjudication.json`.",
+    "**Conclusion:** good discrimination, with future efficiency work focused on compact event-history output rather than removing the version/attribution safeguards."
+  ]
+}

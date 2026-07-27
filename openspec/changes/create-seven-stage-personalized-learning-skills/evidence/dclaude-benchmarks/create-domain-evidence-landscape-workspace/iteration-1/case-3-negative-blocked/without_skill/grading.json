@@ -1,0 +1,94 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+      "passed": true,
+      "evidence": "The without_skill output does NOT produce a domain_evidence_landscape or positive_artifact. It produces a gap_analysis structure with stage_outcome='blocked' and blocked_reason explaining all input materials are unreliable. There is no G2 evaluation, no verdict='pass', and no route_to='S3'. The output explicitly recommends rolling back to S1: handoff.target_stage='S1', handoff.handoff_type='rollback_with_remediation'."
+    },
+    {
+      "text": "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+      "passed": true,
+      "evidence": "stage_outcome is 'blocked'. blocked_reason explicitly states '所有输入材料信度不足，核心断言与已知领域事实矛盾，且无可靠一手文献补充。S2无法在现有材料基础上产出有效学习路径。建议回退至S1重新进行材料收集，并移除不联网搜索的限制。' meta.no_web_search_performed=true. There is no research_run_manifest, no invented query strings, no fabricated sample counts, and no queries array."
+    },
+    {
+      "text": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+      "passed": false,
+      "evidence": "The output has a gap_analysis.missing_primary_sources section listing 4 domains (基础理论, 提示工程技术, 评估与基准, 官方文档与指南) with examples of specific missing sources. skill_coverage_gaps lists 6 skill areas. However, this is not structured as per the six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier). The gap marking does not use the required covered/gap/not_applicable taxonomy with gate_effect. There is no category_coverage structure. The gap_analysis correctly identifies missing content but not in the required format with explicit category-by-category status, reason, and gate_effect."
+    },
+    {
+      "text": "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+      "passed": true,
+      "evidence": "execution_summary.input_materials explicitly documents all 5 materials with credibility assessments: SEO blogs flagged as 'high_risk' with issue '三篇博客互为转载来源，形成封闭引用环' and '内容可能为同一创作者或同一内容农场产出'. training-ad flagged as 'commercial_bias'. The user_claim assessment verdict is 'unsupported_oversimplification' with reasoning explaining why the 'ten rules' claim contradicts known field knowledge: '不存在公认的十条规则即可掌握的行业共识'. The 'ten rules' claim is NOT marked supported. signal_quality_summary.usable_material_count=0. recommendations.immediate_actions says '废弃当前全部5份材料作为学习依据'."
+    },
+    {
+      "text": "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+      "passed": true,
+      "evidence": "The training ad is classified as type='培训广告' with credibility_flag='commercial_bias' and issues including '商业动机可能扭曲信息客观性'. The SEO blogs are flagged as 'SEO优化导向而非知识传播导向'. No source is relabeled as external_evidence. meta field explicitly states 'no_project_files_accessed: true', 'no_web_search_performed: true', 'reasoning_basis: general_knowledge_of_LLM_prompt_engineering_and_information_literacy_principles' — this is transparent about using model knowledge as reasoning basis, not passing it off as research."
+    },
+    {
+      "text": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+      "passed": false,
+      "evidence": "The output routes to S1 rather than S2: stage_outcome='blocked', handoff.target_stage='S1', handoff.handoff_type='rollback_with_remediation'. The expectation says the route should be 'revise_here at S2 unless a documented goal defect requires returning to S1'. While the output does document a goal defect (materials are fundamentally unreliable), the expectation's default is revise_here at S2. The output bypasses S2 revise and goes directly to S1 rollback. It does correctly NOT advance to S3."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 2,
+    "total": 6,
+    "pass_rate": 0.667
+  },
+  "execution_metrics": {
+    "tool_calls": {
+      "Read": 0,
+      "Write": 0,
+      "Bash": 0,
+      "WebSearch": 0,
+      "WebFetch": 0
+    },
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 4000,
+    "transcript_chars": 500
+  },
+  "timing": {
+    "executor_duration_seconds": 38,
+    "grader_duration_seconds": 0,
+    "total_duration_seconds": 34.976
+  },
+  "claims": [
+    {
+      "claim": "Output returned ONLY one valid JSON object with no markdown fence",
+      "type": "factual",
+      "verified": false,
+      "evidence": "response.txt line 1: '```json', final line: '```'. The executor instruction says 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary.' The output is wrapped in a markdown code fence."
+    },
+    {
+      "claim": "All input materials have insufficient credibility for learning use",
+      "type": "quality",
+      "verified": true,
+      "evidence": "execution_summary correctly identifies: 3 SEO blogs as high_risk (mutual reposting, no primary research), 1 training ad as commercial_bias, 1 anonymous repost as unverifiable. signal_quality_summary.overall_credibility='极低', usable_material_count=0. This assessment is consistent with the eval's expected behavior for the negative case."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+        "reason": "The without-skill output correctly identifies missing content but uses a different taxonomy (missing_primary_sources by domain, skill_coverage_gaps) rather than the six mandatory source categories with covered/gap/not_applicable status and gate_effect. This is a format-level failure rather than a content failure — the underlying assessment is correct but not expressed in the required structure."
+      },
+      {
+        "assertion": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+        "reason": "The without-skill output routes to S1 (rollback_with_remediation) rather than S2 (revise_here). The expectation says S1 is acceptable 'unless a documented goal defect requires returning to S1' — and the output does document a goal defect (materials are fundamentally unreliable, core claim contradicts known facts). This is a borderline case: the output arguably satisfies the exception clause but the grading standard errs on the side of burden-of-proof for the default (S2). The assertion could be made more precise about when S1 routing is acceptable."
+      },
+      {
+        "reason": "No assertion checks format compliance (no markdown fence, no prose prefix). Both the with_skill and without_skill case-3 outputs violate this, and the without_skill output is only 1 turn (34s), suggesting the baseline model produced a quick single-response rather than engaging in multi-step research."
+      }
+    ],
+    "overall": "Assertions 3 and 6 fail for format/structure reasons rather than content reasons. The without_skill output correctly identifies the negative case and refuses to fabricate evidence, but lacks the structured category_coverage and uses S1 routing instead of S2 revise_here. The skill's with_skill output passes all 6 assertions, demonstrating the skill adds the required structural rigor for the negative case."
+  }
+}

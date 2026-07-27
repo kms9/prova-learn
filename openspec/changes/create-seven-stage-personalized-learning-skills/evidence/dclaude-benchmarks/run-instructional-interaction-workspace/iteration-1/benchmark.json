@@ -1,0 +1,481 @@
+{
+  "metadata": {
+    "skill_name": "run-instructional-interaction",
+    "skill_path": ".agents/skills/run-instructional-interaction",
+    "executor_model": "dclaude: deepseek-v4-pro[1m]",
+    "analyzer_model": "local deterministic post-hoc analysis",
+    "timestamp": "2026-07-26T19:40:33Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3,
+    "runs_per_eval_per_configuration": 1,
+    "total_runs": 6
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 134.311,
+        "tokens": 78574,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+          "passed": true,
+          "evidence": "positive_artifact.content.content_quality_status.state='correct', errors_found=[], reviewed_against=['PostgreSQL 18 官方文档 §11.3', '§11.4', 'skip scan 相关章节']. Three layered explanations (exp-led-column-query-family/core_concept, exp-equality-range-sort-order/procedure, exp-skipscan-boundary/edge_case) each carry ≥1 evidence_refs back to e-pg-doc-multicolumn or e-pg-doc-skipscan. evidence_collected records provenance='external_evidence' with source_ref and summary. No model-common-sense-only content detected."
+        },
+        {
+          "text": "Activities include worked example, completion, contrast and independent transfer tasks that produce judgeable learner-behavior evidence rather than only reading or acknowledgment.",
+          "passed": true,
+          "evidence": "activities array contains: act-retrieval-pretest (retrieval_pretest), act-worked-example (worked_example), act-completion-problem (completion_problem), act-contrast-case (contrast_case), act-independent-transfer (independent_transfer). All with requires_learner_output=true (except worked_example which is demonstrative). interaction_events show three learner_response entries with substantive reasoning, not mere '懂了'."
+        },
+        {
+          "text": "Task difficulty stays within the learner's learnable range and the independent transfer item is reachable after scaffolding fades.",
+          "passed": true,
+          "evidence": "scaffolding_fade_strategy defines initial_support→fade_rule→terminal_support=on_demand, with fading conditions per hint_ladder step. Activities progress: retrieval_pretest(understand)→worked_example(apply)→completion_problem(analyze)→contrast_case(analyze)→independent_transfer(create). The evt-independent-transfer interaction event shows hints_used=[] (scaffold fully withdrawn) and learner independently produced correct index order, rationale, and sandbox verification steps."
+        },
+        {
+          "text": "Hint ladder steps point to query shape and official leading-column rules without substituting the learner's key indexing-order reasoning, and no answer is leaked before submission.",
+          "passed": true,
+          "evidence": "hint_ladder has three levels: step=1/light ('先把你看到的查询条件分成三类...不用考虑索引，只做分类'), step=2/medium ('回顾 B-tree 索引的扫描规则...第一个范围列之后的列还能缩小扫描区间吗？'), step=3/strong ('不要回到选择性高的列放第一的单一公式...不直接告诉你最终顺序，你自己比较后给出'). Each has fading_condition. answer_leakage_control is specified per activity: retrieval_pretest '学习者先产出...再展示参考框架', completion_problem '关键两步留空由学习者填写；提交前不提供完整顺序', independent_transfer '全程不提供提示或答案；提交前不公布任何顺序或验证结果'."
+        },
+        {
+          "text": "A full interaction trace records each learner response, the hint level used, and the correction trajectory.",
+          "passed": true,
+          "evidence": "interaction_events contains three events. evt-initial-misconception: learner_response with substantive misconception text, hints_used=[], correction_trajectory=[]. evt-boundary-correction: learner_response showing corrected reasoning, hints_used=['hint_ladder.step=1'], correction_trajectory=['从选择性最高永远第一转向看查询族等值条件模式','识别出边界反例中前导列必须匹配查询族共性的原则','主动列出数据分布确认清单']. evt-independent-transfer: learner_response with full independent analysis, hints_used=[], correction_trajectory=[]."
+        },
+        {
+          "text": "G6 is evaluated dimension by dimension, passes only because real candidate evidence exists, and deterministically routes to S7 without claiming mastery.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains 8 dimensions evaluated individually (内容正确性与可追溯性/对目标和学习者的适配/认知层级/例子代表性/支架质量/答案泄露控制/学习者主动性/交付可用性), all passed=true with specific evidence. verdict='pass', route_to='S7'. candidate_mastery_evidence contains 3 items (independent_application/transfer/reasoning_quality), all status='candidate' (not 'mastered'), each with explicit limits (e.g. '扩展到多列等值+多范围列场景的表现待 S7 复测', '掌握判定属于 G7'). No mastery claim is made."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 142.651,
+        "tokens": 79656,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+          "passed": true,
+          "evidence": "Six explanations with representation fields: exp-frac-part-whole=multiple, exp-frac-comparison-same-whole=concrete, exp-numberline-placement=visual_diagram, exp-inverse-denominator=symbolic, exp-recipe-scaling=worked_narrative, exp-equivalence-scaling=multiple. Bar, number line, and symbolic representations are all explicitly used. Evidence refs point to e-ies-fractions-bar, e-ies-fractions-numberline, e-ccss-6-rp. content_quality_status.reviewed_against includes 'IES Practice Guide: Developing Effective Fractions Instruction' and CCSS standards — all traceable to audited sources."
+        },
+        {
+          "text": "Activities include retrieval, worked example, completion and an independent transfer task that elicit explainable learner evidence, not only mechanical common-denominator speed.",
+          "passed": true,
+          "evidence": "activities array: act-retrieval-pretest (retrieval_pretest), act-worked-example-bars (worked_example), act-numberline-selfdraw (exercise — supplementary), act-verbal-abstract (question — supplementary), act-completion-compare (completion_problem), act-independent-transfer-recipe (independent_transfer). All four required kinds are present. The completion problem requires explanatory reasoning ('请补全并说明每一步的依据') not just mechanical answer. The independent transfer requires explaining each step's fraction reasoning."
+        },
+        {
+          "text": "Difficulty progresses from concrete to abstract within the learner's reachable range and the final scaling task is independently solvable.",
+          "passed": true,
+          "evidence": "Activity progression: bar comparison (concrete visual) → self-drawn number line (visual→spatial) → verbal abstract without graphics (撤除所有图形和数轴后独立口头解释) → completion with framework (partial scaffold) → independent transfer recipe scaling (完全独立完成). scaffolding_fade_strategy explicitly defines: initial_support→fade_rule→terminal_support=on_demand. The independent transfer event (evt-5) shows hints_used=[], indicating the scaling task was solved independently. success_conditions include '在未见配方缩放情境中无提示独立应用分数推理并解释每一步'."
+        },
+        {
+          "text": "Feedback rules address task, process and self-regulation without leaking the answer or substituting the learner's unit-fraction reasoning.",
+          "passed": true,
+          "evidence": "feedback_rules contains two entries. fb-frac-compare: task='比较两个分数时先确认整体是否相同...', process='提示检查：(1)是否用了图形或数轴辅助？(2)是否确认了整体相同？...帮助学习者定位推理链条中断的位置而非直接给出答案', self_regulation='完成比较后让学习者回应：如果下次遇到新分数对...你第一步会做什么？'. fb-recipe-scaling: analogous three-level structure. Neither rule leaks answers — task feedback checks correctness without providing the answer, process feedback diagnoses reasoning steps, self-regulation prompts metacognitive reflection."
+        },
+        {
+          "text": "The interaction trace preserves each response, hint level and correction step, including the moment scaffolding is withdrawn.",
+          "passed": true,
+          "evidence": "Five interaction_events with full detail. evt-1 through evt-3 and evt-5: hints_used=[], learner_response contains full verbatim reasoning. evt-4-completion-compare: hints_used=['hint_ladder.step=2'], correction_trajectory=['在找公分母环节卡住约30秒','一级提示引导回想LCM方法','独立列出倍数并找到12','后续通分与比较全对']. The scaffolding withdrawal is visible: activities 1-3 use visual supports, activity 4 uses partial framework, activity 5 removes all support (hints_used=[])."
+        },
+        {
+          "text": "G6 is evaluated dimension by dimension, passes only with real candidate evidence, and deterministically routes to S7 while deferring mastery to G7.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains 8 dimensions evaluated individually (内容正确性与可追溯性/对目标和学习者的适配/认知层级/例子代表性/支架质量/答案泄露控制/学习者主动性/交付可用性), all passed=true. verdict='pass', route_to='S7'. candidate_mastery_evidence has 3 items (independent_application/reasoning_quality/transfer), all status='candidate', each with explicit limits: E-FRAC-W1-1 notes '公分母查找仍需提示辅助', E-FRAC-W1-2 notes '非单位分数抽象比较尚未独立展示', E-FRAC-W1-3 notes '非整数倍和缩量情境未测'. Mastery is explicitly deferred to G7."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 81.573,
+        "tokens": 73235,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not accept untraceable or unverified content as audited evidence and does not fabricate a passing content_quality_status.",
+          "passed": true,
+          "evidence": "positive_artifact is null — no artifact is accepted. evidence_collected contains ev-lecture-content with provenance='model_hypothesis', status='unsupported', source_ref=null, explicitly marking the lecture as untraceable. No content_quality_status with state='correct' is fabricated. requirement_gaps includes gap-no-traceable-evidence (criticality='high'): '5000字讲义未标明来源追溯与适用边界，关键内容缺乏审计证据引用'."
+        },
+        {
+          "text": "The output recognizes that the handout plus immediate answers produces no judgeable independent learning evidence, only acknowledgment.",
+          "passed": true,
+          "evidence": "requirement_gaps includes gap-no-learner-output (criticality='critical'): '学习者全程未产出任何独立作答或可判定行为证据，仅回复'懂了''. evidence_collected includes ev-learner-dongle with provenance='learner_behavior', status='unsupported', summary='学习者最终回复'懂了'，无任何独立作答、中间步骤、错误修正或迁移尝试'. The rubric_results for 学习者主动性 notes 'interaction_events 为空：无任何 learner_response 含独立推理；仅'懂了'不是 learner_behavior 证据'."
+        },
+        {
+          "text": "The output identifies that difficulty and learner agency are unverified because no independent item was attempted.",
+          "passed": true,
+          "evidence": "requirement_gaps includes gap-no-transfer-evidence (criticality='critical'): '缺失 candidate_mastery_evidence：无独立迁移、延迟保持或推理质量证据'. The rubric_results for 认知层级 notes '单一讲义形式仅覆盖remember/understand层级，无apply/analyze/evaluate/create层级活动'. The rubric_results for 对目标和学习者的适配 notes '长篇讲义未对齐节点exit_criteria与学习者前沿；无 learner_snapshot 驱动的难度与支架适配'."
+        },
+        {
+          "text": "Immediate answer exposure is flagged as answer leakage and the hint/feedback layer is absent, so hints cannot substitute for the learner's reasoning is moot and failing.",
+          "passed": true,
+          "evidence": "requirement_gaps includes gap-answer-leakage (criticality='critical'): '每道题后立刻显示标准答案，无法区分学习者'会做'与'看懂''. Also gap-no-hint-structure (criticality='critical'): '教学交互缺失逐级提示阶梯（hint_ladder）和反馈规则（feedback_rules）'. The rubric_results for 答案泄露控制 is failed with evidence '每道题后立刻显示标准答案；未区分独立任务的提交与答案公布时机；学习者回复'懂了'可能仅是看懂答案而非独立做出'. The 支架质量 dimension is failed: '无 hint_ladder 逐级提示阶梯；无 scaffolding_fade_strategy 渐隐策略；无 feedback_rules'."
+        },
+        {
+          "text": "No learner response, hint level or correction trajectory is fabricated; absent interaction evidence is recorded as a gap rather than invented.",
+          "passed": true,
+          "evidence": "positive_artifact is null — no fabricated interaction_events, no invented learner_response, no fake hints_used, no manufactured correction_trajectory. The processing_record explicitly states: '审查教学交互记录：仅发现一篇5000字讲义、即时答案展示、学习者'懂了'回复'. requirement_gaps documents all absences (gap-no-learner-output, gap-no-hint-structure, gap-no-transfer-evidence). The rubric_results for 学习者主动性 confirms 'interaction_events 为空'. Nothing is invented."
+        },
+        {
+          "text": "G6 does not pass, no valid mastery candidate is emitted, and the deterministic route is revise_here at S6 rather than S7.",
+          "passed": true,
+          "evidence": "quality_evaluation.verdict='revise_here', route_to='S6'. All 8 rubric_results dimensions have passed=false. positive_artifact=null. No candidate_mastery_evidence emitted — no mastery candidate at all. quality_evaluation.evidence explicitly states: 'G6量规全部8维 passed=false；无 candidate_mastery_evidence，禁止进入S7'. The route is deterministically S6, not S7."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 98.555,
+        "tokens": 36013,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+          "passed": false,
+          "evidence": "The output has no layered explanation structure (no explanation_id, no layer, no evidence_refs). No content_quality_status. No evidence_collected with provenance tracking. The session_package_and_trace has session_objectives and activities but explanations are embedded in activity descriptions without any traceability to audited external sources. All index-tuning knowledge appears to come from model common sense."
+        },
+        {
+          "text": "Activities include worked example, completion, contrast and independent transfer tasks that produce judgeable learner-behavior evidence rather than only reading or acknowledgment.",
+          "passed": false,
+          "evidence": "Five activities are present but their types are: consolidation_check (A1), challenge (A2, A3), teaching_output (A4), integration (A5). None match the expected kinds: worked_example, completion_problem, contrast_case, or independent_transfer. The activities do produce learner responses, but the specific scaffolded activity sequence required by the expectation is absent."
+        },
+        {
+          "text": "Task difficulty stays within the learner's learnable range and the independent transfer item is reachable after scaffolding fades.",
+          "passed": false,
+          "evidence": "All five activities are marked difficulty='G6' — no progressive difficulty ramp from easier to harder. No scaffolding_fade_strategy exists. No hint_ladder with fading conditions. The learner goes directly into multi-condition index design challenges without graduated support or a scaffold-withdrawal path to independent transfer."
+        },
+        {
+          "text": "Hint ladder steps point to query shape and official leading-column rules without substituting the learner's key indexing-order reasoning, and no answer is leaked before submission.",
+          "passed": false,
+          "evidence": "No hint_ladder is present in the output. No answer_leakage_control annotations exist on any activity. No feedback_rules with task/process/self-regulation levels. The activities describe expected answers inline without any mechanism to prevent answer exposure before learner submission."
+        },
+        {
+          "text": "A full interaction trace records each learner response, the hint level used, and the correction trajectory.",
+          "passed": false,
+          "evidence": "Each activity has a learner_response field but these are paraphrased summaries ('学习者正确表述了索引前缀匹配机制...'), not verbatim traces. No hints_used arrays exist. No correction_trajectory fields document the learner's path from error to correction. The learning_trace section has aggregate statistics (total_activities=5, passed=5) but no per-event hint/correction detail."
+        },
+        {
+          "text": "G6 is evaluated dimension by dimension, passes only because real candidate evidence exists, and deterministically routes to S7 without claiming mastery.",
+          "passed": false,
+          "evidence": "G6_verdict is a single-paragraph rationale with a flat evidence list — not a dimension-by-dimension rubric evaluation. It states status='PASS' and recommends advancement ('可进入下一学习节点'). No candidate_mastery_evidence with limits is emitted. learner_profile_update.readiness='已准备好进入下一学习节点或接受综合评估' — this asserts readiness rather than deferring mastery judgment to G7."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 42.677,
+        "tokens": 32281,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+          "passed": false,
+          "evidence": "The output has an evidence_log describing learner behaviors (bar comparison, number line drawing, verbal explanation) but no structured explanations section with representation types. No evidence_refs to IES, CCSS, or any audited source. No content_quality_status.reviewed_against. The learner_profile and proficiency_determination describe what the learner did but do not connect explanations to audited pedagogical sources."
+        },
+        {
+          "text": "Activities include retrieval, worked example, completion and an independent transfer task that elicit explainable learner evidence, not only mechanical common-denominator speed.",
+          "passed": false,
+          "evidence": "No structured activities array exists. The evidence_log has 5 entries (E1-E5) describing learner behaviors in categories: 视觉表征, 数轴表征, 概念推理, 程序性独立, 迁移应用. These are observational summaries, not designed activities with kind, instruction, cognitive_level, and answer_leakage_control fields. The activity kinds (retrieval, worked_example, completion, independent_transfer) are not present as designed instructional elements."
+        },
+        {
+          "text": "Difficulty progresses from concrete to abstract within the learner's reachable range and the final scaling task is independently solvable.",
+          "passed": false,
+          "evidence": "The evidence_log shows a natural progression (bar→number line→verbal→completion→transfer) but there is no designed difficulty progression. No scaffolding_fade_strategy with initial_support, fade_rule, and terminal_support. The proficiency_determination notes the learner is 'proficient' but the system did not design the difficulty ramp — it merely observed it. The independent transfer exists (E5) but without a designed scaffolding fade mechanism backing it."
+        },
+        {
+          "text": "Feedback rules address task, process and self-regulation without leaking the answer or substituting the learner's unit-fraction reasoning.",
+          "passed": false,
+          "evidence": "No feedback_rules section exists. A scaffolding_profile is present with hint_level='minimal' and fade_strategy but it lacks the task/process/self_regulation three-level structure. The hint strategy is generic ('仅当学习者在程序执行中出现停顿超过30秒或首次尝试错误时提供一级提示') rather than tailored feedback rules per activity type."
+        },
+        {
+          "text": "The interaction trace preserves each response, hint level and correction step, including the moment scaffolding is withdrawn.",
+          "passed": false,
+          "evidence": "evidence_log entries have behavior, category, and performance fields (e.g. '无提示独立完成', '需一级提示后完成') but no verbatim learner_response text. No hints_used arrays tracking which specific hint was given. No correction_trajectory documenting the path from error to correction. E4 notes '需一级提示后完成' but does not record what the hint was or how the learner corrected. The moment of scaffolding withdrawal is described categorically ('无提示独立完成') but not traced step by step."
+        },
+        {
+          "text": "G6 is evaluated dimension by dimension, passes only with real candidate evidence, and deterministically routes to S7 while deferring mastery to G7.",
+          "passed": false,
+          "evidence": "No G6 dimension-by-dimension rubric evaluation exists. The proficiency_determination directly asserts 'current_node_mastery: proficient' with 'confidence: high' — this is a mastery claim, not a G6 gate pass with candidate evidence. decision.action='advance' and recommended_next_node routes to the next learning node (6.RP.A.1), not S7. indicator_breakdown assigns 'mastered' status to 4 of 5 dimensions. Mastery is asserted, not deferred to G7."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333333333333334,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 32.763,
+        "tokens": 31365,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not accept untraceable or unverified content as audited evidence and does not fabricate a passing content_quality_status.",
+          "passed": true,
+          "evidence": "No positive_artifact or content_quality_status is fabricated. teaching_material_analysis identifies the content as '纯文本讲授' with '未提供分节、摘要、学习目标或先行组织者', no 'worked_examples', no 'practice_opportunities'. personalization_deficiency_diagnosis marks 诊断性评估 as '缺失' with impact='critical'. overall_assessment assigns personalization_readiness_score=0, s6_execution_score=0. No passing status is fabricated."
+        },
+        {
+          "text": "The output recognizes that the handout plus immediate answers produces no judgeable independent learning evidence, only acknowledgment.",
+          "passed": true,
+          "evidence": "teaching_material_analysis.practice_opportunities: '无——每道题后立即显示标准答案，剥夺了学习者独立尝试的机会'. personalization_deficiency_diagnosis, dimension 学习者能动性: '学习者未进行任何独立作答、未提出任何问题、未展示任何思考过程；唯一的回复'懂了'属于无信息量的社交性回应'. s6_specific_gap_analysis: observed_behaviors=['学习者回复'懂了''], gap_severity='maximal'. engagement_metrics: total_interactions=1, substantive_responses=0."
+        },
+        {
+          "text": "The output identifies that difficulty and learner agency are unverified because no independent item was attempted.",
+          "passed": true,
+          "evidence": "personalization_deficiency_diagnosis, dimension 诊断性评估: '没有前测或先验知识摸底，无法确定学习起点' (impact='critical'). Dimension 学习者能动性: '完全缺失' (impact='critical'). Dimension 迁移与综合: 'S6阶段的核心目标——知识迁移、综合应用、跨情境问题解决——完全未被涉及。学习者未曾面对任何迁移性任务' (impact='critical'). s6_specific_gap_analysis: root_cause='教学系统退化为单向信息传递模式——从S1到S6的所有个性化学习阶段均被跳过'."
+        },
+        {
+          "text": "Immediate answer exposure is flagged as answer leakage and the hint/feedback layer is absent, so hints cannot substitute for the learner's reasoning is moot and failing.",
+          "passed": true,
+          "evidence": "personalization_deficiency_diagnosis, dimension 过程性反馈: '每道题后立刻显示标准答案，属于'即时告知答案'而非'渐进式反馈'；无提示层级、无错误分析、无针对性解释' (impact='critical'). Dimension 支架与提示层级: '无任何提示系统——没有一级提示（概念提醒）、二级提示（步骤引导）、三级提示（类比或简化）' (impact='high'). recommendations priority 2 and 3 specifically address removing immediate answer display and building hint level system."
+        },
+        {
+          "text": "No learner response, hint level or correction trajectory is fabricated; absent interaction evidence is recorded as a gap rather than invented.",
+          "passed": true,
+          "evidence": "engagement_metrics accurately records total_interactions=1, substantive_responses=0, questions_asked=0, help_requests=0. personalization_deficiency_diagnosis, dimension 学习轨迹记录: '无可追溯的作答历史、错误模式、进度数据或掌握度变化曲线' (impact='high'). No interaction_events, learner_response, hints_used, or correction_trajectory are fabricated. All gaps are documented as absences. The recommendations describe what SHOULD exist rather than pretending it does."
+        },
+        {
+          "text": "G6 does not pass, no valid mastery candidate is emitted, and the deterministic route is revise_here at S6 rather than S7.",
+          "passed": false,
+          "evidence": "The overall_assessment states personalization_readiness_score=0 and s6_execution_score=0. recommendations suggest priority actions to rebuild the pipeline, with priority 1 being introducing diagnostic pre-test (an S1 concept). However, the output does NOT use the G6 contract language: there is no explicit 'verdict=revise_here', no 'route_to=S6', and no dimension-by-dimension G6 rubric evaluation showing failure. The output's recommendation '建议从S1（诊断性评估）重新构建整个个性化学习管道' suggests restarting from S1 rather than routing to revise_here at S6 — a different and broader conclusion than the S6 contract specifies."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 119.5117,
+        "stddev": 33.1194,
+        "min": 81.573,
+        "max": 142.651
+      },
+      "tokens": {
+        "mean": 77155.0,
+        "stddev": 3437.6563,
+        "min": 73235.0,
+        "max": 79656.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.2778,
+        "stddev": 0.4811,
+        "min": 0.0,
+        "max": 0.8333
+      },
+      "time_seconds": {
+        "mean": 57.9983,
+        "stddev": 35.4712,
+        "min": 32.763,
+        "max": 98.555
+      },
+      "tokens": {
+        "mean": 33219.6667,
+        "stddev": 2462.0718,
+        "min": 31365.0,
+        "max": 36013.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.72",
+      "time_seconds": "+61.5",
+      "tokens": "+43935"
+    }
+  },
+  "notes": [
+    "**Discrimination:** with-skill mean pass rate is `1.0000`; without-skill is `0.2777`; delta is `+0.72`. Evidence-producing activity design, hint leakage control, trace capture and “G6 is not mastery” are effective separators.",
+    "**Variance:** with-skill standard deviation is `0.0000`; without-skill is `0.4809`. The high baseline variance comes from the blocked fixture, where a generic answer can notice missing learner responses but still tends to route incorrectly.",
+    "**Time:** with-skill mean is `119.5117s`, without-skill `57.9983s` (`+61.5s`).",
+    "**Tokens:** actual outer `modelUsage` totals average `77,155.0` with the skill and `33,219.7` without it (`+43,935.3`). Full activities and interaction traces add material cost; compact repeated rubric narration is the main future optimization target.",
+    "**Conclusion:** strong discrimination with explicit time/token overhead justified by trace completeness and answer-leakage controls."
+  ]
+}

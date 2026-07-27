@@ -1,0 +1,102 @@
+{
+  "route": "gclaude",
+  "exit_code": 0,
+  "outer_status": "success",
+  "result_format_note": "The original .result contained a prose prefix before the JSON object; this file contains the parsed JSON review.",
+  "modelUsage": {
+    "glm-5.2": {
+      "inputTokens": 114652,
+      "outputTokens": 14974,
+      "cacheReadInputTokens": 778368,
+      "contextWindow": 200000
+    },
+    "glm-5.1": {
+      "inputTokens": 770,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 256,
+      "contextWindow": 200000
+    }
+  },
+  "review": {
+    "verdict": "pass_with_changes",
+    "confidence": 0.83,
+    "blocking_findings": [],
+    "major_findings": [
+      {
+        "id": "MF1",
+        "artifact": "specs/personalized-learning-stage-contracts/spec.md",
+        "gap": "The fast-tier S2+S3 and S4+S5 merge allow/deny guards are silently absent.",
+        "required_change": "Add merge guards and a verification task, preserving both artifacts and both gates."
+      },
+      {
+        "id": "MF2",
+        "artifact": "specs/verify-mastery-and-replan/spec.md",
+        "gap": "The learner-model protocol specifies versioned update/conflict behavior but omits load-as-of, immutable evidence append, and history audit.",
+        "required_change": "Add retrieval and audit requirements without claiming a live backend."
+      },
+      {
+        "id": "MF3",
+        "artifact": "design.md",
+        "gap": "quick_validate.py validates frontmatter only; schema, duplicated-contract, placeholder, cross-reference, and forward-test evidence need named validation mechanisms.",
+        "required_change": "Define deterministic direct checks and the dclaude forward-test harness; do not treat quick_validate.py as full validation."
+      }
+    ],
+    "minor_findings": [
+      {
+        "id": "m1",
+        "required_change": "Add an affirmative not_applicable-only-with-reason-and-gate_effect scenario."
+      },
+      {
+        "id": "m2",
+        "required_change": "Enumerate model_hypothesis and market_signal as distinct evidence provenance types."
+      },
+      {
+        "id": "m3",
+        "required_change": "Encode default recruitment and interview sample thresholds or an explicit undersample-gap downgrade."
+      },
+      {
+        "id": "m4",
+        "required_change": "Explicitly defer or specify the research-grade tier."
+      },
+      {
+        "id": "m5",
+        "required_change": "Add cross-stage safe cold-start, empty-evidence, and unable-to-confirm behavior."
+      },
+      {
+        "id": "m6",
+        "required_change": "Keep the error-ledger creation and maintenance task explicit."
+      }
+    ],
+    "confirmed_decisions": [
+      "Exactly seven repo-local stage skills with no eighth stage or orchestrator",
+      "Eight spec capabilities map to seven skill folders",
+      "S1/S2 fail closed and confirmation cannot waive external evidence",
+      "Common handoff, seven schemas, confirmation state machine, gates, and deterministic S7 routes",
+      "Twenty-one stage evals plus two cross-domain handoff audits with anti-leakage discipline",
+      "quick_validate.py alone is insufficient",
+      "G6 artifact quality is separate from G7 mastery"
+    ],
+    "eval_contract": {
+      "required_inputs": [
+        "immutable reviewed SOP and example fixtures",
+        "per-skill instructions, UI metadata, contracts, schemas, and eval metadata",
+        "raw executor prompt separated from grader-held assertions"
+      ],
+      "required_outputs": [
+        "schema-valid handoff and stage artifact",
+        "valid gate verdict and allowed route",
+        "preserved route output, exit status, and outer modelUsage",
+        "two simulated end-to-end handoff traces",
+        "error-ledger entries before remediation"
+      ],
+      "comparison_mode": "Forward-test raw fixtures; grade transformed output or defect detection, schema validity, verdict, route, blocked state, and confirmation behavior.",
+      "provenance_requirements": [
+        "source file and section per case",
+        "outer modelUsage",
+        "no model hypothesis counted as external evidence",
+        "retained intermediate verdicts and resolved-error history",
+        "simulated data labeled as fixtures"
+      ]
+    }
+  }
+}

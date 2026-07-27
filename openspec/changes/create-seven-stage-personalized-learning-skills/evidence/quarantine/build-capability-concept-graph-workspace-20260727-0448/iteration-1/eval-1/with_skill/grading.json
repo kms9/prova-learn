@@ -1,0 +1,64 @@
+{
+  "case_id": 1,
+  "config": "with_skill",
+  "graded_at": "2026-07-26T20:55:08Z",
+  "expectation_results": [
+    {
+      "expectation": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+      "passed": true,
+      "evidence": "stage_id=S3 envelope; positive_artifact.type=capability_concept_graph; content.focus_question present; nodes carry node_type concept(C1-C6), representation(R1,R2), strategy(S1-S3), procedure(P1-P6), metacognition(M1)."
+    },
+    {
+      "expectation": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+      "passed": true,
+      "evidence": "All 17 edges respected the stated topological order; hard edges (C1->R1->P1; C2->P2; C2->P3->P4->P5->P6->M1; C4->P4) form no cycle; rubric 结构无环性 passed=true with explicit topo order."
+    },
+    {
+      "expectation": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+      "passed": true,
+      "evidence": "Every edge has prerequisite_strength hard|soft and a rationale field; all 9 hard edges include a '缺该前置则下游不可执行' necessity rationale."
+    },
+    {
+      "expectation": "Every target capability traces to the nodes required to diagnose and assess it.",
+      "passed": true,
+      "evidence": "CAP-DIAGNOSE->C1,C2,C6,R1,S1,P1,P2; CAP-PROPOSE->C3,C4,C5,R2,S2,P3,P4; CAP-VALIDATE->C5,S3,P5,P6,M1, each node carrying diagnostic capability_statement and an assessment item."
+    },
+    {
+      "expectation": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+      "passed": true,
+      "evidence": "All 18 nodes have an observable '能...' capability_statement, common_misconceptions (non-empty), one assessment_items entry, and a mastery_thresholds entry."
+    },
+    {
+      "expectation": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+      "passed": true,
+      "evidence": "traceability covers all 18 nodes with source_refs(S2)/goal_refs(S1)/assessment_refs; quality_evaluation.verdict=pass, route_to=S4, with 结构无环性 and 先修边可解释性 among the passed gate dimensions."
+    }
+  ],
+  "overall_passed": true,
+  "summary": "S3 capability_concept_graph satisfies all six expectations: typed nodes, acyclic hard subgraph, rationaled/strength-tagged edges, full target-to-assessment tracing, complete node-level capability/misconception/threshold coverage, and a G3 pass routing to S4.",
+  "grader_elapsed_s": 30.8,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 9857,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.049713,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 33693,
+      "outputTokens": 3079,
+      "cacheReadInputTokens": 960,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.24592,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.295633
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "case-3-negative-blocked",
+  "prompt": "学习者只说“七天成为 AI 专家”，拒绝补充使用场景、范围或验收方式，并要求不要联网，只凭模型知识给出目标；验收只想做 100 道选择题，80 分算通过。请执行个性化学习 S1 并输出结构化 JSON。",
+  "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S1 反向例子] S1 must fail closed: no accepted positive goal artifact, no G1 pass, research_blocked or pending state, and route remains S1.",
+  "expectations": [
+    "The output does not claim G1 pass.",
+    "The output identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
+    "The lack of executed research is preserved as research_blocked or an equivalent explicit blocking state.",
+    "Model knowledge is not relabeled as external evidence.",
+    "Mandatory confirmation remains unresolved.",
+    "The route stays at S1 and no fabricated positive artifact is accepted."
+  ]
+}

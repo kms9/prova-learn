@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "case-1-positive-primary",
+  "prompt": "G1/G3 已通过，给定 PostgreSQL 查询优化能力图与预设诊断题。学习者行为：能解释普通 EXPLAIN 与 EXPLAIN ANALYZE 的差别（知道后者实际执行，但未提写操作风险）；能指出估算行数与实际行数的差异，却不能解释统计信息的作用；为 tenant_id=? AND status=? ORDER BY created_at DESC 选索引时只说“把选择性最高的列放前面”；数据分布变化后仍沿用同一索引、不要求重新测量；自评熟练度 8/10。请执行个性化学习 S4 并输出结构化 JSON 移交结果。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S4 正向例子1 and PostgreSQL end-to-end §S4] A versioned learner_snapshot whose node states, misconceptions, hint dependence, transfer and confidence calibration are all backed by behavior evidence, with a supported nearest learning frontier and a passing G4 route to S5.",
+  "expectations": [
+    "The output contains a versioned learner_snapshot inside a stage S4 handoff envelope with the strict {type, schema_version, artifact_id, content} wrapper.",
+    "Node states are decided by behavioral observations, and the self-rating 8/10 does not override behavior evidence or mark any disputed node tested_mastered.",
+    "The snapshot distinguishes answered-correctly, independent-without-prompts, and transferable outcomes, including a recorded transfer failure on the distribution-change task.",
+    "Each node state records hint dependency and confidence calibration, and the overconfident index-rule belief is captured as a coded misconception with evidence.",
+    "The learning frontier names a nearest learnable node with traceable evidence refs and a rationale, not the final goal.",
+    "G4 is evaluated dimension by dimension and a pass routes deterministically to S5."
+  ]
+}

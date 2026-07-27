@@ -1,0 +1,445 @@
+{
+  "stage": "S1_个性化学习分析",
+  "version": "1.0",
+  "generated_at": "2026-07-27",
+  "input_summary": {
+    "learner_stated_goal": "七天成为 AI 专家",
+    "learner_provided_context": "无 — 学习者拒绝补充使用场景、范围、验收方式",
+    "assessment_format": "100道选择题",
+    "pass_threshold": 80,
+    "constraints": [
+      "不联网",
+      "仅凭模型知识"
+    ]
+  },
+  "learner_profile": {
+    "explicit": {
+      "goal": "七天成为 AI 专家",
+      "time_budget_days": 7,
+      "assessment_type": "multiple_choice",
+      "question_count": 100,
+      "pass_score": 80
+    },
+    "inferred": {
+      "assumed_starting_level": "初级（对AI有基本认知，但不成体系）",
+      "assumed_daily_study_hours": 6,
+      "total_study_hours": 42,
+      "learning_preference": "结构化、应试导向",
+      "motivation_type": "快速认证/自我提升",
+      "risk_factors": [
+        "目标过于宏大（七天 vs AI专家）——需将目标收敛为'AI通识达标'",
+        "无场景约束导致知识边界模糊——需自行划定合理范围",
+        "拒绝补充信息意味着方案需自包含且可独立执行"
+      ]
+    }
+  },
+  "goal_decomposition": {
+    "original_goal": "七天成为 AI 专家",
+    "refined_goal": "七天内掌握 AI 核心通识体系，通过 100 题选择题测试（≥80分）",
+    "scope_definition": {
+      "included_domains": [
+        "人工智能概述与历史",
+        "机器学习基础（监督/无监督/强化学习）",
+        "深度学习基础（神经网络、CNN、RNN、Transformer）",
+        "自然语言处理核心概念",
+        "计算机视觉核心概念",
+        "生成式 AI 与大语言模型",
+        "AI 伦理与安全",
+        "AI 工程实践与 MLOps 基础",
+        "经典算法与数学基础（概率、线性代数、优化）",
+        "AI 应用场景与产业落地"
+      ],
+      "excluded_domains": [
+        "深度数学证明",
+        "手写代码实现",
+        "特定行业垂直应用（无场景信息）",
+        "前沿论文细节（2025年后）"
+      ]
+    },
+    "depth_level": "概念理解 + 原理辨析 + 典型应用 —— 适配选择题考核",
+    "success_criteria": {
+      "primary": "100题选择题得分 ≥ 80",
+      "secondary": "能对每个知识域的核心概念进行准确辨析"
+    }
+  },
+  "knowledge_point_taxonomy": [
+    {
+      "domain_id": "D01",
+      "domain": "人工智能概述与历史",
+      "weight": 10,
+      "hours": 3,
+      "key_topics": [
+        "AI 定义与图灵测试",
+        "符号主义 vs 连接主义 vs 行为主义",
+        "AI 三次浪潮与关键事件",
+        "强AI vs 弱AI vs AGI",
+        "AI 主要应用领域总览"
+      ]
+    },
+    {
+      "domain_id": "D02",
+      "domain": "机器学习基础",
+      "weight": 15,
+      "hours": 6,
+      "key_topics": [
+        "监督学习（分类/回归）核心算法：线性回归、逻辑回归、SVM、决策树、随机森林、KNN、朴素贝叶斯",
+        "无监督学习：K-Means、DBSCAN、PCA、t-SNE",
+        "半监督学习与自监督学习概念",
+        "强化学习：MDP、Q-Learning、Policy Gradient 概念",
+        "偏差-方差权衡、过拟合/欠拟合",
+        "交叉验证、正则化（L1/L2）",
+        "特征工程基础",
+        "评估指标：准确率、精确率、召回率、F1、AUC-ROC、混淆矩阵"
+      ]
+    },
+    {
+      "domain_id": "D03",
+      "domain": "深度学习基础",
+      "weight": 18,
+      "hours": 8,
+      "key_topics": [
+        "神经网络基本结构：神经元、激活函数（ReLU、Sigmoid、Tanh、Softmax）",
+        "反向传播与梯度下降变体（SGD、Adam、RMSprop）",
+        "CNN：卷积层、池化层、经典架构（LeNet、AlexNet、VGG、ResNet）",
+        "RNN、LSTM、GRU 原理与对比",
+        "Transformer：自注意力、多头注意力、位置编码",
+        "Batch Normalization / Layer Normalization",
+        "Dropout 与正则化技术",
+        "迁移学习与微调",
+        "损失函数（交叉熵、MSE、对比损失）"
+      ]
+    },
+    {
+      "domain_id": "D04",
+      "domain": "自然语言处理",
+      "weight": 12,
+      "hours": 5,
+      "key_topics": [
+        "文本预处理：分词、词干提取、停用词",
+        "词向量：Word2Vec、GloVe、FastText",
+        "序列模型在 NLP 中的应用",
+        "注意力机制与 Seq2Seq",
+        "预训练语言模型：BERT、GPT 系列演进",
+        "提示工程基础概念",
+        "RAG（检索增强生成）概念",
+        "NLP 评估指标：BLEU、ROUGE、困惑度"
+      ]
+    },
+    {
+      "domain_id": "D05",
+      "domain": "计算机视觉",
+      "weight": 10,
+      "hours": 5,
+      "key_topics": [
+        "图像分类、目标检测（R-CNN 系列、YOLO、SSD）",
+        "图像分割（语义分割 vs 实例分割）",
+        "GAN 与扩散模型概念",
+        "图像生成与风格迁移",
+        "多模态模型（CLIP、DALL-E 概念）",
+        "CV 评估指标：mAP、IoU"
+      ]
+    },
+    {
+      "domain_id": "D06",
+      "domain": "生成式 AI 与大语言模型",
+      "weight": 15,
+      "hours": 6,
+      "key_topics": [
+        "LLM 训练流程：预训练、SFT、RLHF、DPO",
+        "Scaling Law 概念",
+        "上下文学习与思维链",
+        "幻觉问题与缓解策略",
+        "Agent 与工具使用概念",
+        "开源 vs 闭源模型生态",
+        "Token 与 Tokenization",
+        "推理优化：量化、蒸馏、KV-Cache"
+      ]
+    },
+    {
+      "domain_id": "D07",
+      "domain": "AI 伦理与安全",
+      "weight": 8,
+      "hours": 3,
+      "key_topics": [
+        "偏见与公平性",
+        "可解释性（XAI）：LIME、SHAP",
+        "隐私保护：联邦学习、差分隐私概念",
+        "AI 对齐问题",
+        "对抗攻击与鲁棒性",
+        "AI 监管与治理框架（EU AI Act 等概念）"
+      ]
+    },
+    {
+      "domain_id": "D08",
+      "domain": "AI 工程实践",
+      "weight": 7,
+      "hours": 3,
+      "key_topics": [
+        "MLOps 基本流程：数据→训练→评估→部署→监控",
+        "模型服务与推理优化",
+        "特征存储与模型注册",
+        "A/B 测试与实验设计",
+        "数据标注与质量管控",
+        "GPU/TPU 硬件基础概念"
+      ]
+    },
+    {
+      "domain_id": "D09",
+      "domain": "数学与算法基础",
+      "weight": 8,
+      "hours": 3,
+      "key_topics": [
+        "概率论：条件概率、贝叶斯定理、期望、方差",
+        "线性代数：向量、矩阵、特征值/特征向量",
+        "优化：梯度下降、凸优化概念",
+        "信息论：熵、交叉熵、KL 散度",
+        "常见距离度量：欧氏距离、余弦相似度"
+      ]
+    }
+  ],
+  "daily_schedule": [
+    {
+      "day": 1,
+      "theme": "AI 全景与机器学习入门",
+      "domains": [
+        "D01",
+        "D02（部分）"
+      ],
+      "hours": 6,
+      "plan": [
+        "AI 历史、流派、核心概念（2h）",
+        "监督学习核心算法概览（2h）",
+        "评估指标与过拟合/欠拟合（1h）",
+        "当日知识自测（1h）"
+      ],
+      "daily_quiz_count": 12
+    },
+    {
+      "day": 2,
+      "theme": "机器学习深化与无监督学习",
+      "domains": [
+        "D02（续）",
+        "D08"
+      ],
+      "hours": 6,
+      "plan": [
+        "无监督学习与降维（2h）",
+        "强化学习基础概念（1h）",
+        "特征工程与交叉验证（1.5h）",
+        "MLOps 与工程实践（1h）",
+        "当日知识自测（0.5h）"
+      ],
+      "daily_quiz_count": 12
+    },
+    {
+      "day": 3,
+      "theme": "深度学习核心",
+      "domains": [
+        "D03",
+        "D09"
+      ],
+      "hours": 7,
+      "plan": [
+        "神经网络基础与激活函数（1.5h）",
+        "反向传播与优化器（1.5h）",
+        "CNN 架构演进（1.5h）",
+        "数学基础串讲（1.5h）",
+        "当日知识自测（1h）"
+      ],
+      "daily_quiz_count": 14
+    },
+    {
+      "day": 4,
+      "theme": "序列模型与 Transformer",
+      "domains": [
+        "D03（续）",
+        "D04（部分）"
+      ],
+      "hours": 7,
+      "plan": [
+        "RNN/LSTM/GRU 深入（1.5h）",
+        "Transformer 架构精讲（2h）",
+        "NLP 基础与词向量（1.5h）",
+        "预训练语言模型概览（1h）",
+        "当日知识自测（1h）"
+      ],
+      "daily_quiz_count": 14
+    },
+    {
+      "day": 5,
+      "theme": "NLP 深化与计算机视觉",
+      "domains": [
+        "D04（续）",
+        "D05"
+      ],
+      "hours": 6,
+      "plan": [
+        "BERT/GPT 对比与演进（1.5h）",
+        "提示工程与 RAG（1h）",
+        "CV 核心任务与架构（2h）",
+        "多模态模型概念（1h）",
+        "当日知识自测（0.5h）"
+      ],
+      "daily_quiz_count": 14
+    },
+    {
+      "day": 6,
+      "theme": "生成式 AI 与 LLM 深入",
+      "domains": [
+        "D06",
+        "D07"
+      ],
+      "hours": 6,
+      "plan": [
+        "LLM 训练全流程（2h）",
+        "Agent、工具使用、推理优化（1.5h）",
+        "AI 伦理与安全全面梳理（1.5h）",
+        "当日知识自测（1h）"
+      ],
+      "daily_quiz_count": 14
+    },
+    {
+      "day": 7,
+      "theme": "总复习与模拟考试",
+      "domains": [
+        "D01-D09"
+      ],
+      "hours": 6,
+      "plan": [
+        "跨域知识串联与对比辨析（2h）",
+        "高频易错点专项突破（1.5h）",
+        "全真模拟考试 100 题（1.5h）",
+        "错题回顾与最后补漏（1h）"
+      ],
+      "daily_quiz_count": 100
+    }
+  ],
+  "assessment_blueprint": {
+    "total_questions": 100,
+    "pass_score": 80,
+    "question_distribution": [
+      {
+        "domain_id": "D01",
+        "domain": "人工智能概述与历史",
+        "question_count": 8,
+        "target_correct": 7
+      },
+      {
+        "domain_id": "D02",
+        "domain": "机器学习基础",
+        "question_count": 15,
+        "target_correct": 12
+      },
+      {
+        "domain_id": "D03",
+        "domain": "深度学习基础",
+        "question_count": 18,
+        "target_correct": 14
+      },
+      {
+        "domain_id": "D04",
+        "domain": "自然语言处理",
+        "question_count": 12,
+        "target_correct": 10
+      },
+      {
+        "domain_id": "D05",
+        "domain": "计算机视觉",
+        "question_count": 10,
+        "target_correct": 8
+      },
+      {
+        "domain_id": "D06",
+        "domain": "生成式 AI 与大语言模型",
+        "question_count": 15,
+        "target_correct": 12
+      },
+      {
+        "domain_id": "D07",
+        "domain": "AI 伦理与安全",
+        "question_count": 8,
+        "target_correct": 6
+      },
+      {
+        "domain_id": "D08",
+        "domain": "AI 工程实践",
+        "question_count": 7,
+        "target_correct": 6
+      },
+      {
+        "domain_id": "D09",
+        "domain": "数学与算法基础",
+        "question_count": 7,
+        "target_correct": 5
+      }
+    ],
+    "difficulty_distribution": {
+      "easy": {
+        "count": 35,
+        "description": "概念识记——直接考察定义与术语"
+      },
+      "medium": {
+        "count": 45,
+        "description": "理解辨析——对比相似概念、判断适用场景"
+      },
+      "hard": {
+        "count": 20,
+        "description": "综合推理——跨域关联、因果推断、案例分析"
+      }
+    },
+    "question_types": {
+      "single_choice": 80,
+      "multiple_choice": 20
+    },
+    "scoring_strategy": "单选每题1分，多选全对得1分、部分对0.5分、错选0分。卷面满分100分，≥80分通过。"
+  },
+  "risk_assessment": {
+    "feasibility_score": "中等偏高（6.5/10）",
+    "key_risks": [
+      {
+        "risk": "知识广度 vs 深度矛盾",
+        "mitigation": "以选择题辨析能力为导向，重概念边界而非公式推导"
+      },
+      {
+        "risk": "七天时间不足以覆盖所有子域",
+        "mitigation": "按权重分配时间，D02/D03/D06 为核心高权重域，优先保障"
+      },
+      {
+        "risk": "学习者基础未知导致起点错配",
+        "mitigation": "Day1 快速诊断性自测，若正确率<40%则建议延长至14天"
+      },
+      {
+        "risk": "无场景约束导致知识无法迁移",
+        "mitigation": "在各域中加入典型应用场景案例，确保概念落地"
+      }
+    ],
+    "recommended_actions": [
+      "若 Day1 诊断测试正确率低于 40%，应将计划调整为 14 天",
+      "每日自测需达到 75% 正确率方可进入下一天，否则当日内容重学",
+      "第 7 天模拟考若低于 75 分，建议延期正式测试并针对性补弱"
+    ]
+  },
+  "daily_progress_tracking": {
+    "checkpoint_day_1": {
+      "min_quiz_score_pct": 70,
+      "action_if_fail": "重学 Day1 内容，Day1 不通过不进入 Day2"
+    },
+    "checkpoint_day_3": {
+      "min_quiz_score_pct": 72,
+      "action_if_fail": "回顾薄弱域，调整下半程重点"
+    },
+    "checkpoint_day_5": {
+      "min_quiz_score_pct": 75,
+      "action_if_fail": "Day6 增加1小时补弱时间"
+    },
+    "checkpoint_day_7": {
+      "simulated_exam_min_score": 80,
+      "action_if_fail": "延期正式考试，分析错题分布后补学1-2天"
+    }
+  },
+  "metadata": {
+    "note": "本方案基于学习者仅提供'七天成为 AI 专家'目标且拒绝补充信息的约束生成。所有范围界定、深度选择和知识域划分均由模型基于 AI 通识教育的一般标准自行推断。实际执行时应根据学习者的真实起点和反馈动态调整。",
+    "scope_rationale": "将'AI专家'收敛为'AI通识体系达标'而非'研究级专家'——前者在七天高强度学习下可达成选择题80分目标，后者需要以年为单位。",
+    "no_external_resources": "按学习者要求未引用任何联网资源，所有知识域和考点基于模型训练数据中的 AI 教育体系构建。"
+  }
+}

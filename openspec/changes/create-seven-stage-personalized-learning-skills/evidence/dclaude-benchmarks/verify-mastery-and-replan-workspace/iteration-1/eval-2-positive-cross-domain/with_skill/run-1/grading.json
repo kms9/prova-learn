@@ -1,0 +1,91 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope with both ordered sections present.",
+      "passed": true,
+      "evidence": "Envelope has stage_id=\"S7\". positive_artifact.type=\"mastery_and_replanning_bundle\" (artifact_id mrb-g6-frac-s7-001). content contains both mastery_verification and learner_model_update_and_replan, with mastery_verification appearing first ('both ordered sections present')."
+    },
+    {
+      "text": "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+      "passed": true,
+      "evidence": "Four distinct evidence events support mastery: F1 '不看材料独立解释 3/5 > 3/7' (independent, no materials); F2 '近迁移比较 4/9 与 4/11' (near transfer); F3 '表征从图形转到数轴' (representation transfer) AND '一周后延迟复测' (delayed retention); F4 '食谱缩放中正确使用分数关系' (far/functional transfer). Both nodes show transfer.result='pass' and delayed_retention.result='pass'; hint_dependency.level='none' throughout. Mastery rests on all four events together, not one item."
+    },
+    {
+      "text": "Each model_patch change from partial to mastered is backed by explicit evidence event IDs and rationale.",
+      "passed": true,
+      "evidence": "model_patch[0] unit_fraction_magnitude: before='partial', after='mastered', evidence_event_ids=['F1','F2','F3','F4'] with rationale; model_patch[1] same_numerator_comparison: before='partial', after='mastered', evidence_event_ids=['F1','F2','F3','F4'] with rationale. Each partial→mastered transition is tied to explicit event IDs and reasoning."
+    },
+    {
+      "text": "The update is version-checked (expected_model_version matched, update_status=applied); version_conflict and not_executed remain the honest fallback states defined by the schema.",
+      "passed": true,
+      "evidence": "update.expected_model_version=6, update.loaded_model_version=6, update.status='applied', update.persistence='applied', update_status='applied' (before model_version 6 → after 7). The status field is an enum that the skill schema (mastery-and-replanning-bundle.schema.json) defines to include version_conflict and not_executed, and the sibling case-3 run renders those states under mismatched conditions; this output honestly emits 'applied' because versions matched rather than hard-coding success. Caveat: THIS output does not itself enumerate the fallback tokens."
+    },
+    {
+      "text": "Attribution NODE_MASTERED routes deterministically to S6 (next node), with a maintenance plan in review_schedule; complete is reserved for true goal-level achievement.",
+      "passed": true,
+      "evidence": "attribution.primary='NODE_MASTERED', secondary=[]. route.attribution='NODE_MASTERED', route.route_to='S6'; quality_evaluation.verdict='pass', route_to='S6'. review_schedule is present with retrieval, spacing, interleaving, and delayed_retest {scheduled:true, interval_days:14}. decision='continue' — NOT 'complete'; the top-level run 'status' is 'completed' but the mastery decision field is 'continue', so 'complete' is correctly reserved (Example B notes GOAL_ACHIEVED→complete only at a terminal goal node)."
+    },
+    {
+      "text": "Content-quality vs learner-knowledge are distinguished: because content and graph are verified correct, mastery is attributed to the learner rather than to a content fix.",
+      "passed": true,
+      "evidence": "assumptions include '内容质量问题与图谱错误已在上游排除，非学习者能力问题'; processing_record records distinguishing content质量(S6)/策略(S5)/诊断(S4)/图谱(S3)/来源(S2)/目标(S1) and '确认无上游污染'; requirement_gaps=[]. attribution.primary='NODE_MASTERED' credits the learner; no content-fix or source-correction action is proposed."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_steps": 9,
+    "num_turns": 9,
+    "errors_encountered": 0,
+    "output_chars": 13799,
+    "transcript_chars": 963,
+    "total_tokens": 79938
+  },
+  "timing": {
+    "executor_duration_seconds": 96,
+    "total_duration_seconds": 91.6
+  },
+  "claims": [
+    {
+      "claim": "expected_model_version=6 matches loaded version=6 on a real persistent backend; update applied, version advanced 6→7",
+      "type": "factual",
+      "verified": true,
+      "evidence": "update.expected_model_version=6, update.loaded_model_version=6, update.status='applied', update.persistence='applied'; update.before.model_version=6, update.after.model_version=7."
+    },
+    {
+      "claim": "All four indicators F1–F4 reach mastery under no-hint conditions",
+      "type": "factual",
+      "verified": true,
+      "evidence": "evidence_collected F1–F4 all status='supported'; hint_dependency.level='none' for both nodes; mastery_judgment marks both nodes 'mastered'."
+    },
+    {
+      "claim": "Decision is continue, route S6, with a 14-day delayed retest scheduled",
+      "type": "factual",
+      "verified": true,
+      "evidence": "decision='continue', route.route_to='S6', review_schedule.delayed_retest={scheduled:true, interval_days:14, target_nodes:[unit_fraction_magnitude, same_numerator_comparison]}."
+    },
+    {
+      "claim": "The response is returned as ONLY a valid JSON object with no markdown fence and no commentary",
+      "type": "process",
+      "verified": false,
+      "evidence": "response.txt opens with a multi-paragraph prose prefix ('Now I have all the reference materials...') including bulleted scenario notes, then wraps the JSON in a ```json fence. normalization.json reports original_valid_json=false, 774 leading chars and 5 trailing chars removed. executor_prompt.txt forbade markdown fences and commentary — a raw-response defect preserved here per grading instructions."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No expectation enforces the raw-output contract ('ONLY one valid JSON object, no markdown fence, no commentary'). This run — like the other with_skill runs — emits a prose prefix plus a ```json fence (normalization.json original_valid_json=false) in direct violation of the prompt; a pure-JSON assertion would capture this consistent defect."
+      }
+    ],
+    "overall": "All six expectations are discriminating and well-scoped, cleanly separating schema structure (1), evidence quality (2), update traceability (3,4), routing correctness (5), and the content-vs-learner distinction (6). The only gap is the missing output-format assertion that would catch the prose-prefix/fence defect."
+  }
+}

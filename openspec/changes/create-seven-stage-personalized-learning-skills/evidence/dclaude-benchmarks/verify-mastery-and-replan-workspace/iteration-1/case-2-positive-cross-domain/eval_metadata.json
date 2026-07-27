@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "prompt": "G6 已通过。六年级分数学习者不看材料解释 3/5 > 3/7（F1）；近迁移比较 4/9 与 4/11（F2）；表征从图形转到数轴（F3）；一周后独立完成延迟复测（F3）；在食谱缩放中正确使用分数关系（F4）。全程无提示。掌握规则在测评前已确定，内容与图谱正确。expected_model_version=6，加载版本 6，存在真实持久化后端。请执行个性化学习 S7，输出结构化 JSON 移交结果。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S7 正向例子2] A mastery_and_replanning_bundle marking the fraction nodes mastered via multidimensional transfer and delayed evidence, with an applied version-checked update, decision continue, a maintenance review schedule, and a passing G7 route to S6.",
+  "expectations": [
+    "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope with both ordered sections present.",
+    "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+    "Each model_patch change from partial to mastered is backed by explicit evidence event IDs and rationale.",
+    "The update is version-checked (expected_model_version matched, update_status=applied); version_conflict and not_executed remain the honest fallback states defined by the schema.",
+    "Attribution NODE_MASTERED routes deterministically to S6 (next node), with a maintenance plan in review_schedule; complete is reserved for true goal-level achievement.",
+    "Content-quality vs learner-knowledge are distinguished: because content and graph are verified correct, mastery is attributed to the learner rather than to a content fix."
+  ]
+}

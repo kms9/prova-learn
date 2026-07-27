@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "case-3-negative-blocked",
+  "prompt": "输入只有一个目录：SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 查询优化。没有焦点问题、边的理由、误概念、评估题、掌握规则或来源映射。请执行个性化学习 S3 并输出结构化结果。",
+  "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S3 反向例子] A topic directory must not pass as a capability_concept_graph; G3 fails and the route revises S3 or returns upstream to S2 for unsupported facts.",
+  "expectations": [
+    "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+    "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+    "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+    "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+    "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+    "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded."
+  ]
+}

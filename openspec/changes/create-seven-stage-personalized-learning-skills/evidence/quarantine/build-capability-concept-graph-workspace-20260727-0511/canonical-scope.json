@@ -1,0 +1,7 @@
+{
+  "canonical": false,
+  "reason": "Temporary Claude Skill Eval workspace materialized before the current gclaude S3 rerun completed. Its retained grading describes the older S1-route output and does not correspond to reviews/s3-gclaude-fix-eval.outer.json, whose fresh result routes to S2.",
+  "source_location": ".agents/skills/build-capability-concept-graph-workspace",
+  "quarantined_at": "2026-07-27",
+  "related_outer": "../../../reviews/s3-gclaude-fix-eval.outer.json"
+}

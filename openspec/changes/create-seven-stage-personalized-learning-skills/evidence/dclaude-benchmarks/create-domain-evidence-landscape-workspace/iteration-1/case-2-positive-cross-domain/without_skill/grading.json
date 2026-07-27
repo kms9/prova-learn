@@ -1,0 +1,90 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+      "passed": false,
+      "evidence": "The without_skill output does NOT contain a domain_evidence_landscape or S2 handoff envelope. It produces a 'perspectives' structure with 4 dimensions (domain_consensus, common_misconceptions, teaching_evidence, case_experiences) and a synthesis_for_S2 section. There is no research_run_manifest with online status, perspectives, queries with executed_at timestamps, rounds, or follow_up_triggers. The research_quality_notes.search_transparency field claims '共执行7次独立联网搜索' but there is no structured manifest recording actual query strings, execution times, or perspective-to-query mapping."
+    },
+    {
+      "text": "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+      "passed": false,
+      "evidence": "No category_coverage structure exists. Sources are cited inline within evidence_summary fields (e.g., 'Siegler, R.S. et al. (2012)...') but without explicit classification into the six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier). There is no source_ledger with evidence_id, source_category, or gate_effect. No structured tracking of which categories are covered vs gap vs not_applicable."
+    },
+    {
+      "text": "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+      "passed": false,
+      "evidence": "No claims array with supported/unsupported status and evidence_refs exists. The output presents domain_consensus items with confidence ratings (very_high, high) and sources lists, but these are descriptive rather than structured claims with traceable evidence_refs mapping to a source_ledger. There is no evidence_gaps array documenting the limits of practice guides. The IES practice guide is not explicitly cited."
+    },
+    {
+      "text": "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+      "passed": false,
+      "evidence": "The output has a 'common_misconceptions' section listing 7 items (MM-1 through MM-7) with root_cause, frequency, and age_range — these are domain-level misconceptions. However, there is no explicit separation between 'domain-level misconceptions all learners face' and 'this specific learner's known misconceptions'. There is no open_problems array. The consensus items appear in domain_consensus but there is no separate open_problems list or disagreements structure preserving both sides' arguments."
+    },
+    {
+      "text": "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+      "passed": false,
+      "evidence": "No explicit market_signal labeling exists. The output contains teaching tips (TE-1 through TE-6) and case_experiences (CE-1 through CE-5) in the same top-level structure as domain_consensus, without provenance classification (market_signal vs external_evidence vs model_hypothesis). The synthesis_for_S2.design_implications section integrates all four perspectives but does not distinguish signal provenance. No source_ledger with provenance field exists."
+    },
+    {
+      "text": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking.",
+      "passed": false,
+      "evidence": "No quality_evaluation or rubric_results structure exists. No G2 dimension-by-dimension evaluation. No research_executed boolean. No verdict or route_to. The output moves to synthesis_for_S2 which describes 'G1_to_S2_bridge' and provides design implications, but without any formal gate evaluation."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "tool_calls": {
+      "Read": 0,
+      "Write": 0,
+      "Bash": 0,
+      "WebSearch": 7,
+      "WebFetch": 0
+    },
+    "total_tool_calls": 7,
+    "total_steps": 12,
+    "errors_encountered": 0,
+    "output_chars": 18000,
+    "transcript_chars": 1500
+  },
+  "timing": {
+    "executor_duration_seconds": 135,
+    "grader_duration_seconds": 0,
+    "total_duration_seconds": 132.165
+  },
+  "claims": [
+    {
+      "claim": "共执行7次独立联网搜索",
+      "type": "process",
+      "verified": false,
+      "evidence": "The research_quality_notes.search_transparency claims '共执行7次独立联网搜索，覆盖学术数据库(ERIC, Springer, ScienceDirect, ResearchGate)、教学实践网站...' but there is no research_run_manifest with query strings, executed_at timestamps, or perspective-question-query mapping. The outer.json does not show tool-level search counts. The claim cannot be verified from the output structure."
+    },
+    {
+      "claim": "Output returned ONLY one valid JSON object with no markdown fence",
+      "type": "factual",
+      "verified": false,
+      "evidence": "response.txt line 1: 'Based on the comprehensive multi-perspective research I've conducted, here is the structured JSON output:' followed by line 3: '```json' and final line: '```'. Violates executor instruction."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries",
+        "reason": "This assertion correctly catches the structural divergence. The without-skill output produces a perspectives-based synthesis (domain_consensus, common_misconceptions, teaching_evidence, case_experiences) that is structurally different from the required domain_evidence_landscape with handoff envelope, research_run_manifest, source_ledger, claims, and category_coverage."
+      },
+      {
+        "reason": "The without-skill output demonstrates that the baseline model can produce pedagogically coherent research synthesis about fraction learning — it correctly identifies whole number bias, number line effectiveness, benchmarking strategies, etc. However, all 6 assertions fail because the output lacks the structured evidence-landscape format. This confirms the assertions are discriminating and not just checking surface presence of keywords."
+      }
+    ],
+    "overall": "Assertions are discriminating — without-skill fails all 6 while with-skill passes all 6. This demonstrates the skill adds structural rigor (handoff envelope, research_run_manifest, source_ledger, claims, category_coverage, G2 gate) that the baseline model does not produce."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "case_id": 3,
+  "config": "without_skill",
+  "graded_at": "2026-07-26T21:06:25Z",
+  "expectation_results": [
+    {
+      "expectation": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+      "passed": false,
+      "evidence": "Output is empty; the explicit rejection/evaluation of the topic sequence is never demonstrated."
+    },
+    {
+      "expectation": "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+      "passed": false,
+      "evidence": "Output is empty; none of these elements are identified."
+    },
+    {
+      "expectation": "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+      "passed": false,
+      "evidence": "Output is empty; nothing is reported as failed."
+    },
+    {
+      "expectation": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+      "passed": true,
+      "evidence": "Output contains no content at all, so no invention or relabeling occurs."
+    },
+    {
+      "expectation": "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+      "passed": false,
+      "evidence": "Output is empty; absence of traceability is not reported and nothing is attributed."
+    },
+    {
+      "expectation": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+      "passed": false,
+      "evidence": "Output is empty; no G3 status, routing decision, or downstream scope recording appears."
+    }
+  ],
+  "overall_passed": false,
+  "summary": "Executor output is empty, so all substantive evaluation/reporting expectations fail; only the pure no-fabrication prohibition is vacuously met.",
+  "grader_elapsed_s": 74.09,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 353,
+      "outputTokens": 11,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0021680000000000002,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 22721,
+      "outputTokens": 3265,
+      "cacheReadInputTokens": 704,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.195582,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.19775
+}

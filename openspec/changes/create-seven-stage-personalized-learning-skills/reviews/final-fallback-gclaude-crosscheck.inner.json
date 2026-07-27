@@ -1,0 +1,131 @@
+{
+  "audit_id": "final-fallback-gclaude-crosscheck",
+  "route_role": "fallback_for=dclaude",
+  "fallback_for": "dclaude",
+  "verdict": "pass",
+  "confidence": 0.9,
+  "blocking_findings": [],
+  "major_findings": [],
+  "minor_findings": [
+    {
+      "finding_id": "MIN-04-RESIDUAL",
+      "file": ".agents/skills/verify-mastery-and-replan/references/mastery-and-replanning-bundle.schema.json (content.mastery_verification.mastery_judgment[].status; content.learner_model_update_and_replan.load.current_model_version)",
+      "summary": "S7 schema still does not mechanically couple mastery_judgment.status='mastered' to same-node node_mastery_evidence, and load.current_model_version keeps integer minimum:1 so it cannot encode a cold-start version 0. Both remain contract/rubric-enforced rather than schema-enforced.",
+      "failure_scenario": "No allOf/if-then joins the two node_id-linked arrays (evidence vs judgment), so a status='mastered' with weak multidim evidence passes Draft202012Validator; current_model_version<1 is rejected. This is a documented design boundary (Draft 2020-12 cannot reliably express the cross-array join; cold-start is intentionally an input-gate failure routing to S4 with positive_artifact=null), not a masked defect. Non-blocking; no skill-correctness impact.",
+      "assessment": "Non-blocking residual schema-hardening opportunity, explicitly justified in stage-contract.md and contract-guard-audit.md. Carried forward from the primary crosscheck's MIN-04-RESIDUAL."
+    }
+  ],
+  "agreements": [
+    {
+      "finding_id": "MAJ-01-factual-basis",
+      "assessment": "All three audits agree the underlying facts are real: the case-* tree diverges from the benchmark for diagnose c2 (5/6), diagnose c3 (4/6) and verify c1 (5/6); diagnose/verify grader_run_status.json shows is_error=true/exit_code=1; and the pre-fix S4 diagnose case-3 raw output opened with a prose preamble (output-contract violation).",
+      "evidence": "Verified: diagnose case-2/3 with_skill grading.json = 5/6 and 4/6; verify case-1 with_skill = 5/6; grader_run_status.json for diagnose/verify = {is_error:true,exit_code:1}; diagnose case-3 response.txt opens with prose 'Now I have a thorough understanding...' (handoff-envelope.schema.json requires a pure JSON envelope)."
+    },
+    {
+      "finding_id": "BF-1-dclaude-402",
+      "assessment": "The original gclaude closure (final-gclaude-audit-closed), the fallback, and the primary crosscheck all preserve the dclaude HTTP 402 Insufficient Balance as an environmental/provider-side block with empty modelUsage, not a skill-correctness defect. It is recorded as a route_limitation, not a blocking/major finding.",
+      "evidence": "final-dclaude-closure.outer.json = {is_error:true,api_error_status:402,modelUsage:{},session_id:5b22ea57...}; ledger ERR-037 and ERR-043 are the only two OPEN entries; all three accepted structured audits route=gclaude with non-empty modelUsage."
+    },
+    {
+      "finding_id": "MAJ-01-canonical-layer-fix",
+      "assessment": "All audits agree the substantive S4 negative-case defect the optimistic grade masked is fixed in the canonical layer: the repaired artifact fails closed at S4.",
+      "evidence": "diagnose eval-3 with_skill canonical_output result.gclaude-rerun.json = {stage_id:S4,status:pending,input_validation:pass,verdict:revise_here,route_to:S4,positive_artifact:null}; handoff-envelope.schema.json validates it (FormatChecker, 0 errors)."
+    },
+    {
+      "finding_id": "skill-completeness-and-schema-validity",
+      "assessment": "All audits agree: exactly seven self-contained stage skills, no 8th/orchestrator skill, each carrying the required files; 14 Draft 2020-12 schemas self-valid; the 7 shared handoff schemas are byte-identical.",
+      "evidence": ".agents/skills has exactly 7 top-level dirs (no workspace); each has SKILL.md, agents/openai.yaml, stage-contract.md, handoff-envelope.schema.json, one stage-artifact schema, example.md, evals.json(3 evals); 7 handoff schemas share one SHA-256 (1 unique hash)."
+    },
+    {
+      "finding_id": "honest-route-provenance",
+      "assessment": "All audits agree the route provenance is honest: the gclaude fallback declares fallback_for=dclaude, is not mislabeled dclaude, and makes no provider-diversity claim.",
+      "evidence": "final-route-fallback-approval.md documents user authorization + fallback_for=dclaude + no provider-diversity claim; diagnose/verify grader-route.json and the 3 accepted audits are route=gclaude."
+    }
+  ],
+  "disagreements": [
+    {
+      "finding_id": "MAJ-01",
+      "assessment": "Disagree with the fallback audit's major-severity 'benchmark fails to reconcile with canonical grading' conclusion. The fallback treated the retained case-* historical tree as canonical; the manifest-declared canonical layer is eval-*/<configuration>/run-1, against which all 42 gradings reconcile exactly with the benchmark. I independently confirm the primary crosscheck's rejection.",
+      "evidence": "canonical-evidence-manifest.json declares canonical_run_template='eval-*/<configuration>/run-1' and lists 'case-*/<configuration>' plus grader_run_status.json as historical_noncanonical. Mechanical check: eval-* with_skill/without_skill pass-counts for all 7 skills x 3 evals x 2 configs equal benchmark.json runs[].passed exactly (e.g. diagnose eval-* = 6,6,6 / 0,2,6; verify eval-* = 6,6,6 / 1,2,5), matching run_summary; only the case-* tree diverges."
+    }
+  ],
+  "adjudications": [
+    {
+      "finding_id": "MAJ-01",
+      "decision": "rejected",
+      "reason": "MAJ-01 stems from treating noncanonical case-* history as the aggregation source. The canonical eval-* layer is internally consistent with the benchmark (42/42) and with the canonical_output artifacts (21/21 with_skill envelopes schema-valid). The one substantive execution defect (S4 diagnose case-3 prose/fence + S1 route) is fixed in the canonical repaired artifact, not masked.",
+      "current_evidence": "eval-* grading reconciles to benchmark 42/42; diagnose eval-3 with_skill result.gclaude-rerun.json fails closed (positive_artifact=null, verdict=revise_here, route_to=S4); the pre-fix defect is preserved only in historical case-3/with_skill/outputs/response.txt (prose preamble). canonical-s4-s7-grading-integrity.inner.json verdict=pass over 12 S4/S7 runs."
+    },
+    {
+      "finding_id": "MIN-01",
+      "decision": "accepted",
+      "reason": "The two stray top-level iteration-1/grading.json aggregates are gone; the misleadingly-named root aggregate was renamed to historical-aggregate-grading.json and listed noncanonical.",
+      "current_evidence": "find shows 0 *-workspace/iteration-1/grading.json files; exactly 2 historical-aggregate-grading.json (create-domain-evidence-landscape, verify-mastery-and-replan), both enumerated in canonical-evidence-manifest.json historical_noncanonical."
+    },
+    {
+      "finding_id": "MIN-02",
+      "decision": "accepted",
+      "reason": "All seven canonical workspaces carry a clean grader-route.json and the legacy workspace is explicitly scoped out with a canonical=false marker.",
+      "current_evidence": "7/7 grader-route.json present, each terminal_reason=completed with non-empty modelUsage (diagnose/verify route=gclaude, others route=dclaude); legacy-create-goal-success-contract-workspace/canonical-scope.json = {canonical:false,status:historical_layout_fixture,must_not_match_canonical_glob:true,canonical_replacement:../create-goal-success-contract-workspace/iteration-1}."
+    },
+    {
+      "finding_id": "MIN-03",
+      "decision": "accepted",
+      "reason": "Both public-handoff failure-state invariants are now mechanically enforced via Draft 2020-12 allOf/if-then.",
+      "current_evidence": "handoff-envelope.schema.json: rubric_results items allOf (passed=false => failure_action in [revise_here,return_upstream] and route_to in [S1..complete]) at lines 217-236; top-level allOf (input_validation.status=fail => positive_artifact type null) at lines 283-302. Verified on real outputs: all 7 eval-3 with_skill blocked envelopes carry positive_artifact=null; 21/21 with_skill envelopes validate with FormatChecker (0 errors)."
+    },
+    {
+      "finding_id": "MIN-04",
+      "decision": "partially_accepted",
+      "reason": "The factual observations stand (mastery remains rubric/contract-enforced; current_model_version keeps minimum:1). The audit's own required_change allowed 'or document why', and that rationale is now documented in the S7 stage contract and contract-guard audit, so it is a justified design boundary rather than a masked defect. Carried as non-blocking MIN-04-RESIDUAL.",
+      "current_evidence": "verify-mastery-and-replan/references/mastery-and-replanning-bundle.schema.json: mastery_judgment has no same-node evidence if/then; load.current_model_version = {type:integer,minimum:1}. stage-contract.md line 72 documents the cross-array node_id limitation and G7 enforcement; line 73 documents current_model_version>=1 as intentional (cold-start is an input-gate failure routing to S4 with positive_artifact=null)."
+    },
+    {
+      "finding_id": "MIN-NEW-01",
+      "decision": "accepted",
+      "reason": "The S2 partial-date issue flagged by the primary crosscheck is now resolved on current disk: the S2 stage schema was extended (ERR-082) to accept null, full date, year-month, and 4-digit-year precision, and the repaired canonical artifact validates under strict FormatChecker. It is no longer a current defect.",
+      "current_evidence": "domain-evidence-landscape.schema.json source_ledger[].published_at = oneOf [null, {format:date}, {pattern:^[0-9]{4}-(0[1-9]|1[0-2])$}, {pattern:^[0-9]{4}$}]; S2 eval-2 result.handoff-normalized.json contains partial dates ('2010','2022-04',...) and validates against the S2 stage schema with FormatChecker = 0 errors; 21/21 with_skill handoff envelopes validate with FormatChecker = 0 errors. Ledger ERR-082 = RESOLVED."
+    }
+  ],
+  "confirmed_strengths": [
+    {
+      "strength": "Canonical evidence is internally consistent: 42/42 canonical gradings reconcile to their benchmark and 21/21 with_skill canonical outputs are complete, schema-valid handoffs.",
+      "evidence": "Pass-count diff eval-*/run-1/grading.json vs benchmark.json runs[].passed = 0 mismatches across 42 runs; Draft202012Validator+FormatChecker over 21 with_skill canonical_output files = 0 errors (14 non-null positive_artifact + 7 null blocked)."
+    },
+    {
+      "strength": "The two public-handoff failure-state invariants are schema-enforced and confirmed on real canonical outputs.",
+      "evidence": "handoff-envelope.schema.json allOf if/then (passed=false and input_validation.status=fail cases); all 7 eval-3 with_skill blocked envelopes have positive_artifact=null."
+    },
+    {
+      "strength": "S4 tested_mastered/hint invariant and S7 attribution/version/history invariants are schema-enforced.",
+      "evidence": "diagnose eval-2 repaired artifact enforces the hint/mastery invariant (tested_mastered with none/low hint, route S5); verify eval-1 canonical output uses STRATEGY_OR_SEQUENCE primary + EVIDENCE_INSUFFICIENT secondary, route_to S5, matching the upstream-priority contract."
+    },
+    {
+      "strength": "Two full S1->S7 integration chains and one S7->S5->S6->S7 remediation loop exist with correct gate order, deterministic routing, and explicit simulated_fixture scope limits.",
+      "evidence": "integration-audits.json: postgresql-query-optimization and senior-subject-content-reviewer chains (S1/G1..S7/G7, route_to complete) and remediation loop loop-1..loop-4 (first S7 STRATEGY_OR_SEQUENCE->S5, final S7 NODE_MASTERED->S6 with route_rationale closing the cycle)."
+    },
+    {
+      "strength": "A durable error ledger records failures before fixes, with every fallback-audit finding (ERR-060..064) resolved and the only OPEN entries being the preserved dclaude 402.",
+      "evidence": "docs/chat_log/七阶段个性化学习Skill实施与评估错误记录.md: ERR-060/061/062/063/064 RESOLVED, ERR-082 (S2 partial date) RESOLVED; ERR-037 and ERR-043 OPEN = dclaude 402 balance-gate."
+    }
+  ],
+  "route_limitations": [
+    {
+      "limitation": "dclaude final/independent audit and the S4 eval-2 with-skill rerun returned HTTP 402 before inference with empty modelUsage and zero tokens. The user-authorized fresh gclaude session (fallback_for=dclaude) fills that slot; per the user's authorization this is not counted as a blocking/major skill defect.",
+      "evidence": "final-dclaude-closure.outer.json = {is_error:true,api_error_status:402,modelUsage:{},session_id:5b22ea57-be72-4ee8-b2ae-7668f3c9a0f9}; final-dclaude-continuation-2/3.outer.json also 402 with 0 tokens; ledger ERR-037 and ERR-043 OPEN; final-route-fallback-approval.md records the user authorization."
+    },
+    {
+      "limitation": "Both accepted final sessions (the original closure and this fresh fallback cross-check) are gclaude sessions, so the final audit has session independence but not provider diversity; no provider-diversity claim is made.",
+      "evidence": "final-gclaude-audit-closed.route.json, canonical-s4-s7-grading-integrity.route.json, final-primary-gclaude-crosscheck.route.json all route=gclaude with non-empty glm-5.1/glm-5.2 modelUsage; this cross-check is also primary_gclaude."
+    },
+    {
+      "limitation": "The fallback independent audit intentionally did not read protected prior gclaude verdicts; mutual provider-independent cross-check against a non-gclaude final remains pending dclaude balance recovery.",
+      "evidence": "final-gclaude-fallback-independent.inner.json route_limitations; ERR-043 awaiting dclaude balance recovery."
+    },
+    {
+      "limitation": "The original grader_run_status.json for diagnose/verify still shows is_error=true/exit_code=1; this is retained historical evidence, and the canonical route provenance (grader-route.json) is clean for all 7 workspaces.",
+      "evidence": "diagnose/verify grader_run_status.json = {is_error:true,exit_code:1}; canonical-evidence-manifest.json historical_noncanonical lists grader_run_status.json as 'retained even when a later clean grader-route.json supersedes it'; 7/7 grader-route.json = completed, non-empty modelUsage."
+    }
+  ],
+  "required_changes": []
+}

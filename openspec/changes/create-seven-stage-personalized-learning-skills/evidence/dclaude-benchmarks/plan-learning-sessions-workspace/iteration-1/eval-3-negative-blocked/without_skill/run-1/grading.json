@@ -1,0 +1,88 @@
+{
+  "expectations": [
+    {
+      "text": "The copied table of contents, video quota and question count is not accepted as a path connecting a confirmed frontier to the target.",
+      "passed": true,
+      "evidence": "input_summary.submission_type='课程目录式计划'. readiness_assessment.can_proceed_to_S6=false, overall_readiness_level='NOT_READY', readiness_score=0.05. s6_proceed_decision.decision='DENIED'. required_remediation.action='REJECT_PLAN_RETURN_TO_PREPARATION'. diagnosis.root_cause: '提交者将内容大纲与个性化学习计划混为一谈'. No positive artifact or learning path is generated."
+    },
+    {
+      "text": "Chapters and videos are identified as non-capability nodes with unexplained redundancy and no hard-prerequisite discipline.",
+      "passed": true,
+      "evidence": "required_artifacts_check.capability_graph_nodes.status='MISSING', severity='BLOCKING', description='未提供能力图谱节点，无法确定目标能力集合、依赖关系'. required_artifacts_check.node_entry_exit_conditions.status='MISSING', severity='BLOCKING', description='未定义能力图谱节点的进入条件与退出条件'. critical_findings: '计划粒度不足以支撑教学决策：无知识点级别映射、无时间精度、无难度分层'. format_issues note the coarse weekly structure with no dependency discipline."
+    },
+    {
+      "text": "No fabricated first session or starting state is accepted as executable.",
+      "passed": true,
+      "evidence": "No session plan, daily schedule, or first-session definition exists anywhere in the output. s6_proceed_decision.decision='DENIED'. The output only provides remediation steps (required_remediation.steps) that describe what needs to be created, not fabricated sessions."
+    },
+    {
+      "text": "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+      "passed": false,
+      "evidence": "No explicit confirmation object with status='pending' or 'blocked' exists in the output. The output uses its own schema (s5_evaluation, evaluation_id, readiness_assessment) rather than the stage contract schema (confirmation with mode/status/response). While required_artifacts_check.learner_snapshot.status='MISSING' and s6_proceed_decision.decision='DENIED' functionally represent a blocked state, there is no explicit confirmation.status='pending' field. The burden of proof is on the expectation, and the structured confirmation field is absent."
+    },
+    {
+      "text": "No per-node exit criteria exist and none are fabricated.",
+      "passed": true,
+      "evidence": "No exit_criteria structure or per-node criteria exists anywhere in the output. required_artifacts_check.node_entry_exit_conditions.status='MISSING', severity='BLOCKING'. The output correctly identifies this gap without fabricating any exit criteria."
+    },
+    {
+      "text": "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6.",
+      "passed": false,
+      "evidence": "No quality_evaluation or rubric_results object exists. No G5 rubric with 8 dimensions is evaluated. No route_to field exists. The output uses s6_proceed_decision.decision='DENIED' and required_remediation.action='REJECT_PLAN_RETURN_TO_PREPARATION' — functionally equivalent to return_upstream — but without the stage contract's structured G5 evaluation. The required_remediation.steps[0] says to create learner_snapshot (S4 output), which is functionally correct, but no explicit route_to='S4' exists. No deterministic routing is specified using the stage contract's route_to mechanism."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 2,
+    "total": 6,
+    "pass_rate": 0.6666666666666666
+  },
+  "execution_metrics": {
+    "total_turns": 1,
+    "total_tokens": 31491,
+    "output_tokens": 1848,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 34,
+    "total_duration_seconds": 30.974
+  },
+  "claims": [
+    {
+      "claim": "5项BLOCKING级别工件缺失，无法进入S6教学阶段",
+      "type": "factual",
+      "verified": true,
+      "evidence": "required_artifacts_check identifies 5 artifacts with status='MISSING' and severity='BLOCKING': learner_snapshot, capability_graph_nodes, learning_frontier_evidence, node_entry_exit_conditions, assessment_arrangement. s6_proceed_decision confirms '5项BLOCKING级别工件缺失'."
+    },
+    {
+      "claim": "若强行进入S6，教学将退化为非个性化讲授",
+      "type": "quality",
+      "verified": true,
+      "evidence": "diagnosis.risk_if_forced_proceed explicitly states this risk. The reasoning is logically sound given the complete absence of learner-specific artifacts."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+        "reason": "The without_skill output functionally rejects the plan but lacks the stage contract's confirmation envelope. This assertion would be more discriminating if it required the explicit confirmation.status='pending' or 'blocked' field rather than accepting functional equivalents. Currently, it catches a real gap but the evidence standard could be tighter."
+      },
+      {
+        "assertion": "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6.",
+        "reason": "The without_skill output uses a completely different schema (s5_evaluation, s6_proceed_decision) rather than quality_evaluation→rubric_results→route_to. While it functionally reaches the right conclusion (deny, return to preparation), it never evaluates the G5 rubric. This assertion correctly catches the missing G5 evaluation. The eval could also benefit from checking output schema compliance as a structural assertion."
+      }
+    ],
+    "overall": "The without_skill output correctly rejects the course catalog but uses its own evaluation schema instead of the stage contract's G5 rubric and routing mechanism. It functionally arrives at the right answer (DENIED, return to create learner_snapshot) but misses the structured confirmation and quality_evaluation the stage contract requires. Assertions 4 and 6 correctly identify these gaps. The evals are well-targeted for this negative case."
+  }
+}

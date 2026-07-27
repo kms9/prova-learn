@@ -1,0 +1,10 @@
+{
+  "case_id": 1,
+  "config": "with_skill",
+  "graded_at": "2026-07-27T02:31:20Z",
+  "expectation_results": [],
+  "overall_passed": false,
+  "summary": "grader run failed (exit -1)",
+  "grader_elapsed_s": 180.01,
+  "grader_exit_status": -1
+}

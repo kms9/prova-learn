@@ -1,0 +1,115 @@
+{
+  "route": "dclaude",
+  "exit_code": 0,
+  "outer_status": "success",
+  "modelUsage": {
+    "deepseek-v4-pro[1m]": {
+      "inputTokens": 121066,
+      "outputTokens": 9160,
+      "cacheReadInputTokens": 603136,
+      "contextWindow": 1000000
+    }
+  },
+  "review": {
+    "verdict": "pass_with_changes",
+    "confidence": 0.72,
+    "blocking_findings": [
+      {
+        "id": "B1-MISSING-MERGE-GUARDS",
+        "artifact": "specs/personalized-learning-stage-contracts/spec.md",
+        "gap": "The fast-tier S2+S3 and S4+S5 merge allow/deny guards are not encoded.",
+        "required_change": "Add testable merge preconditions, prohibitions, preserved-artifact rules, and implementation/verification tasks."
+      },
+      {
+        "id": "B2-UNRESOLVED-EVAL-FORMAT",
+        "artifact": "design.md",
+        "gap": "The concrete Claude skill-eval input/output file contract is unresolved.",
+        "required_change": "Inspect the installed evaluator, define concrete eval metadata/result/benchmark/provenance artifacts, and update design/specs/tasks before apply."
+      },
+      {
+        "id": "B3-UNDERSPECIFIED-INTEGRATION-AUDIT",
+        "artifact": "tasks.md",
+        "gap": "The two end-to-end audits lack concrete transition chains, assertions, and pass criteria.",
+        "required_change": "Define full S1-S7 and S7-S5-S6-S7 chains, per-handoff assertions, and simulated-versus-observed labeling."
+      }
+    ],
+    "major_findings": [
+      {
+        "id": "M1-PARTIAL-EVIDENCE-TAXONOMY",
+        "artifact": "specs/create-goal-success-contract/spec.md and specs/create-domain-evidence-landscape/spec.md",
+        "gap": "model_hypothesis, market_signal, and external_evidence are not explicit provenance enums.",
+        "required_change": "Add provenance labels and a gate check that model hypotheses are never represented as external evidence."
+      },
+      {
+        "id": "M2-RUBRIC-NOT-OPERATIONALIZED",
+        "artifact": "specs/personalized-learning-stage-contracts/spec.md",
+        "gap": "The common rubric-result entry shape is not normative.",
+        "required_change": "Require dimension, evidence, score, threshold, passed, failure action, and route_to."
+      },
+      {
+        "id": "M3-OVERLOADED-VALIDATION-TASK",
+        "artifact": "tasks.md",
+        "gap": "Structural, schema, cross-reference, placeholder, and byte-identity checks need independently verifiable tasks.",
+        "required_change": "Split local validation into explicit checks."
+      },
+      {
+        "id": "M4-PARTIAL-COLD-START-TREATMENT",
+        "artifact": "stage specs",
+        "gap": "Safe missing-input, empty-evidence, and unable-to-confirm behavior is not explicit across every stage.",
+        "required_change": "Add a cross-stage requirement and stage-specific routes."
+      },
+      {
+        "id": "M5-DUAL-ARTIFACT-UNDERSPECIFIED",
+        "artifact": "specs/build-capability-concept-graph/spec.md",
+        "gap": "The senior-reviewer case uses both a canonical knowledge map and a capability graph, but the contract names only the latter.",
+        "required_change": "Define the canonical map as an optional but schema-governed S3 output or explicitly exclude it."
+      }
+    ],
+    "minor_findings": [
+      {
+        "id": "m1-NO-EXAMPLE-VERIFICATION-TASK",
+        "required_change": "Verify each eval fixture has source-section traceability and complete grader assertions."
+      },
+      {
+        "id": "m2-NO-BYTE-IDENTITY-TASK",
+        "required_change": "Use a standalone byte-identity check for all handoff schema copies."
+      },
+      {
+        "id": "m3-RESEARCH-GRADE-UNCOVERED",
+        "required_change": "Explicitly defer or specify research-grade expert review and longitudinal retesting."
+      }
+    ],
+    "confirmed_decisions": [
+      "Exactly seven top-level skill folders",
+      "S7 remains one skill with ordered mastery verification and versioned replanning subflows",
+      "Self-contained packages with byte-identical duplicated handoff schema",
+      "JSON Schema Draft 2020-12",
+      "Two positive plus one negative or blocked eval per stage",
+      "S1/S2 fail closed when research is unavailable",
+      "Error-first durable ledger",
+      "Grader-held assertions are excluded from executor prompts",
+      "Deterministic S7 attribution routes and version conflicts"
+    ],
+    "eval_contract": {
+      "required_inputs": [
+        "source fixture with file and section traceability",
+        "declared-schema upstream artifacts except S1 cold start",
+        "executor-visible prompt separated from grader-held assertions"
+      ],
+      "required_outputs": [
+        "schema-valid handoff and stage artifact",
+        "input validation and confirmation state",
+        "operationalized rubric verdict and route",
+        "traceability",
+        "per-case preserved output and provenance"
+      ],
+      "comparison_mode": "Behavioral and schema assertions, not exact output matching; research-dependent evals grade evidence discipline and blocked behavior.",
+      "provenance_requirements": [
+        "source file and section",
+        "outer modelUsage",
+        "timestamp and preserved route output",
+        "all 21 stage cases and two integration audits"
+      ]
+    }
+  }
+}

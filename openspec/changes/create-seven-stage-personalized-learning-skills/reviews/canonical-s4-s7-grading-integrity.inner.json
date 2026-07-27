@@ -1,0 +1,35 @@
+{
+  "audit_id": "canonical-s4-s7-grading-integrity",
+  "verdict": "pass",
+  "checked_runs": 12,
+  "mismatches": [
+    {
+      "path": "diagnose-learner-frontier-workspace/iteration-1/eval-2-positive-cross-domain/with_skill/run-1/grading.json:eval_feedback.overall",
+      "type": "stale_advisory_narrative_non_blocking",
+      "evidence": "The advisory says the top-level expectation still names whole-number bias, but current top-level and per-run metadata are byte-identical and use the repaired whole-number-free assertion. Grade 6/6 and benchmark math are correct.",
+      "required_change": "Correct the stale advisory only; do not change the grade."
+    },
+    {
+      "path": "diagnose-learner-frontier-workspace/iteration-1/eval-2-positive-cross-domain/without_skill/run-1/grading.json:eval_feedback.overall",
+      "type": "stale_advisory_narrative_non_blocking",
+      "evidence": "The same stale whole-number-bias advisory remains although current metadata is repaired. Grade 2/6 and benchmark math are correct.",
+      "required_change": "Correct the stale advisory only; do not change the grade."
+    },
+    {
+      "path": "verify-mastery-and-replan-workspace/iteration-1/eval-1-positive-primary/with_skill/run-1/grading.json:eval_feedback.overall and suggestions[0]",
+      "type": "stale_advisory_narrative_non_blocking",
+      "evidence": "The advisory critiques an EVIDENCE_INSUFFICIENT-primary assertion that no longer exists. Current expectation and output both use STRATEGY_OR_SEQUENCE primary, EVIDENCE_INSUFFICIENT secondary, route S5, decision remediate. Grade 6/6 is correct.",
+      "required_change": "Regenerate or correct the stale advisory only; do not change the grade."
+    }
+  ],
+  "historical_tree_note": "case-* directories are pre-fix historical evidence and were not treated as canonical. The canonical tree is eval-*/<configuration>/run-1, and benchmark.json canonical_output selects the repaired artifact where applicable.",
+  "confirmed_checks": [
+    "All 12 grading expectation texts exactly equal current eval metadata and benchmark expectation texts.",
+    "All 12 passed-flag arrays equal benchmark passed flags.",
+    "All 12 summaries are mathematically exact and equal benchmark result counts and pass rate.",
+    "S4 eval-2 current assertion is whole-number-free and its repaired gclaude output satisfies the coded-misconception assertion.",
+    "S4 eval-3 with-skill canonical output is result.gclaude-rerun.json with positive_artifact null, verdict revise_here, and route_to S4.",
+    "S7 eval-1 current assertion and output use STRATEGY_OR_SEQUENCE primary, EVIDENCE_INSUFFICIENT secondary, route_to S5, and remediate.",
+    "All 12 canonical_output files exist and are the artifacts cited by grading evidence."
+  ]
+}

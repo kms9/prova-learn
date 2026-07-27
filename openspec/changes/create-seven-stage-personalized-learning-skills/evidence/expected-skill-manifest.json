@@ -1,0 +1,44 @@
+{
+  "snapshot_date": "2026-07-27",
+  "scope_root": ".agents/skills",
+  "expected_stage_skills": [
+    {
+      "stage": "S1",
+      "name": "create-goal-success-contract",
+      "present_before_implementation": false
+    },
+    {
+      "stage": "S2",
+      "name": "create-domain-evidence-landscape",
+      "present_before_implementation": false
+    },
+    {
+      "stage": "S3",
+      "name": "build-capability-concept-graph",
+      "present_before_implementation": false
+    },
+    {
+      "stage": "S4",
+      "name": "diagnose-learner-frontier",
+      "present_before_implementation": false
+    },
+    {
+      "stage": "S5",
+      "name": "plan-learning-sessions",
+      "present_before_implementation": false
+    },
+    {
+      "stage": "S6",
+      "name": "run-instructional-interaction",
+      "present_before_implementation": false
+    },
+    {
+      "stage": "S7",
+      "name": "verify-mastery-and-replan",
+      "present_before_implementation": false
+    }
+  ],
+  "unexpected_stage_skill_folders": [],
+  "preimplementation_observation": ".agents/skills ABSENT",
+  "boundary": "Create exactly these seven stage skill folders; do not create an orchestrator or eighth stage skill."
+}

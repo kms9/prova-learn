@@ -1,0 +1,102 @@
+{
+  "execution_id": "s7-20260727-001",
+  "stage": "S7",
+  "stage_label": "个性化学习决策与移交",
+  "timestamp": "2026-07-27T00:00:00.000Z",
+  "model_version": {
+    "expected": 6,
+    "loaded": 6,
+    "match": true,
+    "backend": "persistent",
+    "backend_status": "operational"
+  },
+  "preceding_unit": {
+    "id": "G6",
+    "domain": "分数比较与表征",
+    "grade": 6,
+    "verdict": "passed"
+  },
+  "indicator_results": [
+    {
+      "id": "F1",
+      "type": "概念解释",
+      "description": "不看材料独立解释 3/5 > 3/7",
+      "outcome": "mastered",
+      "evidence": "自主口头/书面解释同分子分数大小关系，引用分母意义，无需任何视觉辅助或提示"
+    },
+    {
+      "id": "F2",
+      "type": "近迁移",
+      "description": "比较 4/9 与 4/11",
+      "outcome": "mastered",
+      "evidence": "将同分子比较策略成功迁移至新数值对，反应正确且流畅"
+    },
+    {
+      "id": "F3",
+      "type": "表征转换与保持",
+      "description": "图形表征转到数轴表征；一周后延迟复测",
+      "outcome": "mastered",
+      "evidence": "独立完成从离散图形到连续数轴的表征转换；延迟复测（≥7天）无需复习即通过"
+    },
+    {
+      "id": "F4",
+      "type": "真实应用",
+      "description": "食谱缩放中正确使用分数关系",
+      "outcome": "mastered",
+      "evidence": "在情境化食谱缩放任务中正确识别并应用分数比例关系，解答完整无误"
+    }
+  ],
+  "scaffolding_profile": {
+    "prompts_delivered": 0,
+    "hints_requested": 0,
+    "scaffolding_level": "none",
+    "independence": "full"
+  },
+  "mastery_rules": {
+    "pre_determined": true,
+    "validated_at_load": true,
+    "content_graph_alignment": "correct",
+    "rule_set": "G6_fraction_comparison_v6",
+    "conditions_evaluated": [
+      {
+        "rule": "all_indicators_mastered",
+        "result": true
+      },
+      {
+        "rule": "zero_prompt_requirement",
+        "result": true
+      },
+      {
+        "rule": "delayed_retention_confirmed",
+        "result": true
+      },
+      {
+        "rule": "near_transfer_demonstrated",
+        "result": true
+      },
+      {
+        "rule": "far_transfer_demonstrated",
+        "result": true
+      }
+    ]
+  },
+  "s7_decision": {
+    "action": "advance",
+    "rationale": "全部四项指标（F1–F4）在无提示条件下达到掌握标准，近迁移与延迟保持均已验证，掌握规则与知识图谱节点匹配正确。推荐进入下一学习单元。",
+    "readiness_score": 1.0,
+    "risk_flags": []
+  },
+  "handoff": {
+    "target_unit": "G7",
+    "target_domain": "分数运算（乘除）",
+    "prerequisites_satisfied": [
+      "fraction_comparison_same_numerator",
+      "fraction_comparison_same_denominator",
+      "fraction_representation_number_line",
+      "fraction_real_world_application"
+    ],
+    "knowledge_graph_node": "fraction_comparison_mastered",
+    "transition_type": "standard",
+    "estimated_readiness": "high"
+  }
+}

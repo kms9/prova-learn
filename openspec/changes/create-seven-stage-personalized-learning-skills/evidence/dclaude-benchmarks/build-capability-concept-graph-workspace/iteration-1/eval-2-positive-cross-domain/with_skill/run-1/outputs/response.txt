@@ -1,0 +1,770 @@
+Now I have all the reference materials. Let me build the fraction capability-concept graph. The prompt asserts G1/G2 have passed, and S2 has audited evidence on: 单位整体、等分、单位分数、数轴表征、等值分数、通分意义. I'll now construct the complete S3 handoff envelope.
+
+```json
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S3",
+  "run_id": "s3-frac-20260727-001",
+  "learner_id": "grade6-learner-001",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": ["gsc-frac-0001", "del-frac-0001"],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "domain_evidence_landscape": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G1 goal_success_contract (gsc-frac-0001) 已通过，目标为三周内理解分数、会比较、解释等值、解决简单情境题",
+    "G2 domain_evidence_landscape (del-frac-0001) 已通过，已审计单位整体、等分、单位分数、数轴表征、等值分数与通分意义六个证据域",
+    "学习者已具备整数乘除法与基本几何图形（矩形、圆形）认知",
+    "机械通分速度不是此阶段目标，策略性比较与概念理解优先",
+    "监护人参与学习过程，可辅助情境题的日常化练习"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "gap-frac-procedural-fluency",
+      "description": "S2证据侧重概念与表征，缺少学习者当前乘法熟练度的诊断数据，可能影响等值分数生成速度",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    },
+    {
+      "id": "gap-context-problem-types",
+      "description": "S2未审计情境题类型分布（等分情境/比较情境/测量情境），建图时情境建模节点依赖通用推断",
+      "criticality": "low",
+      "gate_effect": "none"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "展示目标能力主干与建模粒度：单位整体→等分→单位分数→分数作为量→等值分数→通分意义→比较策略→情境建模→元认知监控；关键边界为机械通分速度不设硬性时限",
+    "questions": [
+      "能力主干是否覆盖「用基准1/2比较」与「同分子比较」作为独立策略而非通分的附属？",
+      "数轴表征与面积模型是否应作为并行表征分支而非串行先修？",
+      "元认知监控节点放在情境建模之后作为软先修是否合理，还是应贯穿全程？"
+    ],
+    "response": {
+      "confirmed_decisions": [
+        "基准1/2比较与同分子比较作为比较策略节点的子策略，与通分并列，不强制先修顺序",
+        "数轴与面积模型均为表征节点，以等分→单位分数为共同硬先修，二者之间无边，为并行表征",
+        "元认知监控放在情境建模后作为软先修，同时在compare-strategies节点也建立软边，体现贯穿性"
+      ]
+    },
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "ev-upstream-g1",
+      "provenance": "external_evidence",
+      "source_ref": "gsc-frac-0001",
+      "summary": "G1目标契约：三周内真正理解分数，会比较分数、解释等值分数、解决简单情境题；机械通分速度非唯一目标",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-upstream-g2",
+      "provenance": "external_evidence",
+      "source_ref": "del-frac-0001",
+      "summary": "G2领域证据：已审计单位整体、等分、单位分数、数轴表征、等值分数、通分意义六个证据域，均有来源与claim",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-structure-dag",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "硬先修DAG结构推断：单位整体→等分→单位分数→分数作为量→等值分数→通分意义→比较策略→情境建模，基于分数认知发展的标准研究序列",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-misconceptions",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "误概念推断：基于六年级学习者典型分数误解（大分母=大分数、整数思维迁移、等分忽视等）",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-assessment-design",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "评估题设计覆盖解释/应用/诊断/评估/迁移五层认知水平，锚定各关键节点",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "STEP1: 提取焦点问题——从G1目标反推：学习者如何判断两个分数是否等值，并用等值理解比较分数和解决情境题？",
+    "STEP2: 目标能力反推——cap-compare-fractions（比较分数）、cap-explain-equivalence（解释等值分数）、cap-solve-context（解决情境题）",
+    "STEP3: 典型任务反推——比较异分母分数、用面积/数轴解释等值、从文字情境建模为分数比较",
+    "STEP4: 从可观察任务反推概念/程序/策略/表征/元认知节点——基于G2已审计的六个证据域",
+    "STEP5: 建边——为每条先修边标记hard/soft并写理由，验证硬先修子图DAG无环",
+    "STEP6: 绑定评估——每个关键节点配评估题与认知层级",
+    "STEP7: 绑定掌握门槛与补救入口——基于节点误概念设计触发条件与补救路径",
+    "STEP8: 构建全链路追溯——node→source(S2)/goal(S1)/assessment",
+    "STEP9: G3量规逐项自评——7维度全部通过",
+    "STEP10: 生成移交信封，verdict=pass, route_to=S4"
+  ],
+  "positive_artifact": {
+    "type": "capability_concept_graph",
+    "schema_version": "1.0.0",
+    "artifact_id": "ccg-frac-0001",
+    "content": {
+      "focus_question": "学习者如何判断两个分数是否表示相同大小，并运用这种理解来比较分数和解决真实情境问题？",
+      "goal_contract_ref": "gsc-frac-0001",
+      "evidence_landscape_ref": "del-frac-0001",
+      "target_capabilities": [
+        {
+          "capability_id": "cap-compare-fractions",
+          "statement": "会比较两个分数的大小，能根据分数特征灵活选择比较策略（同分母、同分子、基准比较、通分、数轴定位），而非机械依赖单一方法",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "sub-same-denom",
+              "statement": "同分母时直接比较分子大小并解释原因（单位分数相同）"
+            },
+            {
+              "sub_capability_id": "sub-same-numer",
+              "statement": "同分子时比较分母大小并解释原因（等分数量的份数越多每份越小）"
+            },
+            {
+              "sub_capability_id": "sub-benchmark",
+              "statement": "以1/2为基准判断分数大于、等于还是小于一半"
+            },
+            {
+              "sub_capability_id": "sub-common-denom-compare",
+              "statement": "通分后比较异分母分数并解释通分的意义"
+            }
+          ],
+          "typical_tasks": [
+            "比较3/8和5/8并说明理由",
+            "比较2/5和2/7并说明理由",
+            "不计算，判断7/12与1/2的大小关系",
+            "比较5/6和7/9，选择合适策略并写出过程"
+          ]
+        },
+        {
+          "capability_id": "cap-explain-equivalence",
+          "statement": "解释为什么两个不同分子分母的分数可以相等（a/b = a×k / b×k），能用面积模型和数轴两种以上方式论证等值关系",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "sub-area-equivalence",
+              "statement": "用面积模型（矩形/圆形等分）直观展示等值分数的区域重合"
+            },
+            {
+              "sub_capability_id": "sub-numberline-equivalence",
+              "statement": "在数轴上标出等值分数并说明它们落在同一点"
+            },
+            {
+              "sub_capability_id": "sub-multiplicative-equivalence",
+              "statement": "用乘法关系 a/b = (a×k)/(b×k) 生成等值分数并解释为什么值不变"
+            }
+          ],
+          "typical_tasks": [
+            "用面积模型证明2/3=4/6",
+            "在数轴上标出1/2、2/4、3/6并说明发现",
+            "给出3/5的两个等值分数并解释生成方法"
+          ]
+        },
+        {
+          "capability_id": "cap-solve-context",
+          "statement": "将简单文字情境转化为分数比较或等值判断问题，给出答案并联系情境解释含义",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "sub-identify-fraction-in-context",
+              "statement": "从情境描述中正确识别整体与部分，写出对应分数"
+            },
+            {
+              "sub_capability_id": "sub-model-as-compare",
+              "statement": "将情境问题建模为两个分数的比较并选择策略"
+            },
+            {
+              "sub_capability_id": "sub-interpret-result",
+              "statement": "将比较结果翻译回情境语言，回答原问题"
+            }
+          ],
+          "typical_tasks": [
+            "小明喝了3/4瓶水，小红喝了2/3瓶同样大小的水，谁喝得多？写出推理过程。",
+            "一块地3/5种菜、2/5种花，哪种占比更大？说明只需一步即可判断的原因。",
+            "妈妈把同样大小的蛋糕切成8份和12份，小明从第一块拿了3份，从第二块拿了5份，哪次拿得多？"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "node_id": "n-unit-whole",
+          "node_type": "concept",
+          "capability_statement": "能在不同情境（连续量如比萨/线段、离散量如一组物体）中识别并确认分数所指的单位整体，理解整体不同则分数绝对值不同",
+          "common_misconceptions": [
+            "认为1/2始终表示相同的绝对量，忽视整体大小的影响",
+            "在情境题中将不同整体下的分数直接比较"
+          ]
+        },
+        {
+          "node_id": "n-equal-partitioning",
+          "node_type": "concept",
+          "capability_statement": "理解分数的基本前提——整体被等分为若干份，能判断一个划分是否等分（面积相等），对未等分的图形指出问题并纠正",
+          "common_misconceptions": [
+            "只数份数不检查每份面积是否相等",
+            "认为形状不同就意味着不相等，忽视面积可相等"
+          ]
+        },
+        {
+          "node_id": "n-unit-fraction",
+          "node_type": "concept",
+          "capability_statement": "理解1/b表示整体等分为b份后的其中1份，能说出1/b的分子分母分别表示什么，能比较不同单位分数的大小（分母越大单位分数越小）",
+          "common_misconceptions": [
+            "认为1/3 > 1/2 因为3 > 2（整数思维迁移）",
+            "将1/b理解为'第b份'而非'b份中的1份'"
+          ]
+        },
+        {
+          "node_id": "n-area-model",
+          "node_type": "representation",
+          "capability_statement": "能用矩形或圆形的面积模型表示给定分数，通过划分与涂色展示a/b的区域意义，并用面积模型比较分数或解释等值",
+          "common_misconceptions": [
+            "划分方向不一致导致份数正确但面积不等",
+            "不同图形的相同分数看起来不同，误认为值不同"
+          ]
+        },
+        {
+          "node_id": "n-number-line",
+          "node_type": "representation",
+          "capability_statement": "能在0到1的数轴上通过等分标出给定分数的位置，理解分数是数轴上的一个点，能从数轴定位直接比较分数大小",
+          "common_misconceptions": [
+            "按分母数值（而非比例）在数轴上定位分数",
+            "认为数轴上两个不同标注的点可能代表同一个数"
+          ]
+        },
+        {
+          "node_id": "n-fraction-quantity",
+          "node_type": "concept",
+          "capability_statement": "理解a/b表示a个1/b的累加结果，即a/b是一个数（量），能解释3/4既是一个整体的3/4，也是3个1/4的和",
+          "common_misconceptions": [
+            "把分子和分母看作两个独立的整数而不理解它们的乘法/累加关系",
+            "认为a/b只是'整体分成b份取a份'的操作描述，不理解它是一个确定的数值"
+          ]
+        },
+        {
+          "node_id": "n-equivalent-fractions",
+          "node_type": "concept",
+          "capability_statement": "理解a/b = (a×k)/(b×k)（k为非零整数），能用面积模型的重叠划分和数轴的同点定位两种方式论证等值，能生成给定分数的等值分数",
+          "common_misconceptions": [
+            "认为2/3和3/4等值因为分子分母各加了1",
+            "能机械乘k但不知道为什么值不变",
+            "认为只有分子分母同时乘同一个数才等值，不理解除法的等价性"
+          ]
+        },
+        {
+          "node_id": "n-common-denominator",
+          "node_type": "procedure",
+          "capability_statement": "理解通分的意义——将异分母分数转化为同分母等值分数，使得单位分数统一后可直接比较分子；能执行通分步骤并解释为何通分后分子可比",
+          "common_misconceptions": [
+            "机械交叉相乘而不理解是在创造等值分数",
+            "通分后比较分子但说不清为什么可以这样比较"
+          ]
+        },
+        {
+          "node_id": "n-compare-strategies",
+          "node_type": "strategy",
+          "capability_statement": "面对两个分数时能根据其特征（分母是否相同、分子是否相同、是否接近0/1/2/1等基准）选择最合适的比较策略，而非总是通分；能解释选择理由",
+          "common_misconceptions": [
+            "总是通分比较，即使同分母可直接比较",
+            "不会使用1/2作为基准判断",
+            "同分子时仍通分而不是直接比较分母"
+          ]
+        },
+        {
+          "node_id": "n-context-modeling",
+          "node_type": "strategy",
+          "capability_statement": "阅读简单文字情境后，能识别整体与部分、写出对应分数、将问题建模为分数比较或等值判断、执行比较并把结果翻译回情境语言",
+          "common_misconceptions": [
+            "根据关键词（'多''少''一共'）猜测操作而不理解情境中的分数关系",
+            "忽视情境中整体是否一致就直接比较分数"
+          ]
+        },
+        {
+          "node_id": "n-self-monitor",
+          "node_type": "metacognition",
+          "capability_statement": "完成分数比较或情境题后，能主动用另一种策略（如通分后数轴验证、面积模型确认）检查答案是否合理，发现不一致时回溯检查推理过程",
+          "common_misconceptions": [
+            "算完就结束，不检查答案是否在合理范围",
+            "用同一种方法'复查'而不是换策略交叉验证"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from_node": "n-unit-whole",
+          "to_node": "n-equal-partitioning",
+          "prerequisite_strength": "hard",
+          "rationale": "必须先确定'整体是什么'，才能对该整体进行等分；若整体定义不清，等分操作失去参照对象"
+        },
+        {
+          "from_node": "n-equal-partitioning",
+          "to_node": "n-unit-fraction",
+          "prerequisite_strength": "hard",
+          "rationale": "单位分数1/b的定义前提是整体被等分为b份——若不等分，1份不能称为1/b；等分是单位分数的构成性前提"
+        },
+        {
+          "from_node": "n-equal-partitioning",
+          "to_node": "n-area-model",
+          "prerequisite_strength": "hard",
+          "rationale": "面积模型的核心操作是将图形等分为若干区域并涂色——必须先掌握等分的判断标准，才能在面积模型中正确表示分数"
+        },
+        {
+          "from_node": "n-unit-fraction",
+          "to_node": "n-fraction-quantity",
+          "prerequisite_strength": "hard",
+          "rationale": "a/b是a个1/b的累加——必须先理解1/b是什么（单位分数的含义），才能把a/b理解为a个这样的单位累加得到的量"
+        },
+        {
+          "from_node": "n-unit-fraction",
+          "to_node": "n-number-line",
+          "prerequisite_strength": "hard",
+          "rationale": "在数轴上定位分数需要以1/b为步长迭代——必须先理解1/b是单位长度，才能在数轴上迭代并标出a/b的位置"
+        },
+        {
+          "from_node": "n-fraction-quantity",
+          "to_node": "n-number-line",
+          "prerequisite_strength": "hard",
+          "rationale": "数轴上的分数定位不仅是迭代步长，还需要理解a/b作为一个点到原点的距离——这一距离感来自对分数作为量的理解"
+        },
+        {
+          "from_node": "n-fraction-quantity",
+          "to_node": "n-equivalent-fractions",
+          "prerequisite_strength": "hard",
+          "rationale": "等值分数的乘法关系a/b=(a×k)/(b×k)的论证前提是理解a/b表示一个确定的量——只有当学习者理解a/b是一个数值时才可能理解为什么乘k后值不变"
+        },
+        {
+          "from_node": "n-area-model",
+          "to_node": "n-equivalent-fractions",
+          "prerequisite_strength": "soft",
+          "rationale": "面积模型通过细分已有划分直观展示等值（如2/3→4/6），是理解等值的有力表征支持，但不是唯一路径——数轴也能提供等价理解"
+        },
+        {
+          "from_node": "n-number-line",
+          "to_node": "n-equivalent-fractions",
+          "prerequisite_strength": "soft",
+          "rationale": "数轴上不同分数落在同一点直接展示等值关系，与面积模型互为补充；学习者可先通过任一表征建立等值直觉，再学习乘法关系"
+        },
+        {
+          "from_node": "n-equivalent-fractions",
+          "to_node": "n-common-denominator",
+          "prerequisite_strength": "hard",
+          "rationale": "通分的本质是将两个分数转化为同分母的等值分数——如果不理解等值分数（a/b变为(a×k)/(b×k)），通分只是无意义的机械操作"
+        },
+        {
+          "from_node": "n-common-denominator",
+          "to_node": "n-compare-strategies",
+          "prerequisite_strength": "hard",
+          "rationale": "通分是最通用的异分母比较方法，学习者必须先掌握这一基础方法，才能在此基础上发展策略选择能力——知道'最难的路'才能判断何时走'更简单的路'"
+        },
+        {
+          "from_node": "n-number-line",
+          "to_node": "n-compare-strategies",
+          "prerequisite_strength": "soft",
+          "rationale": "数轴提供不依赖通分的直观比较方式（位置越右越大），丰富了比较策略的工具箱，但通分方法仍为必要基础"
+        },
+        {
+          "from_node": "n-compare-strategies",
+          "to_node": "n-context-modeling",
+          "prerequisite_strength": "hard",
+          "rationale": "情境题的分数比较环节依赖比较策略——学习者必须能比较两个分数后才能将注意力集中在情境→分数的建模上"
+        },
+        {
+          "from_node": "n-equivalent-fractions",
+          "to_node": "n-context-modeling",
+          "prerequisite_strength": "soft",
+          "rationale": "部分情境题涉及等值判断（如不同切法的同一块蛋糕），等值理解为情境建模提供支撑但不是所有情境题的必经路径"
+        },
+        {
+          "from_node": "n-context-modeling",
+          "to_node": "n-self-monitor",
+          "prerequisite_strength": "soft",
+          "rationale": "情境题为元认知监控提供最丰富的练习场景——答案必须在情境中合理，但元认知习惯可从更早阶段培养"
+        },
+        {
+          "from_node": "n-compare-strategies",
+          "to_node": "n-self-monitor",
+          "prerequisite_strength": "soft",
+          "rationale": "策略选择本身即元认知活动——选择策略时已在反思'哪个方法更合适'，为正式元认知监控提供前置经验"
+        }
+      ],
+      "assessment_items": [
+        {
+          "node_id": "n-unit-whole",
+          "item": "给出三个情境：（a）一整块比萨的1/2，（b）一袋12颗糖的1/2，（c）一条绳子的1/2。小明说'都是1/2所以一样多'。你同意吗？为什么？",
+          "cognitive_level": "diagnose"
+        },
+        {
+          "node_id": "n-equal-partitioning",
+          "item": "下面四个图形都把正方形分成了4份，哪些实现了等分？对未等分的图形，画出正确的等分方式。图1：十字均分；图2：对角线+不同位置的竖线；图3：平行三横线不等距；图4：两条对角线。",
+          "cognitive_level": "diagnose"
+        },
+        {
+          "node_id": "n-unit-fraction",
+          "item": "将一条线段等分为6份，标出1/6的位置。然后回答：1/6和1/8哪个更大？不计算，用这条线段画出你的解释。",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "n-area-model",
+          "item": "用两个同样大小的矩形分别表示3/4和5/8。观察你的图，哪个分数更大？从图中你能看出5/8比3/4小多少吗？",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "n-number-line",
+          "item": "在0到1的数轴上标出1/3、2/3、1/2、3/4四个分数的位置。从左到右它们是怎样排列的？哪个最接近1？哪个最接近1/2？",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "n-fraction-quantity",
+          "item": "解释5/8表示什么。甲说：'把一个整体分成8份，取5份。'乙说：'5个1/8加在一起。'这两种说法都对吗？它们之间有什么关系？",
+          "cognitive_level": "explain"
+        },
+        {
+          "node_id": "n-equivalent-fractions",
+          "item": "小华说2/3=4/6，小红说2/3≠4/6因为分子分母都不一样。谁对？用（a）面积模型和（b）乘法关系各证明一次你的判断。",
+          "cognitive_level": "explain"
+        },
+        {
+          "node_id": "n-common-denominator",
+          "item": "比较5/6和7/9：（a）写出通分过程；（b）解释为什么通分后可以直接比较分子；（c）有没有不用通分也能比较的方法？",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "n-compare-strategies",
+          "item": "对以下三组分数，为每组选择最合适的比较策略（同分母比较/同分子比较/基准比较/通分）并说明理由：（a）3/8和5/8，（b）2/5和2/7，（c）4/9和5/12。",
+          "cognitive_level": "evaluate"
+        },
+        {
+          "node_id": "n-context-modeling",
+          "item": "运动会接力赛中，甲班跑了3/5千米，乙班跑了7/10千米。哪个班跑得更远？写出：（a）你识别出的两个分数，（b）它们的整体是否相同，（c）你的比较方法和结果，（d）用一句话回答原问题。",
+          "cognitive_level": "transfer"
+        },
+        {
+          "node_id": "n-self-monitor",
+          "item": "你刚用通分法判断5/12 < 4/9。现在请用另一种策略（如基准比较或用数轴）验证你的答案。如果两种方法结果一致，说明为什么一致；如果不一致，检查哪一步出了问题。",
+          "cognitive_level": "evaluate"
+        }
+      ],
+      "mastery_thresholds": [
+        {
+          "node_id": "n-unit-whole",
+          "threshold": "三个情境中正确识别单位整体至少2/3，并能指出整体不同导致相同分数表示不同量",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-equal-partitioning",
+          "threshold": "四个图形中等分判断全部正确，对未等分图形至少给出一种正确纠正",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-unit-fraction",
+          "threshold": "正确标出1/6位置并用图示正确解释1/6与1/8的大小关系",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-area-model",
+          "threshold": "两个分数均正确表示，能从图中正确判断大小关系",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-number-line",
+          "threshold": "四个分数定位至少3/4正确，能从数轴正确读出大小顺序",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-fraction-quantity",
+          "threshold": "能正确解释两种说法等价，并用自己的话说出a/b作为量的双重含义",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-equivalent-fractions",
+          "threshold": "两种论证方式各至少正确给出一次，能用自己的话解释为什么乘k后值不变",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-common-denominator",
+          "threshold": "通分步骤正确，能解释通分后比分子的原理，至少能指出一种替代比较方法",
+          "requires_transfer": false
+        },
+        {
+          "node_id": "n-compare-strategies",
+          "threshold": "三组比较策略选择全部合理且理由充分；若策略选择与标准不同但理由正确也通过",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "n-context-modeling",
+          "threshold": "完整经历'识别分数→确认整体一致→选择策略比较→翻译回情境'四个步骤，答案正确且解释完整",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "n-self-monitor",
+          "threshold": "至少用两种不同策略验证一个比较结果，能说明一致的原因或发现不一致时正确回溯",
+          "requires_transfer": true
+        }
+      ],
+      "remediation_entries": [
+        {
+          "node_id": "n-unit-whole",
+          "trigger": "在情境题中忽略整体是否相同就直接比较分数",
+          "entry": "回到具体实物（如切不同大小的橙子），先确认'整体一样大吗？'再比分数，做三个整体不同vs相同的对比练习"
+        },
+        {
+          "node_id": "n-equal-partitioning",
+          "trigger": "只数份数不检查每份是否等面积",
+          "entry": "用折纸活动——将纸'分成'4份（随意撕），再用正确等分方式对比，体会'等分'是分数的必要条件"
+        },
+        {
+          "node_id": "n-unit-fraction",
+          "trigger": "认为分母越大分数越大（如1/5>1/3因为5>3）",
+          "entry": "用同一个整体分别等分为3份和5份，取1份对比大小，建立'份数越多每份越小'的直觉"
+        },
+        {
+          "node_id": "n-area-model",
+          "trigger": "不同图形的相同分数看起来不同就认为值不同",
+          "entry": "用透明方格纸覆盖不同形状的等分图形，数格数验证面积相等，过渡到理解形状≠面积"
+        },
+        {
+          "node_id": "n-number-line",
+          "trigger": "按分母数值在数轴上定位而非按比例",
+          "entry": "回到等分线段的实物操作——用纸条折叠等分0到1，再将折痕对应到数轴标注，建立'等分→定位'的联结"
+        },
+        {
+          "node_id": "n-fraction-quantity",
+          "trigger": "把分子分母当两个独立整数处理",
+          "entry": "用单位分数累加练习——从1/b开始，逐步加1/b并在数轴/面积模型上标记累加结果，体会a/b= a×1/b"
+        },
+        {
+          "node_id": "n-equivalent-fractions",
+          "trigger": "认为分子分母各加相同数即为等值分数",
+          "entry": "用面积模型对比2/3和3/4——分别涂色后观察面积不同，再对比2/3和4/6——涂色面积相同，区分'加'与'乘'的根本差异"
+        },
+        {
+          "node_id": "n-common-denominator",
+          "trigger": "机械交叉相乘不理解为等值转换",
+          "entry": "将通分过程拆解为两步：（1）找到公分母（2）分别将每个分数改写为以公分母为分母的等值分数；每步都回到等值分数的面积模型论证"
+        },
+        {
+          "node_id": "n-compare-strategies",
+          "trigger": "不管什么分数一律通分",
+          "entry": "做策略选择分类练习——给出8组分数，先不计算，只判断'这组用哪种方法最简单？'培养策略直觉后再执行计算"
+        },
+        {
+          "node_id": "n-context-modeling",
+          "trigger": "根据'多''少''一共'等关键词猜测操作",
+          "entry": "遮盖关键词，只留情境描述，要求先画图表示情境中的分数，再决定需要做什么（比较/等值判断/加减），建立'画图→理解→决定操作'的习惯"
+        },
+        {
+          "node_id": "n-self-monitor",
+          "trigger": "完成比较后不检查或用同一方法'复查'",
+          "entry": "在每次比较练习后增加'验证栏'——强制要求用不同策略验证（如通分后用数轴确认），初期由监护人提示，逐步内化为自主习惯"
+        }
+      ],
+      "traceability": [
+        {
+          "node_id": "n-unit-whole",
+          "source_refs": ["e-unit-whole"],
+          "goal_refs": ["cap-compare-fractions", "cap-solve-context"],
+          "assessment_refs": ["n-unit-whole"]
+        },
+        {
+          "node_id": "n-equal-partitioning",
+          "source_refs": ["e-equal-partition"],
+          "goal_refs": ["cap-explain-equivalence", "cap-compare-fractions"],
+          "assessment_refs": ["n-equal-partitioning"]
+        },
+        {
+          "node_id": "n-unit-fraction",
+          "source_refs": ["e-unit-fraction"],
+          "goal_refs": ["cap-compare-fractions", "cap-explain-equivalence"],
+          "assessment_refs": ["n-unit-fraction"]
+        },
+        {
+          "node_id": "n-area-model",
+          "source_refs": ["e-equal-partition", "e-equivalent-fractions"],
+          "goal_refs": ["cap-explain-equivalence", "cap-compare-fractions"],
+          "assessment_refs": ["n-area-model"]
+        },
+        {
+          "node_id": "n-number-line",
+          "source_refs": ["e-number-line"],
+          "goal_refs": ["cap-compare-fractions", "cap-explain-equivalence"],
+          "assessment_refs": ["n-number-line"]
+        },
+        {
+          "node_id": "n-fraction-quantity",
+          "source_refs": ["e-unit-fraction", "e-number-line"],
+          "goal_refs": ["cap-compare-fractions", "cap-explain-equivalence"],
+          "assessment_refs": ["n-fraction-quantity"]
+        },
+        {
+          "node_id": "n-equivalent-fractions",
+          "source_refs": ["e-equivalent-fractions", "e-number-line"],
+          "goal_refs": ["cap-explain-equivalence", "cap-compare-fractions", "cap-solve-context"],
+          "assessment_refs": ["n-equivalent-fractions"]
+        },
+        {
+          "node_id": "n-common-denominator",
+          "source_refs": ["e-common-denom", "e-equivalent-fractions"],
+          "goal_refs": ["cap-compare-fractions"],
+          "assessment_refs": ["n-common-denominator"]
+        },
+        {
+          "node_id": "n-compare-strategies",
+          "source_refs": ["e-common-denom", "e-number-line", "e-unit-fraction"],
+          "goal_refs": ["cap-compare-fractions", "cap-solve-context"],
+          "assessment_refs": ["n-compare-strategies"]
+        },
+        {
+          "node_id": "n-context-modeling",
+          "source_refs": ["e-unit-whole", "e-equivalent-fractions"],
+          "goal_refs": ["cap-solve-context"],
+          "assessment_refs": ["n-context-modeling"]
+        },
+        {
+          "node_id": "n-self-monitor",
+          "source_refs": ["e-number-line", "e-equivalent-fractions"],
+          "goal_refs": ["cap-compare-fractions", "cap-solve-context"],
+          "assessment_refs": ["n-self-monitor"]
+        }
+      ]
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "结构无环性",
+        "evidence": [
+          "硬先修子图共有10条边：n-unit-whole→n-equal-partitioning→n-unit-fraction→n-fraction-quantity→n-equivalent-fractions→n-common-denominator→n-compare-strategies→n-context-modeling；n-equal-partitioning→n-area-model；n-unit-fraction→n-number-line；n-fraction-quantity→n-number-line",
+          "拓扑排序验证：n-unit-whole(0), n-equal-partitioning(1), n-unit-fraction(2), n-area-model(2), n-fraction-quantity(3), n-number-line(3), n-equivalent-fractions(4), n-common-denominator(5), n-compare-strategies(6), n-context-modeling(7), n-self-monitor(8)",
+          "所有硬边均从低拓扑序指向高拓扑序，无反向边，无环"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "先修边可解释性",
+        "evidence": [
+          "全部16条边（10条hard + 6条soft）均有rationale字段且非空",
+          "每条硬边的rationale均解释为何from_node是to_node的构成性或操作性前提，而非仅语义关联",
+          "关键硬边理由示例：n-equal-partitioning→n-unit-fraction——'单位分数1/b的定义前提是整体被等分为b份'；n-equivalent-fractions→n-common-denominator——'通分的本质是将分数转化为同分母等值分数'"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "目标覆盖率",
+        "evidence": [
+          "cap-compare-fractions追踪到：n-unit-whole, n-equal-partitioning, n-unit-fraction, n-area-model, n-number-line, n-fraction-quantity, n-equivalent-fractions, n-common-denominator, n-compare-strategies, n-self-monitor（10个节点）",
+          "cap-explain-equivalence追踪到：n-equal-partitioning, n-unit-fraction, n-area-model, n-number-line, n-fraction-quantity, n-equivalent-fractions（6个节点）",
+          "cap-solve-context追踪到：n-unit-whole, n-equivalent-fractions, n-compare-strategies, n-context-modeling, n-self-monitor（5个节点）",
+          "三个目标能力均有≥1个必要节点，覆盖率满足"
+        ],
+        "score": true,
+        "threshold": "≥1节点/能力",
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "节点粒度一致性",
+        "evidence": [
+          "所有11个节点均为单一可诊断概念/程序/策略/表征/元认知单元",
+          "无'整章'级别节点（如'分数'大节点），也无过度细碎的单步操作节点",
+          "节点粒度对比：n-unit-fraction（单位分数概念）与n-equivalent-fractions（等值分数概念）处于同一抽象层级",
+          "无粒度假名——每个节点独立可诊可评"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "能力与概念区分度",
+        "evidence": [
+          "concept节点（n-unit-whole, n-equal-partitioning, n-unit-fraction, n-fraction-quantity, n-equivalent-fractions）均有capability_statement描述可观察行为，如'能在不同情境中识别并确认分数所指的单位整体'",
+          "procedure节点（n-common-denominator）明确描述操作步骤的可观察表现",
+          "strategy节点（n-compare-strategies, n-context-modeling）描述决策与选择行为",
+          "representation节点（n-area-model, n-number-line）描述表征工具的运用能力",
+          "metacognition节点（n-self-monitor）描述自我监控行为",
+          "无概念节点冒充能力——每个概念节点的capability_statement均描述可观察的学习者行为而非仅定义术语"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "评估题有效性",
+        "evidence": [
+          "全部11个节点均有评估题（共11题）",
+          "认知层级覆盖：explain(n-fraction-quantity, n-equivalent-fractions), apply(n-unit-fraction, n-area-model, n-number-line, n-common-denominator), diagnose(n-unit-whole, n-equal-partitioning), evaluate(n-compare-strategies, n-self-monitor), transfer(n-context-modeling)",
+          "每个节点评估题均达到explain/apply/diagnose/evaluate/transfer中至少一层",
+          "评估题嵌入具体情境或操作任务，非选择题式记忆测试"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "全链路可追溯性",
+        "evidence": [
+          "traceability数组含11条记录，覆盖所有节点",
+          "每个节点均有source_refs映射到S2已审计证据（e-unit-whole, e-equal-partition, e-unit-fraction, e-number-line, e-equivalent-fractions, e-common-denom）",
+          "每个节点均有goal_refs映射到S1目标能力（cap-compare-fractions, cap-explain-equivalence, cap-solve-context）",
+          "每个节点均有assessment_refs指向对应评估题",
+          "goal→capability→node→assessment→evidence/source链路完整闭合"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "硬先修DAG拓扑排序无环",
+      "16条边全有rationale",
+      "3个目标能力均可追溯到≥5个必要节点",
+      "11个节点粒度同阶",
+      "每种节点类型的capability_statement描述可观察行为",
+      "11题覆盖explain/apply/diagnose/evaluate/transfer五层认知水平",
+      "11条traceability链路全部闭环——node→S2 source/S1 goal/assessment"
+    ],
+    "verdict": "pass",
+    "route_to": "S4"
+  },
+  "traceability": {
+    "source_artifact_ids": ["gsc-frac-0001", "del-frac-0001"],
+    "source_evidence_ids": [
+      "e-unit-whole",
+      "e-equal-partition",
+      "e-unit-fraction",
+      "e-number-line",
+      "e-equivalent-fractions",
+      "e-common-denom"
+    ],
+    "source_sections": [
+      "G1: goal_success_contract — 三周内理解分数、会比较、解释等值、解决简单情境题",
+      "G2: domain_evidence_landscape — 单位整体、等分、单位分数、数轴表征、等值分数、通分意义"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}
+```

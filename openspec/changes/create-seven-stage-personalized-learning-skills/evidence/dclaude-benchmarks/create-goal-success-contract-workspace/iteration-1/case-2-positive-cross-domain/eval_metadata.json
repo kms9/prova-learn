@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "prompt": "监护人与六年级学习者共同提出：三周内每天 25 分钟，真正理解分数；要会比较分数、解释等值分数并解决简单情境题，机械通分速度不是唯一目标。双方已经确认这些范围和一种包含数轴解释、配方缩放与未见迁移题的验收方式。请完成个性化学习 S1，输出结构化 JSON。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S1 正向例子2] A guardian-and-learner-confirmed contract spanning representation, explanation, application and transfer, with real pre-research and a passing G1 route.",
+  "expectations": [
+    "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+    "The pass rule contains an independently required transfer task rather than only mechanical speed or recall.",
+    "Executed external pre-research and auditable source coverage are recorded.",
+    "Both guardian and learner confirmation is represented as resolved.",
+    "Constraints and exclusions are explicit.",
+    "A passing G1 routes to S2."
+  ]
+}

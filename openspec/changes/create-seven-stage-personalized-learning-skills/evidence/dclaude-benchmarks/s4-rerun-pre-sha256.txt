@@ -1,0 +1,4 @@
+b6280e008cc7ebdfb728e186d3a4c25f65ec654fd18ae4411310c5ceafb2842f  .agents/skills/diagnose-learner-frontier/SKILL.md
+cc988d64e8d11c6fa79299f46d433feb0833bf47ea687d9cdec64842e0d324b6  .agents/skills/diagnose-learner-frontier/evals/evals.json
+8915d4280c314b4789579c038abc6f5c5d72acb2780d3c67e095bc73e49a1ee6  .agents/skills/diagnose-learner-frontier/references/stage-contract.md
+964ceebc6b6a2dec4070864898b06b122b2da7ae8e8eed87acc6e82d7bd10125  .agents/skills/diagnose-learner-frontier/references/learner-snapshot.schema.json

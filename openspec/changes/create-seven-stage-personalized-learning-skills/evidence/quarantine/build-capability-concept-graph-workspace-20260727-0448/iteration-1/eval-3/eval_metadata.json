@@ -1,0 +1,9 @@
+{
+  "skill_name": "build-capability-concept-graph",
+  "case_id": 3,
+  "eval_name": "eval-3",
+  "source": {},
+  "route": "gclaude",
+  "iteration": 1,
+  "expectations_count": 6
+}

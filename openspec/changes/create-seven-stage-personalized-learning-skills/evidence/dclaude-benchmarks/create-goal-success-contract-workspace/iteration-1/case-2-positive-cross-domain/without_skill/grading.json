@@ -1,0 +1,102 @@
+{
+  "expectations": [
+    {
+      "text": "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+      "passed": false,
+      "evidence": "No formal contract exists. The output is a week-by-week lesson plan (week_1_sessions with 7 daily entries) with learning_objectives per session, but these are instructional goals (e.g., '用自己的话解释分数表示整体被等分成若干份后取若干份'), not observable_capabilities with capability_id/statement/observable_evidence structure. The output mentions core_objectives at the plan level and assessment_modalities, but these are broad categories ('数轴解释', '配方缩放', '未见迁移题'), not structured capability definitions with multiple cognitive levels and evidence items. Representations are present across activities (fraction strips, number lines, paper folding, recipe cards) but are not organized as capability-verification evidence."
+    },
+    {
+      "text": "The pass rule contains an independently required transfer task rather than only mechanical speed or recall.",
+      "passed": false,
+      "evidence": "No formal pass_rules structure exists. The assessment_preparation_notes.three_week_assessment_blueprint mentions a transfer_component ('两道未见过的情境题，涉及新分母组合或多步骤分数推理') and passing_criteria that include '使用了至少两种不同策略', but these are embedded in descriptive notes rather than as formal, independently required pass rules. The non_goals list includes '机械通分速度训练' but this is a design principle, not a pass rule. The session plan includes a transfer challenge problem on day 7, but this is a learning activity, not a contract-level pass rule that independently gates success."
+    },
+    {
+      "text": "Executed external pre-research and auditable source coverage are recorded.",
+      "passed": false,
+      "evidence": "No external pre-research recorded. outer.json modelUsage shows webSearchRequests=4, indicating some web searches were performed, but no search queries, source URLs with provenance, or category coverage are documented in the output. The output does not contain an external_research_seed section, evidence_collected array, or any structured record of what was searched and retrieved. The pedagogical_framework mentions '研究验证的概念教学策略' and some URLs are referenced in session activities (e.g., Australian Curriculum Lessons), but these are inline mentions, not auditable research records."
+    },
+    {
+      "text": "Both guardian and learner confirmation is represented as resolved.",
+      "passed": false,
+      "evidence": "No structured confirmation mechanism. The plan_metadata.co_design_notes states '监护人与学习者共同确认：三周内每天 25 分钟...' and stakeholders lists ['监护人', '学习者'], but there is no confirmation section with specific questions, individual responses, resolved status, and confirmed_at timestamp. The confirmation is asserted in a single sentence rather than represented as a structured, verified process. No individual confirmation items are tracked as resolved."
+    },
+    {
+      "text": "Constraints and exclusions are explicit.",
+      "passed": false,
+      "evidence": "No formal constraints or exclusions sections. The plan_metadata includes non_goals: ['机械通分速度训练', '大量纸笔计算练习', '死记硬背口诀']. The learner_profile mentions 'total_duration: 3周, daily_session_minutes: 25'. But there is no unified constraints object with duration, effort, environment, materials, and assessment_mode, and no explicit exclusions list. Constraints are scattered across metadata, learner_profile, and session descriptions."
+    },
+    {
+      "text": "A passing G1 routes to S2.",
+      "passed": false,
+      "evidence": "No G1 evaluation exists. No quality_evaluation section, no rubric_results, no verdict, no route_to field. The output has no concept of gate evaluation or deterministic routing."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "num_turns": 7,
+    "output_chars": 47550,
+    "transcript_chars": 48372,
+    "total_tokens": 140498,
+    "web_search_requests": 4,
+    "cost_usd": 1.153958
+  },
+  "timing": {
+    "executor_duration_seconds": 260,
+    "total_duration_seconds": 257.054
+  },
+  "claims": [
+    {
+      "claim": "The plan uses CRA model (Concrete → Representational → Abstract) as its pedagogical framework",
+      "type": "quality",
+      "verified": true,
+      "evidence": "plan_metadata.pedagogical_framework explicitly states 'CRA 模型（具象 → 表征 → 抽象），以数轴为核心桥梁工具'. Session activities follow this progression: day 1 (concrete fraction strips), day 2 (representational number lines), days 4-6 (abstract equivalence rules)."
+    },
+    {
+      "claim": "The plan covers 7 days of week 1 activities at 25 minutes each",
+      "type": "factual",
+      "verified": true,
+      "evidence": "week_1_sessions contains 7 entries (day 1 through day 7), each with duration_minutes=25. The daily_schedule sums to 175 minutes = ~2.9 hours for week 1."
+    },
+    {
+      "claim": "4 web searches were performed during execution",
+      "type": "process",
+      "verified": true,
+      "evidence": "outer.json modelUsage shows webSearchRequests=4. However, no search queries or retrieved source URLs are documented in the output."
+    },
+    {
+      "claim": "The output was generated without reading any skill package files",
+      "type": "process",
+      "verified": true,
+      "evidence": "The executor_prompt.txt instructs: 'Do NOT read or use .agents/skills, SKILL.md, stage contracts, examples, schemas, eval expectations, or any project file.' The output structure (lesson plan vs handoff envelope) confirms no skill artifacts were consulted."
+    },
+    {
+      "claim": "Output was returned as raw JSON with no markdown fence (per executor instruction: 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary')",
+      "type": "quality",
+      "verified": false,
+      "evidence": "response.txt starts with ```json markdown fence opener and ends with ``` markdown fence closer. This violates the executor's instruction."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+        "reason": "The without-skill output actually contains rich multi-representational activities (fraction strips, number lines, folding paper, recipe cards, area models) across multiple cognitive levels. It fails because it's not in contract format, not because the content is absent. This assertion is correctly discriminating — it checks structural conformance to the skill's output format, not just content presence."
+      },
+      {
+        "assertion": "Executed external pre-research and auditable source coverage are recorded.",
+        "reason": "Interesting edge case: outer.json shows webSearchRequests=4, so the without_skill executor DID perform web searches, but the results are not recorded in the output as auditable evidence. The assertion correctly checks for documentation of the research process, not just its execution. This is a valuable distinction."
+      }
+    ],
+    "overall": "The assertions effectively discriminate between skill-guided and unguided execution for the cross-domain case. The without-skill run produces a detailed, pedagogically sound lesson plan but fails every structural and process-oriented expectation (contract format, formal confirmation, auditable research records, G1 evaluation, deterministic routing). This confirms the skill enforces specific process and output structure requirements."
+  }
+}

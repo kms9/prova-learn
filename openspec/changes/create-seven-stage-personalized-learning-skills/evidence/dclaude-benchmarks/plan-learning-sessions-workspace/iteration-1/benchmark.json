@@ -1,0 +1,481 @@
+{
+  "metadata": {
+    "skill_name": "plan-learning-sessions",
+    "skill_path": ".agents/skills/plan-learning-sessions",
+    "executor_model": "dclaude: deepseek-v4-pro[1m]",
+    "analyzer_model": "local deterministic post-hoc analysis",
+    "timestamp": "2026-07-26T19:40:33Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3,
+    "runs_per_eval_per_configuration": 1,
+    "total_runs": 6
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 108.316,
+        "tokens": 75665,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The path connects the confirmed learner_snapshot frontier to the goal_success_contract target with no gaps.",
+          "passed": true,
+          "evidence": "positive_artifact.content.ordered_learning_nodes forms a continuous chain: n-row-est(1)→n-stats(2)→n-multicol(3)→n-partial(4)→n-transfer(5). n-row-est maps to the LS-001 frontier (estimation vs actual discrepancy), and n-transfer maps to the goal_success_contract acceptance criteria (3 unseen queries). quality_evaluation.rubric_results[0] (目标连通性) confirms: 'ordered_learning_nodes: n-row-est(1)→n-stats(2)→n-multicol(3)→n-partial(4)→n-transfer(5) 形成从已证实前沿到目标的最小连通路径'."
+        },
+        {
+          "text": "Selection rationale explains every node and there is no unexplained redundancy or hard-prerequisite crossing.",
+          "passed": true,
+          "evidence": "Each of the 5 nodes has a selection_rationale: n-row-est='学习前沿起点：LS-001 显示学习者把估算行数当实际行数...'; n-stats='修复统计信息缺失的错误模型...'; n-multicol='直接处理 SELECTIVITY_FIRST_ALWAYS 误概念...'; n-partial='扩展条件方案与代价判断...跳过仅视频教学的可选节点，保持路径最小'; n-transfer='迁移到未见查询并安排延迟复测...'. Already-mastered nodes (plan_tree_reading, scan_methods) are explicitly skipped. quality_evaluation.rubric_results[2] (路径最小性) confirms no course-catalog copying."
+        },
+        {
+          "text": "The first session is executable within the stated time and resource constraints.",
+          "passed": true,
+          "evidence": "s1 has estimated_time.minutes_per_session=90, session_count=2, fitting within the 2×90min/week constraint. Activities are concrete: '无材料检索', '在沙箱 EXPLAIN (ANALYZE, BUFFERS) 输出上标注估算与实际行数差异', '对比统计信息新鲜与陈旧下的计划差异，归纳因果', '独立补做一道未见查询的估算偏差标注并解释'. Input materials list PostgreSQL 18 sandbox, EXPLAIN docs, and anonymized orders queries. quality_evaluation.rubric_results[3] (时间可行性) confirms total budget of 24h vs consumed 12h."
+        },
+        {
+          "text": "Mandatory confirmation (path overview, stage goals, time commitment, priority, first-session contract) is resolved as confirmed.",
+          "passed": true,
+          "evidence": "confirmation.status='confirmed', confirmed_at='2026-07-27T00:00:00Z'. confirmation.response has all four items: path_overview='confirmed', priority='confirmed: 先修复估算与统计信息模型再学多列索引', time_budget='confirmed: 4周/每周6小时/每周两次90分钟', first_session_contract='confirmed: s1 可执行'. confirmation.mode='mandatory'."
+        },
+        {
+          "text": "Each learning node has observable, decidable per-node exit criteria aligned with assessment.",
+          "passed": true,
+          "evidence": "exit_criteria.per_node contains 5 entries (one per node) with observable, decidable criteria: n-row-est='独立指出未见 EXPLAIN (ANALYZE, BUFFERS) 计划中的估算与实际行数偏差，并提出验证动作'; n-stats='能解释统计信息新旧对计划的影响，并判断给定场景是否需要执行 ANALYZE'; n-multicol='在两个未见查询中独立选择并论证多列索引的前导列顺序'; n-partial='能拒绝一个不合适索引并说明代价原因'; n-transfer='三个未见查询中至少两题主瓶颈诊断、索引方案与验证步骤均正确'. assessment_schedule maps immediate/transfer/delayed assessments to each node's exit criteria."
+        },
+        {
+          "text": "G5 is evaluated dimension by dimension and the deterministic route is S6 when all dimensions pass.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains all 8 G5 dimensions (目标连通性, 先修正确性, 路径最小性, 时间可行性, 策略适配性, 教学与测评对齐度, 认知负荷, 调整空间), each with evidence array, score=true, passed=true. quality_evaluation.verdict='pass', quality_evaluation.route_to='S6'."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 196.393,
+        "tokens": 80451,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The path connects the confirmed frontier (comparison reasoning developing, contextual transfer not mastered) to the target without reteaching already-mastered representation nodes.",
+          "passed": true,
+          "evidence": "ordered_learning_nodes: n-benchmark-reason(1)→n-contrast-bias(2)→n-contextual-scale(3)→n-interleave(4)→n-transfer(5). n-benchmark-reason selection_rationale states '学习前沿起点：数轴定位与等值分数已掌握，但比较解释仍依赖机械通分(developing)'. Already-mastered nodes (数轴定位, 等值分数) are NOT included as independent nodes. quality_evaluation.rubric_results[2] (路径最小性) confirms: '跳过节点：数轴定位(mastered)→跳过重复的数轴基础训练；等值分数(mastered)→跳过表征训练，不作为独立节点'."
+        },
+        {
+          "text": "Strategies target the known whole-number misconception and contrast cases rather than only increasing drill volume, with no unexplained redundancy.",
+          "passed": true,
+          "evidence": "n-contrast-bias explicitly targets whole-number bias with teaching_strategy=['contrast_case','worked_example','interleaving'] and scaffolding approach='对比卡片对+错误分析'. n-benchmark-reason replaces mechanical common-denominator with explain+worked_example+retrieval. The misconception intervention is built into the session design: '直接攻击全数偏差与机械通分两个典型偏差。通过故意构造分子大≠分数大...和无需通分即可判断...的对比案例'. No drill-volume-based design."
+        },
+        {
+          "text": "Each session fits the 25-minute daily constraint and the first session is executable within constraints.",
+          "passed": true,
+          "evidence": "s1 estimated_time: minutes_per_session=25, session_count=4. Activities broken into daily chunks: 第1天(数轴示范), 第2天(基准卡片独立判断), 第3天(游戏化卡片练习), 第4天(撤除视觉提示). Total budget: 21天×25分钟=525分钟. Sessions: 4+4+5+4+2+2=21 days × 25min = 525min exactly. quality_evaluation.rubric_results[3] (时间可行性) confirms."
+        },
+        {
+          "text": "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+          "passed": true,
+          "evidence": "confirmation.status='confirmed', confirmed_at='2026-07-27T12:00:00Z'. confirmation.response includes: path_overview='confirmed', priority_comparative_reasoning='confirmed', time_and_rhythm='confirmed', first_session_contract='confirmed', additional_notes='学习者与监护人确认优先比较推理而非重复表征训练，接受包含未见情境迁移题与延迟复测的验收'. Guardian involvement is explicitly addressed."
+        },
+        {
+          "text": "Per-node exit criteria are observable and the speed-only criterion is explicitly excluded from overall exit criteria.",
+          "passed": true,
+          "evidence": "exit_criteria.per_node has 5 entries with observable, decidable thresholds: n-benchmark-reason='无视觉提示下用基准（1/2或1）独立解释≥4/5对分数的大小关系，解释中不出现通分计算'; n-contrast-bias='在10组对比卡片中正确识别并纠正≥8组全数偏差陷阱'; etc. Speed exclusion: gamification scoring dimensions are strategy_score/reasoning_score/reflection_score — no speed dimension. Design principle: '游戏化非竞速：卡片机制以策略深度和解释质量为评分维度，不以完成速度排名'. Session descriptions repeatedly state '不计时', '速度不计入评分'."
+        },
+        {
+          "text": "Transfer and delayed review are explicit and G5 routes deterministically to S6 when all dimensions pass.",
+          "passed": true,
+          "evidence": "n-transfer has teaching_strategy=['transfer','delayed_retest']. assessment_schedule.transfer: 's5 三道未见情境题（果汁配方甜度、多人分匹萨、非标准长度缩放）'. assessment_schedule.delayed: 's6 延迟复测：基准推理与对比偏差核心任务保持≥80%正确率'. quality_evaluation.rubric_results: all 8 dimensions passed=true. quality_evaluation.verdict='pass', route_to='S6'."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 84.629,
+        "tokens": 73187,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The copied table of contents, video quota and question count is not accepted as a path connecting a confirmed frontier to the target.",
+          "passed": true,
+          "evidence": "input_validation.status='fail'. input_validation.errors[3]: '提交内容为课程目录式计划（第1周数据库原理章节、第2周索引视频数、第3周刷题量、第4周项目），章节/视频/题量不是能力节点，无 selection_rationale、硬先修边、进入/退出条件或测评安排'. positive_artifact=null. status='blocked'. processing_record[1]: '识别提交内容为课程目录式计划而非个性化学习路径'."
+        },
+        {
+          "text": "Chapters and videos are identified as non-capability nodes with unexplained redundancy and no hard-prerequisite discipline.",
+          "passed": true,
+          "evidence": "requirement_gaps[3] (gap-node-criteria): '提交内容无任何节点进入/退出条件或测评安排，无法判定掌握'. quality_evaluation.rubric_results[2] (路径最小性): '提交内容为课程目录（章节→视频→题量→项目），非从已证实前沿到目标的最小连通子图；100道题可能重复同一模板'. quality_evaluation.rubric_results[1] (先修正确性): '无 capability_concept_graph 故无先修边可验证；课程目录按周编排而非按先修依赖'. evidence_collected[0]: '章节/视频/题量/项目非能力节点'."
+        },
+        {
+          "text": "No fabricated first session or starting state is accepted as executable.",
+          "passed": true,
+          "evidence": "positive_artifact=null. No sessions array exists anywhere in the output. No estimated_time, activities, or session definitions. The output explicitly refuses to fabricate: '正向工件置 null'. quality_evaluation.rubric_results[3] (时间可行性) confirms: '无会话定义与 estimated_time，无首个会话契约'."
+        },
+        {
+          "text": "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+          "passed": true,
+          "evidence": "confirmation.status='pending', confirmation.response=null, confirmation.questions=[], confirmation.trigger=null. requirement_gaps[0]: '缺少 learner_snapshot（G4）：无已证实学习前沿...无法确定规划起点，criticality=critical, gate_effect=block'. processing_record[2]: '确认无已证实学习前沿证据，强制确认无法进行，confirmation.status=pending'."
+        },
+        {
+          "text": "No per-node exit criteria exist and none are fabricated.",
+          "passed": true,
+          "evidence": "positive_artifact=null. quality_evaluation.rubric_results[5] (教学与测评对齐度): '无 per_node exit_criteria，无 assessment_schedule（immediate/transfer/delayed 均缺失）'. No exit_criteria structure exists anywhere in the output."
+        },
+        {
+          "text": "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results: all 8 dimensions have passed=false. quality_evaluation.verdict='return_upstream', route_to='S4'. The rubric shows: 目标连通性→S4, 先修正确性→S3 (graph invalid), remaining 6→S5 (revise_here). Overall route is S4. processing_record[5]: '依据 fail-closed 规则与阶段契约 §8：学习前沿证据不足 → return_upstream 至 S4'. Route is explicitly NOT S6."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 3,
+        "failed": 3,
+        "total": 6,
+        "time_seconds": 316.163,
+        "tokens": 139286,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The path connects the confirmed learner_snapshot frontier to the goal_success_contract target with no gaps.",
+          "passed": true,
+          "evidence": "learning_phases define Phase 1 (Estimation & Statistics Model, sessions 1-4) → Phase 2 (Multi-Column Index Ordering, sessions 5-8), progressing from the frontier topics F1/F2 (estimation discrepancy, predicate selectivity) to F3 (multi-column index ordering) and migration acceptance. learner_profile.learning_frontier explicitly maps F1/F2/F3. The 8-session plan culminates in migration_acceptance with 3 unseen queries (ACCEPT-Q1/Q2/Q3)."
+        },
+        {
+          "text": "Selection rationale explains every node and there is no unexplained redundancy or hard-prerequisite crossing.",
+          "passed": true,
+          "evidence": "learning_phases[0].rationale explains 'Learner requested fixing estimation understanding first. This is pedagogically correct: column ordering decisions in Phase 2 depend on understanding how the planner computes selectivity...' Each session has bridge_to_next connecting it to the next. Phase 1→Phase 2 sequencing respects hard prerequisites (estimation before index design). No chapter/video quotas or course catalog copying."
+        },
+        {
+          "text": "The first session is executable within the stated time and resource constraints.",
+          "passed": true,
+          "evidence": "Session 1 has duration_minutes=90, concrete learning_goals, topics with key_points, and a sandbox_exercise with 5 specific steps and a deliverable. Fits within 2×90min/week constraint at 4 weeks/6 hours per week."
+        },
+        {
+          "text": "Mandatory confirmation (path overview, stage goals, time commitment, priority, first-session contract) is resolved as confirmed.",
+          "passed": false,
+          "evidence": "No explicit confirmation object with status='confirmed' exists in the output. precondition_verification.first_session_contract_confirmed=true and learner_sequencing_preference are noted, and handoff_checklist[0] mentions 'Preconditions verified...first session contract accepted', but there is no structured confirmation.response with path_overview/stage_goals/time_commitment/priority/first_session_contract all resolved as 'confirmed'. The output lacks the mandatory confirmation schema required by the stage contract."
+        },
+        {
+          "text": "Each learning node has observable, decidable per-node exit criteria aligned with assessment.",
+          "passed": false,
+          "evidence": "No exit_criteria.per_node structure exists. The output uses progress_milestones (M-PHASE1, M-MISCONCEPTION, M-ACCEPTANCE) with verification conditions at coarse granularity, and migration_acceptance with per-query success_criteria. However, there are no explicit per-learning-node exit criteria. The output defines sessions/topics/learning_goals rather than ordered_learning_nodes with per-node exit criteria aligned to an assessment_schedule."
+        },
+        {
+          "text": "G5 is evaluated dimension by dimension and the deterministic route is S6 when all dimensions pass.",
+          "passed": false,
+          "evidence": "No quality_evaluation or rubric_results object exists in the output. There is no G5 rubric evaluation with 8 dimensions, no verdict field, and no route_to field. The output follows a different schema (plan_id='S5-FRAC-G6-001') rather than the stage contract schema (schema_version, stage_id, quality_evaluation, route_to)."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 3,
+        "failed": 3,
+        "total": 6,
+        "time_seconds": 177.108,
+        "tokens": 41278,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The path connects the confirmed frontier (comparison reasoning developing, contextual transfer not mastered) to the target without reteaching already-mastered representation nodes.",
+          "passed": true,
+          "evidence": "The weekly_plan progresses from Week 1 '比较推理基础——从全数思维到分数思维' → Week 2 '情境缩放深度——从比较到乘除推理' → Week 3 '综合巩固、验收与延迟复测准备'. Week 1 starts from comparison reasoning (developing frontier), not from representation basics. Week 1 Day 1 uses 数轴定位 and 等值分数 as tools, not as reteaching targets. Already-mastered skills are used as scaffolding (e.g., Day 2 uses 数轴 as anchor visualization) but not re-taught as independent units."
+        },
+        {
+          "text": "Strategies target the known whole-number misconception and contrast cases rather than only increasing drill volume, with no unexplained redundancy.",
+          "passed": true,
+          "evidence": "Week 1 week_misconception_intervention.target='whole_number_bias' with 4 intervention strategies (面积模型对比, 数轴定位, 认知冲突提问, 语言重塑). Day 3 uses 对比案例 to challenge whole-number bias. Week 2 week_misconception_intervention.target='mechanical_common_denom' with 4 strategies (面积模型重演, 策略决策训练, 意义优先规则, 反例强化). Day 11 explicitly targets mechanical common-denom with '偏差暴露诊断' and '通分的意义重建'. Strategies use contrast cases, not drill volume."
+        },
+        {
+          "text": "Each session fits the 25-minute daily constraint and the first session is executable within constraints.",
+          "passed": true,
+          "evidence": "Every daily session follows warmup_5min + core_15min + wrapup_5min = 25 minutes. Day 1 structure: warmup_5min='卡片排序热身', core_15min='认知冲突：同分子与同分母的比较推理' (3 stages), wrapup_5min='今日推理日志'. Guardian role specified for each segment. Total: 21 days × 25 min = 525 minutes matching the 3-week constraint."
+        },
+        {
+          "text": "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+          "passed": false,
+          "evidence": "learner_profile.learner_guardian_confirmation mentions path_priority and acceptance_criteria, but there is no explicit confirmation object with status='confirmed' containing all four required items (path overview, stage goals, time commitment, priority, first-session contract). The output uses its own schema (plan_id, plan_type, weekly_plan) without the stage contract's mandatory confirmation envelope. The confirmation is mentioned informally in prose but not resolved as a structured confirmed block."
+        },
+        {
+          "text": "Per-node exit criteria are observable and the speed-only criterion is explicitly excluded from overall exit criteria.",
+          "passed": false,
+          "evidence": "No exit_criteria.per_node structure exists. expected_outcomes provides target indicators (e.g., '能从4种以上策略中灵活选择最优比较方法') but these are outcome descriptions, not per-node exit criteria with observable/decidable thresholds. assessment_plan has formative/summative/delayed_retest assessments, which are assessment schedules, not per-node exit criteria. Speed exclusion IS explicit: gamification_system.core_principle='以策略深度和解释质量为核心评分维度，速度不作为排名标准', but the per-node exit criteria component is missing entirely."
+        },
+        {
+          "text": "Transfer and delayed review are explicit and G5 routes deterministically to S6 when all dimensions pass.",
+          "passed": false,
+          "evidence": "Transfer and delayed review ARE explicit: assessment_plan.delayed_retest at Day 26, summative assessment includes unseen context transfer (Part B 未见情境迁移×2). However, there is NO quality_evaluation or rubric_results object evaluating G5 dimensions. No verdict field. No route_to field. The output uses s6_proceed_decision in a completely different schema rather than the stage contract's quality_evaluation→route_to pattern."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6666666666666666,
+        "passed": 4,
+        "failed": 2,
+        "total": 6,
+        "time_seconds": 30.974,
+        "tokens": 31491,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The copied table of contents, video quota and question count is not accepted as a path connecting a confirmed frontier to the target.",
+          "passed": true,
+          "evidence": "input_summary.submission_type='课程目录式计划'. readiness_assessment.can_proceed_to_S6=false, overall_readiness_level='NOT_READY', readiness_score=0.05. s6_proceed_decision.decision='DENIED'. required_remediation.action='REJECT_PLAN_RETURN_TO_PREPARATION'. diagnosis.root_cause: '提交者将内容大纲与个性化学习计划混为一谈'. No positive artifact or learning path is generated."
+        },
+        {
+          "text": "Chapters and videos are identified as non-capability nodes with unexplained redundancy and no hard-prerequisite discipline.",
+          "passed": true,
+          "evidence": "required_artifacts_check.capability_graph_nodes.status='MISSING', severity='BLOCKING', description='未提供能力图谱节点，无法确定目标能力集合、依赖关系'. required_artifacts_check.node_entry_exit_conditions.status='MISSING', severity='BLOCKING', description='未定义能力图谱节点的进入条件与退出条件'. critical_findings: '计划粒度不足以支撑教学决策：无知识点级别映射、无时间精度、无难度分层'. format_issues note the coarse weekly structure with no dependency discipline."
+        },
+        {
+          "text": "No fabricated first session or starting state is accepted as executable.",
+          "passed": true,
+          "evidence": "No session plan, daily schedule, or first-session definition exists anywhere in the output. s6_proceed_decision.decision='DENIED'. The output only provides remediation steps (required_remediation.steps) that describe what needs to be created, not fabricated sessions."
+        },
+        {
+          "text": "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+          "passed": false,
+          "evidence": "No explicit confirmation object with status='pending' or 'blocked' exists in the output. The output uses its own schema (s5_evaluation, evaluation_id, readiness_assessment) rather than the stage contract schema (confirmation with mode/status/response). While required_artifacts_check.learner_snapshot.status='MISSING' and s6_proceed_decision.decision='DENIED' functionally represent a blocked state, there is no explicit confirmation.status='pending' field. The burden of proof is on the expectation, and the structured confirmation field is absent."
+        },
+        {
+          "text": "No per-node exit criteria exist and none are fabricated.",
+          "passed": true,
+          "evidence": "No exit_criteria structure or per-node criteria exists anywhere in the output. required_artifacts_check.node_entry_exit_conditions.status='MISSING', severity='BLOCKING'. The output correctly identifies this gap without fabricating any exit criteria."
+        },
+        {
+          "text": "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6.",
+          "passed": false,
+          "evidence": "No quality_evaluation or rubric_results object exists. No G5 rubric with 8 dimensions is evaluated. No route_to field exists. The output uses s6_proceed_decision.decision='DENIED' and required_remediation.action='REJECT_PLAN_RETURN_TO_PREPARATION' — functionally equivalent to return_upstream — but without the stage contract's structured G5 evaluation. The required_remediation.steps[0] says to create learner_snapshot (S4 output), which is functionally correct, but no explicit route_to='S4' exists. No deterministic routing is specified using the stage contract's route_to mechanism."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 129.7793,
+        "stddev": 58.8923,
+        "min": 84.629,
+        "max": 196.393
+      },
+      "tokens": {
+        "mean": 76434.3333,
+        "stddev": 3692.6047,
+        "min": 73187.0,
+        "max": 80451.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.5556,
+        "stddev": 0.0962,
+        "min": 0.5,
+        "max": 0.6667
+      },
+      "time_seconds": {
+        "mean": 174.7483,
+        "stddev": 142.6091,
+        "min": 30.974,
+        "max": 316.163
+      },
+      "tokens": {
+        "mean": 70685.0,
+        "stddev": 59611.402,
+        "min": 31491.0,
+        "max": 139286.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.44",
+      "time_seconds": "-45.0",
+      "tokens": "+5749"
+    }
+  },
+  "notes": [
+    "**Discrimination:** with-skill mean pass rate is `1.0000`; without-skill is `0.5556`; delta is `+0.44`. The skill adds consistent value, but this is the weakest separation among the six completed benchmarks because baseline answers often include plausible schedules and activities.",
+    "**Variance:** with-skill standard deviation is `0.0000`; without-skill is `0.0962`. The remaining discriminators are mandatory confirmation, decidable per-node exits, transfer/delayed review and deterministic G5 routing.",
+    "**Time:** with-skill mean is `129.7793s`, without-skill `174.7483s` (`-45.0s`). The structured skill was faster in this small sample.",
+    "**Tokens:** recovered directly from each executor outer `modelUsage`, the means are `76,434.3` with the skill and `70,685.0` without it (`+5,749.3`). This replaces the earlier zero-value aggregation gap.",
+    "**Conclusion:** retain the current skill but strengthen future evals around plan adaptation and executable exit criteria, where generic baseline plans should fail."
+  ]
+}

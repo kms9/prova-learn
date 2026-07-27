@@ -1,0 +1,64 @@
+{
+  "case_id": 3,
+  "config": "with_skill",
+  "graded_at": "2026-07-26T21:11:29Z",
+  "expectation_results": [
+    {
+      "expectation": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+      "passed": true,
+      "evidence": "input_validation.status=fail; positive_artifact=null; explicit 'did NOT fabricate a capability_concept_graph or invent node facts/edges.'"
+    },
+    {
+      "expectation": "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+      "passed": true,
+      "evidence": "Enumerates missing focus question, named typed prerequisite edges with rationale, per-node misconceptions, assessment items, mastery thresholds, source/evidence mapping; node facts flagged as ungrounded."
+    },
+    {
+      "expectation": "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+      "passed": true,
+      "evidence": "G3 dimension '无环性/边可解释性' scored false, passed:false, with 'structural dimensions were NOT executed because there is no valid graph.'"
+    },
+    {
+      "expectation": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+      "passed": true,
+      "evidence": "Evidence provenance=user_provided_unverified, status=unsupported; source_evidence_ids=[]; 'S3 is forbidden from inventing node facts (no fabrication).'"
+    },
+    {
+      "expectation": "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+      "passed": true,
+      "evidence": "source_evidence_ids empty; G1/G2 absent; 'every potential node would be an ungrounded model_hypothesis'; verdict=return_upstream, route_to=S1 with S2 secondary."
+    },
+    {
+      "expectation": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+      "passed": false,
+      "evidence": "G3 passed:false, but route_to=S1 (S2 only secondary attribution), not the specified S3/S2; no invalidated downstream scope is recorded anywhere in the output."
+    }
+  ],
+  "overall_passed": false,
+  "summary": "Output fail-closes correctly (no fabricated graph, no invented evidence, G3 not passed, upstream attribution), but fails E6: primary route is S1 not S3/S2 and no invalidated downstream scope is recorded.",
+  "grader_elapsed_s": 159.65,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 1986,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.010407999999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 26142,
+      "outputTokens": 11415,
+      "cacheReadInputTokens": 640,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.41640499999999997,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.42681299999999994
+}

@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S3",
+  "run_id": "ccg-run-eval-001",
+  "learner_id": null,
+  "status": "blocked",
+  "input_contract": {
+    "artifact_refs": [],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "domain_evidence_landscape": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "fail",
+    "missing_fields": [
+      "goal_success_contract（G1 通过状态缺失）",
+      "domain_evidence_landscape（G2 通过状态缺失）",
+      "focus_question",
+      "edges[].prerequisite_strength",
+      "edges[].rationale",
+      "nodes[].capability_statement",
+      "nodes[].common_misconceptions",
+      "assessment_items",
+      "mastery_thresholds",
+      "remediation_entries",
+      "traceability"
+    ],
+    "stale_inputs": [],
+    "errors": [
+      "输入仅为主题目录 'SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 查询优化'，不具备能力—概念图的任何必备要素",
+      "无 G1 goal_success_contract：无法确定焦点问题、目标能力与验收标准",
+      "无 G2 domain_evidence_landscape：节点事实无已审计证据支撑",
+      "无焦点问题：术语列表无法回答'学习者能用这些知识解决什么问题'",
+      "无边理由：边仅为章节顺序，未标注 hard/soft 强度与 rationale",
+      "无误概念、评估题、掌握门槛或补救入口：无法支持 S4 学习者诊断",
+      "无来源映射：节点不可追溯到 S1 目标或 S2 来源",
+      "输入混入 '锁/事务/分区'，可能不属于目标最小路径，但因无目标定义无法验证"
+    ]
+  },
+  "assumptions": [
+    "输入为 SQL 数据库领域主题目录，是章节序列而非能力—概念图",
+    "目录顺序隐含先修假设（如索引先于执行计划），但无理由与强度标注",
+    "缺失 G1/G2 上游工件，建模无法进行任何有效推断"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "gap-g1-missing",
+      "description": "缺少 G1 goal_success_contract：无法确定焦点问题、目标能力与验收标准",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-g2-missing",
+      "description": "缺少 G2 domain_evidence_landscape：节点事实无已审计证据支撑，结构推断无领域依据",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-focus-question-absent",
+      "description": "无焦点问题：输入仅为7个术语的线性序列，无法判断'学会后能解决什么问题'",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-edges-unnamed",
+      "description": "边仅为'下一章'顺序，无 hard/soft 强度与 rationale，无法判定先修关系或检查无环性",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-no-assessment-mastery",
+      "description": "无 assessment_items、mastery_thresholds、remediation_entries：无法支持 S4 诊断与 S5 路径规划",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-no-traceability",
+      "description": "traceability 完全缺失：节点不可追溯到 S1 目标或 S2 来源，全链路断裂",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-extraneous-nodes",
+      "description": "'锁/事务/分区' 可能不属于目标最小路径，但因无目标定义无法验证是否应纳入",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "输入仅为术语目录，缺少建图所需全部关键要素；无分歧但阻塞",
+    "questions": [
+      "是否需先完成 S1（目标契约）定义焦点问题与目标能力？",
+      "是否需先完成 S2（领域证据）审计术语与来源？",
+      "锁、事务、分区是否属于目标最小路径？"
+    ],
+    "response": null,
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "ev-input-inspection-001",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "检查输入：仅含7个术语的线性序列 'SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 查询优化'，无焦点问题、无边理由、无误概念、无评估题、无掌握门槛、无来源映射。判定为目录伪装成图谱。",
+      "status": "unsupported"
+    }
+  ],
+  "processing_record": [
+    "步骤1：接收输入，识别为7个术语组成的线性目录，非能力—概念图结构",
+    "步骤2：校验输入契约 — G1 goal_success_contract 缺失，G2 domain_evidence_landscape 缺失 → input_validation.status=fail",
+    "步骤3：检查目录结构 — 无焦点问题、边仅为章节顺序无 hard/soft 与理由、无 capability_statement、无 common_misconceptions、无 assessment_items、无 mastery_thresholds、无 remediation_entries、无 traceability",
+    "步骤4：对照示例B反向案例 — 匹配：仅主题目录，缺少所有必备要素，且混入可能不属于目标最小路径的节点",
+    "步骤5：拒绝建图 — positive_artifact=null，status=blocked，失效下游范围至少 [S4,S5,S6,S7]",
+    "步骤6：按 G3 量规逐维评价 — 所有维度 failed"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "结构无环性",
+        "evidence": [
+          "无边标注 hard/soft 强度，无法提取硬先修子图进行无环性检查"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S3"
+      },
+      {
+        "dimension": "先修边可解释性",
+        "evidence": [
+          "边仅为章节顺序，无 rationale，无法解释为何某节点是另一节点的先修"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S3"
+      },
+      {
+        "dimension": "目标覆盖率",
+        "evidence": [
+          "无 target_capabilities 定义，无 goal_contract_ref，每个术语无法追溯到任何目标能力"
+        ],
+        "score": 0,
+        "threshold": 1,
+        "passed": false,
+        "failure_action": "return_upstream",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "节点粒度一致性",
+        "evidence": [
+          "'SQL 基础' 为整章层级，'执行计划' 为具体主题，粒度跨越多阶，存在'整章'与'单步'混排"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S3"
+      },
+      {
+        "dimension": "能力与概念区分度",
+        "evidence": [
+          "节点仅为术语，无 capability_statement，无法区分概念节点与可观察能力"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S3"
+      },
+      {
+        "dimension": "评估题有效性",
+        "evidence": [
+          "assessment_items 完全缺失，无法为任何节点提供诊断题"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S3"
+      },
+      {
+        "dimension": "全链路可追溯性",
+        "evidence": [
+          "traceability 完全缺失，节点不可追溯到 S1 目标或 S2 来源，goal_refs 与 source_refs 均为空"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "return_upstream",
+        "route_to": "S2"
+      }
+    ],
+    "evidence": [
+      "示例B反向案例：输入为 'SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 调优'，与本输入完全同构",
+      "七个 G3 维度全部 failed：无环性无法判定、边无理由、无目标可追溯、粒度不一、术语冒充能力、无评估题、无来源映射",
+      "input_validation.status=fail：G1/G2 均缺失，不得伪造正向工件"
+    ],
+    "verdict": "revise_here",
+    "route_to": "S3"
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [],
+    "source_sections": [
+      "references/example.md §示例B（反向/阻塞）— 把目录当图谱"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}

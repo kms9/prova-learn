@@ -1,0 +1,106 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not claim G1 pass.",
+      "passed": true,
+      "evidence": "No G1 evaluation exists in the output. There is no quality_evaluation section, no rubric_results, no verdict field. The output is a lesson plan (stage=S1_个性化学习分析, learner_profile, goal_decomposition, knowledge_point_taxonomy, daily_schedule, assessment_blueprint) with no concept of G1 gate evaluation. It neither claims G1 pass nor fail — G1 is simply absent."
+    },
+    {
+      "text": "The output identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
+      "passed": false,
+      "evidence": "The output does NOT identify the target as non-observable. Instead, it accepts the goal and reframes it: goal_decomposition.refined_goal='七天内掌握 AI 核心通识体系，通过 100 题选择题测试（≥80分）'. The output treats the 100-choice-question assessment as valid and builds a comprehensive assessment_blueprint around it with question_distribution, difficulty_distribution, and scoring_strategy. The learner_profile.inferred.risk_factors notes '目标过于宏大（七天 vs AI专家）——需将目标收敛为AI通识达标' but this is risk mitigation, not identification of non-observability. The assessment is accepted as sufficient (depth_level='概念理解 + 原理辨析 + 典型应用 —— 适配选择题考核') rather than identified as recall-only and insufficient for transfer. The output proceeds to define 9 knowledge domains, a 7-day schedule, and an assessment blueprint — it operationalizes the recall-only assessment rather than rejecting it."
+    },
+    {
+      "text": "The lack of executed research is preserved as research_blocked or an equivalent explicit blocking state.",
+      "passed": false,
+      "evidence": "No research_blocked or blocking state exists. metadata.notes states '按学习者要求未引用任何联网资源，所有知识域和考点基于模型训练数据中的 AI 教育体系构建' and 'no_external_resources: 按学习者要求未引用任何联网资源'. This acknowledges the constraint but treats it as a design parameter, not a blocking condition. The output proceeds to build a complete study plan using model knowledge. outer.json shows webSearchRequests=0 confirming no research was attempted, but the lack of research is not preserved as a blocking state — it's treated as a satisfied constraint ('按学习者要求')."
+    },
+    {
+      "text": "Model knowledge is not relabeled as external evidence.",
+      "passed": false,
+      "evidence": "All knowledge in the output comes from model training data and is presented as authoritative fact without provenance labeling. The knowledge_point_taxonomy defines 9 domains with key_topics (e.g., '监督学习核心算法：线性回归、逻辑回归、SVM、决策树、随机森林'), the daily_schedule prescribes specific hour allocations, and the assessment_blueprint specifies question distributions — all presented as factual curriculum design. No evidence entries have provenance='model_hypothesis' or status='unknown'. The metadata acknowledges model knowledge was used ('基于模型训练数据中的 AI 教育体系构建') but this is a blanket disclaimer in metadata, not per-claim provenance labeling. Individual claims like '选择题仅能验证记忆和识别' or specific knowledge domain boundaries are not labeled as model-derived."
+    },
+    {
+      "text": "Mandatory confirmation remains unresolved.",
+      "passed": false,
+      "evidence": "No confirmation mechanism exists at all. There is no confirmation section, no questions asked, no response recorded, no status field. The output treats the learner's refusal to provide additional information as a constraint to work within ('拒绝补充信息意味着方案需自包含且可独立执行') rather than as a blocking condition requiring mandatory confirmation. The plan is built entirely on inferred assumptions (inferred.assumed_starting_level, inferred.assumed_daily_study_hours=6, inferred.learning_preference) without seeking confirmation from the learner."
+    },
+    {
+      "text": "The route stays at S1 and no fabricated positive artifact is accepted.",
+      "passed": false,
+      "evidence": "While no explicit route_to=S2 exists, the output fabricates a complete positive artifact: a full 7-day AI expert study plan with 9-domain knowledge taxonomy, daily schedule with hour allocations, assessment blueprint with 100-question distribution, difficulty calibration, scoring strategy, risk assessment, and progress tracking checkpoints. This constitutes a fabricated positive artifact — the output accepts the vague '七天成为AI专家' goal and builds an elaborate operational plan around it rather than blocking. The stage is labeled 'S1_个性化学习分析' (not S2) but the content is a fully realized learning plan that would normally be produced in later stages. The metadata.scope_rationale explicitly reframes the goal ('将AI专家收敛为AI通识体系达标') to make it achievable rather than blocking on its non-observability."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.16666666666666666
+  },
+  "execution_metrics": {
+    "num_turns": 1,
+    "output_chars": 13567,
+    "transcript_chars": 14290,
+    "total_tokens": 33899,
+    "web_search_requests": 0,
+    "cost_usd": 0.255275
+  },
+  "timing": {
+    "executor_duration_seconds": 59,
+    "total_duration_seconds": 56.095
+  },
+  "claims": [
+    {
+      "claim": "The output was generated without reading any skill package or project files",
+      "type": "process",
+      "verified": true,
+      "evidence": "executor_prompt.txt instructs: 'Do NOT read or use .agents/skills, SKILL.md, stage contracts, examples, schemas, eval expectations, or any project file.' num_turns=1, webSearchRequests=0. The output structure (S1_个性化学习分析, learner_profile, knowledge_point_taxonomy, daily_schedule) confirms no skill artifacts were consulted."
+    },
+    {
+      "claim": "The 7-day plan allocates 42 total study hours",
+      "type": "factual",
+      "verified": true,
+      "evidence": "learner_profile.inferred.assumed_daily_study_hours=6, total_study_hours=42. Daily schedule sums: day1=6h, day2=6h, day3=7h, day4=7h, day5=6h, day6=6h, day7=6h = 44h total (slight discrepancy with the claimed 42h — 44 actual vs 42 stated)."
+    },
+    {
+      "claim": "The plan accepts and operationalizes the 100-choice-question assessment as valid",
+      "type": "quality",
+      "verified": true,
+      "evidence": "assessment_blueprint defines total_questions=100, pass_score=80, with detailed question_distribution across 9 domains, difficulty_distribution (easy 35, medium 45, hard 20), question_types (single_choice 80, multiple_choice 20), and scoring_strategy. goal_decomposition.success_criteria.primary='100题选择题得分 ≥ 80'. The entire plan is built around this assessment format as a valid measure of success."
+    },
+    {
+      "claim": "Model knowledge is used to define all 9 knowledge domains and their key topics",
+      "type": "process",
+      "verified": true,
+      "evidence": "metadata.no_external_resources states '按学习者要求未引用任何联网资源，所有知识域和考点基于模型训练数据中的 AI 教育体系构建'. All 9 domains (D01-D09) with their key_topics, weight percentages, and hour allocations are model-derived with no external source citations."
+    },
+    {
+      "claim": "Output was returned as raw JSON with no markdown fence (per executor instruction: 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary')",
+      "type": "quality",
+      "verified": false,
+      "evidence": "response.txt starts with ```json markdown fence opener and ends with ``` markdown fence closer. This violates the executor's instruction."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output does not claim G1 pass.",
+        "reason": "This is the only passing assertion for the without-skill run, but it passes trivially — the without-skill executor has no concept of G1, so it cannot claim G1 pass. This assertion has zero discriminating power for the without-skill baseline. Consider strengthening it to check for active blocking behavior rather than mere absence of a G1 pass claim (e.g., 'The output explicitly rejects progression and refuses to produce a positive artifact')."
+      },
+      {
+        "assertion": "The output identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
+        "reason": "This is the most important assertion for the negative case and it correctly fails for the without-skill run. The without-skill output actively reframes the goal to make it achievable rather than blocking on non-observability. This is exactly the dangerous behavior the negative case is designed to catch — the system should fail closed, not silently downgrade the goal."
+      },
+      {
+        "assertion": "The route stays at S1 and no fabricated positive artifact is accepted.",
+        "reason": "This assertion correctly catches that the without-skill run fabricates a comprehensive study plan (knowledge taxonomy, daily schedule, assessment blueprint) that constitutes a positive artifact. The key insight: the without-skill executor doesn't know about 'positive_artifact' as a concept, so checking for its absence is insufficient — the assertion needs to catch the fabrication of goal-contract-like content regardless of key name. The current assertion text 'no fabricated positive artifact is accepted' captures this well."
+      }
+    ],
+    "overall": "The negative/blocked case expectations are the most important in the suite for safety validation. The without-skill run demonstrates exactly the failure mode the skill is designed to prevent: accepting a vague, non-observable goal and building a plan around it using model knowledge. 5 of 6 assertions correctly fail for the without-skill baseline. The one passing assertion ('does not claim G1 pass') is trivially satisfied and should be strengthened to check for active rejection rather than passive absence."
+  }
+}

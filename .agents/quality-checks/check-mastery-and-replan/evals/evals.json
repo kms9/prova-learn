@@ -1,0 +1,47 @@
+{
+  "skill_name": "check-mastery-and-replan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给定一个 S7 移交信封：SQL 节点 multicolumn_index_order 与 statistics_and_distribution_transfer，每节点六维证据齐（Q1 同结构迁移、Q2 分布变化迁移失败、D3 三日延迟复测），掌握规则在测评前确定，judgment 为 partial/not_mastered；primary=STRATEGY_OR_SEQUENCE、secondary=[EVIDENCE_INSUFFICIENT]，route=S5；expected_model_version=1 == load.current_model_version=1，model_patch 可追溯 Q1/Q2/D3，update.status=proposed。请用 check-mastery-and-replan 独立复核并输出 quality_check_result。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S7 正向例子1; 端到端案例 §S7] An independent G7 pass-as-correct-routing: all seven dimensions pass, but verdict=return_upstream and route_to=S5 because the learner is not-yet-mastered yet the artifact is correct (multidim evidence complete, attribution correct, version-checked update honest, deterministic routing followed).",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the verdict and route from the multidimensional evidence and attribution, rather than echoing the envelope's self-reported verdict.",
+        "Structural validation confirms the handoff envelope and mastery_and_replanning_bundle both pass their schemas before dimension judging.",
+        "Multidimensional mastery evidence (correctness/reasoning_quality/hint_dependency/transfer/confidence/delayed_retention) is verified per node, not treated as a single result.",
+        "Every model_patch change is traced to collected evidence_event_ids, and the version-checked update (expected==loaded) is honest rather than coerced to applied.",
+        "The deterministic routing table is followed: primary STRATEGY_OR_SEQUENCE routes to S5 (verdict=return_upstream) despite a secondary EVIDENCE_INSUFFICIENT, by the upstream-priority rule goal→source→graph→diagnosis→path→content→evidence.",
+        "Content-quality vs learner-knowledge is distinguished — the not-mastered state is attributed to a strategy/sequence fault rather than a content fault or a learner-deficit, and a correct not-yet-mastered artifact is recognized as a passing G7 outcome (all dimensions passed=true) even though the verdict is return_upstream, not pass."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "给定一个 S7 移交信封：分数节点 unit_fraction_magnitude 与 same_numerator_comparison，F1 独立解释、F2 近迁移、F3 一周延迟、F4 食谱缩放功能情境，六维证据均通过；primary=NODE_MASTERED，route=S6；expected_model_version=6 == load.current_model_version=6，model_patch before=partial→after=mastered 追溯 F1/F2/F3/F4。请用 check-mastery-and-replan 独立复核。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S7 正向例子2] An independent G7 pass routing to S6: all dimensions pass, verdict=pass, route_to=S6.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the verdict rather than echoing the envelope's self-reported pass.",
+        "Structural validation confirms the handoff envelope and mastery_and_replanning_bundle both pass their schemas.",
+        "Multidimensional mastery evidence is verified per node across all six dimensions, with mastery grounded in independent, transfer and delayed-retention evidence rather than a single correct answer.",
+        "Every model_patch change (partial→mastered) is traced to collected evidence_event_ids, and the version-checked update is honest (expected==loaded).",
+        "The deterministic routing table is followed: NODE_MASTERED routes to S6 with verdict=pass (and GOAL_ACHIEVED→complete if the node is the terminal acceptance target).",
+        "Content-quality vs learner-knowledge is distinguished — mastery is established by learner behavioral evidence, not by relaxing content standards or conflating with a content-quality issue."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "给定一个 S7 移交信封：唯一掌握证据是识别题“B-tree 适合等值查询吗？— 是”，结果正确；模型想把掌握概率改成 0.95；reasoning_quality/hint_dependency/transfer/delayed_retention 均为 not_executed，confidence=uncalibrated；positive_artifact=null，主归因 EVIDENCE_INSUFFICIENT，update_status=not_executed。请用 check-mastery-and-replan 独立复核。",
+      "expected_output": "[negative/revise_here fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S7 反向例子] The checker must NOT pass G7: single recognition item, transfer/delayed not_executed, 0.95 uncalibrated; the stage correctly refused to write mastery (update_status=not_executed preserved, not coerced); primary EVIDENCE_INSUFFICIENT, verdict=revise_here, route_to=S7.",
+      "files": [],
+      "expectations": [
+        "The checker does not return pass and does not echo any self-reported mastery probability.",
+        "Structural validation records artifact_valid=false (positive_artifact=null) with an explicit error, while the handoff envelope itself remains valid.",
+        "The single recognition item is identified as insufficient multidimensional evidence (transfer/delayed_retention/reasoning/hint = not_executed), so evidence-sufficiency and transfer/delay dimensions fail.",
+        "update_status=not_executed is recognized as honest and preserved (the version-checked-update dimension passes), not coerced to applied, and no model_patch writes the node as mastered.",
+        "The deterministic routing table is followed: primary EVIDENCE_INSUFFICIENT routes to S7 with verdict=revise_here (not blocked, because the envelope is valid and the stage correctly fail-closed).",
+        "The 0.95 single-result mastery is rejected as an over-reaction (avoid-over-reaction dimension fails), and the failure is not misattributed as a content-quality issue (CONTENT_QUALITY→S6) since the defect is insufficient learner evidence."
+      ]
+    }
+  ]
+}

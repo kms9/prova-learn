@@ -1,0 +1,498 @@
+{
+  "metadata": {
+    "skill_name": "diagnose-learner-frontier",
+    "skill_path": ".agents/skills/diagnose-learner-frontier",
+    "executor_model": "mixed: dclaude deepseek-v4-pro[1m]; gclaude glm-5.1/glm-5.2 for S4 repair reruns",
+    "analyzer_model": "local deterministic post-hoc analysis",
+    "timestamp": "2026-07-26T19:40:33Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3,
+    "runs_per_eval_per_configuration": 1,
+    "total_runs": 6
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 78.817,
+        "tokens": 74449,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a versioned learner_snapshot inside a stage S4 handoff envelope with the strict {type, schema_version, artifact_id, content} wrapper.",
+          "passed": true,
+          "evidence": "Graded artifact outputs/result.json: the envelope carries schema_version \"1.0.0\" and stage_id \"S4\"; positive_artifact is exactly the four-key wrapper {type:\"learner_snapshot\", schema_version:\"1.0.0\", artifact_id:\"ls-pg-0001\", content:{...}} and content.model_version=3, so the snapshot is versioned and the wrapper is strict."
+        },
+        {
+          "text": "Node states are decided by behavioral observations, and the self-rating 8/10 does not override behavior evidence or mark any disputed node tested_mastered.",
+          "passed": true,
+          "evidence": "All six node_states carry evidence_refs to learner_behavior D1-D4. The disputed node explain_analyze_safety is status \"insufficient_evidence\" (NOT tested_mastered), error_type \"partial_reasoning\". The self-rating 8/10 appears only in confidence_calibration.self_confidence (planner_statistics_reasoning 0.85, multicolumn_index_order 0.8), both flagged observed_alignment \"overconfident\"; assumptions[3] and processing_record S4.4 state the self-rating is used only as a calibration cue. G4 dimension \"偏差控制\" documents this and passed."
+        },
+        {
+          "text": "The snapshot distinguishes answered-correctly, independent-without-prompts, and transferable outcomes, including a recorded transfer failure on the distribution-change task.",
+          "passed": true,
+          "evidence": "processing_record S4.3 separates 答对 (D1/D2), 独立 (hint=none) and 迁移 (D4 failed). workload_change_transfer is status \"tested_not_mastered\", error_type \"transfer_failure\", evidence_refs [\"D4\"]. transfer_performance.status=\"not_demonstrated\", evidence_refs [\"D4\"], summary states the distribution-change (workload-change) scenario was not transferred."
+        },
+        {
+          "text": "Each node state records hint dependency and confidence calibration, and the overconfident index-rule belief is captured as a coded misconception with evidence.",
+          "passed": true,
+          "evidence": "Every node_state has hint_dependency {level, evidence_refs} and confidence_calibration {self_confidence, observed_alignment}. The overconfident selectivity-first index belief is misconception code \"SELECTIVITY_FIRST_ALWAYS\" with evidence_refs [\"D3\"] and related_node_ids including multicolumn_index_order; that node records self_confidence 0.8, observed_alignment \"overconfident\", hint_dependency level \"high\"."
+        },
+        {
+          "text": "The learning frontier names a nearest learnable node with traceable evidence refs and a rationale, not the final goal.",
+          "passed": true,
+          "evidence": "learning_frontier.nearest_learnable_node_id=\"planner_statistics_reasoning\", evidence_refs [\"D2\",\"D3\"], with a rationale explaining it is the nearest learnable node (learner can already read the plan and spot estimate skew; filling in statistics reasoning unlocks index judgment). alternative_candidate_node_ids=[\"multicolumn_index_order\"]; it is a concrete graph node, not the final goal."
+        },
+        {
+          "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results lists seven dimensions (测量与目标对齐度, 证据充分性, 猜对识别, 提示依赖记录, 错误分类一致性, 偏差控制, 结论可解释性), each with passed:true; verdict=\"pass\", route_to=\"S5\"."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "gclaude",
+      "grader_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 207.993,
+        "tokens": 53703,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Equivalent-fraction representation evidence is preserved as a tested state and is not discarded because of the comparison error.",
+          "passed": true,
+          "evidence": "Graded artifact outputs/result.gclaude-rerun.json: node frac_equiv_representation is status \"tested_mastered\" with evidence_refs [\"EV-001\"] (number-line positioning of 2/3 and 4/6 plus the verbal equality statement, hint_dependency.level=none). The comparison error (EV-002) is recorded separately on frac_comparison (tested_not_mastered), so the equivalence competence is preserved, not discarded."
+        },
+        {
+          "text": "Mechanical cross-multiplication without explanation is not treated as conceptual mastery, and prompt-assisted recipe success is distinguished from independent transfer.",
+          "passed": true,
+          "evidence": "frac_comparison is status \"tested_not_mastered\", error_type \"partial_reasoning\" (mechanical cross-multiplication NOT treated as conceptual mastery); misconception code MECH-PROC-OVER-CONCEPT captures it. Prompt-assisted success (EV-003 diagram-aided equivalence, EV-004 recipe first-wrong-then-correct-with-diagram) is distinguished from independent transfer: frac_proportional_scaling is tested_not_mastered (procedural_error) and transfer_performance.status=\"not_demonstrated\" on EV-005/EV-006 (two unseen-context transfer tasks failed)."
+        },
+        {
+          "text": "At least one coded misconception is supported by two aligned observations rather than inferred from a single item or a domain stereotype.",
+          "passed": true,
+          "evidence": "misconceptions[] contains MECH-PROC-OVER-CONCEPT with evidence_refs [\"EV-002\",\"EV-004\"] — two distinct aligned learner_behavior observations (the 3/5-vs-4/7 mechanical comparison and the recipe-scaling first-attempt failure), not a single item and not a domain stereotype. The G4 证据充分性 dimension cites 'misconception MECH-PROC-OVER-CONCEPT 由 EV-002 与 EV-004 两条对齐观察支撑'."
+        },
+        {
+          "text": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+          "passed": true,
+          "evidence": "All five node_states (frac_equiv_representation, frac_equiv_explanation, frac_comparison, frac_proportional_scaling, frac_transfer_novel) carry hint_dependency {level, evidence_refs} and confidence_calibration {self_confidence, observed_alignment} (values null/unknown because the case-2 input provides no self-rating). transfer_performance.status=\"not_demonstrated\", evidence_refs [\"EV-005\",\"EV-006\"], summary states both unseen-context transfer tasks failed independent transfer."
+        },
+        {
+          "text": "The learning frontier names a nearest learnable node with traceable evidence and a rationale rather than the broad goal of understanding fractions.",
+          "passed": true,
+          "evidence": "learning_frontier.nearest_learnable_node_id=\"frac_equiv_explanation\", evidence_refs [\"EV-001\",\"EV-003\"], rationale explains the learner already independently masters equivalent-fraction representation and can give an equivalence explanation only under diagrammatic scaffold, so it is the nearest bottleneck shared by comparison/scaling/transfer; alternative_candidate_node_ids=[\"frac_comparison\",\"frac_proportional_scaling\"]. It is a concrete node, not the broad goal of understanding fractions."
+        },
+        {
+          "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results lists seven dimensions (测量与目标对齐度, 证据充分性, 猜对识别, 提示依赖记录, 错误分类一致性, 偏差控制, 结论可解释性), each with passed:true; verdict=\"pass\", route_to=\"S5\"."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "gclaude",
+      "executor_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "grader_route": "gclaude",
+      "grader_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.gclaude-rerun.json",
+      "route_provenance": {
+        "route": "gclaude",
+        "models": [
+          "glm-5.1",
+          "glm-5.2"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/with_skill/run-1/result.gclaude-rerun.route.json",
+        "exit_code": 0,
+        "is_error": false,
+        "repair_of": "eval-2-positive-cross-domain/with_skill/run-1/outer.json"
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 165.163,
+        "tokens": 72654,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+          "passed": true,
+          "evidence": "Graded artifact outputs/result.gclaude-rerun.json: positive_artifact is null. There are no node_states and no tested_mastered label anywhere. EV1 (self-rating 8/10) is provenance \"user_provided_unverified\", status \"unknown\"; EV2 (slogan yes/no) is learner_behavior, status \"unsupported\". processing_record steps 2/4/5 declare that self-report, single-item correctness and slogan recognition are excluded from determining critical-node status. No positive artifact is fabricated."
+        },
+        {
+          "text": "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+          "passed": true,
+          "evidence": "EV1 (self-report) is recorded separately and marked user_provided_unverified, NOT used as behavior. requirement_gaps record the absences explicitly: GAP-REAL-BEHAVIOR ('No real learner behavior evidence for any critical node: reasoning process, prompt/hint hierarchy, transfer tasks, timing and a second aligned observation are all absent'), GAP-HINT-AND-CONFIDENCE, GAP-TRANSFER. EV2.summary states 'no reasoning process, no prompt/hint hierarchy, no transfer and no timing recorded'. Absences are explicit, not inferred."
+        },
+        {
+          "text": "The output does not assert independence or transfer ability that was never observed.",
+          "passed": true,
+          "evidence": "No independence is asserted; GAP-HINT-AND-CONFIDENCE states independence cannot be established, and the 猜对识别 rubric dimension fails precisely because independent/transfer cannot be distinguished ('cannot distinguish answered-correctly vs. independent vs. transferable'). No transfer ability is claimed; GAP-TRANSFER states transfer is entirely unobserved."
+        },
+        {
+          "text": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+          "passed": true,
+          "evidence": "First conjunct met: no learning_frontier is produced (positive_artifact null; processing_record step 6 says producing a snapshot would require fabricating a frontier, which is forbidden). Second conjunct met: quality_evaluation.verdict=\"revise_here\", route_to=\"S4\" — the deterministic route stays at S4. confirmation.questions emit diagnostic tasks (deploy aligned explain/predict/counterexample/compare/transfer/confidence items, retest under no/low hints, add unseen transfer problems) to collect real behavior."
+        },
+        {
+          "text": "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+          "passed": true,
+          "evidence": "No node profile is emitted at all (positive_artifact null). processing_record step 5 states critical nodes must remain insufficient_evidence/untested pending real behavior and explicitly notes 'this is NOT a fabricated all-not-mastered profile'. There is no uniform all-not-mastered relabeling."
+        },
+        {
+          "text": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+          "passed": true,
+          "evidence": "G4 does not pass: 6 of 7 rubric dimensions fail (only 偏差控制 passes) and verdict=\"revise_here\" (not pass). The deterministic route is route_to=\"S4\" (revise_here -> S4), which is inside the enumerated set {revise_here->S4, return_upstream->S3}; processing_record step 8 states return_upstream to S3 is not triggered because the diagnostic items are valid."
+        }
+      ],
+      "notes": [
+        "Graded score (6/6) is driven by the rerun's S4 route, which differs from the original run's S1 route. Confirm the rerun (outputs/result.gclaude-rerun.json) is the intended graded artifact per the selection rule — if so, the negative-case safety properties all hold."
+      ],
+      "executor_route": "gclaude",
+      "executor_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "grader_route": "gclaude",
+      "grader_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.gclaude-rerun.json",
+      "route_provenance": {
+        "route": "gclaude",
+        "models": [
+          "glm-5.1",
+          "glm-5.2"
+        ],
+        "outer_json": "eval-3-negative-blocked/with_skill/run-1/result.gclaude-rerun.route.json",
+        "exit_code": 0,
+        "is_error": false,
+        "repair_of": "eval-3-negative-blocked/with_skill/run-1/outer.json"
+      }
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 103.702,
+        "tokens": 68927,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a versioned learner_snapshot inside a stage S4 handoff envelope with the strict {type, schema_version, artifact_id, content} wrapper.",
+          "passed": false,
+          "evidence": "Graded artifact outputs/result.json is a generic learning plan with top-level keys stage, stage_name, learner_profile, diagnostic_findings, personalized_learning_plan, proficiency_recalibration, handoff. There is no learner_snapshot and no object with the {type, schema_version, artifact_id, content} wrapper; no schema_version field exists anywhere."
+        },
+        {
+          "text": "Node states are decided by behavioral observations, and the self-rating 8/10 does not override behavior evidence or mark any disputed node tested_mastered.",
+          "passed": false,
+          "evidence": "There is no node_states structure and no per-node tested/not-tested status decided from behavior; diagnostic_findings F1-F5 are prose gap descriptions, not graph-node states. While adjusted_proficiency drops 8->4 (self-rating not blindly trusted), the skill-specific construct of disputed nodes / tested_mastered does not exist in the output, so the expectation cannot be satisfied."
+        },
+        {
+          "text": "The snapshot distinguishes answered-correctly, independent-without-prompts, and transferable outcomes, including a recorded transfer failure on the distribution-change task.",
+          "passed": false,
+          "evidence": "No snapshot exists. There is no answered-correctly / independent-without-prompts / transferable distinction and no transfer_performance field. F4 notes the workload-change behavior in prose but it is not classified as a recorded transfer failure tied to a node."
+        },
+        {
+          "text": "Each node state records hint dependency and confidence calibration, and the overconfident index-rule belief is captured as a coded misconception with evidence.",
+          "passed": false,
+          "evidence": "No node_states, so no per-node hint_dependency or confidence_calibration. The selectivity-first issue appears only as prose under F3 ('correct_approach' / root_cause); it is not a coded misconception entry with a code and evidence_refs."
+        },
+        {
+          "text": "The learning frontier names a nearest learnable node with traceable evidence refs and a rationale, not the final goal.",
+          "passed": false,
+          "evidence": "There is no learning_frontier naming a nearest-learnable concept-graph node. learning_path_sequence lists modules M1-M4 and high_priority_focus names 'F2', but these are learning modules/gaps, not graph nodes, and there are no evidence_refs."
+        },
+        {
+          "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+          "passed": false,
+          "evidence": "There is no G4 rubric and no dimension-by-dimension gate evaluation. handoff.to_stage mentions 'S5' as a forward destination but it is a planning recommendation, not a G4 pass verdict."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "gclaude",
+      "grader_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.3333333333333333,
+        "passed": 2,
+        "failed": 4,
+        "total": 6,
+        "time_seconds": 39.256,
+        "tokens": 31678,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Equivalent-fraction representation evidence is preserved as a tested state and is not discarded because of the comparison error.",
+          "passed": true,
+          "evidence": "Graded artifact outputs/result.json: learner_profile_summary.strengths preserves the equivalent-fraction competence — 'can correctly locate 2/3 and 4/6 on a number line', 'verbally articulates that 2/3 and 4/6 are equal', 'uses visual diagrams to verify equivalent fractions'. The comparison error is listed separately under gaps ('cross-multiplication for comparing 3/5 vs 4/7 is purely mechanical without conceptual explanation'), so the equivalence evidence is not discarded. (The skill-specific term 'tested state' maps to the baseline's strengths list; the substantive requirement — equivalence evidence preserved and not discarded — is genuinely met.)"
+        },
+        {
+          "text": "Mechanical cross-multiplication without explanation is not treated as conceptual mastery, and prompt-assisted recipe success is distinguished from independent transfer.",
+          "passed": true,
+          "evidence": "gaps lists 'cross-multiplication for comparing 3/5 vs 4/7 is purely mechanical without conceptual explanation' and 'cannot explain why cross-multiplication works' — the mechanical procedure is treated as a gap, not conceptual mastery. strengths 'responds to diagrammatic scaffolding for proportional reasoning tasks' is distinguished from gaps 'failed first attempt on scaling recipe ... without scaffolding' and 'no independent transfer on two novel context problems'."
+        },
+        {
+          "text": "At least one coded misconception is supported by two aligned observations rather than inferred from a single item or a domain stereotype.",
+          "passed": false,
+          "evidence": "The output has no coded misconception entries at all (no misconception array, no codes). The mechanical-cross-multiplication gap is described in prose but never captured as a coded entry supported by two aligned observations. Burden of proof (at least one coded misconception with >=2 aligned observations) is not met."
+        },
+        {
+          "text": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+          "passed": false,
+          "evidence": "No node_states, no hint_dependency fields, no confidence_calibration fields, and no transfer_performance structure. The two failed transfer tasks appear only as prose gaps, not in any transfer_performance object."
+        },
+        {
+          "text": "The learning frontier names a nearest learnable node with traceable evidence and a rationale rather than the broad goal of understanding fractions.",
+          "passed": false,
+          "evidence": "The output gives a prose zone_of_proximal_development and learning_objectives LO-4.1..LO-4.4, but no nearest-learnable concept-graph node and no evidence_refs. It states a broad transitional goal rather than naming a single nearest node traceable to observations."
+        },
+        {
+          "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+          "passed": false,
+          "evidence": "There is no G4 rubric and no dimension-by-dimension gate evaluation. progress_indicators.exit_gate is a planning rule, not a G4 pass verdict routing to S5."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "gclaude",
+      "grader_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 54.359,
+        "tokens": 29946,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+          "passed": true,
+          "evidence": "Graded artifact outputs/result.gclaude-rerun.json: learner_snapshot.accepted_positive=false; every node has tested_mastered=false with mastery 'insufficient_evidence' or 'untested' (node_index_speedup insufficient_evidence; node_index_mechanism and node_index_tradeoffs untested). self_report_handling.used_for_mastery=false ('Self-report is recorded as a subjective claim only; it is not substituted for behavioral evidence and does not advance any node to tested_mastered'). forbidden_inferences confirms 'No node is marked tested_mastered from a self-rating plus one slogan answer' and 'No fabricated positive artifact is accepted'."
+        },
+        {
+          "text": "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+          "passed": true,
+          "evidence": "self_report_handling.note states the self-report is recorded as a subjective claim only and not substituted for behavioral evidence. input_summary.missing_dimensions explicitly enumerates the absences: ['reasoning_trace','prompt_hierarchy','transfer_item','timing_or_effort','second_independent_observation']. gate.reason repeats 'no reasoning, prompt hierarchy, transfer item, timing, or a second observation exist'. Absences are explicit, not inferred."
+        },
+        {
+          "text": "The output does not assert independence or transfer ability that was never observed.",
+          "passed": true,
+          "evidence": "Each node carries a do_not_assert list including 'independence' and 'transfer' (node_index_speedup also lists 'robustness'). No independence or transfer ability is asserted anywhere; next_action says a learning frontier cannot be determined until real behavior is collected."
+        },
+        {
+          "text": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+          "passed": true,
+          "evidence": "learner_snapshot.frontier_determined=false (no learning frontier produced). route.decision=\"revise_here\", route.target_stage=\"S4\" (route stays at S4); next_action='Remain at S4. Collect the diagnostic tasks above ...'. diagnostic_tasks dt-1/dt-2/dt-3 collect real behavior (reasoning_trace, transfer_item, timing_or_effort + second_independent_observation)."
+        },
+        {
+          "text": "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+          "passed": true,
+          "evidence": "Nodes are mastery 'insufficient_evidence'/'untested' with cold_start=true. cold_start_handling.policy explicitly states 'Cold-start / unknown nodes remain insufficient_evidence or untested. They are not relabeled as a uniform all-not-mastered profile, because absence of evidence is not evidence of not-mastery.' No uniform all-not-mastered relabeling occurs."
+        },
+        {
+          "text": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+          "passed": true,
+          "evidence": "gate.passed=false (G4 does not pass). route.decision=\"revise_here\", route.target_stage=\"S4\", inside the enumerated set {revise_here->S4}; route.alternative={decision:'return_upstream', target_stage:'S3', condition:'only if a diagnostic item itself is invalid or uncollectable'}. next_action restates the S4/S3 routing."
+        }
+      ],
+      "notes": [
+        "Both the with_skill and without_skill reruns score 6/6 on this negative case. The baseline rerun satisfies the negative assertions without the skill schema; the eval cannot distinguish the skill's negative-case handling from a strong baseline on this fixture."
+      ],
+      "executor_route": "gclaude",
+      "executor_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "grader_route": "gclaude",
+      "grader_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "canonical_output": "outputs/result.gclaude-rerun.json",
+      "route_provenance": {
+        "route": "gclaude",
+        "models": [
+          "glm-5.1",
+          "glm-5.2"
+        ],
+        "outer_json": "eval-3-negative-blocked/without_skill/run-1/result.gclaude-rerun.route.json",
+        "exit_code": 0,
+        "is_error": false,
+        "repair_of": "eval-3-negative-blocked/without_skill/run-1/outer.json"
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 150.6577,
+        "stddev": 65.7983,
+        "min": 78.817,
+        "max": 207.993
+      },
+      "tokens": {
+        "mean": 66935.3333,
+        "stddev": 11494.6288,
+        "min": 53703,
+        "max": 74449
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.4444,
+        "stddev": 0.5092,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 65.7723,
+        "stddev": 33.7049,
+        "min": 39.256,
+        "max": 103.702
+      },
+      "tokens": {
+        "mean": 43517.0,
+        "stddev": 22022.739,
+        "min": 29946,
+        "max": 68927
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.56",
+      "time_seconds": "+84.9",
+      "tokens": "+23418"
+    }
+  },
+  "notes": [
+    "**Discrimination:** after correcting two fixture-contract defects and rerunning the affected configurations, with-skill mean pass rate is `1.0000`; without-skill is `0.4444`; delta is `+0.56`.",
+    "**Variance:** with-skill standard deviation is `0.0000`; without-skill is `0.5092`. The negative fail-closed case is deliberately easy for a capable baseline and scores 6/6, while the two positive cases retain structural and evidence-traceability discrimination.",
+    "**Time:** with-skill mean is `150.6577s`, without-skill `65.7723s` (`+84.9s`).",
+    "**Tokens:** canonical route-aware `modelUsage` totals average `66,935.3` with the skill and `43,517.0` without it (`+23,418.3`); the repaired with-skill eval-2/eval-3 and without-skill eval-3 runs use their preserved gclaude route metadata because dclaude returned 402 after the contract fixes.",
+    "**Repair provenance:** original dclaude outputs and the first gclaude grading are retained. Current eval-2 with-skill and eval-3 with/without outputs are gclaude reruns because dclaude returned 402 after the contract fixes; route metadata records actual `modelUsage`. The first eval-2 rerun failed with a connection close and created no file; the successful retry passed both handoff and learner-snapshot schemas.",
+    "**Semantic guard result:** the repaired eval-2 artifact has no `tested_mastered` node with medium/high/unknown hint dependence; repaired eval-3 with-skill has `positive_artifact=null`, `verdict=revise_here`, `route_to=S4`.",
+    "**Conclusion:** current with-skill results are stable and correct. Final dclaude rerun/audit remains a separate external gate; gclaude evidence is not represented as dclaude."
+  ]
+}

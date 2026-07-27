@@ -1,0 +1,36 @@
+{
+  "route": "gclaude",
+  "route_role": "fallback_for=dclaude",
+  "fallback_for": "dclaude",
+  "status": "completed",
+  "exit_code": 0,
+  "is_error": false,
+  "api_error_status": null,
+  "terminal_reason": "completed",
+  "session_id": "196315c6-8487-4f8c-a695-7fbf7122f011",
+  "uuid": "7937083b-daa1-4b4f-9633-e880715d84ad",
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 855,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.004752999999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 127766,
+      "outputTokens": 20975,
+      "cacheReadInputTokens": 1529856,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 1.9281330000000003,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "result_format": "explanatory-prefix-plus-single-json-object",
+  "inner_file": "final-fallback-gclaude-crosscheck.inner.json"
+}

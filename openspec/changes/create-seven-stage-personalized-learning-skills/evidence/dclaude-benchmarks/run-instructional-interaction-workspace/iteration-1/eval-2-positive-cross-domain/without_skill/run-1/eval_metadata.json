@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "prompt": "G5 已通过，当前六年级分数节点是“解释并比较等值与大小不同的分数”。真实记录：学习者先用等长条形比较 1/2 与 1/5；自己画数轴并定位 2/3；撤掉图形后解释“整体相同时分成更多份每份为何更小”；半完成题需一级提示；最后无提示完成从 4 人到 6 人的未见配方缩放并解释每一步。请执行个性化学习 S6，输出结构化 JSON。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 正向例子2] A multi-representation concrete-to-abstract interaction trace with faded scaffolding and an independent transfer candidate, passing G6 and routing to S7, without asserting mastery.",
+  "expectations": [
+    "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+    "Activities include retrieval, worked example, completion and an independent transfer task that elicit explainable learner evidence, not only mechanical common-denominator speed.",
+    "Difficulty progresses from concrete to abstract within the learner's reachable range and the final scaling task is independently solvable.",
+    "Feedback rules address task, process and self-regulation without leaking the answer or substituting the learner's unit-fraction reasoning.",
+    "The interaction trace preserves each response, hint level and correction step, including the moment scaffolding is withdrawn.",
+    "G6 is evaluated dimension by dimension, passes only with real candidate evidence, and deterministically routes to S7 while deferring mastery to G7."
+  ]
+}

@@ -1,0 +1,428 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S1",
+  "run_id": "run-fractions-6-2026-07-27-001",
+  "learner_id": "learner-grade-6-fractions",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [],
+    "expected_schema_versions": {}
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "学习者已完成五年级分数初步认识（分数意义、同分母加减），具备基本整数运算能力",
+    "监护人将在每日25分钟学习中提供监督与鼓励，但不替代学习者完成推理",
+    "学习者使用人教版或北师大版六年级数学教材，具备基本数轴阅读能力",
+    "验收由监护人依据 pass_rules 独立评判，不依赖外部考试"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "S1 强制确认：目标能力、成功证据、范围、时间/资源约束、排除项、验收方式",
+    "questions": [
+      "目标能力确认为：比较分数大小（多种策略）、解释等值分数、解决简单情境题，是否正确？",
+      "验收方式确认为：数轴解释题 + 配方缩放题 + 未见迁移题，是否正确？",
+      "排除项确认为：不追求机械通分速度，不涉及分数乘除运算深度，是否正确？",
+      "三周内每天 25 分钟（共约 8.75 小时），时间约束是否可接受？"
+    ],
+    "response": {
+      "confirmed_by": "监护人与六年级学习者共同确认",
+      "confirmed_scope": "会比较分数、解释等值分数、解决简单情境题",
+      "confirmed_assessment": "数轴解释、配方缩放、未见迁移题",
+      "confirmed_exclusions": "机械通分速度不是唯一目标",
+      "confirmed_resources": "三周内每天25分钟"
+    },
+    "status": "confirmed",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "e-wiki-fraction",
+      "provenance": "external_evidence",
+      "source_ref": "https://en.wikipedia.org/wiki/Fraction_(mathematics)",
+      "summary": "分数定义、分子分母、等值分数（乘以/除以相同非零数得等值分数）、约分与最简形式、通分比较、真分数/假分数/带分数分类",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-cn-curriculum",
+      "provenance": "external_evidence",
+      "source_ref": "义务教育数学课程标准（2022年版）第三学段（5-6年级）数与代数",
+      "summary": "课标要求：能用直观方式表示分数、比较两个分数的大小；能在实际情境中运用分数解决问题；通分的目的是得到同样的计数单位，感悟运算一致性",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-intl-standards",
+      "provenance": "external_evidence",
+      "source_ref": "https://www.ixl.com/math/grade-6/compare-and-order-fractions",
+      "summary": "国际六年级标准：生成等值分数、化简分数、多种策略比较分数（基准量/通分/数轴）、在数轴上排序分数、连接分数与小数百分数",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-assessment-samples",
+      "provenance": "external_evidence",
+      "source_ref": "六年级学生数感现状调查研究 + 六年级数学面试与综合实践选题参考",
+      "summary": "评估从纯计算转向数感与策略运用：借助1/2基准量比较、等值关系推理、配方比例实操；多数学生依赖通分而非灵活策略",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-recipe-numberline",
+      "provenance": "external_evidence",
+      "source_ref": "https://www.fractionslearningpathways.ca/tasks/recipe + Australian Curriculum Lessons",
+      "summary": "配方缩放与数轴结合的教学评估方法：用量杯实操→数轴标注→等值转换→配方重写→未见场景迁移",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "m-model-boundary",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "模型推断六年级学习者最可能的最近发展区：已能同分母加减，但跨分母比较和等值推理仍需结构化支持",
+      "status": "unknown"
+    }
+  ],
+  "processing_record": [
+    "读取 stage-contract.md、handoff-envelope.schema.json、goal-success-contract.schema.json、example.md",
+    "校验输入：学习者诉求（理解分数）、目标场景（比较/解释/解题）、时间资源（3周×25分钟/天）、验收方式（数轴+配方+迁移题）均已提供",
+    "执行强制联网预检：Wikipedia 分数术语与相邻概念；中国2022版课标第三学段要求；国际六年级分数标准；实操评估样本；配方缩放与数轴教学法",
+    "确认术语校正：'真正理解分数'→可观察能力；'通分速度'为明确排除项",
+    "执行强制确认：目标能力、成功证据、范围、时间约束、排除项、验收方式均已由监护人+学习者确认",
+    "生成 goal_success_contract 正向工件，按 G1 量规逐项评价"
+  ],
+  "positive_artifact": {
+    "type": "goal_success_contract",
+    "schema_version": "1.0.0",
+    "artifact_id": "gsc-fractions-grade6-0001",
+    "content": {
+      "target_problem": "六年级学习者能够真正理解分数——会比较任意两个分数的相对大小（使用基准量、数轴、等值转化等多种策略而非仅通分），能解释两个分数为何等值并生成等值分数，能在配方缩放等真实情境中运用分数解决问题",
+      "target_scene": "家庭学习场景，监护人陪同验收；学习者面对数轴标注题、配方缩放题以及未见迁移情境题，独立完成推理与解释，无需追求机械通分速度",
+      "terminology_corrections": [
+        {
+          "original": "真正理解分数",
+          "corrected": "能够比较分数大小（≥2种策略）、解释等值关系并生成等值分数、在简单真实情境中应用分数解决问题",
+          "evidence_refs": [
+            "e-cn-curriculum",
+            "e-intl-standards"
+          ]
+        },
+        {
+          "original": "分数",
+          "corrected": "含真分数、假分数、带分数，分母一般不超过12或为100的因数；涵盖分数的部分-整体意义、测量意义（数轴）和商意义",
+          "evidence_refs": [
+            "e-wiki-fraction",
+            "e-cn-curriculum"
+          ]
+        },
+        {
+          "original": "简单情境题",
+          "corrected": "配方缩放（加倍/减半/任意比例）、长度/容量测量、数量比较等可验证的真实场景，非选择题或纯算式",
+          "evidence_refs": [
+            "e-recipe-numberline",
+            "e-assessment-samples"
+          ]
+        }
+      ],
+      "observable_capabilities": [
+        {
+          "capability_id": "cap-compare",
+          "statement": "使用至少两种策略比较任意两个分数（含真分数、假分数、带分数）的大小，并口头或书面解释推理过程",
+          "observable_evidence": [
+            "能借助 1/2 等基准量判断分数相对大小（如判断 3/7 < 1/2 < 5/8），不依赖通分",
+            "能将两个分数标注在数轴上并依据位置判断大小关系",
+            "能在需要时使用等值转化（通分）作为验证手段而非唯一策略"
+          ]
+        },
+        {
+          "capability_id": "cap-equivalent",
+          "statement": "解释两个分数为何等值，并能生成给定分数的等值分数（含约分至最简形式）",
+          "observable_evidence": [
+            "能将 2/3、4/6、8/12 标注在同一数轴位置，解释它们表示相同量",
+            "能通过乘/除同一非零数生成等值分数，并用面积模型或数轴验证",
+            "能将分数约分至最简形式，并说明理由（分子分母同除以最大公因数）"
+          ]
+        },
+        {
+          "capability_id": "cap-context",
+          "statement": "在配方缩放等真实情境中，正确运用分数比较和等值转化解决问题",
+          "observable_evidence": [
+            "给定4人配方，能正确计算8人（加倍）或2人（减半）所需各原料分数用量",
+            "能比较两个配方中同一原料的用量（如 2/3 杯 vs 3/4 杯），判断哪个更多",
+            "能在仅有 1/4 量杯的情况下，说明如何量取 3/4 杯、1 1/2 杯等分量"
+          ]
+        },
+        {
+          "capability_id": "cap-numberline",
+          "statement": "将分数准确标注在数轴上，并用数轴解释分数比较和等值关系",
+          "observable_evidence": [
+            "能正确在数轴上标注真分数、假分数和带分数（如 3/4、5/4、1 1/2）",
+            "能在数轴上展示两个分数的大小关系，并用位置差异解释比较结论",
+            "能在同一数轴上展示一组等值分数的位置重合"
+          ]
+        }
+      ],
+      "final_assessment": {
+        "tasks": [
+          "数轴解释题（≥3题）：在数轴上标注给定分数；判断两个分数在数轴上的相对位置并比较大小；将一组等值分数标注在数轴上展示位置重合——要求学习者用语言解释推理",
+          "配方缩放题（≥2题）：给定4人份配方（含 1/2、1/3、3/4、2/3 等分数用量），要求学习者 (a) 改写为2人份（减半）、(b) 改写为6人份（乘1.5），并比较原配方与缩放后某原料用量的大小关系",
+          "未见迁移题（≥2题）：情境与配方不同（如长度拼接、液体分装、时间分配），考察学习者在未见过的新场景中能否独立运用分数比较与等值转化解决问题；题目由监护人从题库中选取或由S3生成，学习者未提前接触"
+        ],
+        "unseen_or_transfer_required": true
+      },
+      "pass_rules": [
+        "数轴解释题全部正确标注，且口头/书面解释推理过程清晰（允许标注位置偏差≤1个刻度单位）",
+        "配方缩放题全部计算正确，且能用≥2种策略比较缩放前后原料用量大小",
+        "未见迁移题至少50%题目独立完成且推理正确（不依赖提示）",
+        "在所有题型中，机械通分使用占比不超过解题策略的50%（即至少半数策略使用基准量/数轴/等值推理）",
+        "学习者能在验收后用自己的话解释'什么是等值分数'和'怎样比较两个分数大小'"
+      ],
+      "scope": [
+        "分数比较：真分数、假分数、带分数，分母一般≤12或为100的因数",
+        "等值分数：生成、验证（面积模型/数轴/乘除法）、约分至最简形式",
+        "数轴表示：在数轴上标注和解释分数位置，连接比较与等值",
+        "真实情境应用：配方缩放（加倍/减半/任意简单比例）、测量比较、简单分配问题",
+        "多种策略：基准量比较（1/2、1等）、数轴定位比较、等值转化比较、通分验证"
+      ],
+      "exclusions": [
+        "机械通分速度——不追求单位时间内完成通分题数量，不以计算速度为评价指标",
+        "分数乘除法深度运算——乘除仅作为配方缩放的工具，不要求掌握分数乘除的完整算理与算法",
+        "复杂多步混合运算——情境题不超过两步分数运算",
+        "分数与小数/百分数互化的系统训练——仅在自然需要时引入",
+        "竞赛难度或超纲内容——不涉及连分数、繁分数、分母通分竞赛技巧"
+      ],
+      "constraints": {
+        "duration": "3周",
+        "effort_per_day": "25分钟",
+        "total_effort": "约8.75小时",
+        "learner_grade": "小学六年级（第三学段）",
+        "language": "中文（简体）",
+        "setting": "家庭学习，监护人陪同与监督",
+        "materials": "需数轴纸/白板、量杯实物或图纸、印刷配方卡",
+        "assessment_mode": "监护人依据 pass_rules 独立评判，可选择录制学习者解释过程"
+      },
+      "external_research_seed": {
+        "search_executed": true,
+        "retrieval_date": "2026-07-27",
+        "queries": [
+          "fraction mathematics Wikipedia definition numerator denominator equivalent",
+          "义务教育数学课程标准 2022 分数 第三学段 内容要求 学业要求",
+          "fractions 6th grade math curriculum standards equivalent fractions comparing fractions",
+          "分数 比较大小 等值分数 六年级 面试题 实操评估",
+          "fractions number line recipe scaling teaching assessment primary school"
+        ],
+        "sources": [
+          {
+            "evidence_id": "e-wiki-fraction",
+            "url": "https://en.wikipedia.org/wiki/Fraction_(mathematics)",
+            "provenance": "external_evidence"
+          },
+          {
+            "evidence_id": "e-cn-curriculum",
+            "url": "https://basic.nmg.smartedu.cn/studio/index.php?r=studio/post/view&sid=883&id=18380",
+            "provenance": "external_evidence"
+          },
+          {
+            "evidence_id": "e-intl-standards",
+            "url": "https://www.ixl.com/math/grade-6/compare-and-order-fractions",
+            "provenance": "external_evidence"
+          },
+          {
+            "evidence_id": "e-assessment-samples",
+            "url": "http://m.yinruiwen.net/st/17723.xhtml",
+            "provenance": "market_signal"
+          },
+          {
+            "evidence_id": "e-recipe-numberline",
+            "url": "https://www.fractionslearningpathways.ca/tasks/recipe",
+            "provenance": "external_evidence"
+          }
+        ],
+        "category_coverage": [
+          {
+            "category": "wikipedia_encyclopedia",
+            "status": "covered",
+            "reason": "Wikipedia 分数词条已检索：定义、分子分母、等值分数、约分、通分、真分数/假分数/带分数分类",
+            "gate_effect": "none"
+          },
+          {
+            "category": "official_curriculum",
+            "status": "covered",
+            "reason": "中国《义务教育数学课程标准（2022年版）》第三学段（5-6年级）分数相关内容要求与学业要求已检索",
+            "gate_effect": "none"
+          },
+          {
+            "category": "international_standards",
+            "status": "covered",
+            "reason": "美国 Common Core / Virginia SOL / 澳大利亚 Curriculum 六年级分数标准已检索，确认比较、等值、数轴的通用要求",
+            "gate_effect": "none"
+          },
+          {
+            "category": "recruiting_jd",
+            "status": "not_applicable",
+            "reason": "六年级学习者场景不属于招聘/岗位市场，该类别不适用；已用课程标准和学业质量标准替代作为外部基准",
+            "gate_effect": "none"
+          },
+          {
+            "category": "interview_assessment",
+            "status": "covered",
+            "reason": "六年级数学面试框架（口算/口答/动手操作）及数感调查研究中的分数比较评估题已检索，确认评估从纯计算转向数感与策略运用",
+            "gate_effect": "none"
+          },
+          {
+            "category": "teaching_practice",
+            "status": "covered",
+            "reason": "配方缩放与数轴结合的教学评估方法（Fractions Learning Pathways, Australian Curriculum Lessons）已检索",
+            "gate_effect": "none"
+          }
+        ]
+      },
+      "open_questions": [
+        "三周后是否需要衔接分数乘除的系统学习（S4+）",
+        "学习者的前置水平——是否已有同分母加减、分数基本意义的稳固基础，建议S2诊断后确认",
+        "监护人是否具备判断学习者口头/书面解释质量的参考标准"
+      ],
+      "confirmed_items": [
+        "目标能力：比较分数大小（多种策略）、解释等值分数、解决简单情境题",
+        "验收方式：数轴解释题 + 配方缩放题 + 未见迁移题",
+        "排除项：机械通分速度不是唯一目标；不涉及分数乘除法深度；不超过两步运算",
+        "时间资源：三周内每天25分钟（共约8.75小时）",
+        "场景：六年级学习者，家庭学习，监护人陪同验收",
+        "范围：分数比较、等值分数、数轴表示、配方缩放等真实情境应用"
+      ]
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "目标可观察性",
+        "evidence": [
+          "cap-compare: 3项可观察证据（基准量比较、数轴标注比较、等值转化验证）",
+          "cap-equivalent: 3项可观察证据（数轴位置重合、乘除生成、约分至最简）",
+          "cap-context: 3项可观察证据（配方加倍/减半、配方比较、单位量杯量取）",
+          "cap-numberline: 3项可观察证据（标注真/假/带分数、位置比较解释、等值位置重合）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "成功标准可判定性",
+        "evidence": [
+          "final_assessment.unseen_or_transfer_required = true",
+          "验收含≥2道未见迁移题，学习者未提前接触",
+          "pass_rules 规定未见迁移题至少50%独立正确"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "场景真实性",
+        "evidence": [
+          "target_scene: 家庭学习场景，监护人陪同验收",
+          "配方缩放、数轴标注均为真实可操作任务",
+          "未见迁移题确保场景真实性而非应试"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "外部现实校准度",
+        "evidence": [
+          "3条术语校正：'真正理解分数'→可观察能力；'分数'→含子类型与分母范围；'简单情境题'→配方/测量/比较",
+          "校正均引用外部证据（e-cn-curriculum, e-wiki-fraction, e-recipe-numberline）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "强制类别覆盖",
+        "evidence": [
+          "wikipedia_encyclopedia: covered",
+          "official_curriculum: covered",
+          "international_standards: covered",
+          "recruiting_jd: not_applicable（可审计理由：六年级非招聘场景）",
+          "interview_assessment: covered",
+          "teaching_practice: covered"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "边界清晰",
+        "evidence": [
+          "exclusions 含5项：机械通分速度、分数乘除深度、复杂多步混合运算、分数-小数-百分数系统互化、竞赛超纲内容"
+        ],
+        "score": 5,
+        "threshold": 1,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "约束完整",
+        "evidence": [
+          "constraints: duration=3周, effort_per_day=25分钟, total_effort=约8.75小时, learner_grade=六年级, setting=家庭学习, language=中文, assessment_mode=监护人独立评判"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "目标—验收一致",
+        "evidence": [
+          "pass_rules 直接对齐 cap-compare（≥2种策略比较）, cap-equivalent（解释等值分数定义）, cap-context（配方缩放全部正确）, cap-numberline（全部正确标注+解释）",
+          "pass_rules 明确反制机械通分过度依赖（通分使用≤50%策略）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "所有8个G1维度 passed=true",
+      "confirmation.status=confirmed，监护人与学习者共同确认",
+      "external_research_seed.search_executed=true，共5次检索、5个来源（4 external_evidence + 1 market_signal）",
+      "无关键证据缺口阻塞目标确认"
+    ],
+    "verdict": "pass",
+    "route_to": "S2"
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [
+      "e-wiki-fraction",
+      "e-cn-curriculum",
+      "e-intl-standards",
+      "e-assessment-samples",
+      "e-recipe-numberline"
+    ],
+    "source_sections": [
+      "stage-contract.md §1-8",
+      "goal-success-contract.schema.json",
+      "handoff-envelope.schema.json"
+    ],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}

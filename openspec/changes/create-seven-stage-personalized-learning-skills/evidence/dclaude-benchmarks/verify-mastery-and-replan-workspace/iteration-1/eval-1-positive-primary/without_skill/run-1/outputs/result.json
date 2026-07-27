@@ -1,0 +1,163 @@
+{
+  "pipeline_step": "S7",
+  "input_stage": "G6",
+  "execution_status": "completed",
+  "learner_profile": {
+    "domain": "PostgreSQL",
+    "stage": "G6",
+    "strength": "independently selects reasonable multi-column indexes (tenant_id, status, created_at) for structured queries and correctly explains leading column rationale",
+    "gap": "does not connect PostgreSQL statistics infrastructure (ANALYZE, pg_statistic, pg_stats, distribution metadata) to index decision-making; reuses original index plan after data distribution changes without requesting ANALYZE; cannot diagnose estimation error sources at D3 delayed retest"
+  },
+  "assessment_evidence": {
+    "Q1": {
+      "result": "passed",
+      "detail": "无提示下独立选择合理多列索引(tenant_id,status,created_at)并解释前导列"
+    },
+    "Q2": {
+      "result": "corrected_after_L2_hint",
+      "detail": "数据分布改变后仍沿用原索引方案，未要求重新ANALYZE；经二级提示后修正"
+    },
+    "D3_delayed_retest": {
+      "result": "partial",
+      "detail": "能解释前导列，不能解释估算误差来源"
+    }
+  },
+  "root_cause": {
+    "summary": "策略没有把统计信息与分布变化接入索引决策",
+    "category": "strategy_incompleteness",
+    "detail": "掌握规则（索引列选择、前导列原则、知识图谱内容）在测评前已经复核正确；内容、来源、图谱、诊断均无错误。问题在于索引选择策略缺少前置步骤：检查统计信息是否反映当前数据分布，以及后置步骤：通过EXPLAIN估算与实际行数对比验证索引有效性。学习者在没有统计信息意识的情况下，机械应用前导列规则，无法适应分布变化场景。",
+    "verified_components": {
+      "content": "correct",
+      "source": "correct",
+      "knowledge_graph": "correct",
+      "diagnosis": "correct",
+      "strategy": "incomplete"
+    }
+  },
+  "model_version": {
+    "expected": 1,
+    "loaded": 1,
+    "match": true,
+    "persistent_backend": true
+  },
+  "personalized_learning_s7": {
+    "intervention_type": "strategy_augmentation_with_targeted_micro_learning",
+    "target_gap_id": "GAP-STAT-DIST-INDEX-001",
+    "target_gap_name": "统计信息-分布变化-索引决策桥接",
+    "learning_objectives": [
+      {
+        "id": "LO1",
+        "description": "理解PostgreSQL统计信息基础设施：pg_stats视图关键列（n_distinct, most_common_vals, histogram_bounds, correlation），ANALYZE工作机制，pg_stat_all_tables.n_mod_since_analyze含义"
+      },
+      {
+        "id": "LO2",
+        "description": "理解查询规划器如何使用统计信息进行选择性估算和行数估算，能够从EXPLAIN ANALYZE的estimated vs actual rows差异中识别统计信息过期信号"
+      },
+      {
+        "id": "LO3",
+        "description": "在数据分布可能变化时，将ANALYZE作为索引决策的前置步骤，并在ANALYZE后重新验证索引选择是否仍然最优"
+      },
+      {
+        "id": "LO4",
+        "description": "能够诊断估算误差来源：定位特定pg_stats列与实际分布不一致，解释统计信息过期如何导致查询规划器做出次优索引选择"
+      }
+    ],
+    "content_modules": [
+      {
+        "module_id": "S7-M1",
+        "title": "PostgreSQL统计信息基础",
+        "duration_minutes": 15,
+        "topics": [
+          "pg_statistic系统表与pg_stats视图",
+          "n_distinct与选择性估算",
+          "most_common_vals与most_common_freqs",
+          "histogram_bounds与等深直方图",
+          "correlation与索引扫描成本",
+          "ANALYZE采样机制与autovacuum阈值"
+        ],
+        "rationale": "在现有索引知识之前插入统计信息基础，使学习者理解索引决策所依赖的数据基础"
+      },
+      {
+        "module_id": "S7-M2",
+        "title": "统计信息驱动的查询计划",
+        "duration_minutes": 15,
+        "topics": [
+          "选择性估算公式",
+          "行数估算与统计信息的依赖关系",
+          "EXPLAIN中estimated rows的计算来源",
+          "EXPLAIN ANALYZE中actual rows与estimated对比的诊断价值",
+          "统计信息过期导致估算偏差的典型模式（n_distinct偏低、most_common_vals过时、histogram边界不反映新数据）"
+        ],
+        "rationale": "桥接统计信息与查询计划，使学习者能从估算误差反向定位统计信息问题"
+      },
+      {
+        "module_id": "S7-M3",
+        "title": "分布变化下的索引决策完整流程",
+        "duration_minutes": 10,
+        "topics": [
+          "扩展后的索引决策流程：检查统计信息新鲜度→必要时ANALYZE→基于最新统计信息选择索引列→EXPLAIN验证→估算偏差回环",
+          "分布变化对索引列选择的影响（选择性变化可能导致前导列需要调整）",
+          "不同分布下同一索引方案的效率差异"
+        ],
+        "rationale": "将S7-M1和S7-M2的知识整合到现有索引选择策略中，形成完整的决策流程"
+      }
+    ],
+    "practice_items": [
+      {
+        "item_id": "S7-P1",
+        "type": "diagnostic",
+        "scenario": "给定一个tenant_id从均匀分布变为Zipf分布的日志表，展示ANALYZE前后的pg_stats差异和EXPLAIN计划差异",
+        "task": "说明为什么ANALYZE前的索引(tenant_id, status, created_at)可能不再最优，并在ANALYZE后重新评估索引列顺序是否需要调整",
+        "expected_outputs": [
+          "识别n_mod_since_analyze异常",
+          "执行ANALYZE",
+          "对比ANALYZE前后pg_stats中n_distinct和most_common_vals变化",
+          "基于新统计信息重新论证索引列顺序"
+        ],
+        "success_criteria": "完整执行检查→ANALYZE→对比→重新论证的流程，且论证基于具体统计值而非直觉"
+      },
+      {
+        "item_id": "S7-P2",
+        "type": "diagnostic",
+        "scenario": "EXPLAIN ANALYZE输出：Index Scan using idx_tenant_status_created, estimated rows=80, actual rows=12000",
+        "task": "诊断估算误差来源，提出修正步骤，并解释该估算误差对索引选择决策的潜在影响",
+        "expected_outputs": [
+          "通过pg_stats检查tenant_id的n_distinct和most_common_vals",
+          "判断统计信息过期是根因（而非查询规划器bug或索引设计问题）",
+          "提出ANALYZE修正方案",
+          "解释若基于80行的错误估算，规划器可能错误选择索引扫描而实际应使用其他访问路径"
+        ],
+        "success_criteria": "准确指向统计信息过期，正确描述从pg_stats列到估算偏差的因果链"
+      }
+    ],
+    "strategy_update": {
+      "previous_version": 1,
+      "new_version": 2,
+      "change_description": "在索引选择策略中增加统计信息新鲜度检查步骤和估算验证步骤",
+      "updated_decision_flow": [
+        "Step 0 (新增): 检查目标表的pg_stat_all_tables.n_mod_since_analyze，判断是否需要ANALYZE",
+        "Step 1 (保持): 根据查询条件分析各候选列的过滤条件",
+        "Step 2 (增强): 查询pg_stats中候选列的n_distinct、most_common_vals、histogram_bounds，基于当前统计信息评估选择性——而非基于对数据分布的假设",
+        "Step 3 (保持): 按选择性降序排列多列索引，确定前导列",
+        "Step 4 (增强): 选定索引后通过EXPLAIN验证成本估算的合理性",
+        "Step 5 (新增): 若EXPLAIN ANALYZE中estimated与actual rows偏差显著（>5x），回到Step 0重新ANALYZE并重新评估"
+      ],
+      "decision_tree_prerequisite": "在进入索引选择流程前，先确认统计信息反映当前数据分布；若自上次ANALYZE以来表有显著修改（n_mod_since_analyze > autovacuum_analyze_threshold × reltuples），则必须先执行ANALYZE"
+    }
+  },
+  "handoff": {
+    "target_step": "S8_reassessment",
+    "status": "ready_for_transfer",
+    "summary": "G6已通过。学习者在无提示下能独立选择合理多列索引并解释前导列（Q1），但数据分布变化时缺少统计信息检查意识（Q2经二级提示修正），延迟复测无法诊断估算误差来源（D3）。根因确认为策略设计不完整：现有索引选择策略未包含统计信息新鲜度检查和估算验证步骤。S7个性化干预已生成三个内容模块（统计信息基础→统计驱动查询计划→分布变化下的完整索引决策流程）和两个诊断性练习，策略已从v1升级到v2，增加了前置统计信息检查和后置估算验证步骤。所有掌握规则、内容、图谱、诊断已复核正确，model_version一致（expected=1, loaded=1），持久化后端正常。移交至S8进行重评估，建议评估题目包含分布变化场景和估算误差诊断。",
+    "prerequisites_checklist": {
+      "mastery_rules_verified": true,
+      "content_verified": true,
+      "source_verified": true,
+      "knowledge_graph_verified": true,
+      "diagnosis_verified": true,
+      "model_version_consistent": true,
+      "persistent_backend_operational": true,
+      "strategy_updated": true
+    }
+  }
+}

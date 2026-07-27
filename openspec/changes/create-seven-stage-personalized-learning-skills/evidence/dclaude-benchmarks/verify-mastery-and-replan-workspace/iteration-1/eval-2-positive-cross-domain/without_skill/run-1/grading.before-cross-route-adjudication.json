@@ -1,0 +1,76 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope with both ordered sections present.",
+      "passed": false,
+      "evidence": "result.json uses a custom structure with execution_id, stage='S7', indicator_results, mastery_rules, s7_decision, handoff. No positive_artifact with type='mastery_and_replanning_bundle'. No mastery_verification or learner_model_update_and_replan sections. The stage label is '个性化学习决策与移交' but lacks the required bundle structure."
+    },
+    {
+      "text": "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+      "passed": false,
+      "evidence": "indicator_results lists F1–F4 but each has a flat outcome='mastered' with a text description — no structured breakdown into the six required dimensions (correctness, reasoning_quality, hint_dependency, transfer, confidence, delayed_retention). The scaffolding_profile correctly reports zero prompts (independence), but the multidimensional evidence structure required by the expectation is absent."
+    },
+    {
+      "text": "Each model_patch change from partial to mastered is backed by explicit evidence event IDs and rationale.",
+      "passed": false,
+      "evidence": "No model_patch array exists. The output has no per-node before/after state tracking tied to evidence IDs. The s7_decision.action='advance' implies an advancement decision but without the traceable model_patch entries the expectation requires."
+    },
+    {
+      "text": "The update is version-checked (expected_model_version matched, update_status=applied); version_conflict and not_executed remain the honest fallback states defined by the schema.",
+      "passed": false,
+      "evidence": "model_version reports expected=6, loaded=6, match=true, backend='persistent', backend_status='operational'. However, there is no update object with status='applied', no update_status field, and no explicit support for version_conflict or not_executed fallback states. The version match is noted but not structured as a schema-conformant update."
+    },
+    {
+      "text": "Attribution NODE_MASTERED routes deterministically to S6 (next node), with a maintenance plan in review_schedule; complete is reserved for true goal-level achievement.",
+      "passed": false,
+      "evidence": "No attribution object with primary='NODE_MASTERED' exists. s7_decision.action='advance' rather than 'continue'. handoff.target_unit='G7' (not S6) with target_domain='分数运算（乘除）' — routes forward to the next content unit rather than the S6 stage. No review_schedule with retrieval/spacing/interleaving/delayed_retest. No distinction between 'continue' and 'complete' — 'advance' is used generically."
+    },
+    {
+      "text": "Content-quality vs learner-knowledge are distinguished: because content and graph are verified correct, mastery is attributed to the learner rather than to a content fix.",
+      "passed": true,
+      "evidence": "mastery_rules.content_graph_alignment='correct', mastery_rules.validated_at_load=true, mastery_rules.pre_determined=true. The conditions_evaluated are all favorable (all_indicators_mastered=true, zero_prompt_requirement=true, etc.). The output attributes all four indicators to mastering (outcome='mastered') without suggesting content fixes. The handoff.prerequisites_satisfied lists learner achievements, not content corrections."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.167
+  },
+  "execution_metrics": {
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "total_tokens": 32524
+  },
+  "timing": {
+    "executor_duration_seconds": 44,
+    "total_duration_seconds": 40.4
+  },
+  "claims": [
+    {
+      "claim": "全部四项指标在无提示条件下达到掌握标准，推荐进入下一学习单元",
+      "type": "quality",
+      "verified": false,
+      "evidence": "scaffolding_profile.prompts_delivered=0, hints_requested=0, independence='full'. However, the output lacks the structured multidimensional evidence (transfer, delayed retention, etc.) to substantiate the 'mastered' claim per the expectation framework. The indicators are reported as mastered but without the evidentiary depth required."
+    },
+    {
+      "claim": "模型版本匹配 expected=6, loaded=6",
+      "type": "factual",
+      "verified": true,
+      "evidence": "model_version.expected=6, model_version.loaded=6, model_version.match=true"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The without_skill output routes to G7 (next content unit) instead of S6 (next stage). This is a meaningful behavioral difference — the skill routes to the correct pipeline stage while the unguided model routes to the next content domain. An expectation that tests the semantic correctness of the routing target (regardless of output format) would better capture this difference. For example: 'The handoff routes back into the pipeline (S5 or S6) rather than forward to a new content domain (G7).'"
+      }
+    ],
+    "overall": "Similar to eval-1, expectations 1-5 are schema-coupled. The key behavioral difference — the unguided model produces a flat 'advance to G7' decision without maintenance planning — would benefit from format-agnostic assertions about the routing target and the presence of a spaced-review plan."
+  }
+}

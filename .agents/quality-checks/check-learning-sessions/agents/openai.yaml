@@ -1,0 +1,4 @@
+interface:
+  display_name: "学习会话计划质量检查（S5/G5）"
+  short_description: "独立复核 S5 的 learning_and_session_plan 是否达到门 G5，给出可追溯的放行/返工裁决"
+  default_prompt: "使用 $check-learning-sessions 独立复核这个 S5 移交信封是否达到 G5，并输出 quality_check_result。"

@@ -1,0 +1,93 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+      "passed": true,
+      "evidence": "Graded artifact outputs/result.gclaude-rerun.json: positive_artifact is null. There are no node_states and no tested_mastered label anywhere. EV1 (self-rating 8/10) is provenance \"user_provided_unverified\", status \"unknown\"; EV2 (slogan yes/no) is learner_behavior, status \"unsupported\". processing_record steps 2/4/5 declare that self-report, single-item correctness and slogan recognition are excluded from determining critical-node status. No positive artifact is fabricated."
+    },
+    {
+      "text": "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+      "passed": true,
+      "evidence": "EV1 (self-report) is recorded separately and marked user_provided_unverified, NOT used as behavior. requirement_gaps record the absences explicitly: GAP-REAL-BEHAVIOR ('No real learner behavior evidence for any critical node: reasoning process, prompt/hint hierarchy, transfer tasks, timing and a second aligned observation are all absent'), GAP-HINT-AND-CONFIDENCE, GAP-TRANSFER. EV2.summary states 'no reasoning process, no prompt/hint hierarchy, no transfer and no timing recorded'. Absences are explicit, not inferred."
+    },
+    {
+      "text": "The output does not assert independence or transfer ability that was never observed.",
+      "passed": true,
+      "evidence": "No independence is asserted; GAP-HINT-AND-CONFIDENCE states independence cannot be established, and the 猜对识别 rubric dimension fails precisely because independent/transfer cannot be distinguished ('cannot distinguish answered-correctly vs. independent vs. transferable'). No transfer ability is claimed; GAP-TRANSFER states transfer is entirely unobserved."
+    },
+    {
+      "text": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+      "passed": true,
+      "evidence": "First conjunct met: no learning_frontier is produced (positive_artifact null; processing_record step 6 says producing a snapshot would require fabricating a frontier, which is forbidden). Second conjunct met: quality_evaluation.verdict=\"revise_here\", route_to=\"S4\" — the deterministic route stays at S4. confirmation.questions emit diagnostic tasks (deploy aligned explain/predict/counterexample/compare/transfer/confidence items, retest under no/low hints, add unseen transfer problems) to collect real behavior."
+    },
+    {
+      "text": "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+      "passed": true,
+      "evidence": "No node profile is emitted at all (positive_artifact null). processing_record step 5 states critical nodes must remain insufficient_evidence/untested pending real behavior and explicitly notes 'this is NOT a fabricated all-not-mastered profile'. There is no uniform all-not-mastered relabeling."
+    },
+    {
+      "text": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+      "passed": true,
+      "evidence": "G4 does not pass: 6 of 7 rubric dimensions fail (only 偏差控制 passes) and verdict=\"revise_here\" (not pass). The deterministic route is route_to=\"S4\" (revise_here -> S4), which is inside the enumerated set {revise_here->S4, return_upstream->S3}; processing_record step 8 states return_upstream to S3 is not triggered because the diagnostic items are valid."
+    }
+  ],
+  "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 9628,
+    "transcript_chars": 750,
+    "num_turns": 9,
+    "duration_ms": 165163,
+    "graded_artifact": "outputs/result.gclaude-rerun.json",
+    "usage": { "input_tokens": 58392, "output_tokens": 13939, "cache_read_input_tokens": 137920, "model": "glm-5.2 (rerun)" },
+    "rerun_route_file": "result.gclaude-rerun.route.json",
+    "note": "No metrics.json or tool-call log. Per the selection rule the graded artifact is outputs/result.gclaude-rerun.json (a separate glm-5.2 rerun); duration_ms and usage above are that rerun's own (from result.gclaude-rerun.route.json). The original deepseek-v4-pro run that produced outputs/result.json (which routed return_upstream->S1) is reconciled in timing.original_run below (duration 104372ms, input 66625, output 7366). output_chars is the char count of the graded rerun artifact; transcript_chars is executor_prompt size."
+  },
+  "timing": {
+    "executor_duration_seconds": 165,
+    "total_duration_seconds": 165.163,
+    "grader_duration_seconds": null,
+    "timing_source": "result.gclaude-rerun.route.json (the rerun that produced the graded artifact)",
+    "original_run": { "executor_duration_seconds": 108, "total_duration_seconds": 104.372, "duration_ms": 104372, "model": "deepseek-v4-pro[1m]", "note": "Original run producing outputs/result.json, which routed return_upstream->S1; NOT the graded artifact." }
+  },
+  "claims": [
+    {
+      "claim": "The rerun correctly refused to produce a positive artifact and did not pass G4 (correct negative-case handling).",
+      "type": "quality",
+      "verified": true,
+      "evidence": "status \"pending\", positive_artifact null, input_validation.status \"pass\", quality_evaluation.verdict \"revise_here\" (not pass), route_to \"S4\"."
+    },
+    {
+      "claim": "Unlike the original run, the rerun routes to S4 (revise_here), matching the expected_output destination set.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The rerun's quality_evaluation.route_to=\"S4\" and processing_record step 8 states return_upstream to S3 is not triggered because diagnostic items are valid. (The original outputs/result.json instead routed return_upstream->S1 due to assumed missing G1/G3; that artifact is not graded here.)"
+    },
+    {
+      "claim": "The graded rerun artifact is clean bare JSON.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/result.gclaude-rerun.json parses as a JSON object with no prose preamble and no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "Graded score (6/6) is driven by the rerun's S4 route, which differs from the original run's S1 route. Confirm the rerun (outputs/result.gclaude-rerun.json) is the intended graded artifact per the selection rule — if so, the negative-case safety properties all hold."
+    ],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this run directory; the needs_review item is grader-derived."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The case-3 prompt (unlike case-1/2) does not explicitly assert G1/G3 已通过. The original run interpreted the missing gate-status as missing upstream artifacts and routed to S1; the rerun assumed gates passed and routed to S4. To make the route deterministic across runs, the prompt should state G1/G3 status explicitly, as the positive cases do."
+      },
+      {
+        "reason": "No expectation checks the raw output contract (bare JSON, no preamble, no fence). The rerun artifact is clean, but the eval set would not catch a fence/preamble regression if it occurred."
+      }
+    ],
+    "overall": "Core negative-case behavior is fully correct in the graded rerun (null artifact, no G4 pass, no fabricated mastery/frontier, explicit evidence-absence recording, route stays at S4). All six expectations pass against outputs/result.gclaude-rerun.json."
+  }
+}

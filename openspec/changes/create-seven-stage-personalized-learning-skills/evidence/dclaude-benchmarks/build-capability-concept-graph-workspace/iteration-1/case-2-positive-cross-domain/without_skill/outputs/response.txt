@@ -1,0 +1,516 @@
+```json
+{
+  "meta": {
+    "stage": "S3",
+    "gateTarget": "G3",
+    "learnerCode": "G6-FRAC-001",
+    "planGenerated": "2026-07-27",
+    "targetCompletion": "2026-08-17",
+    "totalInstructionalDays": 15
+  },
+  "learnerProfile": {
+    "gradeLevel": 6,
+    "supportStructure": "guardian-coached",
+    "priorGates": {
+      "G1": "passed — foundational number sense, whole-number operations, basic part-whole language",
+      "G2": "passed — introduction to fraction notation, simple area-model fractions with denominators 2, 3, 4, 6, 8"
+    },
+    "learningGoal": "在三周内真正理解分数：会比较分数大小、解释等值分数的含义、解决简单情境题。机械通分速度不是唯一目标。",
+    "learnerDisposition": {
+      "strengths": ["guardian engagement high", "completes home practice reliably", "responds to visual models"],
+      "watchpoints": ["may default to whole-number reasoning", "may rush to procedure before sense-making", "confidence fragile under time pressure"]
+    }
+  },
+  "s2AuditSummary": {
+    "auditor": "S2系统审计",
+    "domainsConfirmed": [
+      {
+        "domain": "单位整体 (Unit Whole)",
+        "evidence": "can identify and name the whole in area and set models; correctly distinguishes when two models refer to different wholes",
+        "confidence": "high"
+      },
+      {
+        "domain": "等分 (Equal Partitioning)",
+        "evidence": "can partition rectangles and circles into 2, 3, 4, 6, 8 equal parts; occasional unevenness with odd denominators but self-corrects",
+        "confidence": "high"
+      },
+      {
+        "domain": "单位分数 (Unit Fractions)",
+        "evidence": "understands 1/b as one equal part of b; can iterate unit fractions to build non-unit fractions (e.g., 3/4 = 1/4 + 1/4 + 1/4)",
+        "confidence": "high"
+      },
+      {
+        "domain": "数轴表征 (Number Line Representation)",
+        "evidence": "can place fractions with denominators 2, 3, 4, 6, 8 on a 0–1 number line; still developing consistency in counting spaces rather than tick marks",
+        "confidence": "moderate"
+      },
+      {
+        "domain": "等值分数 (Equivalent Fractions)",
+        "evidence": "verbally explains that 1/2 = 2/4 = 4/8 using area models; can generate simple equivalents by doubling; the multiplicative principle (a/b = n×a/n×b) is emerging but not yet articulated independently",
+        "confidence": "moderate"
+      },
+      {
+        "domain": "通分意义 (Meaning of Common Denominators)",
+        "evidence": "can explain why same-denominator fractions are easier to compare; recognizes that renaming to a common denominator does not change the value",
+        "confidence": "moderate"
+      }
+    ],
+    "gapsIdentified": [
+      "数轴空间计数 vs 刻度线计数的混淆仍需巩固",
+      "等值分数的乘性原理（n×a / n×b）尚未独立表达",
+      "比较分数时策略单一——倾向通分，较少使用基准分数或共同分子策略",
+      "情境题中的「整体」识别和运算选择尚不稳定"
+    ]
+  },
+  "competencyConceptMap": {
+    "description": "分数能力—概念图：以理解为中心的双维度层级结构。纵轴为认知深度（从具象操作到抽象推理），横轴为能力域（表征、比较、运算、应用）。箭头表示「先决依赖」，虚线表示「双向强化」。",
+    "dimensions": [
+      {
+        "id": "D1",
+        "name": "表征与意义建构 (Representation & Sense-Making)",
+        "description": "将分数作为单一数值进行多模态表征，建立分数感"
+      },
+      {
+        "id": "D2",
+        "name": "比较与排序 (Comparison & Ordering)",
+        "description": "运用多种策略比较分数大小并论证"
+      },
+      {
+        "id": "D3",
+        "name": "等值与变换 (Equivalence & Transformation)",
+        "description": "理解和生成等值分数，灵活在不同命名间转换"
+      },
+      {
+        "id": "D4",
+        "name": "应用与建模 (Application & Modeling)",
+        "description": "将分数知识迁移到情境问题中，建立数学模型"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "C01",
+        "dimension": "D1",
+        "name": "单位整体识别",
+        "nameEn": "Unit Whole Identification",
+        "level": 1,
+        "description": "在面积模型、集合模型、测量模型中准确识别并命名「整体」，判断两个分数是否指向同一整体",
+        "s2Status": "confirmed",
+        "prerequisites": []
+      },
+      {
+        "id": "C02",
+        "dimension": "D1",
+        "name": "等分操作",
+        "nameEn": "Equal Partitioning",
+        "level": 1,
+        "description": "将连续量和离散量等分为指定份数，验证等分性，理解分母表示总份数",
+        "s2Status": "confirmed",
+        "prerequisites": ["C01"]
+      },
+      {
+        "id": "C03",
+        "dimension": "D1",
+        "name": "单位分数理解与迭代",
+        "nameEn": "Unit Fraction Understanding & Iteration",
+        "level": 2,
+        "description": "理解 1/b 的含义，能通过累加单位分数构建任意 a/b，理解分数是单位分数的累加结果",
+        "s2Status": "confirmed",
+        "prerequisites": ["C02"]
+      },
+      {
+        "id": "C04",
+        "dimension": "D1",
+        "name": "数轴上的分数定位",
+        "nameEn": "Fraction Placement on Number Line",
+        "level": 2,
+        "description": "在数轴上以「空间」而非「刻度」定位分数；理解分数是数轴上的一个点/距离；能标注多个不同分母的分数于同一数轴",
+        "s2Status": "moderate-needs-reinforcement",
+        "prerequisites": ["C03"]
+      },
+      {
+        "id": "C05",
+        "dimension": "D1",
+        "name": "分数感与基准估计",
+        "nameEn": "Fraction Sense & Benchmark Estimation",
+        "level": 3,
+        "description": "能快速判断一个分数接近 0、1/2 还是 1；对不合理结果有直觉警觉；能在心理数轴上近似定位任意分数",
+        "s2Status": "emerging",
+        "prerequisites": ["C04"]
+      },
+      {
+        "id": "C06",
+        "dimension": "D2",
+        "name": "同分母/同分子比较",
+        "nameEn": "Same-Denominator / Same-Numerator Comparison",
+        "level": 1,
+        "description": "当分母相同时，通过比较分子判断大小；当分子相同时，推理分母越大分数越小",
+        "s2Status": "confirmed",
+        "prerequisites": ["C02", "C03"]
+      },
+      {
+        "id": "C07",
+        "dimension": "D2",
+        "name": "基准分数比较策略",
+        "nameEn": "Benchmark Fraction Comparison Strategy",
+        "level": 2,
+        "description": "使用 0、1/2、1 作为参照点比较异分母分数（例如 3/7 < 1/2 < 5/8），不依赖通分",
+        "s2Status": "emerging — 当前倾向机械通分，需拓展策略多样性",
+        "prerequisites": ["C05", "C06"]
+      },
+      {
+        "id": "C08",
+        "dimension": "D2",
+        "name": "多策略灵活比较",
+        "nameEn": "Flexible Multi-Strategy Comparison",
+        "level": 3,
+        "description": "在通分法、共同分子法、基准法、数轴法、补数法之间灵活选择最优策略，并解释选择理由",
+        "s2Status": "not-yet — S3核心目标",
+        "prerequisites": ["C07"]
+      },
+      {
+        "id": "C09",
+        "dimension": "D3",
+        "name": "等值分数的具象识别",
+        "nameEn": "Concrete Equivalent Fraction Recognition",
+        "level": 1,
+        "description": "通过面积模型、分数条、数轴识别等值关系（如 1/2 = 2/4 = 4/8），用「同一位置/同一面积」论证",
+        "s2Status": "confirmed",
+        "prerequisites": ["C02", "C03"]
+      },
+      {
+        "id": "C10",
+        "dimension": "D3",
+        "name": "等值分数的乘性原理",
+        "nameEn": "Multiplicative Principle of Equivalent Fractions",
+        "level": 2,
+        "description": "理解并表达 a/b = (n×a)/(n×b)：分子分母同乘同除同一数，分数大小不变；能从模型独立推导此原理",
+        "s2Status": "moderate — 会操作但尚未独立表述原理",
+        "prerequisites": ["C09"]
+      },
+      {
+        "id": "C11",
+        "dimension": "D3",
+        "name": "通分的概念意义",
+        "nameEn": "Conceptual Meaning of Common Denominators",
+        "level": 2,
+        "description": "理解通分是将两个分数用同一「单位分数」重新命名，不改变数值；能将通分过程与数轴/面积模型对应",
+        "s2Status": "moderate — 能解释但不稳定",
+        "prerequisites": ["C10", "C04"]
+      },
+      {
+        "id": "C12",
+        "dimension": "D3",
+        "name": "等值分数的灵活生成",
+        "nameEn": "Flexible Equivalent Fraction Generation",
+        "level": 3,
+        "description": "能根据需要选择乘数/除数生成等值分数；能在多个等值形式间流畅切换；理解最简分数的含义",
+        "s2Status": "not-yet — S3核心目标",
+        "prerequisites": ["C10", "C11"]
+      },
+      {
+        "id": "C13",
+        "dimension": "D4",
+        "name": "情境中的整体识别与运算选择",
+        "nameEn": "Whole Identification & Operation Selection in Context",
+        "level": 2,
+        "description": "在文字情境中正确识别「整体」是什么，判断问题等价于比较、等值变换还是加减操作",
+        "s2Status": "emerging — 当前不稳定",
+        "prerequisites": ["C01"]
+      },
+      {
+        "id": "C14",
+        "dimension": "D4",
+        "name": "简单分数情境题建模与求解",
+        "nameEn": "Simple Fraction Word Problem Modeling & Solving",
+        "level": 3,
+        "description": "综合运用比较、等值变换策略解决一步/两步情境题；能用条形图/数轴建模并解释解答过程",
+        "s2Status": "not-yet — S3核心目标",
+        "prerequisites": ["C08", "C12", "C13"]
+      }
+    ],
+    "edges": [
+      {"from": "C01", "to": "C02", "type": "prerequisite"},
+      {"from": "C02", "to": "C03", "type": "prerequisite"},
+      {"from": "C03", "to": "C04", "type": "prerequisite"},
+      {"from": "C04", "to": "C05", "type": "prerequisite"},
+      {"from": "C02", "to": "C06", "type": "prerequisite"},
+      {"from": "C03", "to": "C06", "type": "prerequisite"},
+      {"from": "C05", "to": "C07", "type": "prerequisite"},
+      {"from": "C06", "to": "C07", "type": "prerequisite"},
+      {"from": "C07", "to": "C08", "type": "prerequisite"},
+      {"from": "C02", "to": "C09", "type": "prerequisite"},
+      {"from": "C03", "to": "C09", "type": "prerequisite"},
+      {"from": "C09", "to": "C10", "type": "prerequisite"},
+      {"from": "C04", "to": "C11", "type": "prerequisite"},
+      {"from": "C10", "to": "C11", "type": "prerequisite"},
+      {"from": "C10", "to": "C12", "type": "prerequisite"},
+      {"from": "C11", "to": "C12", "type": "prerequisite"},
+      {"from": "C01", "to": "C13", "type": "prerequisite"},
+      {"from": "C08", "to": "C14", "type": "prerequisite"},
+      {"from": "C12", "to": "C14", "type": "prerequisite"},
+      {"from": "C13", "to": "C14", "type": "prerequisite"},
+      {"from": "C04", "to": "C09", "type": "reinforcement", "note": "数轴是验证等值的最有力工具"},
+      {"from": "C07", "to": "C05", "type": "reinforcement", "note": "基准策略使用越多，分数感越强"},
+      {"from": "C11", "to": "C08", "type": "reinforcement", "note": "通分意义理解越深，比较策略选择越明智"},
+      {"from": "C14", "to": "C08", "type": "reinforcement", "note": "情境解题反馈比较策略的合理性"},
+      {"from": "C14", "to": "C12", "type": "reinforcement", "note": "情境需求驱动等值变换的灵活选择"}
+    ]
+  },
+  "s3PersonalizedPlan": {
+    "philosophy": "每周聚焦一个核心维度，每天包含「概念对话—具象探索—表征连接—反思输出」四环节。监护人作为「对话伙伴」而非「讲解者」，通过提问引导学习者独立建构理解。评估嵌入每日活动，不设独立考试。",
+    "guardianRole": {
+      "dailyPractices": [
+        "用开放式问题启动：'你怎么知道的？''还有别的办法吗？''如果换成XX会怎样？'",
+        "记录学习者的原话和画图，不做正误评判，用于后续对话",
+        "控制每次聚焦练习不超过25分钟，保持注意力质量",
+        "发现混淆时不直接纠正，引导回到具体模型验证"
+      ],
+      "weeklyCheckIn": "每周结束时与学习者一起回顾作品集，由学习者选出「最得意的理解」和「还想搞清楚的困惑」"
+    },
+    "week1": {
+      "theme": "数轴·基准·多策略比较",
+      "themeRationale": "S2审计显示数轴表征不稳固、比较策略单一。数轴是连接所有分数概念的脊梁——第一周扎根数轴，同时拓展比较策略工具箱。",
+      "day1": {
+        "title": "数轴空间感重建",
+        "activity": "用纸条折叠制作0-1数轴，分别折出二等分、三等分、四等分、六等分、八等分。关键对话：'刻度线之间的空间代表什么？'将纸条并排对比，发现1/2、2/4、3/6重合。",
+        "targetNodes": ["C04"],
+        "diagnostic": "观察学习者是否从「数刻度」转为「数空间」；记录是否独立发现等值重合"
+      },
+      "day2": {
+        "title": "同分子比较与单位分数大小",
+        "activity": "在同一条数轴上放置多个单位分数（1/2, 1/3, 1/4, 1/6, 1/8）。问题链：'为什么1/8比1/2小？分母大的分数一定小吗？'延伸到同分子比较：2/3 vs 2/5，3/4 vs 3/8。",
+        "targetNodes": ["C06", "C04"],
+        "diagnostic": "能否用'分母越大、每份越小'独立论证同分子比较"
+      },
+      "day3": {
+        "title": "基准分数——以1/2为锚",
+        "activity": "分类游戏：给出20个分数卡片，快速判断每个分数'小于1/2''等于1/2''大于1/2'。不计算，只推理。例如：3/8 — 因为4/8=1/2，所以3/8<1/2。",
+        "targetNodes": ["C05", "C07"],
+        "diagnostic": "分类速度与准确率；特别关注分母为奇数的分数（如3/7 vs 1/2）的推理过程"
+      },
+      "day4": {
+        "title": "多策略比较工作坊",
+        "activity": "给出5组异分母分数比较题，要求每组至少用两种不同策略验证。策略菜单：通分法、基准法、共同分子法、数轴法、补数法（比较'离1还差多少'）。记录每种策略最适合什么情况。",
+        "targetNodes": ["C08", "C07"],
+        "diagnostic": "策略选择是否有依据？能否说出'这次我选XX法，因为……'"
+      },
+      "day5": {
+        "title": "策略反思与周作品集",
+        "activity": "学习者从本周作品中选出三件最佳证据，向监护人解释：'这证明我现在会……'。共同回顾比较策略菜单，学习者标注每种策略的自信度（★☆☆/★★☆/★★★）。",
+        "targetNodes": ["C08"],
+        "diagnostic": "自我评价的准确性与S2审计的一致性"
+      }
+    },
+    "week2": {
+      "theme": "等值原理·通分意义·灵活变换",
+      "themeRationale": "S2审计显示等值的乘性原理尚未独立表达。第二周从具象模型推导乘性原理，建立通分与等值的深层连接。",
+      "day6": {
+        "title": "从折叠到乘性原理",
+        "activity": "用纸条折叠：将1/2对折→2/4，再对折→4/8。问题链：'分子和分母各发生了什么变化？为什么分数大小不变？'引导发现'每次折叠，总份数和取的份数都翻倍，但它们的关系不变'。引入乘性表示：1/2 = (2×1)/(2×2) = 2/4。",
+        "targetNodes": ["C10", "C09"],
+        "diagnostic": "能否用自己的话表述'分子分母同乘同除，大小不变'"
+      },
+      "day7": {
+        "title": "等值分数的数轴验证",
+        "activity": "在0-1数轴上用不同颜色标注：先标注1/3的倍数点（1/3, 2/3, 3/3），再标注1/6的倍数点（1/6, 2/6, ..., 6/6）。发现重合点：1/3=2/6, 2/3=4/6, 3/3=6/6。逆向：从1/2=5/10出发，是否还有其他等值？生成1/2的等值家族。",
+        "targetNodes": ["C10", "C12", "C04"],
+        "diagnostic": "能反向（用除法）从较大分母推较小分母吗？例如从6/8推出3/4"
+      },
+      "day8": {
+        "title": "通分的具象意义",
+        "activity": "用两张等大的正方形纸，分别折出三等分（涂2/3）和四等分（涂3/4）。问题：'哪张涂得更多？直接比不出来怎么办？'引导发现：如果都折成12等分，2/3=8/12，3/4=9/12。建立通分的操作意义：'把两个分数用同样的单位分数重新命名，就像把不同面值的硬币都换成同样的零钱。'",
+        "targetNodes": ["C11"],
+        "diagnostic": "能否在脱离模型后独立解释'为什么通分不改变分数大小'"
+      },
+      "day9": {
+        "title": "等值与通分的灵活运用",
+        "activity": "给出任务：将2/3、3/4、5/6排大小。不要求使用特定方法。观察学习者是否：①先发现都接近1（基准法/补数法：差1/3、1/4、1/6→5/6最大、2/3最小）②再用通分验证。关键对话：'如果只用通分，这三个数的最小公分母是多少？值得吗？有没有更快的办法？'",
+        "targetNodes": ["C12", "C08", "C11"],
+        "diagnostic": "策略选择效率——是否选择最小公分母而非机械相乘"
+      },
+      "day10": {
+        "title": "周作品集与原理阐述",
+        "activity": "学习者制作一张'等值与通分关系图'——用自己的图和文字解释：等值分数是什么？通分在做什么？它们之间有什么关系？监护人充当听众提问。",
+        "targetNodes": ["C10", "C11", "C12"],
+        "diagnostic": "原理阐述的完整性、独立性和自信度"
+      }
+    },
+    "week3": {
+      "theme": "情境应用·综合建模·反思整合",
+      "themeRationale": "前两周建好概念工具，第三周将工具运用到真实情境中，并在解题中反思和巩固比较、等值策略。",
+      "day11": {
+        "title": "情境中的整体识别",
+        "activity": "给出5个简短情境，焦点仅放在'整体是什么'的判断上。例如：'小明喝了半瓶水的3/4，小红喝了同样一瓶水的2/3。'——整体都是'一瓶水'；'小明喝了3/4瓶水，小红喝了2/3杯水。'——整体不同，不能直接比。",
+        "targetNodes": ["C13", "C01"],
+        "diagnostic": "是否在每个情境中先确认整体再操作"
+      },
+      "day12": {
+        "title": "比较类情境题",
+        "activity": "情境题：'姐姐跑了5/8公里，弟弟跑了3/5公里，谁跑得更远？用两种方法证明。'鼓励用数轴法和基准法。进阶：'三人吃披萨：A吃了1/3个披萨，B吃了2/5个披萨，C吃了3/8个披萨。按吃的多少排顺序。'",
+        "targetNodes": ["C14", "C08"],
+        "diagnostic": "策略选择是否与数值特征匹配；能否用图辅助解释"
+      },
+      "day13": {
+        "title": "等值类情境题",
+        "activity": "情境题：'美术课上，一组有24人中8人带了彩笔，二组有18人中6人带了彩笔。哪组带彩笔的比例更高？'（8/24=1/3 vs 6/18=1/3→一样高）。进阶：'配方A：3杯面粉配2杯水；配方B：5杯面粉配3杯水。哪个更稠？'",
+        "targetNodes": ["C14", "C12", "C13"],
+        "diagnostic": "是否自发使用等值简化（约分）而非直接通分大分母"
+      },
+      "day14": {
+        "title": "综合挑战与策略复盘",
+        "activity": "6道混合题型（2道比较、2道等值情境、2道开放题），学习者独立完成后，逐一标注使用的策略并评价策略效率。监护人仅观察和记录。完成后共同复盘：'哪道题最需要策略选择？如果只给你30秒，你会用什么方法？'",
+        "targetNodes": ["C14", "C08", "C12"],
+        "diagnostic": "综合表现——正确率、策略多样性、策略与题目匹配度"
+      },
+      "day15": {
+        "title": "G3展示准备与学习旅程回顾",
+        "activity": "学习者准备一份'我的分数学习旅程'展示，包含：①我最自豪的三个理解瞬间；②我学会的三种比较策略及最佳使用场景；③等值分数原理——用我的方式解释；④一道我解决的最有趣的情境题；⑤我还想继续探索的问题。向监护人完整展示，监护人给予具体反馈。",
+        "targetNodes": ["C05", "C08", "C10", "C11", "C14"],
+        "diagnostic": "G3展示的整体质量作为G3通过的主要证据"
+      }
+    }
+  },
+  "g3HandoffResults": {
+    "gateId": "G3",
+    "gateName": "分数理解深度验证 — 比较·等值·应用",
+    "assessmentApproach": "基于S3全程嵌入式评估证据（每日诊断记录+周作品集+Day15学习旅程展示），不使用一次性笔纸测验。",
+    "competencyStatusSummary": [
+      {
+        "nodeId": "C01",
+        "name": "单位整体识别",
+        "preS3": "confirmed",
+        "postS3Target": "confirmed — 维持",
+        "assessmentMethod": "Day11情境整体识别对话记录"
+      },
+      {
+        "nodeId": "C02",
+        "name": "等分操作",
+        "preS3": "confirmed",
+        "postS3Target": "confirmed — 维持",
+        "assessmentMethod": "Day6折叠活动观察"
+      },
+      {
+        "nodeId": "C03",
+        "name": "单位分数理解与迭代",
+        "preS3": "confirmed",
+        "postS3Target": "confirmed — 维持",
+        "assessmentMethod": "Day2单位分数数轴活动"
+      },
+      {
+        "nodeId": "C04",
+        "name": "数轴上的分数定位",
+        "preS3": "moderate",
+        "postS3Target": "confirmed — 从'计数刻度'转为'计数空间'",
+        "assessmentMethod": "Day1纸条数轴+Day7等值数轴验证",
+        "successCriterion": "独立准确放置任意分母≤12的分数于数轴，使用空间语言解释"
+      },
+      {
+        "nodeId": "C05",
+        "name": "分数感与基准估计",
+        "preS3": "emerging",
+        "postS3Target": "confirmed — 能快速判断分数接近0/1/2/1",
+        "assessmentMethod": "Day3分类游戏+Day14策略复盘",
+        "successCriterion": "20题分类正确率≥90%，含分母为奇数的分数"
+      },
+      {
+        "nodeId": "C06",
+        "name": "同分母/同分子比较",
+        "preS3": "confirmed",
+        "postS3Target": "confirmed — 维持",
+        "assessmentMethod": "Day2活动观察"
+      },
+      {
+        "nodeId": "C07",
+        "name": "基准分数比较策略",
+        "preS3": "emerging",
+        "postS3Target": "confirmed — 能独立使用并解释基准法",
+        "assessmentMethod": "Day3分类+Day4多策略工作坊+Day12情境题",
+        "successCriterion": "至少5次独立使用基准策略的记录，附带合理解释"
+      },
+      {
+        "nodeId": "C08",
+        "name": "多策略灵活比较",
+        "preS3": "not-yet",
+        "postS3Target": "confirmed — 能在≥3种策略间选择并论证选择理由",
+        "assessmentMethod": "Day4工作坊+Day9灵活运用+Day14综合挑战",
+        "successCriterion": "Day14综合挑战中策略与题目匹配度≥4/6题合理"
+      },
+      {
+        "nodeId": "C09",
+        "name": "等值分数的具象识别",
+        "preS3": "confirmed",
+        "postS3Target": "confirmed — 维持",
+        "assessmentMethod": "Day6折叠活动"
+      },
+      {
+        "nodeId": "C10",
+        "name": "等值分数的乘性原理",
+        "preS3": "moderate",
+        "postS3Target": "confirmed — 能独立表述并推导乘性原理",
+        "assessmentMethod": "Day6折叠推导+Day10原理阐述+Day15学习旅程展示",
+        "successCriterion": "用自己的语言和图示完整解释'为什么分子分母同乘同除大小不变'"
+      },
+      {
+        "nodeId": "C11",
+        "name": "通分的概念意义",
+        "preS3": "moderate",
+        "postS3Target": "confirmed — 能将通分过程与具象模型对应并解释'不改变值'的原因",
+        "assessmentMethod": "Day8具象通分+Day9灵活运用+Day10关系图",
+        "successCriterion": "独立解释通分的操作意义，能脱离模型用'单位分数统一'语言描述"
+      },
+      {
+        "nodeId": "C12",
+        "name": "等值分数的灵活生成",
+        "preS3": "not-yet",
+        "postS3Target": "confirmed — 能根据需要选择乘数/除数生成等值，包括约分",
+        "assessmentMethod": "Day7数轴验证+Day9灵活运用+Day13情境题",
+        "successCriterion": "在Day13情境题中自发使用约分策略≥1次"
+      },
+      {
+        "nodeId": "C13",
+        "name": "情境中的整体识别与运算选择",
+        "preS3": "emerging",
+        "postS3Target": "confirmed — 在每个情境中先确认整体，再选择操作",
+        "assessmentMethod": "Day11整体识别+Day12/13情境解题",
+        "successCriterion": "Day11中5/5正确识别整体；后续情境中不再出现因整体混淆导致的错误"
+      },
+      {
+        "nodeId": "C14",
+        "name": "简单分数情境题建模与求解",
+        "preS3": "not-yet",
+        "postS3Target": "confirmed — 能解决一步/两步比较类和等值类情境题并用模型解释",
+        "assessmentMethod": "Day12比较类+Day13等值类+Day14综合挑战+Day15展示",
+        "successCriterion": "Day14综合挑战6题中≥4题正确且解释合理"
+      }
+    ],
+    "g3Decision": {
+      "passThreshold": "all C01–C14 nodes ≥ confirmed by end of S3",
+      "conditionalPass": "if ≤2 nodes remain moderate but all not-yet → confirmed",
+      "failAndRemediate": "if ≥1 node remains not-yet after S3 — activate targeted S3.1 remediation cycle"
+    },
+    "evidencePortfolio": {
+      "requiredArtifacts": [
+        "Day1 纸条数轴照片",
+        "Day3 基准分类游戏记录表",
+        "Day4 多策略比较工作坊记录（至少5组题的策略选择与解释）",
+        "Day6 折叠→乘性原理推导记录（学习者原话转录）",
+        "Day8 通分具象模型照片",
+        "Day10 等值与通分关系图",
+        "Day11 整体识别5题记录",
+        "Day14 综合挑战6题完整作答+策略标注",
+        "Day15 学习旅程展示（视频或图文记录）"
+      ]
+    },
+    "postG3Recommendations": {
+      "readyFor": "分数加减运算（同分母→异分母），以等值/通分的深层理解为桥梁",
+      "parallelMaintenance": [
+        "每周一次'策略选择挑战'：给出3组比较题，限时选择最优策略并论证",
+        "维持数轴使用习惯：新学运算时始终先上数轴建模再抽象计算",
+        "每周一则分数情境短故事：由学习者自己编写情境题与解答"
+      ],
+      "watchTransition": "从比较/等值过渡到加减运算时，警惕'分子加分子、分母加分母'的典型错误。预防策略：在引入运算前先通过数轴验证'为什么1/2+1/3≠2/5'。",
+      "nextGatePreview": "G4将聚焦同分母加减→异分母加减的具象基础和运算意义构建，以当前G3的通分理解为直接跳板。"
+    }
+  }
+}
+```

@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "The path connects the confirmed frontier (comparison reasoning developing, contextual transfer not mastered) to the target without reteaching already-mastered representation nodes.",
+      "passed": true,
+      "evidence": "ordered_learning_nodes: n-benchmark-reason(1)→n-contrast-bias(2)→n-contextual-scale(3)→n-interleave(4)→n-transfer(5). n-benchmark-reason selection_rationale states '学习前沿起点：数轴定位与等值分数已掌握，但比较解释仍依赖机械通分(developing)'. Already-mastered nodes (数轴定位, 等值分数) are NOT included as independent nodes. quality_evaluation.rubric_results[2] (路径最小性) confirms: '跳过节点：数轴定位(mastered)→跳过重复的数轴基础训练；等值分数(mastered)→跳过表征训练，不作为独立节点'."
+    },
+    {
+      "text": "Strategies target the known whole-number misconception and contrast cases rather than only increasing drill volume, with no unexplained redundancy.",
+      "passed": true,
+      "evidence": "n-contrast-bias explicitly targets whole-number bias with teaching_strategy=['contrast_case','worked_example','interleaving'] and scaffolding approach='对比卡片对+错误分析'. n-benchmark-reason replaces mechanical common-denominator with explain+worked_example+retrieval. The misconception intervention is built into the session design: '直接攻击全数偏差与机械通分两个典型偏差。通过故意构造分子大≠分数大...和无需通分即可判断...的对比案例'. No drill-volume-based design."
+    },
+    {
+      "text": "Each session fits the 25-minute daily constraint and the first session is executable within constraints.",
+      "passed": true,
+      "evidence": "s1 estimated_time: minutes_per_session=25, session_count=4. Activities broken into daily chunks: 第1天(数轴示范), 第2天(基准卡片独立判断), 第3天(游戏化卡片练习), 第4天(撤除视觉提示). Total budget: 21天×25分钟=525分钟. Sessions: 4+4+5+4+2+2=21 days × 25min = 525min exactly. quality_evaluation.rubric_results[3] (时间可行性) confirms."
+    },
+    {
+      "text": "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+      "passed": true,
+      "evidence": "confirmation.status='confirmed', confirmed_at='2026-07-27T12:00:00Z'. confirmation.response includes: path_overview='confirmed', priority_comparative_reasoning='confirmed', time_and_rhythm='confirmed', first_session_contract='confirmed', additional_notes='学习者与监护人确认优先比较推理而非重复表征训练，接受包含未见情境迁移题与延迟复测的验收'. Guardian involvement is explicitly addressed."
+    },
+    {
+      "text": "Per-node exit criteria are observable and the speed-only criterion is explicitly excluded from overall exit criteria.",
+      "passed": true,
+      "evidence": "exit_criteria.per_node has 5 entries with observable, decidable thresholds: n-benchmark-reason='无视觉提示下用基准（1/2或1）独立解释≥4/5对分数的大小关系，解释中不出现通分计算'; n-contrast-bias='在10组对比卡片中正确识别并纠正≥8组全数偏差陷阱'; etc. Speed exclusion: gamification scoring dimensions are strategy_score/reasoning_score/reflection_score — no speed dimension. Design principle: '游戏化非竞速：卡片机制以策略深度和解释质量为评分维度，不以完成速度排名'. Session descriptions repeatedly state '不计时', '速度不计入评分'."
+    },
+    {
+      "text": "Transfer and delayed review are explicit and G5 routes deterministically to S6 when all dimensions pass.",
+      "passed": true,
+      "evidence": "n-transfer has teaching_strategy=['transfer','delayed_retest']. assessment_schedule.transfer: 's5 三道未见情境题（果汁配方甜度、多人分匹萨、非标准长度缩放）'. assessment_schedule.delayed: 's6 延迟复测：基准推理与对比偏差核心任务保持≥80%正确率'. quality_evaluation.rubric_results: all 8 dimensions passed=true. quality_evaluation.verdict='pass', route_to='S6'."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_turns": 9,
+    "total_tokens": 80451,
+    "output_tokens": 13248,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 200,
+    "total_duration_seconds": 196.393
+  },
+  "claims": [
+    {
+      "claim": "游戏化卡片保留但不以速度为唯一标准",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Design principles explicitly state '游戏化非竞速：卡片机制以策略深度和解释质量为评分维度，不以完成速度排名'. Gamification system core_principle: '以策略深度和解释质量为核心评分维度，速度不作为排名标准'. Session scoring dimensions are strategy/reasoning/reflection only."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+
+    ],
+    "overall": "No suggestions, evals look solid for this configuration."
+  }
+}

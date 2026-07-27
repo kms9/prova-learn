@@ -1,0 +1,47 @@
+{
+  "skill_name": "plan-learning-sessions",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "上游工件均已通过且版本兼容：PostgreSQL 18 目标契约、能力图谱和 learner_snapshot=LS-001。学习者已掌握计划树读取与扫描方式；学习前沿为估算/实际差异、谓词选择性、多列索引顺序，典型误概念是把'全局选择性最高列优先'当成机械规则。约束：4 周、每周约 6 小时、每周两次 90 分钟交互会话、沙箱环境、接受三个未见查询的迁移验收。用户愿意先修复估算与统计模型再学多列索引，并确认首个会话契约。请完成个性化学习 S5，输出结构化 JSON 移交结果。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 正向例子1 (line 491) and docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S5] A minimal connected 4-session path from the evidenced SQL-misconception frontier to transfer, with per-node strategy and exit criteria, assessment schedule, first-session contract, mandatory confirmation resolved, and a passing G5 route to S6.",
+      "files": [],
+      "expectations": [
+        "The path connects the confirmed learner_snapshot frontier to the goal_success_contract target with no gaps.",
+        "Selection rationale explains every node and there is no unexplained redundancy or hard-prerequisite crossing.",
+        "The first session is executable within the stated time and resource constraints.",
+        "Mandatory confirmation (path overview, stage goals, time commitment, priority, first-session contract) is resolved as confirmed.",
+        "Each learning node has observable, decidable per-node exit criteria aligned with assessment.",
+        "G5 is evaluated dimension by dimension and the deterministic route is S6 when all dimensions pass."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "上游工件均已通过：六年级分数学习的目标契约、能力图谱和 learner_snapshot。数轴定位与等值分数已掌握；分数大小比较的解释判为 developing；食谱与长度分配的情境缩放判为 not_mastered；典型偏差为全数偏差和机械通分。约束：三周、每天 25 分钟、保留游戏化卡片但不以速度为唯一标准、监护人参与。学习者与监护人已确认路径优先比较推理而非重复表征训练，并接受包含未见情境迁移题与延迟复测的验收。请完成个性化学习 S5，输出结构化 JSON。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 正向例子2 (line 520)] A feasible minimal plan linking fraction-comparison reasoning to contextual transfer, excluding speed-only criteria, with appropriate strategy, delayed review, mandatory confirmation and a passing G5 route to S6.",
+      "files": [],
+      "expectations": [
+        "The path connects the confirmed frontier (comparison reasoning developing, contextual transfer not mastered) to the target without reteaching already-mastered representation nodes.",
+        "Strategies target the known whole-number misconception and contrast cases rather than only increasing drill volume, with no unexplained redundancy.",
+        "Each session fits the 25-minute daily constraint and the first session is executable within constraints.",
+        "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+        "Per-node exit criteria are observable and the speed-only criterion is explicitly excluded from overall exit criteria.",
+        "Transfer and delayed review are explicit and G5 routes deterministically to S6 when all dimensions pass."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "有人提交一份课程目录式计划：第1周看完数据库原理第1-5章、第2周看10个索引视频、第3周刷100道题、第4周做项目；没有 learner_snapshot，没有能力图谱节点，没有学习前沿证据，也没有节点进入/退出条件或测评安排，但希望立即进入 S6 教学。请执行个性化学习 S5 并输出结构化 JSON。",
+      "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 反向例子 (line 545)] S5 must fail closed: the copied course catalog is rejected as a personalized plan, no positive artifact is accepted, G5 does not pass, and the route returns to S4 for a supported frontier (or S3 only if the graph itself is invalid).",
+      "files": [],
+      "expectations": [
+        "The copied table of contents, video quota and question count is not accepted as a path connecting a confirmed frontier to the target.",
+        "Chapters and videos are identified as non-capability nodes with unexplained redundancy and no hard-prerequisite discipline.",
+        "No fabricated first session or starting state is accepted as executable.",
+        "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+        "No per-node exit criteria exist and none are fabricated.",
+        "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6."
+      ]
+    }
+  ]
+}

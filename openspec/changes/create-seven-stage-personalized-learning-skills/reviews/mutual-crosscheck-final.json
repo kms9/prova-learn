@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "status": "completed",
+  "as_of": "2026-07-27",
+  "accepted_sessions": [
+    {
+      "route": "gclaude",
+      "route_role": "primary_gclaude",
+      "outer": "final-primary-gclaude-crosscheck.outer.json",
+      "inner": "final-primary-gclaude-crosscheck.inner.json",
+      "route_metadata": "final-primary-gclaude-crosscheck.route.json",
+      "session_id": "fa30577e-50fe-4a73-a589-19a4bd09bf9c",
+      "uuid": "7b0798a3-a839-488b-9c31-bee9820c5aa6",
+      "actual_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "verdict": "pass",
+      "blocking_findings": 0,
+      "major_findings": 0
+    },
+    {
+      "route": "gclaude",
+      "route_role": "fallback_for=dclaude",
+      "fallback_for": "dclaude",
+      "outer": "final-fallback-gclaude-crosscheck.outer.json",
+      "inner": "final-fallback-gclaude-crosscheck.inner.json",
+      "route_metadata": "final-fallback-gclaude-crosscheck.route.json",
+      "session_id": "196315c6-8487-4f8c-a695-7fbf7122f011",
+      "uuid": "7937083b-daa1-4b4f-9633-e880715d84ad",
+      "actual_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "verdict": "pass",
+      "blocking_findings": 0,
+      "major_findings": 0,
+      "required_changes": 0
+    }
+  ],
+  "agreements": [
+    {
+      "finding_id": "MAJ-01-factual-basis",
+      "assessment": "The historical case-* tree contains the reported divergent grades and the pre-fix S4 output defect; those records remain preserved as noncanonical history."
+    },
+    {
+      "finding_id": "MIN-01",
+      "assessment": "The misleading root aggregate files required noncanonical naming and scope."
+    },
+    {
+      "finding_id": "MIN-02",
+      "assessment": "All seven canonical workspaces require explicit successful grader-route provenance, and legacy evidence must be excluded."
+    },
+    {
+      "finding_id": "MIN-03",
+      "assessment": "The two failure-state invariants belong in the shared handoff Schema."
+    }
+  ],
+  "disagreements": [
+    {
+      "finding_id": "MAJ-01",
+      "assessment": "Both crosschecks reject major severity because the first fallback audit treated the retained case-* history as canonical; the manifest-declared eval-* tree reconciles 42/42 with the benchmarks."
+    }
+  ],
+  "adjudications": [
+    {
+      "finding_id": "MAJ-01",
+      "decision": "rejected",
+      "reason": "Canonical eval-* grading, benchmark pass counts, and canonical_output reconcile; the substantive S4 negative-case defect is fixed in the canonical repaired artifact."
+    },
+    {
+      "finding_id": "MIN-01",
+      "decision": "accepted_and_fixed",
+      "reason": "Two root aggregates were renamed historical-aggregate-grading.json and declared noncanonical."
+    },
+    {
+      "finding_id": "MIN-02",
+      "decision": "accepted_and_fixed",
+      "reason": "Seven grader-route records are complete and the legacy workspace has canonical=false scope."
+    },
+    {
+      "finding_id": "MIN-03",
+      "decision": "accepted_and_fixed",
+      "reason": "Shared Schema now enforces failed-rubric action/route and failed-input null artifact."
+    },
+    {
+      "finding_id": "MIN-04",
+      "decision": "partially_accepted_and_documented",
+      "reason": "Dynamic same-node mastery correlation stays in G7 because Draft 2020-12 cannot join the two node_id arrays; cold start is an input failure routed to S4, not a version-0 positive artifact."
+    },
+    {
+      "finding_id": "MIN-NEW-01",
+      "decision": "accepted_and_fixed",
+      "reason": "S2 published_at now preserves and validates null, year, year-month, or full-date precision without fabricating missing month/day."
+    }
+  ],
+  "route_limitations": [
+    {
+      "limitation": "dclaude returned HTTP 402 before inference with empty modelUsage and no inner verdict.",
+      "evidence": "final-dclaude-closure.outer.json and final-dclaude-continuation-2/3.outer.json"
+    },
+    {
+      "limitation": "The user authorized a fresh gclaude session labeled fallback_for=dclaude; both accepted sessions are gclaude, so session independence is proven but provider diversity is not.",
+      "evidence": "final-route-fallback-approval.md and both accepted route metadata files"
+    }
+  ],
+  "completion_gate": {
+    "two_successful_fresh_sessions": true,
+    "parseable_inner_json": true,
+    "nonempty_outer_modelUsage": true,
+    "crosscheck_recorded": true,
+    "blocking_findings_zero": true,
+    "major_findings_zero": true,
+    "unresolved_required_changes_zero": true,
+    "provider_diversity_claimed": false
+  }
+}

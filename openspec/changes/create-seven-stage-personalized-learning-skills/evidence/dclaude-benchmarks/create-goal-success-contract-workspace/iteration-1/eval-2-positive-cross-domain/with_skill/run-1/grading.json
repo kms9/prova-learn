@@ -1,0 +1,96 @@
+{
+  "expectations": [
+    {
+      "text": "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+      "passed": true,
+      "evidence": "4 observable_capabilities defined across multiple cognitive levels: cap-compare (multiple comparison strategies — benchmark, number line, equivalent conversion), cap-equivalent (generation, explanation, and verification using area models and number lines), cap-context (recipe scaling application — doubling, halving, measuring with unit cups), cap-numberline (placement of proper/improper/mixed fractions, positional comparison, equivalent fraction co-location). Each capability has 3 specific observable_evidence items spanning concrete (fraction strips), representational (number lines, area models), and abstract (multiplicative reasoning) levels. Representations include: number lines, area models, fraction strips, recipe cards, measuring cups."
+    },
+    {
+      "text": "The pass rule contains an independently required transfer task rather than only mechanical speed or recall.",
+      "passed": true,
+      "evidence": "pass_rules explicitly require: (1) '未见迁移题至少50%题目独立完成且推理正确（不依赖提示）' — independently required transfer task with unseen problems; (2) '机械通分使用占比不超过解题策略的50%' — explicitly caps mechanical speed/recall; (3) '学习者能在验收后用自己的话解释'什么是等值分数'和'怎样比较两个分数大小'' — requires conceptual explanation, not recall. final_assessment.unseen_or_transfer_required=true with ≥2 unseen transfer tasks using novel contexts (length拼接, liquid分装, time分配) distinct from training scenarios."
+    },
+    {
+      "text": "Executed external pre-research and auditable source coverage are recorded.",
+      "passed": true,
+      "evidence": "external_research_seed.search_executed=true with retrieval_date=2026-07-27. 5 search queries listed (e.g., 'fraction mathematics Wikipedia definition numerator denominator equivalent', '义务教育数学课程标准 2022 分数 第三学段 内容要求 学业要求'). 5 sources with full URLs and provenance: e-wiki-fraction (Wikipedia, external_evidence), e-cn-curriculum (Chinese national curriculum standards, external_evidence), e-intl-standards (IXL grade 6 standards, external_evidence), e-assessment-samples (market_signal), e-recipe-numberline (Fractions Learning Pathways, external_evidence). category_coverage with 6 entries: wikipedia_encyclopedia, official_curriculum, international_standards, recruiting_jd (not_applicable with auditable reason: '六年级学习者场景不属于招聘/岗位市场'), interview_assessment, teaching_practice. outer.json confirms webSearchRequests=7."
+    },
+    {
+      "text": "Both guardian and learner confirmation is represented as resolved.",
+      "passed": true,
+      "evidence": "confirmation.response.confirmed_by='监护人与六年级学习者共同确认'. confirmation.status='confirmed', confirmed_at='2026-07-27T00:00:00Z'. 4 confirmation questions asked covering goal capabilities, assessment modalities, exclusions, and time constraints. Response records confirmed_scope, confirmed_assessment, confirmed_exclusions, confirmed_resources. confirmed_items array lists 6 items all attributed to guardian+learner joint confirmation."
+    },
+    {
+      "text": "Constraints and exclusions are explicit.",
+      "passed": true,
+      "evidence": "constraints section documents: duration=3周, effort_per_day=25分钟, total_effort=约8.75小时, learner_grade=小学六年级, language=中文（简体）, setting=家庭学习，监护人陪同与监督, materials=需数轴纸/白板、量杯实物或图纸、印刷配方卡, assessment_mode=监护人依据 pass_rules 独立评判. exclusions list 5 items: 机械通分速度, 分数乘除法深度运算, 复杂多步混合运算, 分数与小数/百分数互化的系统训练, 竞赛难度或超纲内容."
+    },
+    {
+      "text": "A passing G1 routes to S2.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results contains 8 dimensions all with passed=true. quality_evaluation.verdict='pass', quality_evaluation.route_to='S2'."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "num_turns": 17,
+    "output_chars": 21428,
+    "transcript_chars": 22284,
+    "total_tokens": 178096,
+    "web_search_requests": 7,
+    "cost_usd": 1.405476
+  },
+  "timing": {
+    "executor_duration_seconds": 178,
+    "total_duration_seconds": 175.166
+  },
+  "claims": [
+    {
+      "claim": "The skill executed 5 web searches and consulted 5 external sources",
+      "type": "process",
+      "verified": true,
+      "evidence": "outer.json modelUsage shows webSearchRequests=7 (slightly more than the 5 queries recorded — possibly retries or additional searches). external_research_seed.queries lists 5 search query strings. external_research_seed.sources lists 5 source entries with URLs."
+    },
+    {
+      "claim": "The contract's pass_rules require mechanical fraction computation to account for ≤50% of strategies used",
+      "type": "quality",
+      "verified": true,
+      "evidence": "pass_rules state: '在所有题型中，机械通分使用占比不超过解题策略的50%（即至少半数策略使用基准量/数轴/等值推理）'. This explicitly caps mechanical recall."
+    },
+    {
+      "claim": "The recruiting_jd category was marked not_applicable with auditable reasoning",
+      "type": "factual",
+      "verified": true,
+      "evidence": "category_coverage entry for recruiting_jd: status='not_applicable', reason='六年级学习者场景不属于招聘/岗位市场，该类别不适用；已用课程标准和学业质量标准替代作为外部基准'."
+    },
+    {
+      "claim": "Output was returned as raw JSON with no prose prefix or markdown fence (per executor instruction: 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary')",
+      "type": "quality",
+      "verified": false,
+      "evidence": "response.txt starts with the prose line 'Now I have sufficient external research to construct the complete S1 output. Let me assemble the full handoff envelope with the goal_success_contract positive artifact.' followed by a blank line and then a ```json markdown fence opener. The JSON content ends with a ``` markdown fence closer. This violates the executor's instruction."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+        "reason": "Strong assertion that captures the cross-domain nature well. The observable_evidence items are concrete and checkable. Could be strengthened by explicitly requiring that at least two distinct representational forms (number line, area model, physical manipulatives) are referenced in the evidence items."
+      },
+      {
+        "assertion": "Both guardian and learner confirmation is represented as resolved.",
+        "reason": "The confirmation.response shows confirmed_by='监护人与六年级学习者共同确认' but the grader cannot verify this is genuine (vs fabricated). In this simulated fixture context, the assertion checks structural presence, which is appropriate. For real execution, consider requiring that individual confirmation questions each have distinct, non-templated responses."
+      }
+    ],
+    "overall": "Well-designed expectations for the cross-domain case. The assertions effectively check for domain-specific requirements (multi-representation, guardian confirmation, transfer tasks) that distinguish this case from the primary case. The expectations are discriminating: the without_skill baseline fails all of them."
+  }
+}

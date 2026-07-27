@@ -1,0 +1,1 @@
+{"eval_id":3,"eval_name":"eval-3-negative-blocked","prompt":"学习者只说“七天成为 AI 专家”，拒绝补充使用场景、范围或验收方式，并要求不要联网，只凭模型知识给出目标；验收只想做 100 道选择题，80 分算通过。请执行个性化学习 S1 并输出结构化 JSON。","assertions":[]}

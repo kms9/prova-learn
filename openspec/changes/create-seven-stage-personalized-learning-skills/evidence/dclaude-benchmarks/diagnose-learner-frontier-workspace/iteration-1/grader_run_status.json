@@ -1,0 +1,37 @@
+{
+  "exit_code": 1,
+  "start": "2026-07-26T18:53:26Z",
+  "end": "2026-07-26T18:53:40Z",
+  "wall_seconds": 14,
+  "is_error": true,
+  "modelUsage": {
+    "deepseek-v4-pro[1m]": {
+      "inputTokens": 62937,
+      "outputTokens": 187,
+      "cacheReadInputTokens": 5120,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.32192000000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "usage": {
+    "input_tokens": 29787,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 187,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "",
+    "iterations": [],
+    "speed": "standard"
+  }
+}

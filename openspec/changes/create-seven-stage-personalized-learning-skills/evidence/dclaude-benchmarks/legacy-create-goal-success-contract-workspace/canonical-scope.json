@@ -1,0 +1,7 @@
+{
+  "canonical": false,
+  "status": "historical_layout_fixture",
+  "reason": "This directory preserves the pre-adapter eval metadata layout. It has no canonical run, grading, benchmark, or viewer evidence.",
+  "canonical_replacement": "../create-goal-success-contract-workspace/iteration-1",
+  "must_not_match_canonical_glob": true
+}

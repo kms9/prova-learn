@@ -1,0 +1,376 @@
+```json
+{
+  "learner_profile": {
+    "current_level": "会写 SQL，遇到慢查询只会试着加索引",
+    "goal": "四周内能独立阅读执行计划并完成查询优化",
+    "time_budget": "每周约 6 小时，共 4 周（总计约 24 小时）",
+    "environment": "PostgreSQL 18 沙箱，无生产变更权限",
+    "final_assessment": "三个未见查询的实操验收"
+  },
+  "s1_overview": {
+    "phase": "S1 — 执行计划阅读与基础优化",
+    "target_outcome": "学习者面对一条慢查询时，能执行 EXPLAIN (ANALYZE, BUFFERS)，识别核心瓶颈节点，判断统计信息是否准确，选择并验证合适的索引策略，并用结构化 checklist 记录优化过程",
+    "prerequisites": ["SQL 基础（SELECT / JOIN / WHERE / GROUP BY / 子查询）", "了解索引的基本概念（B-tree 是什么）"],
+    "post_s1_direction": "S2 可进入高级主题：查询重写、物化视图、分区裁剪、并行查询调优、锁与并发对性能的影响"
+  },
+  "weekly_plan": {
+    "week_1": {
+      "title": "读懂 EXPLAIN —— 执行计划的语法与基本结构",
+      "hours": 6,
+      "modules": [
+        {
+          "module_id": "w1m1",
+          "title": "EXPLAIN 家族命令",
+          "duration_minutes": 90,
+          "topics": [
+            "EXPLAIN vs EXPLAIN ANALYZE 的区别",
+            "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) 参数组合",
+            "EXPLAIN 输出的行结构：节点树、箭头方向、缩进含义",
+            "实际行数 (actual rows) vs 估计行数 (rows) 的偏差含义",
+            "loops 字段：为什么 actual time 要乘以 loops"
+          ],
+          "hands_on": [
+            "在沙箱中创建一张 100 万行的测试表",
+            "对同一条查询分别执行 EXPLAIN 和 EXPLAIN ANALYZE，对比输出差异",
+            "用 FORMAT JSON 输出并观察嵌套结构"
+          ]
+        },
+        {
+          "module_id": "w1m2",
+          "title": "代价模型与行数估计",
+          "duration_minutes": 90,
+          "topics": [
+            "cost 的含义：startup cost 和 total cost 分别代表什么",
+            "rows 和 width 字段",
+            "estimated cost 与实际执行时间的相关性（不是绝对值，是比较值）",
+            "seq_page_cost、random_page_cost、cpu_tuple_cost 等参数的作用（了解即可）"
+          ],
+          "hands_on": [
+            "构造一个 JOIN 查询，观察嵌套循环 vs 哈希连接的代价差异",
+            "对比 planner cost 与 actual time，理解规划器选择逻辑"
+          ]
+        },
+        {
+          "module_id": "w1m3",
+          "title": "核心扫描节点",
+          "duration_minutes": 90,
+          "topics": [
+            "Seq Scan：全表扫描，何时出现，何时该避免",
+            "Index Scan 和 Index Only Scan 的区别与条件（visibility map）",
+            "Bitmap Index Scan + Bitmap Heap Scan 组合：适合中等选择性场景",
+            "识别扫描方式是否正确"
+          ],
+          "hands_on": [
+            "在不同选择率下（WHERE 命中 1%、10%、50%、90% 行），观察规划器选择哪种扫描",
+            "用 SET enable_seqscan = off 强制使用索引，对比实际性能"
+          ]
+        },
+        {
+          "module_id": "w1m4",
+          "title": "第一周综合练习",
+          "duration_minutes": 90,
+          "topics": ["综合运用前三模块知识"],
+          "hands_on": [
+            "给定 3 条有性能问题的查询，独立写出 EXPLAIN ANALYZE 并标注关键字段含义",
+            "输出每条查询的瓶颈节点及理由"
+          ],
+          "checkpoint": "能解释 EXPLAIN ANALYZE 输出中每一行的含义，能指出哪一步最耗时"
+        }
+      ]
+    },
+    "week_2": {
+      "title": "JOIN 策略与统计信息",
+      "hours": 6,
+      "modules": [
+        {
+          "module_id": "w2m1",
+          "title": "三种 JOIN 算法",
+          "duration_minutes": 90,
+          "topics": [
+            "Nested Loop Join：驱动表选择的关键性，适合小表驱动大表",
+            "Hash Join：构建哈希表 vs 探测阶段，work_mem 的影响（溢出到磁盘）",
+            "Merge Join：要求有序输入，适合已排序的大表连接",
+            "执行计划中如何识别这三种 JOIN 及其性能特征"
+          ],
+          "hands_on": [
+            "构造两张表（小表 JOIN 大表、大表 JOIN 大表），观察规划器选哪种 JOIN",
+            "调整 work_mem 观察 Hash Join 是否溢出到磁盘",
+            "手动创建索引使 Merge Join 成为可能"
+          ]
+        },
+        {
+          "module_id": "w2m2",
+          "title": "统计信息与 ANALYZE",
+          "duration_minutes": 90,
+          "topics": [
+            "pg_statistic 和 pg_stats 视图",
+            "n_distinct、most_common_vals、histogram_bounds 的含义",
+            "ANALYZE 命令的时机与代价",
+            "autovacuum 对统计信息的影响",
+            "当 rows estimated 与 actual rows 差距很大时意味着什么"
+          ],
+          "hands_on": [
+            "执行 ANALYZE 前后观察统计信息变化",
+            "构造数据倾斜场景（某些值大量重复），观察估计行数偏差",
+            "用 SET default_statistics_target 提高采样精度并对比效果"
+          ]
+        },
+        {
+          "module_id": "w2m3",
+          "title": "子查询与 CTE 的执行计划特征",
+          "duration_minutes": 90,
+          "topics": [
+            "Subquery Scan 节点",
+            "相关子查询 vs 非相关子查询的执行方式",
+            "CTE (WITH) 在 PostgreSQL 12+ 的两种行为：MATERIALIZED 与 NOT MATERIALIZED",
+            "CTE 作为优化围栏（optimization fence）的含义和何时利用它"
+          ],
+          "hands_on": [
+            "将同一条查询写为子查询和 CTE 两种形式，对比执行计划",
+            "在 CTE 中显式指定 MATERIALIZED / NOT MATERIALIZED 观察差异"
+          ]
+        },
+        {
+          "module_id": "w2m4",
+          "title": "第二周综合练习",
+          "duration_minutes": 90,
+          "topics": ["综合 JOIN、统计信息、子查询/CTE 的阅读"],
+          "hands_on": [
+            "给定 3 条涉及多表 JOIN + 子查询的慢查询，写出完整的执行计划分析报告",
+            "识别 JOIN 算法是否合理、统计信息是否准确"
+          ],
+          "checkpoint": "能判断 JOIN 策略选择是否合理，能发现统计信息偏差导致的计划错误"
+        }
+      ]
+    },
+    "week_3": {
+      "title": "索引策略深度实践",
+      "hours": 6,
+      "modules": [
+        {
+          "module_id": "w3m1",
+          "title": "B-tree 索引深入",
+          "duration_minutes": 90,
+          "topics": [
+            "复合索引的列顺序原则：等值条件在前、范围条件在后",
+            "覆盖索引 (covering index) 与 Index Only Scan 的关系",
+            "部分索引 (partial index / WHERE 子句索引)",
+            "索引与排序 (ORDER BY) 的交互：避免显式排序",
+            "表达式索引 (expression index) 的使用场景"
+          ],
+          "hands_on": [
+            "给一条慢查询设计 3 种不同列顺序的复合索引，用 EXPLAIN 验证效果",
+            "创建覆盖索引消除回表（Heap Fetches）",
+            "用部分索引优化带 WHERE status = 'active' 的查询"
+          ]
+        },
+        {
+          "module_id": "w3m2",
+          "title": "其他索引类型场景",
+          "duration_minutes": 90,
+          "topics": [
+            "GIN 索引：全文搜索 (tsvector)、数组列 (ANY / @>)、JSONB 查询",
+            "GiST 索引：几何类型、范围类型、全文搜索",
+            "BRIN 索引：大表时序数据的轻量索引",
+            "Hash 索引：等值查询场景（PG 10+ 推荐程度变化）"
+          ],
+          "hands_on": [
+            "创建 GIN 索引优化 JSONB 字段查询",
+            "在时序大表上创建 BRIN 索引，与 B-tree 索引对比大小和性能",
+            "用 GIN 索引加速数组重叠查询 (&&)"
+          ]
+        },
+        {
+          "module_id": "w3m3",
+          "title": "索引诊断与维护",
+          "duration_minutes": 90,
+          "topics": [
+            "pg_stat_user_indexes：哪些索引从未被使用",
+            "pg_stat_user_tables：seq_scan vs idx_scan 比例",
+            "索引膨胀 (bloat) 的识别与 REINDEX",
+            "索引对写入性能的影响（INSERT / UPDATE / DELETE 的额外代价）",
+            "CONCURRENTLY 创建索引的适用场景"
+          ],
+          "hands_on": [
+            "查询 pg_stat_user_indexes 找出从未使用的索引",
+            "用 pgstattuple 或 pg_stat_user_tables 估算表膨胀",
+            "在大量写入场景下对比有无索引的吞吐差异"
+          ]
+        },
+        {
+          "module_id": "w3m4",
+          "title": "第三周综合练习",
+          "duration_minutes": 90,
+          "topics": ["索引设计与效果验证"],
+          "hands_on": [
+            "给定 3 条慢查询，要求设计索引策略、创建索引、用 EXPLAIN ANALYZE 前后对比",
+            "每次对比需记录执行时间的变化和执行计划节点变化"
+          ],
+          "checkpoint": "能针对一条新查询独立完成'分析计划→设计索引→创建→验证→再分析'的完整循环"
+        }
+      ]
+    },
+    "week_4": {
+      "title": "优化工作流与最终验收",
+      "hours": 6,
+      "modules": [
+        {
+          "module_id": "w4m1",
+          "title": "系统性优化方法",
+          "duration_minutes": 90,
+          "topics": [
+            "优化 checklist 工作流：收集信息 → 读计划 → 找瓶颈 → 验证假设 → 实施 → 对比",
+            "常见反模式：隐式类型转换导致索引失效、函数包裹索引列、OR 条件拆分为 UNION",
+            "LIMIT + ORDER BY 的优化（利用索引避免全排序）",
+            "DISTINCT 与 GROUP BY 的执行计划差异",
+            "auto_explain 扩展：自动记录慢查询的执行计划"
+          ],
+          "hands_on": [
+            "用 auto_explain 捕获阈值以上的慢查询计划",
+            "修复一个隐式类型转换导致的 Seq Scan",
+            "对比 DISTINCT 和 GROUP BY 在相同语义下的执行计划"
+          ]
+        },
+        {
+          "module_id": "w4m2",
+          "title": "PostgreSQL 18 新特性关注",
+          "duration_minutes": 60,
+          "topics": [
+            "PG 18 查询优化器的新行为或参数变化（需在沙箱中查阅 release notes 并验证）",
+            "pg_stat_activity 与 pg_locks 的基础使用：判断是否有锁等待影响性能"
+          ],
+          "hands_on": [
+            "在沙箱中查看 PostgreSQL 版本和主要优化器参数",
+            "模拟一个锁等待场景，通过 pg_stat_activity 定位"
+          ]
+        },
+        {
+          "module_id": "w4m3",
+          "title": "优化案例库构建",
+          "duration_minutes": 90,
+          "topics": ["建立个人优化笔记模板"],
+          "hands_on": [
+            "整理前 3 周所有练习中优化成功和失败的案例",
+            "按'问题模式→执行计划特征→解决方案→效果'的四段格式归档",
+            "建立个人的 10 条优化 checklist"
+          ],
+          "output": "一份结构化个人优化手册（markdown / 笔记均可）"
+        },
+        {
+          "module_id": "w4m4",
+          "title": "最终实操验收",
+          "duration_minutes": 120,
+          "topics": ["三条未见查询的独立优化验收"],
+          "assessment_queries": [
+            {
+              "query_id": "final_q1",
+              "scenario": "多表 JOIN + 聚合 + 范围过滤的报表查询",
+              "expected_skills": [
+                "识别 JOIN 算法选择",
+                "判断是否需要复合索引",
+                "评估统计信息准确性",
+                "提出至少 1 个索引优化并验证效果"
+              ]
+            },
+            {
+              "query_id": "final_q2",
+              "scenario": "JSONB / 数组列查询或全文搜索场景",
+              "expected_skills": [
+                "识别是否需要 GIN 索引",
+                "对比 GIN 和 B-tree 在此场景的差异",
+                "正确使用 EXPLAIN ANALYZE 对比效果"
+              ]
+            },
+            {
+              "query_id": "final_q3",
+              "scenario": "含子查询或 CTE 的复杂查询，存在隐式性能陷阱",
+              "expected_skills": [
+                "发现并修复隐式类型转换或函数包裹列的问题",
+                "判断 CTE 是否应使用 NOT MATERIALIZED",
+                "完成完整的优化分析报告"
+              ]
+            }
+          ],
+          "pass_criteria": "三条查询各自完成：原始 EXPLAIN ANALYZE 记录 → 瓶颈分析 → 优化方案 → 优化后 EXPLAIN ANALYZE 对比 → 简短书面总结。三条中至少两条的执行时间降低 50% 以上，或能合理解释为何无法进一步优化。"
+        }
+      ]
+    }
+  },
+  "resources": {
+    "primary_references": [
+      {
+        "title": "PostgreSQL 官方文档 — EXPLAIN",
+        "url": "https://www.postgresql.org/docs/18/sql-explain.html",
+        "note": "EXPLAIN 命令的权威参考"
+      },
+      {
+        "title": "PostgreSQL 官方文档 — Using EXPLAIN",
+        "url": "https://www.postgresql.org/docs/18/using-explain.html",
+        "note": "解释如何阅读执行计划"
+      },
+      {
+        "title": "PostgreSQL 官方文档 — Index Types",
+        "url": "https://www.postgresql.org/docs/18/indexes-types.html",
+        "note": "各索引类型的完整说明"
+      },
+      {
+        "title": "PostgreSQL Wiki — Performance Optimization",
+        "url": "https://wiki.postgresql.org/wiki/Performance_Optimization",
+        "note": "社区维护的性能优化 checklist"
+      }
+    ],
+    "tools": [
+      {
+        "name": "explain.depesz.com",
+        "url": "https://explain.depesz.com/",
+        "description": "在线 EXPLAIN 计划可视化工具，便于分享和分析"
+      },
+      {
+        "name": "explain.dalibo.com",
+        "url": "https://explain.dalibo.com/",
+        "description": "另一个 EXPLAIN 可视化工具，包含 BUFFERS 分析"
+      },
+      {
+        "name": "pg_stat_statements",
+        "description": "PostgreSQL 扩展，用于追踪哪些查询最耗时"
+      },
+      {
+        "name": "auto_explain",
+        "description": "PostgreSQL 扩展，自动记录超过阈值的慢查询执行计划"
+      }
+    ],
+    "sandbox_preparation": [
+      "确保 pg_stat_statements 扩展已启用（shared_preload_libraries）",
+      "确保 auto_explain 扩展可用",
+      "准备数据生成脚本（pgbench 或自定义 generate_series 批量插入）",
+      "确认学习者有 SUPERUSER 或足够权限执行 SET 命令和创建索引"
+    ]
+  },
+  "risk_mitigation": [
+    {
+      "risk": "沙箱数据量太小，无法复现真实慢查询",
+      "mitigation": "第一周就生成至少 100 万行的测试表，后续练习逐步增加数据量和复杂度"
+    },
+    {
+      "risk": "学习者只在沙箱里学，缺乏对真实业务查询的感知",
+      "mitigation": "每周练习中使用模拟业务场景的查询（订单系统、用户行为日志等），而非纯技术 demo"
+    },
+    {
+      "risk": "计划看得懂但不知道如何下手改",
+      "mitigation": "第三周起强制要求每次分析后必须提出至少一个优化方案并实际执行验证，形成闭环肌肉记忆"
+    },
+    {
+      "risk": "4 周时间不足以覆盖所有索引类型",
+      "mitigation": "B-tree 是绝对重点（占 80% 以上实际场景），GIN 和 BRIN 只要求知道何时该查文档，不要求精通"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created_at": "2026-07-27",
+    "phase": "S1",
+    "total_hours": 24,
+    "target_learner": "会 SQL、只会加索引的 PostgreSQL 用户",
+    "next_phase_suggestion": "S2 — 查询重写、物化视图、分区优化、并行查询与锁分析"
+  }
+}
+```

@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "case-1-positive-primary",
+  "prompt": "G5 已通过，当前 PostgreSQL 节点是“依据谓词与可用前缀论证多列索引顺序”，来源可追溯。真实交互记录：学习者先答“选择性最高的列永远放第一”；看到一个边界反例和一级提示后修正；随后在一个未见等值+范围+排序查询上无提示给出正确顺序、理由和沙箱验证步骤。请执行个性化学习 S6，并输出结构化 JSON 移交结果（含 session_package_and_trace 与 G6 裁决）。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 正向例子1 and 七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S6] A source-grounded, faded-scaffold session trace with real attempts and an independent transfer candidate, passing G6 and routing to S7, but asserting no mastery.",
+  "expectations": [
+    "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+    "Activities include worked example, completion, contrast and independent transfer tasks that produce judgeable learner-behavior evidence rather than only reading or acknowledgment.",
+    "Task difficulty stays within the learner's learnable range and the independent transfer item is reachable after scaffolding fades.",
+    "Hint ladder steps point to query shape and official leading-column rules without substituting the learner's key indexing-order reasoning, and no answer is leaked before submission.",
+    "A full interaction trace records each learner response, the hint level used, and the correction trajectory.",
+    "G6 is evaluated dimension by dimension, passes only because real candidate evidence exists, and deterministically routes to S7 without claiming mastery."
+  ]
+}

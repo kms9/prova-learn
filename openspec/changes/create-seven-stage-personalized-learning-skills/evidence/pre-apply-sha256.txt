@@ -1,0 +1,19 @@
+# Requirements/review baseline before openspec-apply-change.
+# tasks.md is intentionally excluded because apply updates checkboxes.
+# This file is intentionally excluded to avoid a self-referential hash.
+b47c76ffc72f324b3fb564eccb7cfee036d1f3a5424641dff2e67a7e0e74e2f5  openspec/changes/create-seven-stage-personalized-learning-skills/.openspec.yaml
+5e92845f8c01ec137590cc793e13c661b8925cf59793a3059289031d30b6ad7f  openspec/changes/create-seven-stage-personalized-learning-skills/design.md
+6d12fcf1554931083f26bc7e475d456e938cd7d3374f4b1a58f8416c8e9830ec  openspec/changes/create-seven-stage-personalized-learning-skills/evidence/expected-skill-manifest.json
+68c22728ceafd27858dab955c702cfbad021e0e2c7f2fb6e86a7706e2ca40e8e  openspec/changes/create-seven-stage-personalized-learning-skills/proposal.md
+3fe19b812574a2731b5da3a888aea8789ece61adb6f1d8b1ede3ab7f7db4de5c  openspec/changes/create-seven-stage-personalized-learning-skills/reviews/cross-review-synthesis.md
+5b05c9f5311abca44dad32098c7f900e29ac52e4ce274ba693203f5e62dec3a4  openspec/changes/create-seven-stage-personalized-learning-skills/reviews/dclaude-review.json
+c024959ddd7867956c4d22e4f01d31bf6913071f3fbf941b75c506c192ba6785  openspec/changes/create-seven-stage-personalized-learning-skills/reviews/gclaude-review.json
+6e20ba646a86a034203c9c49bf1d742ff73278c566809c3e69c0e09b3620f793  openspec/changes/create-seven-stage-personalized-learning-skills/reviews/openspec-explore-prompt.md
+4f0a198ff8154e348cadc8f32b3fc9d8c8ae4ae73a51403f5869e902f2e7b264  openspec/changes/create-seven-stage-personalized-learning-skills/specs/build-capability-concept-graph/spec.md
+22c278c1c69eef9b8a2cec91eb327d8e3bc1b1659f2de06ae6d833306f131140  openspec/changes/create-seven-stage-personalized-learning-skills/specs/create-domain-evidence-landscape/spec.md
+e1035b9000cfc19ef5b8a810be25293cecf1010938cb9b4da0662d5b4b6bc1e6  openspec/changes/create-seven-stage-personalized-learning-skills/specs/create-goal-success-contract/spec.md
+e82dc506b07b2b7973f7af715bf71a020ce2cb9149977d2eaad71a3ff7aa8b26  openspec/changes/create-seven-stage-personalized-learning-skills/specs/diagnose-learner-frontier/spec.md
+1c2b1bf1e2380d24dc79ccf44094d7c5a67966e46aa6813ff7a962b3ec0b85d3  openspec/changes/create-seven-stage-personalized-learning-skills/specs/personalized-learning-stage-contracts/spec.md
+922ba23f787c1d3f7e3df4b9809798d4fe651f04a930c1225d71c71ee855fff2  openspec/changes/create-seven-stage-personalized-learning-skills/specs/plan-learning-sessions/spec.md
+77f6feb5b8ff6900c195977fabc3a43e01cb0b604ac999e7421e926a4694b955  openspec/changes/create-seven-stage-personalized-learning-skills/specs/run-instructional-interaction/spec.md
+873b2d17ed2923270a152a2c906ed76cb71d6ffd49415e6e89eac51639f03fbe  openspec/changes/create-seven-stage-personalized-learning-skills/specs/verify-mastery-and-replan/spec.md

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.skills.example/schemas/goal-success-contract-1.0.0.json",
+  "title": "goal_success_contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "artifact_id", "content"],
+  "properties": {
+    "type": {"const": "goal_success_contract"},
+    "schema_version": {"const": "1.0.0"},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_problem",
+        "target_scene",
+        "terminology_corrections",
+        "observable_capabilities",
+        "final_assessment",
+        "pass_rules",
+        "scope",
+        "exclusions",
+        "constraints",
+        "external_research_seed",
+        "open_questions",
+        "confirmed_items"
+      ],
+      "properties": {
+        "target_problem": {"type": "string", "minLength": 1},
+        "target_scene": {"type": "string", "minLength": 1},
+        "terminology_corrections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["original", "corrected", "evidence_refs"],
+            "properties": {
+              "original": {"type": "string"},
+              "corrected": {"type": "string"},
+              "evidence_refs": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "observable_capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["capability_id", "statement", "observable_evidence"],
+            "properties": {
+              "capability_id": {"type": "string"},
+              "statement": {"type": "string"},
+              "observable_evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        },
+        "final_assessment": {
+          "type": "object",
+          "required": ["tasks", "unseen_or_transfer_required"],
+          "properties": {
+            "tasks": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "unseen_or_transfer_required": {"type": "boolean"}
+          }
+        },
+        "pass_rules": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "scope": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "exclusions": {"type": "array", "items": {"type": "string"}},
+        "constraints": {"type": "object"},
+        "external_research_seed": {
+          "type": "object",
+          "required": ["search_executed", "retrieval_date", "queries", "sources", "category_coverage"],
+          "properties": {
+            "search_executed": {"type": "boolean"},
+            "retrieval_date": {"type": ["string", "null"], "format": "date"},
+            "queries": {"type": "array", "items": {"type": "string"}},
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["evidence_id", "url", "provenance"],
+                "properties": {
+                  "evidence_id": {"type": "string"},
+                  "url": {"type": "string", "format": "uri"},
+                  "provenance": {"enum": ["market_signal", "external_evidence"]}
+                }
+              }
+            },
+            "category_coverage": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["category", "status", "reason", "gate_effect"],
+                "properties": {
+                  "category": {"type": "string"},
+                  "status": {"enum": ["covered", "not_applicable", "gap"]},
+                  "reason": {"type": "string"},
+                  "gate_effect": {"enum": ["none", "lower_confidence", "block"]}
+                }
+              }
+            }
+          }
+        },
+        "open_questions": {"type": "array", "items": {"type": "string"}},
+        "confirmed_items": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    }
+  }
+}

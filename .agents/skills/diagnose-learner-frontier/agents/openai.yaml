@@ -1,0 +1,4 @@
+interface:
+  display_name: "学习者诊断与学习前沿"
+  short_description: "用多项行为证据诊断节点状态、误概念、提示依赖与最近学习前沿"
+  default_prompt: "使用 $diagnose-learner-frontier 根据行为证据诊断我的学习前沿。"

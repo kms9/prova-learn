@@ -1,0 +1,94 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+      "passed": true,
+      "evidence": "Graded artifact outputs/result.gclaude-rerun.json: learner_snapshot.accepted_positive=false; every node has tested_mastered=false with mastery 'insufficient_evidence' or 'untested' (node_index_speedup insufficient_evidence; node_index_mechanism and node_index_tradeoffs untested). self_report_handling.used_for_mastery=false ('Self-report is recorded as a subjective claim only; it is not substituted for behavioral evidence and does not advance any node to tested_mastered'). forbidden_inferences confirms 'No node is marked tested_mastered from a self-rating plus one slogan answer' and 'No fabricated positive artifact is accepted'."
+    },
+    {
+      "text": "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+      "passed": true,
+      "evidence": "self_report_handling.note states the self-report is recorded as a subjective claim only and not substituted for behavioral evidence. input_summary.missing_dimensions explicitly enumerates the absences: ['reasoning_trace','prompt_hierarchy','transfer_item','timing_or_effort','second_independent_observation']. gate.reason repeats 'no reasoning, prompt hierarchy, transfer item, timing, or a second observation exist'. Absences are explicit, not inferred."
+    },
+    {
+      "text": "The output does not assert independence or transfer ability that was never observed.",
+      "passed": true,
+      "evidence": "Each node carries a do_not_assert list including 'independence' and 'transfer' (node_index_speedup also lists 'robustness'). No independence or transfer ability is asserted anywhere; next_action says a learning frontier cannot be determined until real behavior is collected."
+    },
+    {
+      "text": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+      "passed": true,
+      "evidence": "learner_snapshot.frontier_determined=false (no learning frontier produced). route.decision=\"revise_here\", route.target_stage=\"S4\" (route stays at S4); next_action='Remain at S4. Collect the diagnostic tasks above ...'. diagnostic_tasks dt-1/dt-2/dt-3 collect real behavior (reasoning_trace, transfer_item, timing_or_effort + second_independent_observation)."
+    },
+    {
+      "text": "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+      "passed": true,
+      "evidence": "Nodes are mastery 'insufficient_evidence'/'untested' with cold_start=true. cold_start_handling.policy explicitly states 'Cold-start / unknown nodes remain insufficient_evidence or untested. They are not relabeled as a uniform all-not-mastered profile, because absence of evidence is not evidence of not-mastery.' No uniform all-not-mastered relabeling occurs."
+    },
+    {
+      "text": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+      "passed": true,
+      "evidence": "gate.passed=false (G4 does not pass). route.decision=\"revise_here\", route.target_stage=\"S4\", inside the enumerated set {revise_here->S4}; route.alternative={decision:'return_upstream', target_stage:'S3', condition:'only if a diagnostic item itself is invalid or uncollectable'}. next_action restates the S4/S3 routing."
+    }
+  ],
+  "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 4497,
+    "transcript_chars": 719,
+    "num_turns": 1,
+    "duration_ms": 54359,
+    "graded_artifact": "outputs/result.gclaude-rerun.json",
+    "usage": { "input_tokens": 27298, "output_tokens": 2342, "cache_read_input_tokens": 78976, "model": "glm-5.2 (rerun)" },
+    "rerun_route_file": "result.gclaude-rerun.route.json",
+    "note": "No metrics.json or tool-call log. Per the selection rule the graded artifact is outputs/result.gclaude-rerun.json (a separate glm-5.2 rerun); duration_ms and usage above are that rerun's own (from result.gclaude-rerun.route.json). The original deepseek-v4-pro run that produced outputs/result.json is reconciled in timing.original_run below (duration 21258ms, input 29609, output 1191). output_chars is the char count of the graded rerun artifact; transcript_chars is executor_prompt size."
+  },
+  "timing": {
+    "executor_duration_seconds": 54,
+    "total_duration_seconds": 54.359,
+    "grader_duration_seconds": null,
+    "timing_source": "result.gclaude-rerun.route.json (the rerun that produced the graded artifact)",
+    "original_run": { "executor_duration_seconds": 25, "total_duration_seconds": 21.258, "duration_ms": 21258, "model": "deepseek-v4-pro[1m]", "note": "Original run producing outputs/result.json; NOT the graded artifact." }
+  },
+  "claims": [
+    {
+      "claim": "The rerun abstained correctly: no fabricated mastery, no G4 pass, explicit data limitations, route to S4.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "accepted_positive=false, gate.passed=false, frontier_determined=false, missing_dimensions enumerating five absent evidence types, route.target_stage=\"S4\", and diagnostic tasks to collect real behavior."
+    },
+    {
+      "claim": "The baseline rerun routes to S4 (revise_here), matching the expected destination set.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "route.decision=\"revise_here\", route.target_stage=\"S4\" with an explicit return_upstream->S3 alternative for invalid items; both inside the expected_output's {S4, S3} set."
+    },
+    {
+      "claim": "The graded rerun artifact is clean bare JSON.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/result.gclaude-rerun.json parses as a JSON object with no prose preamble and no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "Both the with_skill and without_skill reruns score 6/6 on this negative case. The baseline rerun satisfies the negative assertions without the skill schema; the eval cannot distinguish the skill's negative-case handling from a strong baseline on this fixture."
+    ],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this run directory; the needs_review item is grader-derived."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+        "reason": "The baseline rerun has an explicit gate object here, but expectation 6 is satisfiable by any output that simply does not advance to S5 and names an S4/S3 route. Consider requiring an explicit per-dimension G4 evaluation artifact so the assertion cannot pass purely by abstention."
+      },
+      {
+        "reason": "No expectation checks the raw output contract; add a bare-JSON/no-fence/no-preamble assertion so a formatting regression is visible."
+      }
+    ],
+    "overall": "Baseline rerun abstains correctly, records explicit evidence absences, keeps cold-start nodes insufficient_evidence/untested, and routes to S4 with diagnostic tasks — all six expectations pass against outputs/result.gclaude-rerun.json. It ties the with_skill rerun at 6/6 on this negative case."
+  }
+}

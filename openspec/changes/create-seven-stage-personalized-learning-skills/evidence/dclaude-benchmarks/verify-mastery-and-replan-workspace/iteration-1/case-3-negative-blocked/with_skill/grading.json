@@ -1,0 +1,91 @@
+{
+  "expectations": [
+    {
+      "text": "The single recognition item is classified as evidence insufficient rather than mastery, and no node is marked mastered.",
+      "passed": true,
+      "evidence": "evidence_collected E1 (the recognition item 'B-tree 适合等值查询吗？— 是') has status='partially_supported'. processing_record records '掌握判定：6 维证据中 5 维缺失，无法满足任何预定义掌握规则 → status=evidence_insufficient'. positive_artifact=null, so there is no mastery_judgment array and no node is marked mastered. The requirement_gap GAP-EVID-001 (criticality 'critical', gate_effect 'block') records the insufficiency."
+    },
+    {
+      "text": "Mastery evidence is required to be multidimensional; missing reasoning, transfer and delayed retention are recorded as not_executed/unknown, not inferred from one correct answer.",
+      "passed": true,
+      "evidence": "processing_record records per-dimension status: 'correctness=correct（仅识别题正确），reasoning_quality=unknown（无推理记录），hint_dependency=not_executed（未记录提示层级），transfer=not_executed（无近/远迁移），confidence=unknown（未记录猜测概率或校准），delayed_retention=not_executed（无延迟保持证据）'. The five missing dimensions are explicitly marked unknown/not_executed, not inferred from the single correct recognition answer."
+    },
+    {
+      "text": "No model update or persistence success is claimed; with expected_version=4 and loaded=5 the update_status is version_conflict and no patch is applied.",
+      "passed": true,
+      "evidence": "VER_CHECK_001 records expected_model_version=4 vs current_model_version=5. processing_record: '版本冲突。不应用任何补丁，model_patch=[]' and 'update.status=version_conflict，update.persistence=not_executed'. requirement_gap GAP-VER-001 ('版本冲突阻止原子更新'). confirmation.response.decision='rejected'. No mastery update or persistence success is claimed; version_conflict is reported and no patch is applied. (positive_artifact=null per the Example C pattern, so version_conflict is conveyed via processing_record/requirement_gaps rather than a structured update object.)"
+    },
+    {
+      "text": "The claimed 0.95 mastery probability is treated as uncalibrated confidence and rejected as an overreaction to a single result.",
+      "passed": true,
+      "evidence": "MODEL_CLAIM_001 ('模型主张将掌握概率改为 0.95 并推进到下一章，无推理、独立应用、迁移或延迟证据支撑') has status='unsupported'. processing_record records confidence=unknown ('未记录猜测概率或校准'). confirmation.response.decision='rejected' with basis '单次正确不得越级写为高掌握概率'. The rubric '避免单次结果过度反应' reads '从单次识别题正确直接跳至 0.95 掌握概率并推进到下一章，构成严重过度反应', passed=false. The 0.95 claim is rejected as uncalibrated at multiple levels."
+    },
+    {
+      "text": "Primary attribution EVIDENCE_INSUFFICIENT yields the deterministic route revise_here to S7 for retesting, not progression to the next chapter.",
+      "passed": true,
+      "evidence": "processing_record: '归因路由：primary=EVIDENCE_INSUFFICIENT（最早污染源），secondary=[]。按路由表 route_to=S7 补测'. quality_evaluation.verdict='revise_here', route_to='S7'; every rubric dimension that fails has failure_action='revise_here', route_to='S7'. The output stays at S7 for retesting and does not progress to the next chapter (confirmation.response.decision='rejected', approved advancement refused)."
+    },
+    {
+      "text": "Raw evidence, inferred mastery state and route decision remain separated; the output requires independent, transfer and delayed evidence before any mastery update.",
+      "passed": true,
+      "evidence": "Three distinct layers are kept separate: evidence_collected (raw E1/MODEL_CLAIM_001/VER_CHECK_001), processing_record (inferred mastery state with per-dimension analysis), and quality_evaluation (route decision revise_here→S7). The fail-closed rule is explicit: '无独立应用、迁移或必要延迟证据时不得标为 mastered', and processing_record requires '需以 expected_model_version=5 重新加载学习者模型后再执行 S7' — independent/transfer/delayed evidence is required before any mastery update."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_steps": 10,
+    "num_turns": 10,
+    "errors_encountered": 0,
+    "output_chars": 9383,
+    "transcript_chars": 871,
+    "total_tokens": 84748
+  },
+  "timing": {
+    "executor_duration_seconds": 158,
+    "total_duration_seconds": 154.323
+  },
+  "claims": [
+    {
+      "claim": "5 of 6 evidence dimensions are missing (reasoning_quality=unknown, hint_dependency=not_executed, transfer=not_executed, confidence=unknown, delayed_retention=not_executed)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "processing_record enumerates all six dimensions with status; the rubric '证据充分性' confirms 5 of 6 are unknown or not_executed."
+    },
+    {
+      "claim": "Version conflict expected_model_version=4 ≠ loaded=5 blocks the write",
+      "type": "factual",
+      "verified": true,
+      "evidence": "VER_CHECK_001 status='supported'; GAP-VER-001 'expected_model_version=4 但持久层当前版本为 5，版本冲突阻止原子更新'; processing_record 'update.status=version_conflict，update.persistence=not_executed'."
+    },
+    {
+      "claim": "S7 fails closed: positive_artifact=null, no fabricated mastery, no G7 pass",
+      "type": "quality",
+      "verified": true,
+      "evidence": "positive_artifact=null; all 7 rubric dimensions passed=false; verdict='revise_here', route_to='S7'; confirmation.status='rejected'."
+    },
+    {
+      "claim": "The response is returned as ONLY a valid JSON object with no markdown fence and no commentary",
+      "type": "process",
+      "verified": false,
+      "evidence": "response.txt opens with a prose/analysis prefix ('Now I have all the reference materials...') including bold markdown headings ('**Analysis...**', '**Rulings:**'), then wraps the JSON in a ```json fence. normalization.json reports original_valid_json=false, 933 leading chars and 5 trailing chars removed. executor_prompt.txt forbade markdown fences and commentary — a raw-response defect preserved here per grading instructions."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No expectation enforces the raw-output contract. This run — the longest (10 turns) — emits a substantial prose/analysis prefix with bold markdown headings plus a ```json fence (normalization.json original_valid_json=false), violating the explicit 'ONLY one valid JSON object, no markdown fence, no commentary' instruction. A pure-JSON assertion would consistently catch this across the with_skill runs."
+      }
+    ],
+    "overall": "All six expectations are discriminating and the negative/blocked fixture is well-tested: the skill correctly fails closed (single recognition item not promoted to mastery, five dimensions marked unknown/not_executed, version_conflict with no patch, 0.95 rejected as overreaction, route revise_here→S7, layers kept separate). The only gap is the missing output-format assertion."
+  }
+}

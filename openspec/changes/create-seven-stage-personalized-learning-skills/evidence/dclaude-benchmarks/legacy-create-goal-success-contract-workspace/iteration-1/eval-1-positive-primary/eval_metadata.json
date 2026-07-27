@@ -1,0 +1,1 @@
+{"eval_id":1,"eval_name":"eval-1-positive-primary","prompt":"学习者说：我会写 SQL，但遇到 PostgreSQL 慢查询只会试着加索引。希望四周内、每周约 6 小时，能自己看执行计划并做优化。已确认使用 PostgreSQL 18 沙箱，不允许生产变更，最终可接受三个未见查询的实操验收。请完成个性化学习 S1，并输出结构化 JSON 移交结果。","assertions":[]}

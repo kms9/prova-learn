@@ -1,0 +1,95 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope, with mastery_verification completed before and referenced by learner_model_update_and_replan.",
+      "passed": true,
+      "evidence": "Outer envelope has stage_id=\"S7\". positive_artifact.type=\"mastery_and_replanning_bundle\" (artifact_id mrb-pg-n10-20260727-001); content.mastery_verification appears before content.learner_model_update_and_replan. The update section references the same evidence the verification collected: append_evidence[].source_evidence_ids are [Q1],[Q2],[D3] and model_patch[].evidence_event_ids tie back to Q1/D3 and Q2/D3 — the same events gathered in mastery_verification.node_mastery_evidence and evidence_collected."
+    },
+    {
+      "text": "Mastery evidence is multidimensional (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) and does not collapse to a single correct result; the not-mastered node stays partial/not_mastered.",
+      "passed": true,
+      "evidence": "node_mastery_evidence for both multicolumn_index_order and statistics_and_distribution_transfer contains all six dimensions (correctness, reasoning_quality, hint_dependency, transfer, confidence, delayed_retention). It does not collapse to a single correct result: Q1's independent success yields only 'partial' for multicolumn_index_order, and mastery_judgment assigns multicolumn_index_order='partial' and statistics_and_distribution_transfer='not_mastered'."
+    },
+    {
+      "text": "Every model_patch entry records before/after values and ties to new evidence event IDs rather than asserting mastery without evidence.",
+      "passed": true,
+      "evidence": "model_patch has 4 entries, each with before/after/evidence_event_ids/rationale: multicolumn_index_order (not_mastered→partial, [Q1,D3]); statistics_and_distribution_transfer (not_mastered→not_mastered, [Q2,D3]); misconception_INDEX_INDEPENDENT_OF_STATS (active→weakened_but_active, [Q2]); planner_statistics_reasoning (0.30→0.42, [D3]). No entry asserts mastery, and every entry is tied to concrete evidence_event_ids."
+    },
+    {
+      "text": "The model update is version-checked (expected_model_version matched, update_status=applied); the schema and output also honestly support version_conflict and not_executed states when conditions differ.",
+      "passed": true,
+      "evidence": "update.expected_model_version=1, update.loaded_model_version=1, update.status='applied', update.persistence='applied', update_status='applied' — version-checked with matched versions and an applied atomic update (before model_version 1 → after 2). The status is an enum field rather than a boolean success flag, and the same skill schema (mastery-and-replanning-bundle.schema.json) defines version_conflict and not_executed as members of that enum; the sibling case-3 with_skill run renders version_conflict/not_executed under mismatched conditions, confirming the fallback states are real rather than the output hard-coding success. Caveat: THIS output does not itself enumerate the fallback tokens (conditions matched, so 'applied' is the honest value)."
+    },
+    {
+      "text": "Primary attribution STRATEGY_OR_SEQUENCE with secondary EVIDENCE_INSUFFICIENT follows the documented upstream priority (path before evidence), routes to S5, and matches the remediate decision.",
+      "passed": true,
+      "evidence": "Output has mastery_verification.attribution.primary='STRATEGY_OR_SEQUENCE' and secondary=['EVIDENCE_INSUFFICIENT'], matching the documented path-before-evidence priority. route.route_to and quality_evaluation.route_to are both S5, and learner_model_update_and_replan.decision='remediate'."
+    },
+    {
+      "text": "Content-quality problems are distinguished from learner-knowledge gaps; here content/graph/diagnosis are verified correct, so the issue is not misread as learner inability.",
+      "passed": true,
+      "evidence": "assumptions include '掌握规则在测评前已确定' and '内容/来源/图谱/诊断均经复核正确'; requirement_gaps is empty. not_mastered_cause states the root cause is '策略未把统计信息与分布变化接入索引决策，导致学习者在分布变化后缺少 ANALYZE→估算→方案更新的行为链' — attributing the gap to strategy incompleteness, not learner inability or a content/graph/diagnosis error."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1
+  },
+  "execution_metrics": {
+    "total_steps": 9,
+    "num_turns": 9,
+    "errors_encountered": 0,
+    "output_chars": 15758,
+    "transcript_chars": 1145,
+    "total_tokens": 78912
+  },
+  "timing": {
+    "executor_duration_seconds": 74,
+    "total_duration_seconds": 70.373
+  },
+  "claims": [
+    {
+      "claim": "expected_model_version=1 matches loaded version=1 on a real persistent backend",
+      "type": "factual",
+      "verified": true,
+      "evidence": "update.expected_model_version=1, update.loaded_model_version=1, update.status='applied', update.persistence='applied'; assumptions state 'expected_model_version=1，加载版本为 1，版本匹配' and '存在真实持久化后端'."
+    },
+    {
+      "claim": "Q1 was done with no hints, Q2 corrected only after an L2 hint, D3 delayed retest partially retained",
+      "type": "factual",
+      "verified": true,
+      "evidence": "evidence_collected Q1 status='supported' (无提示), Q2 'partially_supported' (经二级提示后修正), D3 'partially_supported' (三日延迟复测); hint_dependency levels 'none' (Q1) and 'moderate' (Q2)."
+    },
+    {
+      "claim": "All seven G7 rubric dimensions pass and the verdict routes upstream to S5",
+      "type": "quality",
+      "verified": true,
+      "evidence": "quality_evaluation.rubric_results has 7 dimensions all passed=true; verdict='return_upstream', route_to='S5'."
+    },
+    {
+      "claim": "The response is returned as ONLY a valid JSON object with no markdown fence and no commentary",
+      "type": "process",
+      "verified": false,
+      "evidence": "response.txt begins with prose ('Now I have all the required schemas and references...') and wraps the JSON in a ```json fence. normalization.json reports original_valid_json=false with 534 leading chars and 5 trailing chars removed. executor_prompt.txt explicitly required 'ONLY one valid JSON object ... with no markdown fence and no evaluation commentary' — a raw-response defect preserved here per grading instructions."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+      "assertion": "Primary attribution STRATEGY_OR_SEQUENCE with secondary EVIDENCE_INSUFFICIENT follows the documented upstream priority (path before evidence), routes to S5, and matches the remediate decision.",
+      "reason": "Resolved in the current canonical eval contract: the expectation, stage contract, worked Example A, and output all use STRATEGY_OR_SEQUENCE as primary and EVIDENCE_INSUFFICIENT as secondary, with route_to=S5 and decision=remediate."
+      },
+      {
+        "reason": "No expectation checks the raw-response contract ('ONLY one valid JSON object, no markdown fence, no commentary'). All three with_skill runs in this benchmark emit a prose prefix plus a ```json fence (normalization.json original_valid_json=false), which a pure-JSON assertion would catch and which the prompt explicitly forbade. Consider adding such an assertion to the with_skill cases."
+      }
+    ],
+    "overall": "All six current expectations are consistent with the stage contract and canonical output. Expectation 5 correctly passes the documented STRATEGY_OR_SEQUENCE-primary, EVIDENCE_INSUFFICIENT-secondary ordering, route_to=S5, and remediate decision. The separate raw-response formatting advisory does not change this grading."
+  }
+}

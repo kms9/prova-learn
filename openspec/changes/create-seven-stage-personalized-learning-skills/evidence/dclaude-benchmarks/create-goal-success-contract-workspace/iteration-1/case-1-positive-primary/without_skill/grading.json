@@ -1,0 +1,102 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a goal_success_contract inside a stage S1 handoff envelope.",
+      "passed": false,
+      "evidence": "No goal_success_contract or S1 handoff envelope found. The output is a different structure: learner_profile, s1_overview, weekly_plan with day-by-day modules and hands-on exercises. It uses keys like 'phase', 'target_outcome', 'prerequisites', 'post_s1_direction', 'weekly_plan', 'resources', 'risk_mitigation', 'metadata'. No schema_version, stage_id, input_contract, confirmation, evidence_collected, quality_evaluation, or traceability sections. The output is a lesson plan, not a goal_success_contract inside an S1 handoff envelope."
+    },
+    {
+      "text": "Every target capability has observable evidence and the final assessment distinguishes recall from transfer.",
+      "passed": false,
+      "evidence": "No observable_capabilities structure with capability_id/statement/observable_evidence exists. The output has learning objectives per module (e.g., 'EXPLAIN vs EXPLAIN ANALYZE 的区别') and hands-on exercises, but these are instructional activities, not observable capability definitions with evidence items. The final_assessment section has assessment_queries with expected_skills, but there is no unseen_or_transfer_required flag. The pass_criteria mention '三条中至少两条的执行时间降低 50% 以上' which is performance-based but does not explicitly distinguish recall from transfer."
+    },
+    {
+      "text": "The output records actually executed live pre-research, query or retrieval details, source-category coverage, and evidence provenance rather than treating model memory as external evidence.",
+      "passed": false,
+      "evidence": "No external pre-research recorded. The resources.primary_references section lists 4 URLs (PostgreSQL docs, wiki) but these are static recommendations, not evidence of executed live search. outer.json modelUsage shows webSearchRequests=0. No search queries, no category coverage, no provenance tagging. The without_skill executor was explicitly instructed 'Do NOT read or use .agents/skills' and was told to use 'general reasoning and any live research you independently decide to perform' — no live research was performed (0 web searches). All knowledge appears to come from model memory presented without provenance distinction."
+    },
+    {
+      "text": "The output records sandbox constraints, at least one explicit exclusion, and mandatory confirmation as resolved.",
+      "passed": false,
+      "evidence": "No structured constraints, exclusions, or confirmation mechanism. The learner_profile mentions 'environment: PostgreSQL 18 沙箱，无生产变更权限' but this is buried in profile data, not in a constraints/exclusions section. The risk_mitigation section lists risks but these are mitigations, not explicit exclusions. No mandatory confirmation exists — there is no confirmation section with questions, responses, and resolved status. The output assumes the learner's input is sufficient without seeking confirmation."
+    },
+    {
+      "text": "G1 is evaluated dimension by dimension and passes only if all required dimensions pass.",
+      "passed": false,
+      "evidence": "No G1 evaluation exists. There is no quality_evaluation section, no rubric_results, no dimension-by-dimension assessment. The output has no concept of G1 gate evaluation."
+    },
+    {
+      "text": "The deterministic route is S2 when G1 passes.",
+      "passed": false,
+      "evidence": "No G1 evaluation exists, therefore no route_to field. The metadata mentions 'next_phase_suggestion: S2' as a free-text suggestion, not as a deterministic routing decision based on G1 pass."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "num_turns": 1,
+    "output_chars": 16468,
+    "transcript_chars": 17276,
+    "total_tokens": 33921,
+    "web_search_requests": 0,
+    "cost_usd": 0.255425
+  },
+  "timing": {
+    "executor_duration_seconds": 68,
+    "total_duration_seconds": 64.707
+  },
+  "claims": [
+    {
+      "claim": "Output is a structured JSON object",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The response parses as valid JSON with keys learner_profile, s1_overview, weekly_plan, resources, risk_mitigation, metadata."
+    },
+    {
+      "claim": "The plan covers 4 weeks at 6 hours per week matching the learner's stated constraints",
+      "type": "quality",
+      "verified": true,
+      "evidence": "weekly_plan contains 4 week entries each with hours=6 and 4 modules per week. metadata.total_hours=24 matching 4×6."
+    },
+    {
+      "claim": "No external web research was performed",
+      "type": "process",
+      "verified": true,
+      "evidence": "outer.json modelUsage shows webSearchRequests=0. The output was generated in a single turn (num_turns=1) with no tool calls."
+    },
+    {
+      "claim": "PostgreSQL 18 documentation URLs are provided as resources",
+      "type": "factual",
+      "verified": true,
+      "evidence": "resources.primary_references lists 4 URLs including https://www.postgresql.org/docs/18/sql-explain.html, https://www.postgresql.org/docs/18/using-explain.html, https://www.postgresql.org/docs/18/indexes-types.html. These are recommendations, not evidence of live retrieval."
+    },
+    {
+      "claim": "Output was returned as raw JSON with no markdown fence (per executor instruction: 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary')",
+      "type": "quality",
+      "verified": false,
+      "evidence": "response.txt starts with ```json markdown fence opener and ends with ``` markdown fence closer. The JSON content is wrapped in a markdown code block. This violates the executor's instruction to return ONLY one valid JSON object with no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output contains a goal_success_contract inside a stage S1 handoff envelope.",
+        "reason": "This assertion effectively distinguishes with-skill from without-skill outputs. The without-skill run produces a completely different structure (lesson plan vs contract), confirming the skill drives a specific output format."
+      },
+      {
+        "assertion": "The output records actually executed live pre-research, query or retrieval details, source-category coverage, and evidence provenance rather than treating model memory as external evidence.",
+        "reason": "Strong discriminating assertion — the without-skill run performs zero web searches (webSearchRequests=0) and lists URLs as static recommendations rather than as retrieved evidence with provenance. This is a clear signal of the skill's research requirement being absent."
+      }
+    ],
+    "overall": "All 6 assertions correctly fail for the without-skill baseline, confirming they discriminate between skill-guided and unguided execution. The expectations are well-designed: they check structural requirements (handoff envelope), content quality (observable evidence), process fidelity (live research), constraint handling (exclusions/confirmation), gate evaluation (G1 dimension-by-dimension), and routing (S2 on pass)."
+  }
+}

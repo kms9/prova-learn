@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "prompt": "监护人与六年级学习者已通过 G1/G2：目标是三周内真正理解分数，要会比较分数、解释等值分数并解决简单情境题，机械通分速度不是唯一目标。S2 已审计单位整体、等分、单位分数、数轴表征、等值分数与通分意义等证据。请执行个性化学习 S3，构建分数的能力—概念图并给出 G3 移交结果。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S3 正向例子2] A fraction capability_concept_graph organized around a focus question, with hard/soft prerequisites from unit whole to equivalent fractions and operations, and a passing G3 route to S4.",
+  "expectations": [
+    "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+    "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+    "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+    "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+    "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+    "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold."
+  ]
+}

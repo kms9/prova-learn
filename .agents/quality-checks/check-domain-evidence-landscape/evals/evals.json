@@ -1,0 +1,47 @@
+{
+  "skill_name": "check-domain-evidence-landscape",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给定一个 S2 移交信封：PostgreSQL 18 查询优化领域取证；research_run_manifest.online=true、execution_status=completed、rounds=3、perspectives=6（术语/标准/实践/招聘/面试/批评）各有 questions 与 query_ids；六类来源 covered 且招聘 3 样本/2 组织、面试 2 组；claims C1–C5 supported 且追溯至 PostgreSQL 18 官方文档、C6/C7 unsupported；disagreements 保留双方 strong_arguments；JD 标 market_signal 未写成 fact；缺口透明且无 gate_effect=block。请用 check-domain-evidence-landscape 独立复核并输出 quality_check_result。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S2 正向例子1；docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S2] An independent G2 pass: all dimensions pass, live multi-perspective research verified, source categories covered, route S3.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the G2 verdict from the research manifest and source ledger rather than echoing the envelope's self-reported pass.",
+        "Structural validation of the handoff envelope and domain_evidence_landscape artifact is performed and recorded in structural_validation.",
+        "Live multi-perspective research is verified as actually executed via research_run_manifest (online=true, execution_status=completed, rounds, perspectives, queries).",
+        "All six mandatory source categories are verified covered with auditable sample counts (recruiting >=3 samples across 2 orgs, interview >=2 sets).",
+        "Claim support states are tied to evidence_refs, with C6/C7 marked unsupported and disagreements preserving both sides' strong_arguments.",
+        "Market signals (JDs) are separated from product facts, and the verdict is pass routing deterministically to S3, validating against quality-check-result.schema.json."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "给定一个 S2 移交信封：PostgreSQL 18 查询优化领域取证，因存在 INDEX_ALWAYS_FASTER 争议，conditional 确认升级为 mandatory 且已 confirmed；research_run_manifest 记录多轮追问（Q2/Q5/Q6 由冲突与新发现触发）；disagreements 含两条争议，双方各有 strong_arguments 与 evidence_refs；C8（市场要求）标 claim_type=market_signal、partially_supported，与 C1–C5 产品事实分开；official_academic 类别 critical 且 covered。请用 check-domain-evidence-landscape 独立复核。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S2 正向例子1；docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S2] An independent G2 pass routing to S3, with confirmation upgrade recognized and disagreements balanced.",
+      "files": [],
+      "expectations": [
+        "The checker re-derives the verdict independently and does not treat the envelope's self-reported pass as sufficient.",
+        "Structural validation confirms both the envelope and the domain_evidence_landscape artifact pass their schemas.",
+        "Follow-up research depth is verified: rounds>=1 and conflict-triggered follow-up queries are recorded in research_run_manifest.follow_up_triggers.",
+        "Source-category coverage is verified, with the critical official_academic category covered and recruiting/interview sample thresholds met.",
+        "Disagreements preserve both sides' strong_arguments with evidence_refs, and consensus is not fabricated from one-sided claims.",
+        "Market signals are separated from facts (C8 market_signal/partially_supported vs C1–C5 facts), the verdict is pass with route S3, and the result validates against the schema."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "给定一个 S2 移交信封：用户给出三篇互相转载的 SEO 博客与一个培训广告并要求不再搜索；positive_artifact=null；无 research_run_manifest（或 online=false / execution_status=not_executed）；声称“所有慢查询都应建索引、cost 就是毫秒”；缺失的官方/学术类别被标为 not_applicable。请用 check-domain-evidence-landscape 独立复核。",
+      "expected_output": "[negative/revise_here fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S2 反向例子] The checker must NOT pass G2: no executed multi-perspective research, only same-source blogs, official/academic missing, unsupported claims conflicting with PostgreSQL docs; route stays S2.",
+      "files": [],
+      "expectations": [
+        "The checker does not return pass and independently re-derives the failure from the missing research and unsupported claims rather than echoing any self-reported result.",
+        "Structural validation records artifact_valid=false when positive_artifact is null, with the error captured in structural_validation.errors.",
+        "Missing live multi-perspective research (no valid research_run_manifest) is preserved as a failing dimension rather than coerced to pass.",
+        "Source-category coverage failures are flagged, with the missing official/academic category correctly recorded as gap rather than not_applicable.",
+        "Unsupported claims (all-slow-queries-need-indexes, cost=ms) are identified as conflicting with authoritative sources, lacking evidence_refs, and mixing inference/blog-opinion with fact.",
+        "The verdict is revise_here with route_to=S2, failing dimensions carry failure_action and route_to, and the result validates against the schema."
+      ]
+    }
+  ]
+}

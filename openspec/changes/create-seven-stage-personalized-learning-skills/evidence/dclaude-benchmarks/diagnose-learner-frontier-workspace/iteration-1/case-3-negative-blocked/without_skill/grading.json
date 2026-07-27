@@ -1,0 +1,93 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+      "passed": true,
+      "evidence": "There are no node_states and no tested_mastered label. learner_profile separates self_assessment (8/10, interpretation high_confidence) from demonstrated_performance (response_type 'slogan_only', correctness 'superficially_correct', depth 'minimal', reasoning_present false). scoring.composite_mastery_estimate is 0.18 and confidence_calibration 'overconfident' — the self-rating is not credited as mastery. No positive learner_snapshot artifact is produced."
+    },
+    {
+      "text": "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+      "passed": true,
+      "evidence": "self_assessment and demonstrated_performance are kept distinct (self-report is not substituted for behavior). metadata.data_limitations explicitly enumerates the absences: 'single_observation_only', 'no_reasoning_trace', 'no_transfer_question_attempted', 'no_time_on_task', 'no_prompt_hierarchy_applied'. metadata.recommendation states a single slogan is insufficient."
+    },
+    {
+      "text": "The output does not assert independence or transfer ability that was never observed.",
+      "passed": true,
+      "evidence": "scoring.reasoning_score 0.0 and transfer_readiness 0.0; demonstrated_performance.transfer_indicators is []. intervention.next_stage_recommendation is 'remain_in_S4_or_loop_to_S3'. No unobserved independence or transfer is asserted."
+    },
+    {
+      "text": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+      "passed": true,
+      "evidence": "No nearest-learnable node / learning frontier is determined. intervention.next_stage_recommendation='remain_in_S4_or_loop_to_S3' (stays at S4), with suggested_prompts asking the learner to explain the index mechanism, boundary conditions, and costs (diagnostic tasks to collect real behavior); metadata.recommendation says to 'Collect at least one more observation with a why/how prompt before finalizing'."
+    },
+    {
+      "text": "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+      "passed": true,
+      "evidence": "No node profile is emitted, so there is no uniform all-not-mastered relabeling. scoring.composite_mastery_estimate 0.18 is a single provisional scalar explicitly caveated ('A single slogan answer is insufficient for S4 closure'), not a per-node all-not-mastered profile."
+    },
+    {
+      "text": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+      "passed": true,
+      "evidence": "Nothing passes to S5; there is no advancement. intervention.next_stage_recommendation='remain_in_S4_or_loop_to_S3', which is within the enumerated set {revise_here->S4, return_upstream->S3}. (Note: there is no formal G4 rubric object, but the outcome — no pass, route to S4/S3 — satisfies the negative assertion and the route family.)"
+    }
+  ],
+  "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 3228,
+    "transcript_chars": 719,
+    "duration_ms": 21258,
+    "usage": { "input_tokens": 29609, "output_tokens": 1191, "cache_read_input_tokens": 0, "cost_usd": 0.17782 },
+    "note": "No metrics.json or tool-call log; isolated LLM completion (web_search/fetch = 0). Shortest run (21.3s)."
+  },
+  "timing": {
+    "executor_duration_seconds": 25,
+    "total_duration_seconds": 21.258,
+    "grader_duration_seconds": null
+  },
+  "claims": [
+    {
+      "claim": "The baseline produced a route ('remain_in_S4_or_loop_to_S3') that matches the expected S4/S3 destinations better than the with_skill run's S1 route.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "intervention.next_stage_recommendation='remain_in_S4_or_loop_to_S3', inside the expected_output's {S4, S3} set, whereas the with_skill run routed to S1. This is why the baseline scores 6/6 and with_skill scores 4/6 on this negative case."
+    },
+    {
+      "claim": "The baseline correctly abstained (no fabricated mastery, no G4 pass, flagged insufficient data).",
+      "type": "quality",
+      "verified": true,
+      "evidence": "composite_mastery_estimate 0.18, confidence_calibration 'overconfident', data_limitations enumerating five missing evidence types, and a recommendation to collect more before closure."
+    },
+    {
+      "claim": "RAW DEFECT: the response wraps the JSON in a ```json markdown fence despite the prompt forbidding fences.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "executor_prompt.txt required 'no markdown fence'; response.txt opens with ```json and closes with ```. No prose preamble."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "Counterintuitive result: the baseline outscores the skill on this negative case (6/6 vs 4/6) purely because of the route destination. See eval_feedback — this reflects an eval-coverage gap (the case-3 prompt omits the gate-status assertion), not a genuine skill regression on the negative-case safety properties."
+    ],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this configuration directory; the needs_review item is grader-derived."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+        "reason": "This negative-case expectation is satisfiable without the skill schema (it only requires abstention + a non-advancing route), so a strong baseline passes it. That is fine, but note the baseline wins this case over the skill solely on route destination — the skill's contract-faithful S1 route is penalized while the baseline's intuitive 'stay in S4' is rewarded. The case-3 prompt should explicitly state G1/G3 status (as case-1/2 do) so the route comparison is apples-to-apples."
+      },
+      {
+        "assertion": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+        "reason": "The baseline has no G4 object yet passes because the assertion is negative and its route is in {S4,S3}. Consider requiring an explicit G4-evaluation artifact (even a one-line 'G4: not evaluated / blocked') so the assertion cannot pass purely by omission."
+      },
+      {
+        "reason": "No expectation checks the output contract; this baseline run also emitted a ```json fence."
+      }
+    ],
+    "overall": "Baseline abstains correctly and routes to S4/S3, scoring 6/6. The skill's lower score (4/6) is a route-destination artifact (S1 vs expected S4/S3) traceable to the prompt omitting gate status — worth resolving in the eval before reading this case as a skill regression."
+  }
+}

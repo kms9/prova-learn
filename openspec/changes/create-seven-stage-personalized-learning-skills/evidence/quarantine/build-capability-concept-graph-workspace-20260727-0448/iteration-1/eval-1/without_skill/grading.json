@@ -1,0 +1,64 @@
+{
+  "case_id": 1,
+  "config": "without_skill",
+  "graded_at": "2026-07-26T20:51:37Z",
+  "expectation_results": [
+    {
+      "expectation": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+      "passed": false,
+      "evidence": "S3 stage + g3_handover envelope exist with a capability_concept_map, but there is no explicit focus-question field (only a learning_goal.statement/purpose), and nodes carry no type tag — all N1–N19 are flat concept entries with definition+misconception; no procedure/strategy/representation/metacognition typing."
+    },
+    {
+      "expectation": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+      "passed": true,
+      "evidence": "concept_prerequisites edges (N2→N1, N4→N5, N5→N6, N7→N6, N5→N8, N8→N9, N8→N10, N10→N13, N14→N13, N16→N18) contain no back edges/cycle; traversal is acyclic."
+    },
+    {
+      "expectation": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+      "passed": false,
+      "evidence": "Every concept_prerequisites edge has a 'why' rationale, but no hard/soft distinction exists on prerequisites; primary/supporting relevance only appears on concept_supports_capability, not on the prerequisite edges."
+    },
+    {
+      "expectation": "Every target capability traces to the nodes required to diagnose and assess it.",
+      "passed": true,
+      "evidence": "All 7 capabilities (C1–C7) list key_concepts and concept_supports_capability maps concepts to each; 6/7 also map to a DM assessment dimension (C1 lacks a dedicated DM but still traces to N19/N1/N3)."
+    },
+    {
+      "expectation": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+      "passed": false,
+      "evidence": "Nodes N1–N19 carry only definition + common_misconception; observable_behaviors and target_mastery live at capability level and assessment items (DM1–DM6) live at gate level, so individual nodes lack per-node observable statements, assessment items, and mastery thresholds."
+    },
+    {
+      "expectation": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+      "passed": false,
+      "evidence": "Only 9/19 nodes (N1,N2,N4,N5,N6,N8,N9,N13,N14) appear in s2_evidence_mapping (N3,N7,N10–N12,N15–N19 unmapped); no per-node assessment links; G3 success_criteria pass_rule keys on assessment dimensions, not graph invariants, so there is no deterministic S4 route gated on all invariants holding."
+    }
+  ],
+  "overall_passed": false,
+  "summary": "Valid S3 handoff with an acyclic prerequisite DAG and per-node misconceptions, but it lacks typed/focus-question nodes, hard/soft edge distinction, per-node observable/assessment/mastery content, and complete node-to-S2/assessment traceability with an invariant-gated G3→S4 route.",
+  "grader_elapsed_s": 70.49,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 5311,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.027032999999999998,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 27423,
+      "outputTokens": 5306,
+      "cacheReadInputTokens": 960,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.27024499999999996,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.29727799999999993
+}

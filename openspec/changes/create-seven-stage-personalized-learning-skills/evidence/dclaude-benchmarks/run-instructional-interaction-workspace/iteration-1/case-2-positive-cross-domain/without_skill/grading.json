@@ -1,0 +1,81 @@
+{
+  "expectations": [
+    {
+      "text": "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+      "passed": false,
+      "evidence": "The output has an evidence_log describing learner behaviors (bar comparison, number line drawing, verbal explanation) but no structured explanations section with representation types. No evidence_refs to IES, CCSS, or any audited source. No content_quality_status.reviewed_against. The learner_profile and proficiency_determination describe what the learner did but do not connect explanations to audited pedagogical sources."
+    },
+    {
+      "text": "Activities include retrieval, worked example, completion and an independent transfer task that elicit explainable learner evidence, not only mechanical common-denominator speed.",
+      "passed": false,
+      "evidence": "No structured activities array exists. The evidence_log has 5 entries (E1-E5) describing learner behaviors in categories: 视觉表征, 数轴表征, 概念推理, 程序性独立, 迁移应用. These are observational summaries, not designed activities with kind, instruction, cognitive_level, and answer_leakage_control fields. The activity kinds (retrieval, worked_example, completion, independent_transfer) are not present as designed instructional elements."
+    },
+    {
+      "text": "Difficulty progresses from concrete to abstract within the learner's reachable range and the final scaling task is independently solvable.",
+      "passed": false,
+      "evidence": "The evidence_log shows a natural progression (bar→number line→verbal→completion→transfer) but there is no designed difficulty progression. No scaffolding_fade_strategy with initial_support, fade_rule, and terminal_support. The proficiency_determination notes the learner is 'proficient' but the system did not design the difficulty ramp — it merely observed it. The independent transfer exists (E5) but without a designed scaffolding fade mechanism backing it."
+    },
+    {
+      "text": "Feedback rules address task, process and self-regulation without leaking the answer or substituting the learner's unit-fraction reasoning.",
+      "passed": false,
+      "evidence": "No feedback_rules section exists. A scaffolding_profile is present with hint_level='minimal' and fade_strategy but it lacks the task/process/self_regulation three-level structure. The hint strategy is generic ('仅当学习者在程序执行中出现停顿超过30秒或首次尝试错误时提供一级提示') rather than tailored feedback rules per activity type."
+    },
+    {
+      "text": "The interaction trace preserves each response, hint level and correction step, including the moment scaffolding is withdrawn.",
+      "passed": false,
+      "evidence": "evidence_log entries have behavior, category, and performance fields (e.g. '无提示独立完成', '需一级提示后完成') but no verbatim learner_response text. No hints_used arrays tracking which specific hint was given. No correction_trajectory documenting the path from error to correction. E4 notes '需一级提示后完成' but does not record what the hint was or how the learner corrected. The moment of scaffolding withdrawal is described categorically ('无提示独立完成') but not traced step by step."
+    },
+    {
+      "text": "G6 is evaluated dimension by dimension, passes only with real candidate evidence, and deterministically routes to S7 while deferring mastery to G7.",
+      "passed": false,
+      "evidence": "No G6 dimension-by-dimension rubric evaluation exists. The proficiency_determination directly asserts 'current_node_mastery: proficient' with 'confidence: high' — this is a mastery claim, not a G6 gate pass with candidate evidence. decision.action='advance' and recommended_next_node routes to the next learning node (6.RP.A.1), not S7. indicator_breakdown assigns 'mastered' status to 4 of 5 dimensions. Mastery is asserted, not deferred to G7."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "output_chars": 4455,
+    "transcript_chars": 4455
+  },
+  "timing": {
+    "executor_duration_seconds": 46,
+    "total_duration_seconds": 42.677
+  },
+  "claims": [
+    {
+      "claim": "Learner is proficient at current node with high confidence",
+      "type": "quality",
+      "verified": false,
+      "evidence": "proficiency_determination asserts 'current_node_mastery: proficient', 'confidence: high'. However, this directly violates the S6 contract which requires deferring mastery to G7. The determination is based on 5 evidence log entries which are observational summaries, not structured candidate mastery evidence with limits."
+    },
+    {
+      "claim": "Learner should advance to 6.RP.A.1 (ratio and rate reasoning)",
+      "type": "process",
+      "verified": false,
+      "evidence": "decision.action='advance' with recommended_next_node.id='6.RP.A.1'. This routing decision bypasses the S6→S7 gate entirely and recommends a domain progression without the G6 formal evaluation."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The without_skill output for eval-2 is particularly notable because it directly asserts mastery ('proficient') and routes to the next domain node rather than S7 — exactly the behavior the S6 contract is designed to prevent. This makes it a strong discriminator for the skill's value: without the skill, the agent leaps to a mastery conclusion from observational evidence; with the skill, it produces candidate evidence with limits and defers judgment to G7."
+      }
+    ],
+    "overall": "All six expectations fail. The without_skill agent produced a reasonable learner proficiency assessment but fundamentally violated the S6 contract: it asserted mastery rather than deferring to G7, routed to a new domain node rather than S7, and substituted its own evidence-log format for the required session_package_and_trace structure. The contrast with the with_skill run (6/6 pass) shows the skill's critical role in enforcing the G6 gate discipline."
+  }
+}

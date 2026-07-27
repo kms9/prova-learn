@@ -1,0 +1,89 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope, with mastery_verification completed before and referenced by learner_model_update_and_replan.",
+      "passed": false,
+      "evidence": "The output is a custom object with top-level keys pipeline_step, learner_profile, assessment_evidence, root_cause, model_version, personalized_learning_s7, strategy_update, handoff. There is no positive_artifact of type mastery_and_replanning_bundle, no mastery_verification section, and no learner_model_update_and_replan section. pipeline_step='S7' is labelled but the required bundle envelope and its two ordered sub-sections are absent."
+    },
+    {
+      "text": "Mastery evidence is multidimensional (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) and does not collapse to a single correct result; the not-mastered node stays partial/not_mastered.",
+      "passed": false,
+      "evidence": "assessment_evidence has three flat entries (Q1 result='passed', Q2 'corrected_after_L2_hint', D3_delayed_retest 'partial'), each a single outcome string. The six named dimensions (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) are not structured per node, and there is no node-level partial/not_mastered mastery judgment."
+    },
+    {
+      "text": "Every model_patch entry records before/after values and ties to new evidence event IDs rather than asserting mastery without evidence.",
+      "passed": false,
+      "evidence": "No model_patch array exists. strategy_update records previous_version=1/new_version=2 and an updated_decision_flow, but there are no per-node before/after state values and no evidence_event_ids tying changes to Q1/Q2/D3."
+    },
+    {
+      "text": "The model update is version-checked (expected_model_version matched, update_status=applied); the schema and output also honestly support version_conflict and not_executed states when conditions differ.",
+      "passed": false,
+      "evidence": "model_version reports expected=1, loaded=1, match=true, persistent_backend=true, but there is no update object, no update_status field with value 'applied', and no representation of the version_conflict or not_executed fallback states. The version match is noted yet the structured version-checked update and its honest fallback states (required by the schema) are absent."
+    },
+    {
+      "text": "Primary attribution STRATEGY_OR_SEQUENCE with secondary EVIDENCE_INSUFFICIENT follows the documented upstream priority (path before evidence), routes to S5, and matches the remediate decision.",
+      "passed": false,
+      "evidence": "There is no attribution object with primary STRATEGY_OR_SEQUENCE and secondary EVIDENCE_INSUFFICIENT. root_cause.category='strategy_incompleteness' is only a prose analogue. The handoff routes forward to handoff.target_step='S8_reassessment' rather than S5 and has no remediate decision, so the deterministic multi-attribution protocol is not followed."
+    },
+    {
+      "text": "Content-quality problems are distinguished from learner-knowledge gaps; here content/graph/diagnosis are verified correct, so the issue is not misread as learner inability.",
+      "passed": true,
+      "evidence": "root_cause.verified_components reports content='correct', source='correct', knowledge_graph='correct', diagnosis='correct', strategy='incomplete', and root_cause.detail states '内容、来源、图谱、诊断均无错误。问题在于索引选择策略缺少前置步骤' — correctly attributing the gap to strategy incompleteness rather than learner inability or a content/graph/diagnosis error."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.16666666666666666
+  },
+  "execution_metrics": {
+    "total_steps": 1,
+    "num_turns": 1,
+    "errors_encountered": 0,
+    "output_chars": 8175,
+    "transcript_chars": 1114,
+    "total_tokens": 34928
+  },
+  "timing": {
+    "executor_duration_seconds": 85,
+    "total_duration_seconds": 80.656
+  },
+  "claims": [
+    {
+      "claim": "Model versions match expected=1, loaded=1 on a persistent backend",
+      "type": "factual",
+      "verified": true,
+      "evidence": "model_version.expected=1, model_version.loaded=1, model_version.match=true, model_version.persistent_backend=true."
+    },
+    {
+      "claim": "Handoff is to S8 reassessment",
+      "type": "process",
+      "verified": true,
+      "evidence": "handoff.target_step='S8_reassessment', handoff.status='ready_for_transfer'; prerequisites_checklist.strategy_updated=true."
+    },
+    {
+      "claim": "The response is returned as ONLY a valid JSON object with no markdown fence and no commentary",
+      "type": "process",
+      "verified": true,
+      "evidence": "response.txt is a single bare JSON object starting with '{\"pipeline_step\"' and ending with the closing brace; normalization.json reports original_valid_json=true, leading_chars_removed=0, trailing_chars_removed=0. The baseline (no skill) complied with the output-format contract."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Expectations 1, 3, 4, and 5 are tightly coupled to the skill's specific schema (mastery_and_replanning_bundle, model_patch, update_status, attribution codes) and therefore fail the without_skill output by definition regardless of behavioral quality. The baseline DID correctly (a) diagnose strategy incompleteness as the root cause, (b) confirm version match, (c) verify content/graph/diagnosis correct, and (d) flag the missing ANALYZE/estimation steps — yet only expectation 6 gives it any credit. Adding format-agnostic behavioral assertions (e.g. 'identifies that an incomplete strategy, not the learner, is the root cause'; 'records that the version matches before applying any update') would let the comparison surface real behavioral differences instead of only schema-conformance differences."
+      },
+      {
+      "assertion": "Primary attribution STRATEGY_OR_SEQUENCE with secondary EVIDENCE_INSUFFICIENT follows the documented upstream priority (path before evidence), routes to S5, and matches the remediate decision.",
+      "reason": "The current assertion is internally consistent with the stage contract and worked Example A. This baseline still fails it because it has no structured primary/secondary attribution protocol, no deterministic S5 route under that protocol, and no matching remediate decision field."
+      }
+    ],
+    "overall": "The without_skill run produces a clean, behaviorally reasonable S7-style decision but a different schema, so four schema-coupled expectations fail automatically. Only expectation 6 (content-vs-learner distinction) is format-agnostic enough to pass. Consider rebalancing toward behavioral assertions so the with/without comparison measures substance, not just schema conformance."
+  }
+}

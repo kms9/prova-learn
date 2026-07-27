@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "The path connects the confirmed learner_snapshot frontier to the goal_success_contract target with no gaps.",
+      "passed": true,
+      "evidence": "positive_artifact.content.ordered_learning_nodes forms a continuous chain: n-row-est(1)→n-stats(2)→n-multicol(3)→n-partial(4)→n-transfer(5). n-row-est maps to the LS-001 frontier (estimation vs actual discrepancy), and n-transfer maps to the goal_success_contract acceptance criteria (3 unseen queries). quality_evaluation.rubric_results[0] (目标连通性) confirms: 'ordered_learning_nodes: n-row-est(1)→n-stats(2)→n-multicol(3)→n-partial(4)→n-transfer(5) 形成从已证实前沿到目标的最小连通路径'."
+    },
+    {
+      "text": "Selection rationale explains every node and there is no unexplained redundancy or hard-prerequisite crossing.",
+      "passed": true,
+      "evidence": "Each of the 5 nodes has a selection_rationale: n-row-est='学习前沿起点：LS-001 显示学习者把估算行数当实际行数...'; n-stats='修复统计信息缺失的错误模型...'; n-multicol='直接处理 SELECTIVITY_FIRST_ALWAYS 误概念...'; n-partial='扩展条件方案与代价判断...跳过仅视频教学的可选节点，保持路径最小'; n-transfer='迁移到未见查询并安排延迟复测...'. Already-mastered nodes (plan_tree_reading, scan_methods) are explicitly skipped. quality_evaluation.rubric_results[2] (路径最小性) confirms no course-catalog copying."
+    },
+    {
+      "text": "The first session is executable within the stated time and resource constraints.",
+      "passed": true,
+      "evidence": "s1 has estimated_time.minutes_per_session=90, session_count=2, fitting within the 2×90min/week constraint. Activities are concrete: '无材料检索', '在沙箱 EXPLAIN (ANALYZE, BUFFERS) 输出上标注估算与实际行数差异', '对比统计信息新鲜与陈旧下的计划差异，归纳因果', '独立补做一道未见查询的估算偏差标注并解释'. Input materials list PostgreSQL 18 sandbox, EXPLAIN docs, and anonymized orders queries. quality_evaluation.rubric_results[3] (时间可行性) confirms total budget of 24h vs consumed 12h."
+    },
+    {
+      "text": "Mandatory confirmation (path overview, stage goals, time commitment, priority, first-session contract) is resolved as confirmed.",
+      "passed": true,
+      "evidence": "confirmation.status='confirmed', confirmed_at='2026-07-27T00:00:00Z'. confirmation.response has all four items: path_overview='confirmed', priority='confirmed: 先修复估算与统计信息模型再学多列索引', time_budget='confirmed: 4周/每周6小时/每周两次90分钟', first_session_contract='confirmed: s1 可执行'. confirmation.mode='mandatory'."
+    },
+    {
+      "text": "Each learning node has observable, decidable per-node exit criteria aligned with assessment.",
+      "passed": true,
+      "evidence": "exit_criteria.per_node contains 5 entries (one per node) with observable, decidable criteria: n-row-est='独立指出未见 EXPLAIN (ANALYZE, BUFFERS) 计划中的估算与实际行数偏差，并提出验证动作'; n-stats='能解释统计信息新旧对计划的影响，并判断给定场景是否需要执行 ANALYZE'; n-multicol='在两个未见查询中独立选择并论证多列索引的前导列顺序'; n-partial='能拒绝一个不合适索引并说明代价原因'; n-transfer='三个未见查询中至少两题主瓶颈诊断、索引方案与验证步骤均正确'. assessment_schedule maps immediate/transfer/delayed assessments to each node's exit criteria."
+    },
+    {
+      "text": "G5 is evaluated dimension by dimension and the deterministic route is S6 when all dimensions pass.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results contains all 8 G5 dimensions (目标连通性, 先修正确性, 路径最小性, 时间可行性, 策略适配性, 教学与测评对齐度, 认知负荷, 调整空间), each with evidence array, score=true, passed=true. quality_evaluation.verdict='pass', quality_evaluation.route_to='S6'."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_turns": 10,
+    "total_tokens": 75665,
+    "output_tokens": 8546,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 112,
+    "total_duration_seconds": 108.316
+  },
+  "claims": [
+    {
+      "claim": "正向工件 learning_and_session_plan 通过 learning-and-session-plan.schema.json 校验",
+      "type": "quality",
+      "verified": true,
+      "evidence": "positive_artifact.type='learning_and_session_plan', schema_version='1.0.0', content contains all required fields: stage_goals, ordered_learning_nodes, sessions, assessment_schedule, exit_criteria, risks, alternative_routes, review_anchors."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+
+    ],
+    "overall": "No suggestions, evals look solid for this configuration."
+  }
+}

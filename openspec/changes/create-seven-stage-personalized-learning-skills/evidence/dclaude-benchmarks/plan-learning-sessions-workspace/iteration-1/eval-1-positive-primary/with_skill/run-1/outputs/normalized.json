@@ -1,0 +1,521 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S5",
+  "run_id": "S5-run-pg-20260727-001",
+  "learner_id": "LS-001",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "goal_success_contract=gsc-pg-0001",
+      "capability_concept_graph=ccg-pg-0001",
+      "learner_snapshot=LS-001"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "capability_concept_graph": "1.0.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "上游 G1/G3/G4 门均已通过且版本兼容，追溯关系完整，无需返回 S1/S3/S4",
+    "learner_snapshot LS-001 中标注的学习前沿（估算/实际差异、谓词选择性、多列索引顺序）为已证实不稳定节点，非证据不足",
+    "典型误概念 SELECTIVITY_FIRST_ALWAYS 已在 LS-001 中被诊断确认，可作为教学策略输入",
+    "PostgreSQL 18 沙箱环境已就绪且包含脱敏 orders 表与示例查询数据",
+    "学习者每周两次 90 分钟交互会话可稳定排期，延迟复测可在一周后安排"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "rg-1",
+      "description": "G3 能力图谱中部分索引与覆盖索引的具体节点 ID 未在用户输入中显式给出，使用推断节点 ID n-partial 并标注为 model_hypothesis",
+      "criticality": "low",
+      "gate_effect": "none"
+    },
+    {
+      "id": "rg-2",
+      "description": "用户未提供具体每周哪两天可用于会话；假设星期一和星期四，实际排期需在 S6 执行前确认",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    }
+  ],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "S5 强制确认：路径概览与阶段目标、时间投入与节奏（4周/每周6小时/每周两次90分钟）、优先级（先估算与统计信息模型再学多列索引）、首个会话契约（s1：建立估算—实际—统计信息因果链）",
+    "questions": [
+      "是否同意从已证实前沿（估算/实际差异、统计信息模型不稳）出发，路径为 n-row-est → n-stats → n-multicol → n-partial → n-transfer？",
+      "是否确认先修复估算与统计信息模型，再学多列索引顺序的优先级？",
+      "是否接受 4 周、每周两次 90 分钟交互会话、总计约 12 小时教学时间的安排？",
+      "首个会话 s1（建立估算—实际—统计信息因果链）的目标、活动与退出标准是否可执行？"
+    ],
+    "response": {
+      "path_overview": "confirmed",
+      "priority": "confirmed: 先修复估算与统计信息模型再学多列索引",
+      "time_budget": "confirmed: 4周/每周6小时/每周两次90分钟",
+      "first_session_contract": "confirmed: s1 可执行"
+    },
+    "status": "confirmed",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "ev-s5-001",
+      "provenance": "learner_behavior",
+      "source_ref": "learner_snapshot=LS-001",
+      "summary": "G4 已证实学习前沿：学习者掌握计划树读取与扫描方式；不稳定节点为估算/实际差异、谓词选择性、多列索引顺序；误概念 SELECTIVITY_FIRST_ALWAYS 已诊断确认",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-002",
+      "provenance": "external_evidence",
+      "source_ref": "capability_concept_graph=ccg-pg-0001",
+      "summary": "G3 能力图谱提供节点、硬先修边（n-row-est→n-stats→n-multicol）与评估映射，版本与 LS-001 一致",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-003",
+      "provenance": "external_evidence",
+      "source_ref": "goal_success_contract=gsc-pg-0001",
+      "summary": "G1 目标契约：学习者能独立诊断并改进单表查询性能，验收标准为三个未见查询的迁移任务",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-004",
+      "provenance": "user_provided_unverified",
+      "source_ref": "user_constraint_input",
+      "summary": "用户提供时间约束：4周、每周约6小时、每周两次90分钟交互会话、PostgreSQL 18沙箱",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-005",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "计划假设：s1中标注偏差支架适合估算概念修复；对比案例策略对 SELECTIVITY_FIRST_ALWAYS 误概念有效",
+      "status": "partially_supported"
+    }
+  ],
+  "processing_record": [
+    "校验输入契约：G1/G3/G4 版本一致、门均已通过、必填字段完整、追溯关系对齐 → pass",
+    "收集时间/节奏/资源约束：4周/每周6小时/每周两次90分钟/PostgreSQL 18沙箱/三个未见查询验收",
+    "识别需求缺口：部分索引节点 ID 需推断（rg-1）、具体排期日未指定（rg-2）",
+    "从已证实前沿到目标选择最小连通子图：n-row-est(1) → n-stats(2) → n-multicol(3) → n-partial(4) → n-transfer(5)，跳过已掌握的计划树读取与扫描方式",
+    "为每个节点匹配教学策略：估算概念用explain+worked_example+retrieval；统计模型用explain+contrast_case；误概念SELECTIVITY_FIRST_ALWAYS用worked_example+practice+contrast_case；扩展节点用practice+transfer；最终迁移用transfer+delayed_retest",
+    "编排8次90分钟会话覆盖4周：s1(估算-统计因果链×2)、s2(多列索引顺序×2)、s3(部分/覆盖索引×2)、s4(迁移与延迟复测×2)",
+    "安排测评：即时（每会话末独立小题）、迁移（s4三个未见查询）、延迟（一周后n-multicol复测）",
+    "定义复习锚点：次日、第4天、一周后",
+    "执行强制确认：展示路径概览、阶段目标、时间投入与首个会话契约 → confirmed",
+    "生成正向工件 learning_and_session_plan 并通过 G5 八维度量规评价"
+  ],
+  "positive_artifact": {
+    "type": "learning_and_session_plan",
+    "schema_version": "1.0.0",
+    "artifact_id": "lsp-pg-0001",
+    "content": {
+      "stage_goals": [
+        {
+          "goal_id": "sg-1",
+          "statement": "修复'计划器按规则选索引'的错误模型，建立估算—统计—代价的因果链"
+        },
+        {
+          "goal_id": "sg-2",
+          "statement": "能独立为未见查询选择并论证多列/部分/覆盖索引，包含能论证'不加索引'的情形"
+        }
+      ],
+      "ordered_learning_nodes": [
+        {
+          "node_id": "n-row-est",
+          "order": 1,
+          "selection_rationale": "学习前沿起点：LS-001 显示学习者把估算行数当实际行数，是后续所有索引判断的基础模型缺陷",
+          "teaching_strategy": [
+            "explain",
+            "worked_example",
+            "retrieval"
+          ],
+          "scaffolding": {
+            "approach": "标注偏差",
+            "description": "教师先在 EXPLAIN (ANALYZE, BUFFERS) 输出上标注估算与实际行数差异位置，再让学习者在新计划上独立补标"
+          },
+          "fade_conditions": [
+            "学习者独立指出未见计划中的估算偏差并提出验证动作"
+          ]
+        },
+        {
+          "node_id": "n-stats",
+          "order": 2,
+          "selection_rationale": "修复统计信息缺失的错误模型；连接估算偏差与 pg_statistic 机制，是理解多列索引选择的必要前置",
+          "teaching_strategy": [
+            "explain",
+            "contrast_case"
+          ],
+          "scaffolding": {
+            "approach": "对比案例",
+            "description": "对比同一查询在统计信息新鲜（刚 ANALYZE）与陈旧（大量写入后未 ANALYZE）两种情形下的计划差异，让学习者归纳因果"
+          },
+          "fade_conditions": [
+            "能解释统计信息新旧对计划的影响并判断何时应 ANALYZE"
+          ]
+        },
+        {
+          "node_id": "n-multicol",
+          "order": 3,
+          "selection_rationale": "直接处理 SELECTIVITY_FIRST_ALWAYS 误概念；硬先修为 n-row-est 与 n-stats，需先理解估算与统计才能正确推理前导列选择",
+          "teaching_strategy": [
+            "worked_example",
+            "practice",
+            "contrast_case"
+          ],
+          "scaffolding": {
+            "approach": "半完成示例",
+            "description": "给出具体谓词与数据分布（如 tenant_id/status/created_at），学习者补出前导列判断的第二、三步推理，再对比 (tenant_id,status,created_at) 与 (status,tenant_id,created_at) 的计划差异"
+          },
+          "fade_conditions": [
+            "在两个未见查询中独立选择并论证多列索引顺序"
+          ]
+        },
+        {
+          "node_id": "n-partial",
+          "order": 4,
+          "selection_rationale": "扩展条件方案与代价判断，覆盖部分索引和覆盖索引场景；跳过仅视频教学的可选节点，保持路径最小",
+          "teaching_strategy": [
+            "practice",
+            "transfer"
+          ],
+          "scaffolding": {
+            "approach": "边界任务",
+            "description": "给出混合场景：部分索引可用/不可用/参数化边界，以及 index-only scan 的可见性条件，学习者识别并判断"
+          },
+          "fade_conditions": [
+            "能拒绝一个不合适索引并说明代价原因"
+          ]
+        },
+        {
+          "node_id": "n-transfer",
+          "order": 5,
+          "selection_rationale": "迁移到未见查询并安排延迟复测；对应 G1 验收标准——三个未见查询的独立诊断与方案",
+          "teaching_strategy": [
+            "transfer",
+            "delayed_retest"
+          ],
+          "scaffolding": {
+            "approach": "无提示独立任务",
+            "description": "提供三个未见脱敏查询，学习者独立完成采集、诊断、方案设计、验证与回滚说明，至少一例论证'不加索引'"
+          },
+          "fade_conditions": [
+            "三题中至少两题主瓶颈、方案与验证均正确"
+          ]
+        }
+      ],
+      "sessions": [
+        {
+          "session_id": "s1",
+          "goal": "建立估算—实际—统计信息的因果链",
+          "activities": [
+            "无材料检索：先写出自己对'计划器如何选择索引'的当前模型",
+            "在沙箱 EXPLAIN (ANALYZE, BUFFERS) 输出上标注估算与实际行数差异",
+            "对比统计信息新鲜与陈旧下的计划差异，归纳因果",
+            "独立补做一道未见查询的估算偏差标注并解释"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 90,
+            "session_count": 2
+          },
+          "input_materials": [
+            "PostgreSQL 18 EXPLAIN 文档（rows、width、loops 等输出字段）",
+            "脱敏 orders 查询与沙箱计划输出",
+            "统计信息对比用计划（新鲜 vs 陈旧）"
+          ]
+        },
+        {
+          "session_id": "s2",
+          "goal": "为多列索引选择论证前导列与排序约束",
+          "activities": [
+            "worked example：tenant_id/status/created_at 三列索引顺序推理演示",
+            "半完成示例补步：给出谓词与数据分布，补出前导列判断的二、三步",
+            "对比任务：(tenant_id,status,created_at) 与 (status,tenant_id,created_at) 在带 ORDER BY ... LIMIT 查询下的计划差异",
+            "两个未见查询独立论证多列索引顺序"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 90,
+            "session_count": 2
+          },
+          "input_materials": [
+            "PostgreSQL 多列索引文档（列顺序与 B-tree 访问）",
+            "带 ORDER BY ... LIMIT 的案例查询",
+            "脱敏数据分布统计（各列 NDV 与直方图概要）"
+          ]
+        },
+        {
+          "session_id": "s3",
+          "goal": "扩展部分/覆盖索引并判断代价",
+          "activities": [
+            "部分索引可用场景判断：WHERE 子句匹配度分析",
+            "部分索引不可用与参数化边界识别",
+            "index-only scan 可见性条件练习",
+            "写入代价与维护权衡：识别一个'不该加索引'的场景并论证"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 90,
+            "session_count": 2
+          },
+          "input_materials": [
+            "PostgreSQL 部分索引与覆盖索引文档",
+            "写入负载样本（INSERT/UPDATE 频率数据）",
+            "回滚与验证清单"
+          ]
+        },
+        {
+          "session_id": "s4",
+          "goal": "未见查询迁移与延迟复测",
+          "activities": [
+            "三个未见脱敏查询独立诊断：采集计划、分析瓶颈、设计方案",
+            "至少一例论证'不加索引'的代价推理",
+            "方案验证与回滚说明",
+            "一周后对 n-multicol 节点延迟复测"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 90,
+            "session_count": 2
+          },
+          "input_materials": [
+            "三个未见脱敏查询",
+            "沙箱 PostgreSQL 18 环境",
+            "回滚与验证清单"
+          ]
+        }
+      ],
+      "assessment_schedule": {
+        "immediate": [
+          "s1 每会话末：独立完成至少一道未见查询的估算偏差标注并解释推理",
+          "s2 每会话末：在两个未见查询中独立论证多列索引顺序",
+          "s3 每会话末：至少一道部分索引可用性判断与代价分析"
+        ],
+        "transfer": [
+          "s4 三个未见查询项目：独立采集计划、诊断瓶颈、设计方案、验证与回滚说明",
+          "s4 至少出现一例能论证'不加索引'的完整案例"
+        ],
+        "delayed": [
+          "s4 中一周后对 n-multicol 节点延迟复测",
+          "最终项目前一次计划诊断延迟检查"
+        ]
+      },
+      "review_anchors": [
+        "s1 结束后次日：快速检索估算偏差标注方法",
+        "s2 结束后第4天：交错复习多列索引顺序与统计信息因果关系",
+        "s3 结束后一周：延迟复测多列索引节点"
+      ],
+      "risks": [
+        {
+          "risk_id": "r-1",
+          "description": "学习者把'全局选择性最高列优先'当成机械规则（SELECTIVITY_FIRST_ALWAYS），导致多列索引顺序选择错误",
+          "mitigation": "在 s2 插入对比任务，要求回到谓词形状与前导列约束论证索引顺序；使用 (tenant_id,status,created_at) vs (status,tenant_id,created_at) 对比暴露选择性规则的局限",
+          "criticality": "high"
+        },
+        {
+          "risk_id": "r-2",
+          "description": "估算模型修复不牢导致 s2 跨级进行多列索引推理时基础不稳",
+          "mitigation": "s1 退出标准未达则在 s2 前补一次半完成示例，不提前教授多列索引语法；维持硬先修顺序不变",
+          "criticality": "medium"
+        },
+        {
+          "risk_id": "r-3",
+          "description": "学习者可能因工作或生活原因错过一次90分钟会话，导致节奏被打乱",
+          "mitigation": "替代路线中预设备用周（第4周留缓冲）；延迟复测可后移但不取消",
+          "criticality": "medium"
+        }
+      ],
+      "alternative_routes": [
+        {
+          "trigger": "若 s1 退出标准未达（仍无法独立指出估算偏差）",
+          "adjustment": "在 s2 前增加一次检索式补救会话（30分钟），内容为额外标注偏差练习，保持最小路径不变"
+        },
+        {
+          "trigger": "若延迟复测显示 n-multicol 节点遗忘或误概念回退",
+          "adjustment": "在 s4 迁移前插入一次交错复习（45分钟），回顾 n-row-est → n-stats → n-multicol 因果链再进入转移任务"
+        },
+        {
+          "trigger": "若学习者提前达到 n-multicol 退出标准",
+          "adjustment": "s3 扩展更多真实场景的部分索引案例，不跳过 n-partial 但可压缩为一次会话加一次转移"
+        }
+      ],
+      "exit_criteria": {
+        "per_node": [
+          {
+            "node_id": "n-row-est",
+            "criteria": "独立指出未见 EXPLAIN (ANALYZE, BUFFERS) 计划中的估算与实际行数偏差，并提出验证动作（如检查 pg_statistic 或执行 ANALYZE）"
+          },
+          {
+            "node_id": "n-stats",
+            "criteria": "能解释统计信息新旧对计划的影响，并判断给定场景是否需要执行 ANALYZE"
+          },
+          {
+            "node_id": "n-multicol",
+            "criteria": "在两个未见查询中独立选择并论证多列索引的前导列顺序，论证包含谓词形状分析和排序约束考虑"
+          },
+          {
+            "node_id": "n-partial",
+            "criteria": "能拒绝一个不合适索引并说明代价原因（写入开销、维护成本或选择性不足）"
+          },
+          {
+            "node_id": "n-transfer",
+            "criteria": "三个未见查询中至少两题主瓶颈诊断、索引方案与验证步骤均正确，且至少一例论证'不加索引'"
+          }
+        ],
+        "overall": [
+          "三个未见查询中至少两题方案与验证正确",
+          "至少出现一次能完整论证'不加索引'的案例",
+          "一周后延迟复测 n-multicol 节点通过"
+        ]
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "目标连通性",
+        "evidence": [
+          "ordered_learning_nodes: n-row-est(1)→n-stats(2)→n-multicol(3)→n-partial(4)→n-transfer(5) 形成从已证实前沿到目标的最小连通路径",
+          "exit_criteria.per_node 每个节点有可判定退出标准",
+          "stage_goals sg-1/sg-2 分别对应前沿修复与目标达成"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "先修正确性",
+        "evidence": [
+          "n-row-est→n-stats→n-multicol 遵守硬先修边（估算基础→统计机制→多列索引推理）",
+          "n-partial 以 n-multicol 为先修（扩展索引类型需先理解前导列概念）",
+          "order 字段递增无跨越"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "路径最小性",
+        "evidence": [
+          "仅选择5个节点，跳过已掌握的计划树读取与扫描方式（LS-001 证实的掌握节点）",
+          "selection_rationale 对每个节点说明为何入选：n-row-est/n-stats 对应前沿修复，n-multicol 处理误概念，n-partial 扩展边界，n-transfer 对应验收",
+          "无课程目录复制、无视频定额、无题量堆积"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "时间可行性",
+        "evidence": [
+          "总预算：4周×6小时=24小时；计划消耗：8次90分钟会话=12小时+延迟复测，余量充足",
+          "s1 在每周两次90分钟约束内可独立执行：90分钟×2覆盖标注偏差+对比案例+检索练习",
+          "sessions 中所有 estimated_time 均不超过单次90分钟"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "策略适配性",
+        "evidence": [
+          "估算偏差（概念错误）→ explain+worked_example+retrieval（解释→示范→检索巩固）",
+          "统计信息模型（因果链缺失）→ explain+contrast_case（对比新旧统计下的计划差异）",
+          "SELECTIVITY_FIRST_ALWAYS（误概念）→ worked_example+practice+contrast_case（对比案例暴露规则局限）",
+          "部分索引（程序性扩展）→ practice+transfer（边界任务→迁移）",
+          "n-transfer（迁移目标）→ transfer+delayed_retest（未见任务+延迟复测）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "教学与测评对齐度",
+        "evidence": [
+          "n-row-est exit_criteria（独立指出估算偏差并提出验证动作）↔ s1 末独立补做标注练习",
+          "n-multicol exit_criteria（两个未见查询中独立论证索引顺序）↔ s2 末即时测评",
+          "n-transfer exit_criteria（三题中至少两题正确）↔ s4 三个未见查询迁移验收",
+          "每节点 exit_criteria 均对应 assessment_schedule 中的具体测评项"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "认知负荷",
+        "evidence": [
+          "s1 聚焦单一因果链（估算→实际→统计），不引入索引概念",
+          "每会话2次90分钟，间隔至少2天，有次日复习锚点",
+          "review_anchors: 次日→第4天→一周后，符合遗忘曲线间距",
+          "scaffolding 从标注偏差（高支架）→半完成示例→无提示独立任务（撤架），难度递进合理"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "调整空间",
+        "evidence": [
+          "r-1（误概念回退）→ s2 对比任务缓解，criticality=high",
+          "r-2（估算基础不稳）→ s2 前补半完成示例，criticality=medium",
+          "r-3（会话错过）→ 第4周缓冲+延迟复测可后移，criticality=medium",
+          "alternative_routes 均为可执行调整，不改变最小路径骨架",
+          "三条替代路线覆盖：补救、回退修复、加速三种场景"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "所有8个G5量规维度 passed=true",
+      "confirmation.status=confirmed，强制确认已完成",
+      "路径从已证实前沿连通到目标，无硬先修跨越",
+      "首个会话s1在每周两次90分钟约束内可独立执行",
+      "正向工件 learning_and_session_plan 通过 learning-and-session-plan.schema.json 校验"
+    ],
+    "verdict": "pass",
+    "route_to": "S6"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "gsc-pg-0001",
+      "ccg-pg-0001",
+      "LS-001"
+    ],
+    "source_evidence_ids": [
+      "ev-s5-001",
+      "ev-s5-002",
+      "ev-s5-003",
+      "ev-s5-004",
+      "ev-s5-005"
+    ],
+    "source_sections": [
+      "docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 正向例子",
+      "docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S5",
+      "references/stage-contract.md §1-§8",
+      "references/learning-and-session-plan.schema.json"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-26T18:41:10Z"
+}

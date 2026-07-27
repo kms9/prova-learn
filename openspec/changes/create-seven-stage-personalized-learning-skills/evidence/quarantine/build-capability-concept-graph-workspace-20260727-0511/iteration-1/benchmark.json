@@ -1,0 +1,242 @@
+{
+  "skill_name": "build-capability-concept-graph",
+  "route": "gclaude",
+  "iteration": 1,
+  "generated_at": "2026-07-26T21:11:29Z",
+  "with_skill": {
+    "cases": 3,
+    "overall_passed": 2,
+    "expectations_passed": 17,
+    "expectations_total": 18,
+    "avg_elapsed_s": 200.08,
+    "total_cost_usd": 1.805144
+  },
+  "without_skill": {
+    "cases": 3,
+    "overall_passed": 0,
+    "expectations_passed": 6,
+    "expectations_total": 18,
+    "avg_elapsed_s": 87.0,
+    "total_cost_usd": 0.936848
+  },
+  "delta_expectations_passed": 11,
+  "skill_helps": true,
+  "cases": [
+    {
+      "case_id": 1,
+      "eval_name": "eval-1",
+      "expectations": [
+        "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+        "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+        "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+        "Every target capability traces to the nodes required to diagnose and assess it.",
+        "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+        "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold."
+      ],
+      "without_skill": {
+        "exit_status": 0,
+        "elapsed_s": 139.86,
+        "overall_passed": false,
+        "expectations_passed": 2,
+        "expectations_total": 6,
+        "cost_usd": 0.36961499999999997,
+        "modelUsage": {
+          "glm-5.1": {
+            "inputTokens": 212,
+            "outputTokens": 17,
+            "cacheReadInputTokens": 256,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.001613,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          },
+          "glm-5.2": {
+            "inputTokens": 22580,
+            "outputTokens": 10190,
+            "cacheReadInputTokens": 704,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.368002,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          }
+        }
+      },
+      "with_skill": {
+        "exit_status": 0,
+        "elapsed_s": 180.53,
+        "overall_passed": true,
+        "expectations_passed": 6,
+        "expectations_total": 6,
+        "cost_usd": 0.682595,
+        "modelUsage": {
+          "glm-5.1": {
+            "inputTokens": 242,
+            "outputTokens": 15,
+            "cacheReadInputTokens": 256,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.0017130000000000001,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          },
+          "glm-5.2": {
+            "inputTokens": 30761,
+            "outputTokens": 21069,
+            "cacheReadInputTokens": 704,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.680882,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          }
+        }
+      }
+    },
+    {
+      "case_id": 2,
+      "eval_name": "eval-2",
+      "expectations": [
+        "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+        "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+        "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+        "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+        "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+        "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold."
+      ],
+      "without_skill": {
+        "exit_status": 0,
+        "elapsed_s": 67.37,
+        "overall_passed": false,
+        "expectations_passed": 3,
+        "expectations_total": 6,
+        "cost_usd": 0.273162,
+        "modelUsage": {
+          "glm-5.1": {
+            "inputTokens": 468,
+            "outputTokens": 15,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.002715,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          },
+          "glm-5.2": {
+            "inputTokens": 24304,
+            "outputTokens": 5943,
+            "cacheReadInputTokens": 704,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.270447,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          }
+        }
+      },
+      "with_skill": {
+        "exit_status": 0,
+        "elapsed_s": 274.74,
+        "overall_passed": true,
+        "expectations_passed": 6,
+        "expectations_total": 6,
+        "cost_usd": 0.657331,
+        "modelUsage": {
+          "glm-5.1": {
+            "inputTokens": 242,
+            "outputTokens": 15,
+            "cacheReadInputTokens": 256,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.0017130000000000001,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          },
+          "glm-5.2": {
+            "inputTokens": 30569,
+            "outputTokens": 20093,
+            "cacheReadInputTokens": 896,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.655618,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          }
+        }
+      }
+    },
+    {
+      "case_id": 3,
+      "eval_name": "eval-3",
+      "expectations": [
+        "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+        "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+        "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+        "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+        "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+        "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded."
+      ],
+      "without_skill": {
+        "exit_status": 1,
+        "elapsed_s": 53.77,
+        "overall_passed": false,
+        "expectations_passed": 1,
+        "expectations_total": 6,
+        "cost_usd": 0.294071,
+        "modelUsage": {
+          "glm-5.1": {
+            "inputTokens": 187,
+            "outputTokens": 12,
+            "cacheReadInputTokens": 256,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.001363,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          },
+          "glm-5.2": {
+            "inputTokens": 32437,
+            "outputTokens": 2515,
+            "cacheReadInputTokens": 135296,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.292708,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          }
+        }
+      },
+      "with_skill": {
+        "exit_status": 0,
+        "elapsed_s": 144.98,
+        "overall_passed": false,
+        "expectations_passed": 5,
+        "expectations_total": 6,
+        "cost_usd": 0.46521799999999996,
+        "modelUsage": {
+          "glm-5.1": {
+            "inputTokens": 217,
+            "outputTokens": 19,
+            "cacheReadInputTokens": 256,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.0016880000000000003,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          },
+          "glm-5.2": {
+            "inputTokens": 30480,
+            "outputTokens": 12426,
+            "cacheReadInputTokens": 960,
+            "cacheCreationInputTokens": 0,
+            "webSearchRequests": 0,
+            "costUSD": 0.46352999999999994,
+            "contextWindow": 200000,
+            "maxOutputTokens": 32000
+          }
+        }
+      }
+    }
+  ]
+}

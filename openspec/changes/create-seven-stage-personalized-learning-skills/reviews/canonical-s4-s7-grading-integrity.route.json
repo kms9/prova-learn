@@ -1,0 +1,35 @@
+{
+  "route": "gclaude",
+  "audit_id": "canonical-s4-s7-grading-integrity",
+  "exit_code": 0,
+  "subtype": "success",
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "e6afb653-ec15-4776-98f7-e8467e744516",
+  "uuid": "40f4fbea-8034-4c47-ad95-0eb192d80759",
+  "duration_ms": 450795,
+  "result_format": "explanatory-prefix-plus-single-json-object",
+  "inner_json": "canonical-s4-s7-grading-integrity.inner.json",
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 436,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002658,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 75599,
+      "outputTokens": 32714,
+      "cacheReadInputTokens": 907904,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 1.6497970000000004,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  }
+}

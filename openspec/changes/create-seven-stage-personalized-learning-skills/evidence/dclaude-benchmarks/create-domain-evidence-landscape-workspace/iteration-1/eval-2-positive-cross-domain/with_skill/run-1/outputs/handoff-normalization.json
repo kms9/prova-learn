@@ -1,0 +1,11 @@
+{
+  "source_file": "response.txt",
+  "source_sha256": "e2c085d93e67340f6db0b827c0acb2a72caeb87036a7b421ebd1ae2a78dfc80b",
+  "preserved_positive_artifact_file": "result.json",
+  "preserved_positive_artifact_sha256": "87779871ed4c0a2c601af8b820f2b2aa3f80cc4041741319c47fee0e2dfe0ada",
+  "canonical_output_file": "result.handoff-normalized.json",
+  "canonical_output_sha256": "28d2e410c539bdd8e6725937d8b6c63c95122a6b49bad0ec3d259cc0129c26c4",
+  "operation": "Extract the first fenced json object as the complete handoff envelope and replace the two unescaped ASCII quotation pairs around the Chinese terms 分数教学能力 and 量感 with Chinese quotation marks.",
+  "semantic_change": false,
+  "positive_artifact_deep_equal_to_preserved_result": true
+}

@@ -1,0 +1,506 @@
+{
+  "meta": {
+    "phase": "S2",
+    "generated_at": "2026-07-27",
+    "method": "STORM-style multi-round web research (6 rounds, 18+ sources)",
+    "research_rounds": [
+      "PG18 EXPLAIN ANALYZE BUFFERS defaults + single-table diagnosis",
+      "Single-table index strategy patterns (composite, covering, partial, expression)",
+      "PG18 new features (async I/O, skip scan, planner enhancements)",
+      "EXPLAIN ANALYZE output deep-dive (Rows Removed by Filter, buffers, loops, timing)",
+      "Index verification methodology (before/after benchmarking, forcing plans, pg_stat_user_indexes)",
+      "PG18 sandbox setup + B-tree skip scan practical examples + index-only scan heap fetches"
+    ]
+  },
+  "learner_profile": {
+    "role": "中国互联网中级后端工程师",
+    "prerequisites": [
+      "熟悉 SQL 基本语法（SELECT、WHERE、ORDER BY、LIMIT）",
+      "了解 B-tree 索引的基本概念（等值查询、范围查询加速）",
+      "有 PostgreSQL 的基本使用经验",
+      "能独立搭建 Docker 或本地 PostgreSQL 环境"
+    ],
+    "learning_constraints": {
+      "scope": "仅限单表慢查询诊断与索引优化",
+      "excluded": [
+        "优化器内核参数调优",
+        "多表 JOIN 优化",
+        "查询改写（子查询/CTE 重构）",
+        "分区表设计",
+        "物化视图",
+        "连接池/锁/长事务问题"
+      ],
+      "environment": "PostgreSQL 18 沙箱环境（Docker 或本地安装）"
+    }
+  },
+  "learning_path": {
+    "module_1_环境准备": {
+      "objective": "在本地搭建 PostgreSQL 18 沙箱并生成测试数据",
+      "estimated_minutes": 30,
+      "steps": [
+        {
+          "title": "启动 PG18 容器",
+          "code": "docker run -d --name pg18-learn -e POSTGRES_PASSWORD=learn -e POSTGRES_DB=tuning_lab -p 5432:5432 postgres:18"
+        },
+        {
+          "title": "启用 pg_stat_statements 扩展",
+          "code": "psql -h localhost -U postgres -d tuning_lab -c \"CREATE EXTENSION IF NOT EXISTS pg_stat_statements;\"\n# 需在 postgresql.conf 中设置 shared_preload_libraries = 'pg_stat_statements'，Docker 镜像通常已预置"
+        },
+        {
+          "title": "生成训练用单表数据（100万行订单表）",
+          "code": "CREATE TABLE orders (\n    id BIGSERIAL PRIMARY KEY,\n    user_id INTEGER NOT NULL,\n    status VARCHAR(20) NOT NULL DEFAULT 'pending',\n    total_amount DECIMAL(12,2) NOT NULL,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    note TEXT\n);\n\nINSERT INTO orders (user_id, status, total_amount, created_at)\nSELECT\n    (random() * 10000)::int,\n    CASE (random() * 10)::int\n        WHEN 0 THEN 'pending'\n        WHEN 1 THEN 'confirmed'\n        WHEN 2 THEN 'shipped'\n        ELSE 'completed'\n    END,\n    (random() * 10000 + 10)::decimal(12,2),\n    now() - (random() * 365 * 2 || ' days')::interval\nFROM generate_series(1, 1000000);\n\nANALYZE orders;"
+        }
+      ],
+      "deliverable": "沙箱环境就绪，orders 表含 100 万行，统计信息已刷新"
+    },
+    "module_2_EXPLAIN_基础解读": {
+      "objective": "掌握 EXPLAIN (ANALYZE, BUFFERS) 输出的核心字段含义",
+      "estimated_minutes": 45,
+      "critical_knowledge": {
+        "pg18_change": "PostgreSQL 18 起，EXPLAIN ANALYZE 自动包含 BUFFERS 信息，无需显式指定 BUFFERS 选项。只需 EXPLAIN ANALYZE 即可获得缓冲区 I/O 数据。",
+        "field_reference": {
+          "cost": {
+            "meaning": "规划器估算成本（相对单位，非毫秒），startup..total 分别表示返回首行和全部行的代价",
+            "usage": "比较不同计划节点的相对代价，不能直接当毫秒读",
+            "red_flag": "估算行数与实际行数差几个数量级 → 统计信息过期 → ANALYZE tablename"
+          },
+          "actual_time": {
+            "meaning": "实际执行时间（毫秒），first..last 格式，first=产生首行的时间，last=产生最后一行的时间",
+            "critical_rule": "这是每次循环的平均值！当 loops > 1 时，真实耗时 = actual_time_last × loops",
+            "inclusive_timing": "父节点的 actual time 包含所有子节点。隔离某节点自身耗时：用父节点 last 减去子节点 last"
+          },
+          "rows": {
+            "estimated": "规划器估算的返回行数（括号外）",
+            "actual": "实际返回行数（actual time 后的 rows=N）",
+            "red_flag": "估算与实际的差距超过一个数量级 → 统计信息不准"
+          },
+          "loops": {
+            "meaning": "该节点被执行的次数",
+            "critical_rule": "在 Nested Loop 中内表 loops 可能非常大，必须乘以 actual time 来评估真实成本",
+            "parallel_note": "并行查询中 loops 表示 worker 数，时序不能简单相乘，需用 VERBOSE 查看各 worker 单独耗时"
+          },
+          "buffers": {
+            "shared_hit": "从共享缓冲区命中（内存，快）",
+            "shared_read": "从磁盘物理读取（慢！每次 read = 一次 I/O）",
+            "temp_read_written": "临时文件读写（排序/哈希溢出到磁盘的信号）",
+            "unit": "1 buffer = 8 KiB（通常），但 buffers 计数的是 I/O 操作次数而非独立数据量 —— 同一 buffer 被命中 10 次计为 hit=10",
+            "optimization_principle": "优化目标是降低 buffer 计数而非仅看时间。buffer 计数跨环境可比，时间是硬件相关的"
+          },
+          "rows_removed_by_filter": {
+            "meaning": "被 WHERE 条件过滤掉的行数（只出现在 ANALYZE 执行时）",
+            "critical_rule": "这是 per-loop 平均值！当 loops > 1 时乘以 loops 才是总丢弃行数",
+            "red_flag": "返回 1 行但 Rows Removed by Filter = 20000 → 扫描了 20001 行才找到 1 行 → 严重低效，需要索引",
+            "limit_interaction": "含 LIMIT 无 ORDER BY 时，Rows Removed by Filter 取决于匹配行在物理存储中的位置 —— 先插入的行匹配到就少扫描，后插入的多扫描"
+          },
+          "heap_fetches": {
+            "meaning": "Index Only Scan 中仍需回表取行的次数",
+            "root_cause": "visibility map 未标记对应页为 all-visible → 必须回堆检查元组可见性",
+            "fix": "VACUUM table_name（注意：VACUUM FULL 不更新 visibility map！必须用 plain VACUUM）",
+            "red_flag": "Heap Fetches 接近返回行数 → Index Only Scan 退化为普通 Index Scan，失去覆盖索引的优势"
+          },
+          "planning_time": "规划器生成执行计划的时间（通常 < 1ms）",
+          "execution_time": "查询实际执行的墙钟时间（毫秒），包含所有 I/O 等待"
+        }
+      },
+      "exercise": "执行 EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20; 并逐字段解读输出",
+      "deliverable": "能独立解释 EXPLAIN ANALYZE 输出中每行的每个字段"
+    },
+    "module_3_诊断单表慢查询": {
+      "objective": "掌握从发现慢查询到定位根因的完整流程",
+      "estimated_minutes": 60,
+      "diagnostic_workflow": {
+        "step_1_find_slow_queries": {
+          "title": "定位慢查询",
+          "method": "pg_stat_statements 按 total_exec_time 降序",
+          "query": "SELECT queryid, calls, mean_exec_time, total_exec_time,\n       shared_blks_read, temp_blks_written,\n       left(query, 200) AS query_preview\nFROM pg_stat_statements\nWHERE query NOT LIKE '%pg_stat%'\nORDER BY total_exec_time DESC\nLIMIT 10;"
+        },
+        "step_2_multidimensional_assessment": {
+          "title": "多维度判断优先级",
+          "indicators": [
+            "calls 高 + mean_exec_time 低 → 高频查询，微优化收益大",
+            "calls 低 + mean_exec_time 高 → 低频但单次昂贵，可能是报表",
+            "shared_blks_read 大 → 磁盘 I/O 严重",
+            "temp_blks_written > 0 → 排序/哈希溢出到磁盘"
+          ]
+        },
+        "step_3_get_execution_plan": {
+          "title": "获取执行计划",
+          "command": "EXPLAIN (ANALYZE, BUFFERS, VERBOSE) SELECT ...;"
+        },
+        "step_4_plan_reading_order": {
+          "title": "从最内层节点向上读",
+          "principle": "执行计划是树结构，缩进最多的节点最先执行。数据从叶子节点向上流动"
+        },
+        "step_5_identify_bottleneck_signals": {
+          "title": "识别瓶颈信号",
+          "signals": [
+            {
+              "signal": "Seq Scan on 大表（> 10万行）",
+              "diagnosis": "缺少合适的索引",
+              "fix": "在 WHERE/JOIN 列上建 B-tree 索引"
+            },
+            {
+              "signal": "Rows Removed by Filter 远超返回行数",
+              "diagnosis": "现有索引不能完全覆盖过滤条件，或索引列顺序不对",
+              "fix": "建复合索引，将所有等值过滤列放在前面"
+            },
+            {
+              "signal": "shared read 占比高（> 20%）",
+              "diagnosis": "数据不在缓存中，或扫描了过多不必要的块",
+              "fix": "减少扫描数据量（加索引），而非加大 shared_buffers"
+            },
+            {
+              "signal": "Sort Method: external merge Disk",
+              "diagnosis": "排序超出 work_mem，溢出到磁盘",
+              "fix": "增大 work_mem 或用索引消除排序"
+            },
+            {
+              "signal": "Index Only Scan 但 Heap Fetches 很大",
+              "diagnosis": "visibility map 过期，被迫回表",
+              "fix": "VACUUM table_name"
+            },
+            {
+              "signal": "Bitmap Heap Scan 读取大量 heap block",
+              "diagnosis": "索引筛选出很多行但表数据分散",
+              "fix": "考虑覆盖索引消除回表，或调整索引选择性"
+            },
+            {
+              "signal": "估算 rows 与实际 rows 差一个数量级以上",
+              "diagnosis": "统计信息过期或数据倾斜",
+              "fix": "ANALYZE tablename; 对倾斜列 ALTER COLUMN SET STATISTICS 500"
+            }
+          ]
+        }
+      },
+      "deliverable": "能独立运行完整诊断流程，从 pg_stat_statements 到 EXPLAIN 解读到根因判定"
+    },
+    "module_4_索引策略论证": {
+      "objective": "能根据执行计划诊断结果，设计并论证合适的索引方案",
+      "estimated_minutes": 90,
+      "index_selection_framework": {
+        "decision_tree": [
+          {
+            "scenario": "WHERE 单列 = 常量",
+            "recommendation": "单列 B-tree 索引",
+            "example": "WHERE user_id = 42 → CREATE INDEX ON orders (user_id)"
+          },
+          {
+            "scenario": "WHERE 多列等值条件 + ORDER BY",
+            "recommendation": "复合 B-tree 索引：等值列在前 → 排序列在后",
+            "example": "WHERE user_id = 42 AND status = 'pending' ORDER BY created_at DESC → CREATE INDEX ON orders (user_id, status, created_at DESC)"
+          },
+          {
+            "scenario": "WHERE 等值 + 范围条件",
+            "recommendation": "复合 B-tree 索引：等值列在前 → 范围列在后",
+            "example": "WHERE status = 'pending' AND created_at > '2025-01-01' → CREATE INDEX ON orders (status, created_at)"
+          },
+          {
+            "scenario": "WHERE 过滤 + SELECT 少量列",
+            "recommendation": "覆盖索引（INCLUDE），消除回表",
+            "example": "SELECT id, status, total_amount FROM orders WHERE user_id = 42 → CREATE INDEX ON orders (user_id) INCLUDE (status, total_amount)"
+          },
+          {
+            "scenario": "大量数据中频繁查询一个小众子集",
+            "recommendation": "部分索引（WHERE 子句），缩小索引体积",
+            "example": "90% 订单已 completed，只查 pending → CREATE INDEX ON orders (created_at) WHERE status = 'pending'"
+          },
+          {
+            "scenario": "WHERE func(column) = 值（表达式过滤）",
+            "recommendation": "表达式索引",
+            "example": "WHERE LOWER(email) = 'test@example.com' → CREATE INDEX ON users ((LOWER(email)))"
+          },
+          {
+            "scenario": "OR 条件组合多个列",
+            "recommendation": "各列单独建索引，让 PG 用 BitmapOr 组合；或改写为 UNION ALL",
+            "example": "WHERE col1 = 'A' OR col2 = 'B' → 两列各建索引 + 考虑 UNION ALL 重写"
+          }
+        ],
+        "composite_index_column_order_rule": {
+          "principle": "等值条件列 → 范围条件列 → 排序/返回列（INCLUDE）",
+          "rationale": "B-tree 按列顺序组织。等值条件固定前缀后，范围条件限制扫描区间。排序与索引方向一致可消除额外 Sort 节点",
+          "pg18_skip_scan_note": "PG18 的 skip scan 放宽了前导列限制：即使查询不包含前导列，若前导列基数低，PG 会自动按每个 distinct 值做多次索引查找。但这不意味着列顺序不再重要 —— 前导列基数高（> 几千）时 skip scan 得不偿失"
+        }
+      },
+      "index_type_selection": {
+        "b_tree": {
+          "scenario": "等值、范围、ORDER BY、唯一约束",
+          "coverage": "90%+ 的场景"
+        },
+        "hash": {
+          "scenario": "仅等值查询（无范围、无排序）",
+          "note": "B-tree 通常已足够，hash 索引体积略小但不支持范围"
+        },
+        "gin": {
+          "scenario": "JSONB 包含、数组操作、全文检索",
+          "note": "写入成本高，更新频繁的表需谨慎"
+        },
+        "brin": {
+          "scenario": "超大表且物理存储与列值高度相关（如时序数据）",
+          "note": "极小但选择性低，不适合单行精确查找"
+        }
+      },
+      "deliverable": "给定一个慢查询场景，能写出完整的索引方案论证 —— 包括为什么选这个索引类型、为什么是这个列顺序、预期能减少多少 buffer 读取"
+    },
+    "module_5_验证与闭环": {
+      "objective": "掌握索引效果的验证方法，形成测量→优化→验证的闭环",
+      "estimated_minutes": 45,
+      "verification_protocol": {
+        "step_1_baseline": {
+          "title": "记录基线",
+          "actions": [
+            "EXPLAIN (ANALYZE, BUFFERS) 记录优化前的执行时间、buffer 计数、扫描类型",
+            "记录 pg_stat_user_tables 中该表的 seq_scan 和 idx_scan 计数"
+          ]
+        },
+        "step_2_create_index_safely": {
+          "title": "安全创建索引",
+          "actions": [
+            "生产环境使用 CREATE INDEX CONCURRENTLY（不阻塞写入，但不可在事务块中执行）",
+            "沙箱环境可直接 CREATE INDEX",
+            "创建后立即 ANALYZE table_name"
+          ]
+        },
+        "step_3_re_explain": {
+          "title": "重新获取执行计划",
+          "actions": [
+            "用完全相同的参数再次 EXPLAIN (ANALYZE, BUFFERS)",
+            "对比扫描节点变化（Seq Scan → Index Scan / Index Only Scan）",
+            "对比 buffer 计数（重点看 shared read 是否大幅下降）",
+            "对比 execution time",
+            "确认 Rows Removed by Filter 是否消除或大幅减少"
+          ]
+        },
+        "step_4_force_plan_for_testing": {
+          "title": "如果规划器没选你的索引",
+          "approach": "SET enable_seqscan = off; 后再 EXPLAIN —— 强制走索引看实际性能",
+          "interpretation": "强制后若索引更快 → 规划器代价估算不准（执行 ANALYZE 或调整统计采样）；若索引更慢 → 索引设计确实不合适",
+          "reset": "RESET enable_seqscan;"
+        },
+        "step_5_monitor_index_usage": {
+          "title": "监控索引实际使用",
+          "query": "SELECT schemaname, tablename, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch\nFROM pg_stat_user_indexes\nWHERE tablename = 'orders'\nORDER BY idx_scan DESC;"
+        },
+        "step_6_check_for_invalid_indexes": {
+          "title": "检查无效索引",
+          "query": "SELECT indexrelid::regclass AS index_name, indisvalid\nFROM pg_index WHERE NOT indisvalid;",
+          "note": "CREATE INDEX CONCURRENTLY 失败会留下无效索引 —— 它仍消耗写入维护成本但查询无法使用，必须 DROP"
+        }
+      },
+      "deliverable": "能独立执行一次完整的索引优化闭环：发现慢查询 → 分析执行计划 → 设计索引 → 创建 → 验证效果 → 监控使用"
+    },
+    "module_6_PG18_特性应用": {
+      "objective": "理解并利用 PG18 与单表查询优化相关的新特性",
+      "estimated_minutes": 40,
+      "pg18_features_for_single_table": {
+        "explain_buffers_default": {
+          "feature": "EXPLAIN ANALYZE 自动包含 BUFFERS",
+          "impact": "无需记住加 BUFFERS 选项，简化诊断流程",
+          "code": "EXPLAIN ANALYZE SELECT ...;  -- BUFFERS 自动附带",
+          "suppress": "EXPLAIN (ANALYZE, BUFFERS OFF) SELECT ...;  -- 如需抑制"
+        },
+        "skip_scan": {
+          "feature": "B-tree Skip Scan（跳跃扫描）",
+          "mechanism": "复合索引前导列未出现在 WHERE 中时，若前导列基数低，PG18 自动为每个 distinct 值做索引查找",
+          "practical_value": "一个 (region, category, sale_date) 索引可同时服务 WHERE category = 'X' 查询（即使 region 不在 WHERE 中），减少索引数量",
+          "limitations": "仅 B-tree；前导列基数越低越好（几十到几百最理想）；至少需要一个非前导列的等值条件",
+          "example": "索引 (region, product_category, sale_date)\n查询 WHERE product_category = 'Electronics' AND sale_date > '2025-06-01'\n→ PG17 可能被迫 Seq Scan（48.5ms）\n→ PG18 自动 skip scan（12.8ms，约 4× 提升）"
+        },
+        "async_io": {
+          "feature": "异步 I/O 子系统",
+          "impact_on_learning": "Seq Scan 快 15-25%，Bitmap Heap Scan 快 10-18%。这不改变索引策略本身，但减少了不用索引时的代价差距。优化重点仍应是减少 buffer 读取",
+          "note": "这是基础设施优化，学习者无需配置。重点仍是：能走索引就避免 Seq Scan"
+        },
+        "or_to_any_transformation": {
+          "feature": "OR → = ANY 自动转换",
+          "impact": "WHERE status = 'a' OR status = 'b' OR status = 'c' 被自动改写为 WHERE status = ANY(ARRAY['a','b','c'])，从而能用单个 Index Scan 而非多个 Bitmap Scan",
+          "note": "自动化优化，无需用户干预"
+        },
+        "explain_row_decimals": {
+          "feature": "实际行数显示为小数（rows=1.00 而非 rows=1）",
+          "impact": "更精确地反映 per-loop 平均值，帮助发现统计精度问题"
+        }
+      },
+      "deliverable": "理解 PG18 新特性如何改变（或未改变）单表慢查询诊断的方法论"
+    }
+  },
+  "knowledge_map": {
+    "核心概念层次": {
+      "level_1_识别": [
+        "pg_stat_statements",
+        "慢查询日志 log_min_duration_statement",
+        "total_exec_time vs mean_exec_time vs calls"
+      ],
+      "level_2_诊断": [
+        "EXPLAIN (ANALYZE, BUFFERS)",
+        "执行计划树结构",
+        "最内层节点优先执行",
+        "actual time 是 per-loop 平均值",
+        "Rows Removed by Filter 是 per-loop 平均值"
+      ],
+      "level_3_根因分析": [
+        "Seq Scan → 缺索引",
+        "Rows Removed by Filter 大 → 索引不匹配",
+        "shared read 高 → 扫描数据过量",
+        "temp read/written → work_mem 不足/缺排序索引",
+        "Heap Fetches ≈ 返回行数 → visibility map 过期"
+      ],
+      "level_4_优化方案": [
+        "B-tree 复合索引（等值→范围→排序）",
+        "覆盖索引 INCLUDE",
+        "部分索引 WHERE 子句",
+        "表达式索引",
+        "PG18 skip scan 减少索引数量"
+      ],
+      "level_5_验证": [
+        "优化前后 EXPLAIN 对比",
+        "buffer 计数下降 = 核心成功指标",
+        "强制走索引验证 SET enable_seqscan = off",
+        "pg_stat_user_indexes 监控使用",
+        "去除无效索引"
+      ]
+    },
+    "优化优先级公式": "影响 = total_exec_time（累计数据库耗时）× 业务重要性。不要只看最慢的单次执行，要关注高频调用的累积成本"
+  },
+  "exclusion_boundary": {
+    "explicitly_excluded": [
+      "优化器内核参数调优（cpu_tuple_cost, random_page_cost, seq_page_cost 等 cost 参数）",
+      "多表 JOIN 策略选择（Nested Loop vs Hash Join vs Merge Join）",
+      "查询改写为子查询/CTE/LATERAL",
+      "分区表设计与 partition pruning",
+      "物化视图",
+      "并行查询 worker 数量调优（max_parallel_workers_per_gather 等）",
+      "连接池、锁等待、长事务诊断",
+      "SQL 语法层面的等价重写（EXISTS vs IN vs = ANY 的语义选择）"
+    ],
+    "boundary_notes": "以下内容虽在单表查询中可能出现，但超出本次学习范围：shared_buffers 大小调优、effective_cache_size 调整、JIT 编译开关、work_mem 的全局调优（仅在出现 Sort Method: external merge 时临时 SET work_mem 是可以的）"
+  },
+  "practical_exercise_scenarios": [
+    {
+      "id": "ex1",
+      "title": "缺索引导致全表扫描",
+      "query": "SELECT * FROM orders WHERE user_id = 8888 ORDER BY created_at DESC LIMIT 10;",
+      "expected_plan_before": "Seq Scan on orders ... Rows Removed by Filter: ~999990",
+      "fix": "CREATE INDEX ON orders (user_id, created_at DESC);",
+      "expected_plan_after": "Index Scan using orders_user_id_created_at_idx ... 无需过滤",
+      "learning_point": "从全表扫描到索引扫描，理解复合索引中列顺序的重要性"
+    },
+    {
+      "id": "ex2",
+      "title": "Rows Removed by Filter 揭示索引不完整",
+      "query": "SELECT * FROM orders WHERE user_id = 42 AND status = 'pending' ORDER BY created_at DESC LIMIT 5;",
+      "existing_index": "仅 idx_orders_user_id (user_id)",
+      "expected_signal": "Index Scan using idx_orders_user_id ... Rows Removed by Filter: N（被 status 过滤）",
+      "fix": "CREATE INDEX ON orders (user_id, status, created_at DESC);",
+      "expected_fix_signal": "Rows Removed by Filter 消失，buffer 计数大幅下降",
+      "learning_point": "Index Scan 不等于最优。Rows Removed by Filter 暴露了单列索引不足以覆盖多列过滤"
+    },
+    {
+      "id": "ex3",
+      "title": "排序溢出到磁盘的场景",
+      "query": "SELECT * FROM orders WHERE status = 'completed' ORDER BY total_amount DESC LIMIT 100;",
+      "expected_signal": "Sort Method: external merge Disk ... temp read=N written=N",
+      "learning_action": "先尝试用索引消除排序：CREATE INDEX ON orders (status, total_amount DESC); 若仍有 temp 读写则 SET work_mem = '256MB'",
+      "learning_point": "有索引可消除排序时优先建索引；work_mem 调大是临时方案"
+    },
+    {
+      "id": "ex4",
+      "title": "Index Only Scan 退化为大量 heap fetches",
+      "query": "SELECT user_id, status FROM orders WHERE user_id BETWEEN 100 AND 200;",
+      "existing_index": "CREATE INDEX ON orders (user_id) INCLUDE (status);",
+      "expected_signal": "Index Only Scan ... Heap Fetches: N (N ≈ 返回行数)",
+      "fix": "VACUUM orders; 后重新 EXPLAIN → Heap Fetches 降至 0",
+      "learning_point": "Heap Fetches 接近返回行数 = visibility map 过期，用 VACUUM 而非 VACUUM FULL 修复"
+    },
+    {
+      "id": "ex5",
+      "title": "部分索引场景",
+      "query": "SELECT * FROM orders WHERE status = 'pending' AND created_at < now() - interval '1 day' ORDER BY created_at;",
+      "analysis": "orders 表 70% 为 completed，pending 仅占 ~10%",
+      "fix": "CREATE INDEX ON orders (created_at) WHERE status = 'pending';",
+      "learning_point": "部分索引大幅缩小索引体积。但查询中的 WHERE 条件必须可证明蕴含索引谓词 —— 使用绑定变量 WHERE status = $1 可能无法匹配"
+    }
+  ],
+  "key_references": [
+    {
+      "title": "PostgreSQL 18 EXPLAIN 手册（Debian manpage）",
+      "url": "https://manpages.debian.org/unstable/postgresql-client-18/EXPLAIN.7.en.html",
+      "topic": "EXPLAIN 选项与输出格式"
+    },
+    {
+      "title": "EXPLAIN ANALYZE or EXPLAIN (ANALYZE, BUFFERS)? | PostgresAI",
+      "url": "https://v2.postgres.ai/docs/postgres-howtos/performance-optimization/query-tuning/explain-analyze-buffers",
+      "topic": "BUFFERS 解读与优化方法论"
+    },
+    {
+      "title": "PostgreSQL Tutorial: Rows Removed by Filter | Rockdata",
+      "url": "https://www.rockdata.net/tutorial/explain-rows-removed-by-filter/",
+      "topic": "Rows Removed by Filter 深度解读"
+    },
+    {
+      "title": "PostgreSQL Tutorial: Tuning Index Scans | Rockdata",
+      "url": "https://www.rockdata.net/tutorial/tune-index-scan/",
+      "topic": "索引扫描优化"
+    },
+    {
+      "title": "PostgreSQL 18 B-tree Skip Scan | Neon",
+      "url": "https://neon.com/postgresql/18/skip-scan-btree",
+      "topic": "PG18 skip scan 原理与示例"
+    },
+    {
+      "title": "PostgreSQL 18 性能优化实战 | ltmonster.space",
+      "url": "https://ltmonster.space/postgresql-18-performance-optimization",
+      "topic": "单表慢查询诊断完整中文教程"
+    },
+    {
+      "title": "PG18 引入 BUFFERS 为 EXPLAIN ANALYZE 默认选项 | modb.pro",
+      "url": "https://www.modb.pro/db/1970646238655688704",
+      "topic": "BUFFERS 默认启用的中文解读"
+    },
+    {
+      "title": "PostgreSQL 18 多列 B 树索引支持跳跃扫描 | Rockdata 中文",
+      "url": "https://www.rockdata.net/zh-cn/posts/skip-scan-multicolumn-btree-index/",
+      "topic": "Skip scan 中文详解"
+    },
+    {
+      "title": "从 Explain 到执行：手把手优化 PostgreSQL 慢查询的 5 个关键步骤 | 阿里云开发者",
+      "url": "https://developer.aliyun.com/article/1668002",
+      "topic": "慢查询优化全流程中文教程"
+    },
+    {
+      "title": "PostgreSQL SQL 优化指南四句真言 | 腾讯云",
+      "url": "https://cloud.tencent.com/developer/article/2638151",
+      "topic": "索引类型选择与优化原则"
+    },
+    {
+      "title": "Choosing the right Postgres indexes | incident.io",
+      "url": "https://incident.io/blog/choosing-the-right-postgres-indexes",
+      "topic": "索引选择决策树"
+    },
+    {
+      "title": "PostgreSQL 18 Async I/O Tuning Checklist | Cybrosys",
+      "url": "https://www.cybrosys.com/research-and-development/postgres/the-ultimate-postgresql-18-asynchronous-io-tuning-checklist-with-examples",
+      "topic": "PG18 异步 I/O 配置"
+    }
+  ],
+  "transfer_output": {
+    "target_phase": "S3",
+    "learner_readiness": {
+      "can_independently": [
+        "搭建 PG18 沙箱并生成测试数据",
+        "用 pg_stat_statements 定位慢查询",
+        "阅读并解释 EXPLAIN (ANALYZE, BUFFERS) 的每一个字段",
+        "识别 7 种常见瓶颈信号并给出根治方案",
+        "设计复合索引（等值→范围→排序列顺序）",
+        "评估是否需要覆盖索引/部分索引/表达式索引",
+        "执行优化前→建索引→优化后的完整验证闭环",
+        "利用 PG18 skip scan 减少复合索引的数量"
+      ],
+      "boundary_awareness": [
+        "遇到多表 JOIN 问题 → 标记为 S3 或后续阶段",
+        "遇到优化器选错计划但索引正确 → 标记为需要统计信息或 cost 参数调优（超出范围）",
+        "遇到锁等待导致的 '慢' → 标记为锁问题而非查询优化问题"
+      ]
+    },
+    "recommended_s3_input": "学习者已在 PG18 沙箱内完成 5 个练习场景的独立诊断与验证。S3 可从多表 JOIN（Nested Loop / Hash Join / Merge Join 的选择与优化）开始，或深入查询改写（EXISTS vs IN vs JOIN 的等价性与性能差异）"
+  }
+}

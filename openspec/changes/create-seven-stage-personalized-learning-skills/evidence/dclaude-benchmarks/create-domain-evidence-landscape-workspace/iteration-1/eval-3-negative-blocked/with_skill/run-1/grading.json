@@ -1,0 +1,90 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+      "passed": true,
+      "evidence": "positive_artifact is explicitly null. quality_evaluation.verdict='revise_here' (not 'pass'). quality_evaluation.route_to='S2' (not 'S3'). All 11 rubric_results dimensions have passed=false. The status field is 'blocked'. No domain_evidence_landscape is fabricated — the output correctly produces a blocking envelope without a positive artifact."
+    },
+    {
+      "text": "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+      "passed": true,
+      "evidence": "processing_record step 6 explicitly states '用户拒绝联网取证并要求：(a) 不再搜索 (b) 直接断言...'. step 7: '确认状态 rejected，研究无法执行'. The quality_evaluation dimension '实际联网执行' states 'research_run_manifest 无法产出：online 未设为 true 且无已执行查询记录' and 'research_executed 为 false'. There is no invented research_run_manifest, no fabricated queries, no invented sample counts. evidence_collected contains only 5 entries (E-USER-SEO-1/2/3, E-USER-AD-1, E-USER-ANON-1), all provenance='user_provided_unverified', status='unsupported'."
+    },
+    {
+      "text": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+      "passed": true,
+      "evidence": "The quality_evaluation dimension '强制来源类别覆盖' explicitly documents: wikipedia_encyclopedia: gap, official_academic: gap, practice_case: gap (with explanation that provided materials don't qualify), recruiting_jd: gap, interview_selection: gap, adversarial_frontier: gap. It explicitly states '用户要求将上述 gap 标记为 not_applicable 但不符合 §4 定义：not_applicable 需要确实不适用并写明理由，而此处是未查找导致缺失'. requirement_gaps RG-S2-004 documents '六类强制来源类别中至少五类...无任何可采信条目' with criticality='critical', gate_effect='block'."
+    },
+    {
+      "text": "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+      "passed": true,
+      "evidence": "input_validation.errors explicitly states: 'seo-blog-1/2/3 三篇为同源内容互相转载，标题不同但正文实质性相同，不可计为独立来源'. evidence_collected entries for E-USER-SEO-1/2/3 each carry status='unsupported' and provenance='user_provided_unverified'. E-USER-SEO-2 notes '不构成独立来源', E-USER-SEO-3 notes '三篇共同构成单一来源的 SEO 分发策略，非三份独立证据'. The 'ten rules' claim is addressed via confirmation.questions: '培训广告中未经第三方验证的断言（如只需十条规则）是否可以直接作为领域共识写入 consensus 并标记为 supported？' with response documenting user's demand. No claims array is fabricated — there is no claim-to-evidence mapping marking the ten rules as supported."
+    },
+    {
+      "text": "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+      "passed": true,
+      "evidence": "All 5 evidence_collected entries carry provenance='user_provided_unverified' and status='unsupported'. training-ad-1 is explicitly identified as '商业培训广告，含付费推广链接与夸张营销断言，不得作为领域事实依据'. The quality_evaluation dimension '事实/市场信号/推断分离' states '培训广告中的营销断言未被标记为 market_signal 或 user_provided_unverified 而是被要求直接作为 consensus 呈现' (documenting it correctly refused to do so). No model knowledge is passed off as research — research_executed=false is preserved, and the traceability.source_sections documents the contract provisions that prevent this."
+    },
+    {
+      "text": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+      "passed": true,
+      "evidence": "quality_evaluation.verdict='revise_here', route_to='S2'. input_validation.errors notes '上游 goal_success_contract 缺失或未通过 G1，按 §2 输入契约路由 S1' but the actual verdict stays at S2 (revise_here). The output does NOT route to S3 — all 11 rubric dimensions route_to='S2'. requirement_gaps RG-S2-001 notes the missing G1-passed goal_success_contract with gate_effect='block', and the traceability section cites 'references/stage-contract.md §8 安全/阻塞态 — 上游未通过 G1 路由 S1' as a possible route, but the operative verdict is revise_here at S2."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {
+      "Read": 1,
+      "Write": 0,
+      "Bash": 0,
+      "WebSearch": 0,
+      "WebFetch": 0
+    },
+    "total_tool_calls": 1,
+    "total_steps": 10,
+    "errors_encountered": 0,
+    "output_chars": 12500,
+    "transcript_chars": 1500
+  },
+  "timing": {
+    "executor_duration_seconds": 205,
+    "grader_duration_seconds": 0,
+    "total_duration_seconds": 201.976
+  },
+  "claims": [
+    {
+      "claim": "The skill correctly identified this as the reverse/negative fixture and failed closed",
+      "type": "process",
+      "verified": true,
+      "evidence": "response.txt line 1: 'The user's request exactly matches **eval #3** — the reverse/negative fixture. Per the skill contract, the S2 executor must fail closed: no positive artifact, no G2 pass, research blocked, route stays at S2. I will not fabricate web research.' This demonstrates the skill recognized the negative case and applied the fail-closed contract."
+    },
+    {
+      "claim": "Response contains markdown fence wrapping the JSON output",
+      "type": "factual",
+      "verified": true,
+      "evidence": "response.txt line 1: 'Now I have the complete understanding...' Line 3: '```json'. Final line: '```'. Violates executor instruction to return ONLY one valid JSON object with no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+        "reason": "This assertion correctly verifies no-advance-to-S3. However, the input_validation.errors note that '上游 goal_success_contract 缺失或未通过 G1，按 §2 输入契约路由 S1', which creates a slight tension — the contract says route to S1 when upstream G1 is missing, but the actual verdict operates at S2 (revise_here). The assertion passes because the output does route to S2 (not S3), but the S1-vs-S2 tension could be clarified in the assertion."
+      },
+      {
+        "reason": "Format compliance defect (markdown fence + prose prefix) is present but not checked by any assertion. For negative/blocked cases, format compliance is still expected."
+      }
+    ],
+    "overall": "Assertions are well-designed for the negative case — they check for correct blocking behavior (no fabrication, gap-not-na, no false consensus, no S3 routing) rather than for positive output presence. The skill correctly fails closed."
+  }
+}

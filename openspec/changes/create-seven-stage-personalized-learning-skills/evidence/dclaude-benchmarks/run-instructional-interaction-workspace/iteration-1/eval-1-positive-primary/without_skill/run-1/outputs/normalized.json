@@ -1,0 +1,98 @@
+{
+  "session_package_and_trace": {
+    "session_id": "S6",
+    "topic": "PostgreSQL 多列索引顺序 — 进阶场景与教学输出",
+    "prerequisite": "G5 已通过：学习者已能从「选择性最高列永远第一」的直觉修正为「等值优先于范围/排序」的正确原则，并在未见等值+范围+排序查询上独立给出正确顺序、理由和沙箱验证步骤",
+    "learning_node": "依据谓词与可用前缀论证多列索引顺序",
+    "session_objectives": [
+      "在多范围条件与 IN 子句场景下正确推导索引列顺序",
+      "设计覆盖索引以支持仅索引扫描 (Index Only Scan)",
+      "就多查询负载权衡索引策略并清晰阐述取舍理由",
+      "以教学语言向他人解释多列索引顺序的核心原则与边界"
+    ],
+    "activities": [
+      {
+        "activity_id": "A1",
+        "type": "consolidation_check",
+        "description": "用自己的话解释：为什么等值列应放在范围列前面？请从 B-tree 索引前缀匹配的角度说明。",
+        "expected": "索引按 (a,b,c) 顺序组织。WHERE a=1 AND b>5 用到 (a,b) 两列——a 等值定位到连续区间起点，b 在该区间内做范围扫描。若反过来 (b,a)，b>5 消耗前缀后 a 列无法参与索引定位，只能做过滤。",
+        "learner_response": "学习者正确表述了索引前缀匹配机制，指出范围条件会「消耗」前缀——一旦遇到范围列，后续列失去索引定位能力，只能作为过滤条件。同时指出等值列内部按选择性排序仍有价值，但前提是等值优先于范围的层级不能打破。",
+        "assessment": "pass"
+      },
+      {
+        "activity_id": "A2",
+        "type": "challenge",
+        "difficulty": "G6",
+        "query": "SELECT * FROM orders WHERE status = 'paid' AND created_at BETWEEN '2025-01-01' AND '2025-06-30' AND amount > 100 ORDER BY created_at DESC",
+        "description": "设计最优索引并说明理由。注意 created_at 同时出现在 BETWEEN（范围）和 ORDER BY 中。",
+        "expected": "索引 (status, created_at)：status 等值放第一；created_at 同时服务于 BETWEEN 范围扫描和 ORDER BY 排序，避免额外 Sort 节点；amount > 100 无法利用索引前缀（created_at 已消耗前缀），但可作为索引过滤条件或留到 Heap 过滤。若 amount 过滤性极强，可扩展为 (status, created_at, amount)。",
+        "learner_response": "推荐 (status, created_at)。核心理由：status 是唯一等值条件，放第一列；created_at 同时承担范围过滤和排序，利用索引有序性消除 Sort。amount 在 created_at 之后已无法用于索引定位，但可做 Index Filter。同时指出若 amount 过滤掉 90%+ 行，可考虑 (status, created_at, amount) 减少回表——但增加索引体积，需实测权衡。",
+        "learner_sandbox": "CREATE INDEX idx_a2_1 ON orders(status, created_at); CREATE INDEX idx_a2_2 ON orders(status, created_at, amount); EXPLAIN (ANALYZE, BUFFERS) 对比两种索引的 cost、actual time、shared buffers hit。",
+        "assessment": "pass",
+        "insight": "自发提出 amount 索引过滤 vs 索引体积的权衡分析，超越简单规则进入代价思维"
+      },
+      {
+        "activity_id": "A3",
+        "type": "challenge",
+        "difficulty": "G6",
+        "query": "SELECT id, name, email FROM users WHERE department_id IN (1, 2, 3) AND status = 'active' ORDER BY name LIMIT 50",
+        "description": "IN 列表有 3 个值。设计最优索引并解释 IN 子句对索引前缀的影响。",
+        "expected": "IN (1,2,3) 在 PostgreSQL 中等价于 = ANY(ARRAY[...])，优化器展开为多次索引扫描后合并 (BitmapOr / Index Scan x N)，因此 IN 列仍可作为等值前缀使用。索引 (department_id, status, name) 可覆盖查询三列，实现 Index Only Scan + 消除 Sort。",
+        "learner_response": "推荐 (department_id, status, name)：department_id 处理 IN（视为等值前缀），status 等值过滤，name 同时满足 ORDER BY 和覆盖查询（id 需确认在索引中——若 id 是 PK 则自动包含在索引中，或显式加 INCLUDE）。对比 (department_id, status) 方案：后者需要 Sort + 回表取 name/email/id，前者走 Index Only Scan 且无 Sort。代价是索引更大。实际用 EXPLAIN 验证：前者 Index Only Scan + 无 Sort，后者 Index Scan + Sort。",
+        "learner_sandbox": "CREATE INDEX idx_a3_1 ON users(department_id, status, name); CREATE INDEX idx_a3_2 ON users(department_id, status); EXPLAIN ANALYZE 两条，对比 plan 类型、cost、actual time。",
+        "assessment": "pass",
+        "insight": "准确识别 IN 列表的索引行为，区分 Index Scan 与 Index Only Scan 适用条件"
+      },
+      {
+        "activity_id": "A4",
+        "type": "teaching_output",
+        "difficulty": "G6",
+        "description": "教学任务：向一位坚持「选择性最高的列永远放第一」的同事解释为什么这个直觉有时是错误的。请给出至少一个具体反例、原则总结和可验证的 EXPLAIN 对比。",
+        "expected": "原则：索引列顺序决定哪些列能参与索引查找，而非选择性。等值列优先于范围/排序列；等值列内部才按选择性排序。反例：WHERE status='active' AND created_at>'2025-01-01'，尽管 created_at 选择性远高于 status，索引 (created_at, status) 导致范围扫描后 status 无法用于索引定位；而 (status, created_at) 的 status 等值定位后 created_at 既做范围又有序。",
+        "learner_response": "学习者给出三层递进解释：(1) 用「字典比喻」——索引像字典先按第一列排序再按第二列，范围条件相当于「从某页往后翻」，翻过去后第二列排序不再可用。(2) 给出具体反例和两条 EXPLAIN 输出对比，展示 (created_at, status) 的 Index Cond 只有 created_at 而 (status, created_at) 的 Index Cond 包含两列。(3) 总结可操作规则：先分类（等值 vs 范围 vs 排序），等值列优先；等值列之间按选择性降序；范围/排序列紧跟；验证用 EXPLAIN。",
+        "assessment": "pass",
+        "insight": "用比喻建立直觉，用 EXPLAIN 输出做证据，用规则做总结——三层教学结构表明深层理解与知识迁移能力"
+      },
+      {
+        "activity_id": "A5",
+        "type": "integration",
+        "difficulty": "G6",
+        "description": "综合负载设计：应用有两个高频查询。Q1: SELECT * FROM events WHERE user_id=? AND event_type=? AND created_at>? ORDER BY created_at DESC LIMIT 20。Q2: SELECT * FROM events WHERE user_id=? ORDER BY created_at DESC LIMIT 50。设计索引策略并说明取舍。",
+        "expected": "Q1 需要 (user_id, event_type, created_at) 或 (user_id, created_at, event_type)。Q2 需要 (user_id, created_at)。合并考虑：若 event_type 过滤性强，建 (user_id, event_type, created_at) 服务 Q1 同时可服务 Q2；若 Q2 频率更高且追求 Index Only Scan，建 (user_id, created_at) + INCLUDE 覆盖列。需要权衡写入开销、存储空间、查询性能。",
+        "learner_response": "方案 A：单索引 (user_id, created_at, event_type)——Q2 完美匹配，Q1 的 event_type 退化为 Index Filter（不如 Index Cond 但可用）。方案 B：单索引 (user_id, event_type, created_at)——Q1 完美匹配，Q2 也能用（前缀 user_id 可用）但索引多了 event_type 列稍大。方案 C：两个索引各服务一个查询，但写入开销翻倍。推荐方案 A 或 B 取决于 Q1 event_type 的过滤性：过滤性强选 B，否则选 A。建议用 pgbench 压测对比 p50/p99 延迟和索引体积。",
+        "learner_sandbox": "创建方案 A 和 B 的索引，编写 pgbench 脚本模拟 Q1 和 Q2 混合负载（比例按实际业务），对比 tps、延迟分布、索引大小。",
+        "assessment": "pass",
+        "insight": "提出多方案分情形推荐 + pgbench 验证，展示工程化决策思维而非唯一答案"
+      }
+    ],
+    "learning_trace": {
+      "total_activities": 5,
+      "passed": 5,
+      "failed": 0,
+      "key_insight_moments": [
+        "A2: 自发提出索引过滤列取舍的代价权衡分析",
+        "A3: 准确识别 IN 列表索引行为并区分扫描类型",
+        "A4: 使用字典比喻教学，三层递进解释结构",
+        "A5: 多方案分情形推荐 + 压测验证的工程化思维"
+      ],
+      "learner_profile_update": {
+        "resolved_misconception": "「选择性最高的列永远放第一」→ 已修正为「等值优先于范围/排序，等值列内部再按选择性降序」",
+        "new_capability": "独立分析含 IN 子句、多范围条件、覆盖索引的综合场景，并给出沙箱/压测验证方案",
+        "meta_cognition": "能将原理以教学语言传递给他人，使用类比和反例建立直觉",
+        "readiness": "已准备好进入下一学习节点或接受综合评估"
+      }
+    }
+  },
+  "G6_verdict": {
+    "level": "G6",
+    "status": "PASS",
+    "rationale": "学习者在 S6 全部五项活动中通过：A1 巩固了前缀匹配机制的正确表述；A2 在多范围+排序场景中独立推导最优索引并自发进行代价权衡；A3 准确处理 IN 子句的索引行为并区分 Index Scan 与 Index Only Scan；A4 以三层递进结构（比喻→证据→规则）完成高质量教学输出；A5 在多查询负载场景中展示多方案分情形推荐和工程化验证思维。学习者已从「记住并应用规则」上升到「理解原理、能教学、能工程权衡」的层次，符合 G6 标准。",
+    "evidence": [
+      "A2: 多范围+排序场景独立正确分析，无需提示",
+      "A3: IN 子句场景正确推理，区分 Index Scan vs Index Only Scan",
+      "A4: 教学输出包含比喻、EXPLAIN 对比证据、可操作规则三层结构",
+      "A5: 负载级多方案分情形推荐 + pgbench 验证方案"
+    ],
+    "next_node_recommendation": "可进入下一学习节点。建议后续方向：(1) 表达式索引与部分索引的场景化决策；(2) 扩展统计 (CREATE STATISTICS) 与查询计划绑定的高级调优；(3) 真实生产环境索引审计实践——分析慢查询日志，识别缺失/冗余/未使用索引。"
+  }
+}

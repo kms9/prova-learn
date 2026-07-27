@@ -1,0 +1,99 @@
+{
+  "expectations": [
+    {
+      "text": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+      "passed": true,
+      "evidence": "focus_question: '学习者如何判断两个分数是否表示相同大小，并运用这种理解来比较分数和解决真实情境问题？'. Nodes include representation types: n-area-model (面积模型) and n-number-line (数轴表征). The graph is organized as a capability-concept DAG, not a chapter sequence. Nodes are typed: concept (n-unit-whole, n-equal-partitioning, n-unit-fraction, n-fraction-quantity, n-equivalent-fractions), representation (n-area-model, n-number-line), procedure (n-common-denominator), strategy (n-compare-strategies, n-context-modeling), metacognition (n-self-monitor)."
+    },
+    {
+      "text": "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[0] ('结构无环性'): 10 hard edges form the DAG path n-unit-whole→n-equal-partitioning→n-unit-fraction→n-fraction-quantity→n-equivalent-fractions→n-common-denominator→n-compare-strategies→n-context-modeling. Topological sort: n-unit-whole(0) < n-equal-partitioning(1) < n-unit-fraction(2) < n-fraction-quantity(3) < n-equivalent-fractions(4) < n-common-denominator(5) < n-compare-strategies(6) < n-context-modeling(7) < n-self-monitor(8). All hard edges from lower to higher order, no cycle."
+    },
+    {
+      "text": "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+      "passed": true,
+      "evidence": "All 10 hard edges have rationale fields. Key examples: n-equal-partitioning→n-unit-fraction: '单位分数1/b的定义前提是整体被等分为b份——若不等分，1份不能称为1/b；等分是单位分数的构成性前提'; n-equivalent-fractions→n-common-denominator: '通分的本质是将两个分数转化为同分母的等值分数——如果不理解等值分数，通分只是无意义的机械操作'. Each rationale explains why from_node is a constitutive or operational prerequisite of to_node, grounded in fraction structure."
+    },
+    {
+      "text": "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[2] confirms: cap-compare-fractions traces to 10 nodes (n-unit-whole through n-self-monitor); cap-explain-equivalence traces to 6 nodes (n-equal-partitioning through n-equivalent-fractions); cap-solve-context traces to 5 nodes (n-unit-whole, n-equivalent-fractions, n-compare-strategies, n-context-modeling, n-self-monitor). traceability[].goal_refs maps each node to its target capabilities."
+    },
+    {
+      "text": "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+      "passed": true,
+      "evidence": "All 11 nodes have: (a) capability_statement with observable behavior (e.g. n-unit-fraction: '理解1/b表示整体等分为b份后的其中1份，能说出1/b的分子分母分别表示什么，能比较不同单位分数的大小'), (b) common_misconceptions (e.g. n-unit-fraction: '认为1/3 > 1/2 因为3 > 2（整数思维迁移）'), (c) assessment_items (11 items covering cognitive_levels: explain(2), apply(4), diagnose(2), evaluate(2), transfer(1)). The 'larger numerator and denominator imply larger fraction' misconception appears at n-equivalent-fractions: '认为2/3和3/4等值因为分子分母各加了1'."
+    },
+    {
+      "text": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+      "passed": true,
+      "evidence": "traceability array covers all 11 nodes. Each entry has: source_refs→S2 evidence (e-unit-whole, e-equal-partition, e-unit-fraction, e-number-line, e-equivalent-fractions, e-common-denom), goal_refs→S1 target capabilities, assessment_refs→assessment items. quality_evaluation.verdict='pass', route_to='S4'. All 7 rubric dimensions pass. The 6 S2 evidence domains match those stated in the prompt: 单位整体、等分、单位分数、数轴表征、等值分数、通分意义."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 11,
+    "errors_encountered": 0,
+    "output_chars": 15841,
+    "transcript_chars": 85478
+  },
+  "timing": {
+    "executor_duration_seconds": 210,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": 206.499
+  },
+  "claims": [
+    {
+      "claim": "G1/G2 已通过，已审计单位整体、等分、单位分数、数轴表征、等值分数与通分意义六个证据域",
+      "type": "process",
+      "verified": true,
+      "evidence": "input_validation.status='pass', source_evidence_ids lists all 6 evidence domains matching the prompt's S2 audit description"
+    },
+    {
+      "claim": "硬先修DAG拓扑排序无环，16条边全有rationale",
+      "type": "factual",
+      "verified": true,
+      "evidence": "quality_evaluation confirms: 10 hard + 6 soft = 16 edges, all with rationale fields. Topological sort verified for hard-prerequisite subgraph."
+    },
+    {
+      "claim": "评估题覆盖解释/应用/诊断/评估/迁移五层认知水平",
+      "type": "quality",
+      "verified": true,
+      "evidence": "11 assessment items: explain(2), apply(4), diagnose(2), evaluate(2), transfer(1) = 5 distinct cognitive levels"
+    },
+    {
+      "claim": "11条traceability链路全部闭环——node→S2 source/S1 goal/assessment",
+      "type": "quality",
+      "verified": true,
+      "evidence": "All 11 traceability entries have non-empty source_refs, goal_refs, assessment_refs, covering every node"
+    },
+    {
+      "claim": "数轴与面积模型均为表征节点，以等分→单位分数为共同硬先修，二者之间无边，为并行表征",
+      "type": "factual",
+      "verified": true,
+      "evidence": "confirmation.response.confirmed_decisions documents this architectural choice. n-area-model depends on n-equal-partitioning (hard), n-number-line depends on n-unit-fraction and n-fraction-quantity (both hard). No edge between n-area-model and n-number-line — parallel representation branches."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+        "reason": "The traceability source_refs use evidence IDs (e-unit-whole, etc.) that are well-named and distinct. This is stronger than the case-1 with_skill run which used generic e-doc/e-jd. The cross-domain expectations are well-crafted — each assertion targets a structural property of the graph rather than surface features."
+      }
+    ],
+    "overall": "All 6 expectations pass with strong evidence. The with_skill output for the cross-domain (fractions) case demonstrates excellent structural fidelity: 11 typed nodes (concept/representation/procedure/strategy/metacognition), 16 edges all with hard/soft marking and rationale, 11 assessment items across 5 cognitive levels, full traceability to 6 distinct S2 evidence domains, and a passing G3 verdict routing to S4. The focus question anchors the graph, and multiple representations (area model, number line) are used as parallel branches rather than serial chapters."
+  }
+}

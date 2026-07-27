@@ -1,0 +1,90 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+      "passed": false,
+      "evidence": "The without_skill output does NOT contain a domain_evidence_landscape or S2 handoff envelope. Instead it produces a 'learning_path' structure with modules (module_1 through module_6), a knowledge_map, and practical_exercise_scenarios. There is no research_run_manifest with online status, perspectives, queries with executed_at, rounds, or follow_up_triggers. The output mentions 'STORM-style multi-round web research (6 rounds, 18+ sources)' in meta.method but provides no structured manifest recording actual queries, execution timestamps, or perspective-to-query mapping."
+    },
+    {
+      "text": "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+      "passed": false,
+      "evidence": "The without_skill output has no category_coverage structure at all. There is no explicit tracking of which of the six mandatory source categories are covered/gap/not_applicable. key_references lists 12 URLs but without source_category classification, criticality, or gate_effect. There is no source_ledger with evidence_id entries. Product-behavior facts reference PostgreSQL 18 documentation in the learning content (e.g., 'PostgreSQL 18 起，EXPLAIN ANALYZE 自动包含 BUFFERS 信息') but without structured traceability to specific source_ledger entries with URLs and reliability ratings."
+    },
+    {
+      "text": "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+      "passed": false,
+      "evidence": "No claims array exists in the output. The output teaches that 'cost' is '规划器估算成本（相对单位，非毫秒）' in the EXPLAIN field reference and correctly notes Seq Scan can be optimal, but there is no structured claim-to-evidence mapping with supported/unsupported status and evidence_refs. The content is presented as instructional material, not as verifiable claims with evidence provenance."
+    },
+    {
+      "text": "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+      "passed": false,
+      "evidence": "No consensus or disagreements structures exist in the output. The content correctly notes that '索引并非总是更快' and 'Seq Scan 在某些场景下优于 Index Scan' as teaching points, but there is no structured disagreement recording with side_a/side_b both having strong_arguments and evidence_refs. No INDEX_ALWAYS_FASTER position is explicitly recorded with its rebuttal as a structured disagreement."
+    },
+    {
+      "text": "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+      "passed": false,
+      "evidence": "No recruiting JD samples, market_signal labeling, or model_hypothesis classification exists anywhere in the output. There is no jd_capability_matrix or market signal tracing. The output does not distinguish between fact, market_signal, practice, or inference claim types."
+    },
+    {
+      "text": "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2.",
+      "passed": false,
+      "evidence": "No quality_evaluation or rubric_results structure exists. There is no G2 dimension-by-dimension evaluation. The transfer_output section sets target_phase='S3' and claims learner readiness without any gate evaluation. No research_executed boolean or gate mechanism is present."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "tool_calls": {
+      "Read": 0,
+      "Write": 0,
+      "Bash": 0,
+      "WebSearch": 11,
+      "WebFetch": 0
+    },
+    "total_tool_calls": 11,
+    "total_steps": 17,
+    "errors_encountered": 0,
+    "output_chars": 20000,
+    "transcript_chars": 2000
+  },
+  "timing": {
+    "executor_duration_seconds": 279,
+    "grader_duration_seconds": 0,
+    "total_duration_seconds": 275.86
+  },
+  "claims": [
+    {
+      "claim": "Output used STORM-style multi-round web research (6 rounds, 18+ sources)",
+      "type": "process",
+      "verified": false,
+      "evidence": "The meta.method field claims 'STORM-style multi-round web research (6 rounds, 18+ sources)' and meta.research_rounds lists 6 round descriptions, but there is no research_run_manifest with actual query strings, executed_at timestamps, perspective-question-query mapping, or follow_up_triggers. The output is a learning path (modules, exercises, code examples) rather than an evidence landscape. The claim cannot be verified from the available evidence."
+    },
+    {
+      "claim": "Output returned ONLY one valid JSON object with no markdown fence",
+      "type": "factual",
+      "verified": false,
+      "evidence": "response.txt line 1 begins with prose: '```json' followed by the JSON. The executor instruction says 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary.' This instruction is violated — the output is wrapped in a markdown code fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope",
+        "reason": "This assertion correctly catches the fundamental structural difference between with-skill (produces handoff envelope with domain_evidence_landscape) and without-skill (produces learning_path with modules). It is discriminating."
+      },
+      {
+        "reason": "The without-skill output does perform genuine web research (outer.json shows 11 web_search_requests) and produces pedagogically useful content about PostgreSQL query optimization, but in a completely different structure (learning modules, code examples, exercises) rather than the required evidence-landscape format. An additional assertion about structural compliance with the handoff-envelope schema would increase discriminating power."
+      }
+    ],
+    "overall": "The assertions are well-targeted and correctly discriminate the with-skill vs without-skill outputs. All 6 fail for without-skill, which is correct given the fundamental format divergence."
+  }
+}

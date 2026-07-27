@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "prompt": "上游已通过 G1：监护人与六年级学习者共同确认三周内每天 25 分钟真正理解分数，覆盖比较、等值分数解释与简单情境题，验收含数轴解释、配方缩放与未见迁移题。请执行个性化学习 S2，对“分数学习”做真实联网多视角取证，区分领域共识、常见误概念、教学证据与个案经验，并输出结构化 JSON 移交结果。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S2 正向例子2] A guardian-and-learner-relevant evidence landscape that grounds fraction learning in authoritative pedagogical research, separates domain misconceptions from this learner's misconceptions, and records executed live research with a passing G2 route.",
+  "expectations": [
+    "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+    "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+    "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+    "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+    "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+    "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking."
+  ]
+}

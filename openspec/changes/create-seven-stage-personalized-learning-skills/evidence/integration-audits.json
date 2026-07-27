@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_type": "simulated_fixture",
+  "source_cases": [
+    "docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md",
+    "docs/chat_log/七步个性化学习SOP贯穿案例-资深学科内容校验老师.md"
+  ],
+  "chains": [
+    {
+      "chain_id": "postgresql-query-optimization",
+      "learner_id": "fixture-pg",
+      "stages": [
+        {"stage": "S1", "gate": "G1", "verdict": "pass", "route_to": "S2", "artifact_id": "pg-goal-v1", "input_artifact_ids": [], "source_refs": ["pg-case:S1"], "model_version": null},
+        {"stage": "S2", "gate": "G2", "verdict": "pass", "route_to": "S3", "artifact_id": "pg-evidence-v1", "input_artifact_ids": ["pg-goal-v1"], "source_refs": ["pg-case:S2", "pg-doc-18"], "model_version": null},
+        {"stage": "S3", "gate": "G3", "verdict": "pass", "route_to": "S4", "artifact_id": "pg-graph-v1", "input_artifact_ids": ["pg-goal-v1", "pg-evidence-v1"], "source_refs": ["pg-case:S3"], "model_version": null},
+        {"stage": "S4", "gate": "G4", "verdict": "pass", "route_to": "S5", "artifact_id": "pg-snapshot-v3", "input_artifact_ids": ["pg-goal-v1", "pg-graph-v1"], "source_refs": ["pg-case:S4", "pg-observation-set-1"], "model_version": 3},
+        {"stage": "S5", "gate": "G5", "verdict": "pass", "route_to": "S6", "artifact_id": "pg-plan-v1", "input_artifact_ids": ["pg-goal-v1", "pg-graph-v1", "pg-snapshot-v3"], "source_refs": ["pg-case:S5"], "model_version": 3},
+        {"stage": "S6", "gate": "G6", "verdict": "pass", "route_to": "S7", "artifact_id": "pg-session-v1", "input_artifact_ids": ["pg-plan-v1", "pg-snapshot-v3"], "source_refs": ["pg-case:S6", "pg-attempts-1"], "model_version": 3},
+        {"stage": "S7", "gate": "G7", "verdict": "pass", "route_to": "complete", "artifact_id": "pg-mastery-v1", "input_artifact_ids": ["pg-session-v1", "pg-snapshot-v3"], "source_refs": ["pg-case:S7", "pg-transfer-set-2", "pg-delayed-1"], "model_version": 4}
+      ],
+      "scope_limit": "Simulated sandbox competence only; no production-readiness claim."
+    },
+    {
+      "chain_id": "senior-subject-content-reviewer",
+      "learner_id": "fixture-reviewer",
+      "stages": [
+        {"stage": "S1", "gate": "G1", "verdict": "pass", "route_to": "S2", "artifact_id": "review-goal-v1", "input_artifact_ids": [], "source_refs": ["review-case:S1"], "model_version": null},
+        {"stage": "S2", "gate": "G2", "verdict": "pass", "route_to": "S3", "artifact_id": "review-evidence-v1", "input_artifact_ids": ["review-goal-v1"], "source_refs": ["review-case:S2", "curriculum-standards"], "model_version": null},
+        {"stage": "S3", "gate": "G3", "verdict": "pass", "route_to": "S4", "artifact_id": "review-graph-v1", "input_artifact_ids": ["review-goal-v1", "review-evidence-v1"], "source_refs": ["review-case:S3"], "model_version": null},
+        {"stage": "S4", "gate": "G4", "verdict": "pass", "route_to": "S5", "artifact_id": "review-snapshot-v2", "input_artifact_ids": ["review-goal-v1", "review-graph-v1"], "source_refs": ["review-case:S4", "review-observations-1"], "model_version": 2},
+        {"stage": "S5", "gate": "G5", "verdict": "pass", "route_to": "S6", "artifact_id": "review-plan-v1", "input_artifact_ids": ["review-goal-v1", "review-graph-v1", "review-snapshot-v2"], "source_refs": ["review-case:S5"], "model_version": 2},
+        {"stage": "S6", "gate": "G6", "verdict": "pass", "route_to": "S7", "artifact_id": "review-session-v1", "input_artifact_ids": ["review-plan-v1", "review-snapshot-v2"], "source_refs": ["review-case:S6", "review-attempts-1"], "model_version": 2},
+        {"stage": "S7", "gate": "G7", "verdict": "pass", "route_to": "complete", "artifact_id": "review-mastery-v1", "input_artifact_ids": ["review-session-v1", "review-snapshot-v2"], "source_refs": ["review-case:S7", "review-transfer-2", "review-delayed-1"], "model_version": 3}
+      ],
+      "scope_limit": "Simulated content-review competence in the audited K12 scope; no employment outcome claim."
+    }
+  ],
+  "remediation_loop": {
+    "loop_id": "postgresql-s7-s5-s6-s7",
+    "events": [
+      {
+        "event_id": "loop-1",
+        "stage": "S7",
+        "input_artifact_ids": ["pg-session-v1", "pg-snapshot-v3"],
+        "primary_attribution": "STRATEGY_OR_SEQUENCE",
+        "route_to": "S5",
+        "expected_model_version": 3,
+        "loaded_model_version": 3,
+        "operation_status": "proposed",
+        "history": ["pg-snapshot-v3", "pg-attempts-1"]
+      },
+      {
+        "event_id": "loop-2",
+        "stage": "S5",
+        "input_artifact_ids": ["loop-1", "pg-plan-v1"],
+        "primary_attribution": null,
+        "route_to": "S6",
+        "expected_model_version": 3,
+        "loaded_model_version": 3,
+        "operation_status": "not_executed",
+        "history": ["pg-snapshot-v3", "pg-attempts-1", "loop-1"]
+      },
+      {
+        "event_id": "loop-3",
+        "stage": "S6",
+        "input_artifact_ids": ["loop-2", "pg-snapshot-v3"],
+        "primary_attribution": null,
+        "route_to": "S7",
+        "expected_model_version": 3,
+        "loaded_model_version": 3,
+        "operation_status": "not_executed",
+        "history": ["pg-snapshot-v3", "pg-attempts-1", "loop-1", "loop-2"]
+      },
+      {
+        "event_id": "loop-4",
+        "stage": "S7",
+        "input_artifact_ids": ["loop-3", "pg-snapshot-v3"],
+      "primary_attribution": "NODE_MASTERED",
+      "route_to": "S6",
+      "route_rationale": "The remediated node is mastered and the S7 re-entry closes this remediation audit loop; route_to S6 starts instruction for the next planned node rather than continuing remediation of the same node.",
+      "expected_model_version": 3,
+        "loaded_model_version": 3,
+        "operation_status": "proposed",
+        "history": ["pg-snapshot-v3", "pg-attempts-1", "loop-1", "loop-2", "loop-3", "pg-remediation-transfer", "pg-remediation-delayed"]
+      }
+    ],
+  "scope_limit": "All events are simulated fixtures; proposed model version 4 is not claimed persisted.",
+  "completion_semantics": "loop-4 closes this remediation cycle at the re-entered S7 event. NODE_MASTERED -> S6 means the remediated node passed and the learner may continue to the next planned instructional session; it is not a claim that the overall learning goal is complete."
+}
+}

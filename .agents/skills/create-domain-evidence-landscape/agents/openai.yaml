@@ -1,0 +1,4 @@
+interface:
+  display_name: "领域取证与认知全景"
+  short_description: "对已确认目标执行真实联网、多视角、可追溯取证，区分证据、市场信号、假设与缺口"
+  default_prompt: "使用 $create-domain-evidence-landscape 对这个学习领域做 STORM 式多视角联网取证并形成证据全景。"

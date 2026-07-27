@@ -1,0 +1,35 @@
+{
+  "route": "gclaude",
+  "command": "/usr/local/bin/claude --dangerously-skip-permissions -p <task> --output-format json --no-session-persistence",
+  "exit_code": 0,
+  "subtype": "success",
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "826430e5-4bbf-4150-a508-71c0c592c235",
+  "uuid": "d260514e-b106-4089-9923-f28be900324b",
+  "duration_ms": 130862,
+  "result_format": "explanatory-prefix-plus-single-json-object",
+  "inner_json": "final-gclaude-audit-closed.inner.json",
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 488,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002943,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 65004,
+      "outputTokens": 14283,
+      "cacheReadInputTokens": 85696,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.7249429999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  }
+}

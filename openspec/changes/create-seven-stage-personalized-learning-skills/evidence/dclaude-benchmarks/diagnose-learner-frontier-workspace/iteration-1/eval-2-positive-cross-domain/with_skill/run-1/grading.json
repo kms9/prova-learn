@@ -1,0 +1,89 @@
+{
+  "expectations": [
+    {
+      "text": "Equivalent-fraction representation evidence is preserved as a tested state and is not discarded because of the comparison error.",
+      "passed": true,
+      "evidence": "Graded artifact outputs/result.gclaude-rerun.json: node frac_equiv_representation is status \"tested_mastered\" with evidence_refs [\"EV-001\"] (number-line positioning of 2/3 and 4/6 plus the verbal equality statement, hint_dependency.level=none). The comparison error (EV-002) is recorded separately on frac_comparison (tested_not_mastered), so the equivalence competence is preserved, not discarded."
+    },
+    {
+      "text": "Mechanical cross-multiplication without explanation is not treated as conceptual mastery, and prompt-assisted recipe success is distinguished from independent transfer.",
+      "passed": true,
+      "evidence": "frac_comparison is status \"tested_not_mastered\", error_type \"partial_reasoning\" (mechanical cross-multiplication NOT treated as conceptual mastery); misconception code MECH-PROC-OVER-CONCEPT captures it. Prompt-assisted success (EV-003 diagram-aided equivalence, EV-004 recipe first-wrong-then-correct-with-diagram) is distinguished from independent transfer: frac_proportional_scaling is tested_not_mastered (procedural_error) and transfer_performance.status=\"not_demonstrated\" on EV-005/EV-006 (two unseen-context transfer tasks failed)."
+    },
+    {
+      "text": "At least one coded misconception is supported by two aligned observations rather than inferred from a single item or a domain stereotype.",
+      "passed": true,
+      "evidence": "misconceptions[] contains MECH-PROC-OVER-CONCEPT with evidence_refs [\"EV-002\",\"EV-004\"] — two distinct aligned learner_behavior observations (the 3/5-vs-4/7 mechanical comparison and the recipe-scaling first-attempt failure), not a single item and not a domain stereotype. The G4 证据充分性 dimension cites 'misconception MECH-PROC-OVER-CONCEPT 由 EV-002 与 EV-004 两条对齐观察支撑'."
+    },
+    {
+      "text": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+      "passed": true,
+      "evidence": "All five node_states (frac_equiv_representation, frac_equiv_explanation, frac_comparison, frac_proportional_scaling, frac_transfer_novel) carry hint_dependency {level, evidence_refs} and confidence_calibration {self_confidence, observed_alignment} (values null/unknown because the case-2 input provides no self-rating). transfer_performance.status=\"not_demonstrated\", evidence_refs [\"EV-005\",\"EV-006\"], summary states both unseen-context transfer tasks failed independent transfer."
+    },
+    {
+      "text": "The learning frontier names a nearest learnable node with traceable evidence and a rationale rather than the broad goal of understanding fractions.",
+      "passed": true,
+      "evidence": "learning_frontier.nearest_learnable_node_id=\"frac_equiv_explanation\", evidence_refs [\"EV-001\",\"EV-003\"], rationale explains the learner already independently masters equivalent-fraction representation and can give an equivalence explanation only under diagrammatic scaffold, so it is the nearest bottleneck shared by comparison/scaling/transfer; alternative_candidate_node_ids=[\"frac_comparison\",\"frac_proportional_scaling\"]. It is a concrete node, not the broad goal of understanding fractions."
+    },
+    {
+      "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results lists seven dimensions (测量与目标对齐度, 证据充分性, 猜对识别, 提示依赖记录, 错误分类一致性, 偏差控制, 结论可解释性), each with passed:true; verdict=\"pass\", route_to=\"S5\"."
+    }
+  ],
+  "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 10466,
+    "transcript_chars": 913,
+    "num_turns": 13,
+    "duration_ms": 207993,
+    "graded_artifact": "outputs/result.gclaude-rerun.json",
+    "usage": { "input_tokens": 32750, "output_tokens": 20637, "cache_read_input_tokens": 269376, "model": "glm-5.2 (rerun)" },
+    "rerun_route_file": "result.gclaude-rerun.route.json",
+    "note": "No metrics.json or tool-call log. Per the selection rule the graded artifact is outputs/result.gclaude-rerun.json (a separate glm-5.2 rerun); duration_ms and usage above are that rerun's own (from result.gclaude-rerun.route.json). The original deepseek-v4-pro run that produced outputs/result.json is reconciled in timing.original_run below (duration 333840ms, input 76197, output 30770). output_chars is the char count of the graded rerun artifact; transcript_chars is executor_prompt size."
+  },
+  "timing": {
+    "executor_duration_seconds": 208,
+    "total_duration_seconds": 207.993,
+    "grader_duration_seconds": null,
+    "timing_source": "result.gclaude-rerun.route.json (the rerun that produced the graded artifact)",
+    "original_run": { "executor_duration_seconds": 337, "total_duration_seconds": 333.84, "duration_ms": 333840, "model": "deepseek-v4-pro[1m]", "note": "Original run producing outputs/result.json; NOT the graded artifact." }
+  },
+  "claims": [
+    {
+      "claim": "The graded rerun artifact is clean JSON with no prose preamble and no markdown fence.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/result.gclaude-rerun.json parses directly as a JSON object; no fence, no commentary."
+    },
+    {
+      "claim": "At least one coded misconception is backed by two aligned observations (per the revised expectation 3).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "MECH-PROC-OVER-CONCEPT has evidence_refs ['EV-002','EV-004'], two distinct learner_behavior observations; the G4 证据充分性 dimension records the two-observation support."
+    },
+    {
+      "claim": "confidence_calibration is structurally recorded but vacuous for every node.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Every node_state has confidence_calibration {self_confidence:null, observed_alignment:\"unknown\"}. Acceptable because the case-2 input provides no learner self-rating, but no actual calibration was performed."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this run directory."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+        "reason": "All confidence_calibration values are null/unknown yet this expectation passes, because the case-2 input supplies no self-rating. Consider requiring a non-null observed_alignment whenever any self-rating is present, so vacuous calibration cannot satisfy the assertion by accident."
+      }
+    ],
+    "overall": "Strong rerun artifact; all six expectations pass on substance, including the current misconception-support expectation satisfied by MECH-PROC-OVER-CONCEPT with two aligned observations. Graded against outputs/result.gclaude-rerun.json per the selection rule. The per-run and top-level eval_metadata are byte-identical and both use the repaired whole-number-free assertion."
+  }
+}

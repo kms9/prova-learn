@@ -1,0 +1,604 @@
+Now I have all the skill package details. Let me construct the S5 handoff envelope with the `learning_and_session_plan` artifact, following every rule from the stage contract, both schemas, and incorporating all user-provided constraints.
+
+```json
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S5",
+  "run_id": "run-s5-frac-20260727-001",
+  "learner_id": "learner-frac-001",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "gsc-frac-0001",
+      "ccg-frac-0001",
+      "LS-frac-0001"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "capability_concept_graph": "1.0.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "上游工件 (goal_success_contract=gsc-frac-0001, capability_concept_graph=ccg-frac-0001, learner_snapshot=LS-frac-0001) 版本一致且 G1/G3/G4 均已通过",
+    "数轴定位与等值分数的掌握证据充分可靠，可作为学习前沿起点",
+    "学习者每日可稳定投入 25 分钟，连续 3 周",
+    "监护人具备基本分数概念，可在情境缩放阶段参与讨论但不会替代学习者推理",
+    "分数卡片、数轴模板等基础游戏化材料已就绪",
+    "未见情境迁移题与延迟复测题需 S5 后由教师/系统生成"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "rg-1",
+      "description": "食谱与长度分配的具体情境材料（脱敏食谱、长度数据）需在实际执行前准备；当前仅描述材料规格",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    },
+    {
+      "id": "rg-2",
+      "description": "监护人的具体参与时段与方式未细化（如工作日 vs 周末），仅假设可在情境缩放阶段参与",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    },
+    {
+      "id": "rg-3",
+      "description": "游戏化卡片的确切设计（如积分规则、非速度维度的反馈机制）未由上游工件提供，基于通用设计假设",
+      "criticality": "low",
+      "gate_effect": "none"
+    }
+  ],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "S5 强制确认：路径概览、阶段目标、时间投入与节奏、第一个会话契约",
+    "questions": [
+      "路径概览：从已掌握的数轴定位与等值分数出发，经基准推理比较 → 对比案例打破全数偏差 → 情境缩放（食谱/长度）→ 交错练习 → 未见情境迁移，是否确认此最小连通子图？",
+      "阶段目标与优先级：优先比较推理（理解'为什么大/小'）而非重复表征训练（画图/通分计算），是否确认？",
+      "时间投入与节奏：3周、每天25分钟、共21个日会话，监护人参与情境缩放阶段，游戏化卡片保留但不以速度为唯一标准，是否确认？",
+      "第一个会话契约：4天×25分钟，用基准卡片与数轴比较分数大小，要求解释推理而非计算通分，退出标准为'能用1/2或1为基准独立解释至少4/5对分数的大小关系'，是否确认？"
+    ],
+    "response": {
+      "path_overview": "confirmed",
+      "priority_comparative_reasoning": "confirmed",
+      "time_and_rhythm": "confirmed",
+      "first_session_contract": "confirmed",
+      "additional_notes": "学习者与监护人确认优先比较推理而非重复表征训练，接受包含未见情境迁移题与延迟复测的验收"
+    },
+    "status": "confirmed",
+    "confirmed_at": "2026-07-27T12:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "ev-s5-001",
+      "provenance": "learner_behavior",
+      "source_ref": "LS-frac-0001",
+      "summary": "数轴定位与等值分数已掌握：学习者能在数轴上正确放置分数并生成等值分数",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-002",
+      "provenance": "learner_behavior",
+      "source_ref": "LS-frac-0001",
+      "summary": "分数大小比较的解释判为 developing：学习者能正确判断大小但解释依赖机械通分而非基准推理",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-003",
+      "provenance": "learner_behavior",
+      "source_ref": "LS-frac-0001",
+      "summary": "食谱与长度分配的情境缩放判为 not_mastered：学习者无法将分数比较迁移到真实缩放任务",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-004",
+      "provenance": "learner_behavior",
+      "source_ref": "LS-frac-0001",
+      "summary": "典型偏差为全数偏差（把分子/分母当独立整数比较）和机械通分（不判断是否需要通分即直接计算）",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-005",
+      "provenance": "user_provided_unverified",
+      "source_ref": null,
+      "summary": "时间约束：3周、每天25分钟；游戏化卡片保留但不以速度为唯一标准；监护人参与",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "ev-s5-006",
+      "provenance": "user_provided_unverified",
+      "source_ref": null,
+      "summary": "学习者与监护人确认路径优先比较推理而非重复表征训练，接受包含未见情境迁移题与延迟复测的验收",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "校验输入契约：goal_success_contract (G1)、capability_concept_graph (G3)、learner_snapshot (G4) 版本一致，上游门状态均为 pass",
+    "确认学习前沿：数轴定位+等值分数=mastered → 稳定起点；分数比较解释=developing → 可直接进入但需加固；情境缩放=not_mastered → 目标节点",
+    "收集需求缺口：时间约束 3周×25分钟/天=525分钟总预算；监护人参与限于情境缩放阶段；游戏化卡片保留",
+    "执行强制确认：路径概览、阶段目标、时间投入、首个会话契约四项均已确认",
+    "从已证实前沿选择最小连通子图：跳过已掌握的等值分数表征训练与数轴定位重复练习；选择 n-benchmark-reason → n-contrast-bias → n-contextual-scale → n-interleave → n-transfer",
+    "匹配教学策略：全数偏差→contrast_case；机械通分→worked_example+explain；情境缩放→practice+transfer；迁移→transfer+delayed_retest",
+    "编排会话：21个日会话分为6个会话组，覆盖全部节点；复习锚点按次日/第4天/一周后设计",
+    "定义退出标准：每节点可观察可判定；整体验收包含未见情境迁移题与延迟复测",
+    "评估风险与替代路线：全数偏差顽固、监护人过度支架、机械通分回退、疲劳、迁移难度跃升",
+    "生成 learning_and_session_plan 正向工件并通过 G5 量规逐项评价"
+  ],
+  "positive_artifact": {
+    "type": "learning_and_session_plan",
+    "schema_version": "1.0.0",
+    "artifact_id": "lsp-frac-0001",
+    "content": {
+      "stage_goals": [
+        {
+          "goal_id": "sg-1",
+          "statement": "从机械通分过渡到基准推理：学习者能用1/2、1等基准和数轴位置解释分数大小关系，而非仅依赖通分计算"
+        },
+        {
+          "goal_id": "sg-2",
+          "statement": "打破全数偏差：学习者能识别并纠正'分子大分数就大'或'分母大分数就小'的直觉错误，建立分数量的整体理解"
+        },
+        {
+          "goal_id": "sg-3",
+          "statement": "情境缩放迁移：学习者能将分数比较推理应用于食谱调整（加倍/减半）和长度分配任务，在真实情境中独立做出正确缩放决策"
+        }
+      ],
+      "ordered_learning_nodes": [
+        {
+          "node_id": "n-benchmark-reason",
+          "order": 1,
+          "selection_rationale": "学习前沿起点：数轴定位与等值分数已掌握，但比较解释仍依赖机械通分(developing)。本节点用已掌握的数轴与等值分数作为支架，建立'以1/2或1为基准判断大小'的推理策略，替代无理解的通分计算。硬先修：等值分数(mastered)、数轴定位(mastered)已满足",
+          "teaching_strategy": ["explain", "worked_example", "retrieval"],
+          "scaffolding": {
+            "approach": "基准卡片+数轴标注",
+            "description": "教师先用数轴展示1/2和1的位置作为锚点，示范'3/8 < 1/2 而 5/6 > 1/2 → 3/8 < 5/6'的基准推理链；然后给出分数对，学习者补出基准判断步骤；最后撤除数轴视觉提示，仅用卡片独立推理"
+          },
+          "fade_conditions": [
+            "学习者能在无视觉提示下用基准（1/2或1）独立解释至少4/5对分数的大小关系",
+            "解释中不出现通分计算，而是引用基准比较逻辑"
+          ]
+        },
+        {
+          "node_id": "n-contrast-bias",
+          "order": 2,
+          "selection_rationale": "直接攻击全数偏差与机械通分两个典型偏差。通过故意构造'分子大≠分数大'(如2/5 vs 1/2)和'无需通分即可判断'(如1/8 vs 1/3, 7/8 vs 3/4)的对比案例，迫使学习者放弃整数直觉和机械策略。硬先修：n-benchmark-reason 提供的基准推理框架",
+          "teaching_strategy": ["contrast_case", "worked_example", "interleaving"],
+          "scaffolding": {
+            "approach": "对比卡片对+错误分析",
+            "description": "每组对比卡片包含：一个诱使全数偏差的陷阱对(如2/3 vs 3/5，直觉可能认为3/5更大)和一个基准可解的对照对。学习者先独立判断并写下推理，再与教师对比分析错误模式。游戏化卡片积分基于推理质量而非速度"
+          },
+          "fade_conditions": [
+            "在10组对比卡片中正确识别并纠正至少8组全数偏差陷阱",
+            "能口头解释为什么'分子大≠分数大'和'分母大≠分数小'各至少一例"
+          ]
+        },
+        {
+          "node_id": "n-contextual-scale",
+          "order": 3,
+          "selection_rationale": "情境缩放判为not_mastered，是路径核心目标节点。学习者在抽象比较中可能正确，但无法迁移到食谱/长度情境。本节点用worked example逐步引入情境，再通过监护人参与的实践活动建立情境推理能力。硬先修：n-benchmark-reason + n-contrast-bias 提供的比较推理与偏差意识",
+          "teaching_strategy": ["worked_example", "practice", "transfer"],
+          "scaffolding": {
+            "approach": "情境阶梯（抽象→半情境→全情境）",
+            "description": "第一阶：教师在已知食谱(如3/4杯面粉，需加倍→多少杯)上示范缩放推理，标注比较判断点；第二阶：学习者补出半完成情境(如'食谱需2/3杯糖，减半后与1/4杯比较，够吗？')的推理步骤；第三阶：监护人参与的开放式情境(如'两条绳子分别长3/8米和2/5米，哪条更长？分给3人够吗？')，学习者独立推理，监护人仅追问'你是怎么知道的？'而非给出答案"
+          },
+          "fade_conditions": [
+            "在至少3个未见食谱/长度情境中独立完成缩放推理并正确",
+            "能解释情境中的分数比较与抽象比较的相同推理逻辑"
+          ]
+        },
+        {
+          "node_id": "n-interleave",
+          "order": 4,
+          "selection_rationale": "交错练习巩固前三个节点的推理策略，防止机械回退。混合基准比较、对比偏差判断和情境缩放三类问题，迫使学习者在不同策略间切换而非形成单一模板。包含检索练习以强化长期记忆",
+          "teaching_strategy": ["interleaving", "retrieval", "practice"],
+          "scaffolding": {
+            "approach": "混合卡片游戏+延迟检索",
+            "description": "将基准比较卡、对比陷阱卡、情境缩放卡混合洗牌，每天从中随机抽取练习；积分基于策略选择合理性（判断'该用基准还是需要精算'）而非速度或题量；每3天插入一次纯检索（无卡片参考，独立回忆策略）"
+          },
+          "fade_conditions": [
+            "混合练习中策略选择正确率≥85%",
+            "检索练习中至少4/5题能独立完成且策略选择合理"
+          ]
+        },
+        {
+          "node_id": "n-transfer",
+          "order": 5,
+          "selection_rationale": "最终验收节点：未见情境迁移与延迟复测。对应目标契约中的验收条件——学习者在从未见过的情境中独立应用比较推理与缩放策略。包含延迟复测以验证长期保持",
+          "teaching_strategy": ["transfer", "delayed_retest"],
+          "scaffolding": {
+            "approach": "无提示独立任务",
+            "description": "提供3个全新情境题（如'三种果汁配方中哪种最甜？'、'多人分匹萨的分配判断'、'非标准长度单位的缩放比较'），学习者独立完成全部推理链；延迟复测在一周后进行，复用n-benchmark-reason和n-contrast-bias的核心任务"
+          },
+          "fade_conditions": [
+            "至少2/3未见情境题的主推理链与结论正确",
+            "延迟复测中基准推理与对比偏差任务保持≥80%正确率"
+          ]
+        }
+      ],
+      "sessions": [
+        {
+          "session_id": "s1",
+          "goal": "建立基准推理：用1/2和1作为锚点比较分数大小，替代机械通分",
+          "activities": [
+            "第1天：教师用数轴展示1/2和1锚点，示范3组基准推理链（>1/2, <1/2, 跨1/2比较），学习者口头复述",
+            "第2天：学习者用基准卡片独立判断8对分数与1/2的关系，记录推理语言（'因为...所以...'），教师逐条反馈",
+            "第3天：游戏化卡片练习——抽两卡判断大小并用基准解释，积分基于解释完整性而非速度；监护人观摩并学习追问方式",
+            "第4天：撤除数轴视觉提示，纯卡片+口头推理，目标4/5对正确；未达标则在次日补一次精简版检索"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 25,
+            "session_count": 4
+          },
+          "input_materials": [
+            "数轴模板（标注0, 1/2, 1）",
+            "基准分数卡片组（含1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8, 1/3, 2/3, 5/6等）",
+            "基准推理记录表（'我的推理：___与1/2比较，因为___所以___'）",
+            "监护人追问话术卡（'你是怎么知道的？''还有别的方法吗？'）"
+          ]
+        },
+        {
+          "session_id": "s2",
+          "goal": "对比案例打破全数偏差：识别并纠正整数直觉错误，建立分数量的整体理解",
+          "activities": [
+            "第1天：教师呈现3组对比案例（如1/3 vs 1/5→分母大反而分数小；2/3 vs 3/5→分子大不一定分数大），学习者先独立判断再对比正确推理",
+            "第2天：错误分析——学习者对8组陷阱卡片独立判断并写推理，教师标注'全数偏差'和'机械通分'两类错误模式",
+            "第3天：游戏化对比挑战——混合陷阱对和常规对，识别陷阱并解释为什么是陷阱；积分基于'识别+解释'双维度",
+            "第4天：学习者为两个全数偏差例子创作自己的'反例故事'（如'我原来以为...但实际...'），教师确认概念转变"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 25,
+            "session_count": 4
+          },
+          "input_materials": [
+            "对比陷阱卡片组（含10组陷阱对+5组常规对）",
+            "错误模式记录表（全数偏差/机械通分/其他）",
+            "反例故事模板（'我原来以为___，但实际___，因为___'）",
+            "游戏化积分规则卡（推理质量评分维度说明）"
+          ]
+        },
+        {
+          "session_id": "s3",
+          "goal": "情境缩放迁移：将分数比较推理应用于食谱调整和长度分配任务",
+          "activities": [
+            "第1天：教师示范食谱缩放推理链（'食谱需3/4杯面粉，要加倍→6/4=1 1/2杯；原食谱1/2杯糖，加倍后与3/4杯比较够吗？'），标注每一步的比较判断点",
+            "第2天：半完成情境补步——给出情境和部分推理链，学习者补出缺失的比较判断步骤（如'减半后够不够？'的判断依据）",
+            "第3天：监护人参与的食谱实践——用真实或模拟食谱，学习者独立做缩放判断，监护人追问'你是怎么知道的？'并记录推理过程",
+            "第4天：长度分配情境——多条绳子/布料分配问题，比较分数长度并判断分配是否公平",
+            "第5天：开放式情境综合——混合食谱和长度问题，学习者独立完成推理链并解释为什么抽象比较和情境比较用同样的逻辑"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 25,
+            "session_count": 5
+          },
+          "input_materials": [
+            "脱敏食谱卡（含分数用量：3/4杯、2/3杯、1/2杯、5/8杯等）",
+            "缩放任务卡（加倍/减半/乘3等操作）",
+            "长度分配情境卡（绳子/布料分数长度与分配人数）",
+            "监护人参与指南（'倾听→追问→记录'三步法，禁止直接给答案）",
+            "情境推理记录表"
+          ]
+        },
+        {
+          "session_id": "s4",
+          "goal": "交错练习与检索：混合三类问题巩固策略切换能力，防止机械回退",
+          "activities": [
+            "第1天：混合卡片游戏——基准比较卡+对比陷阱卡混合抽取，判断策略类型后再解题，积分基于策略选择合理性",
+            "第2天：情境+抽象交错——将s3的情境题与s1/s2的抽象题混合，学习者标注每题使用的推理策略",
+            "第3天：无卡片检索练习——不提供任何视觉参考，独立完成6道混合题并写推理链",
+            "第4天：回顾前三天的错误模式，针对性补练最弱环节；监护人协助整理'我的策略工具箱'"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 25,
+            "session_count": 4
+          },
+          "input_materials": [
+            "混合问题集（含基准比较/对比偏差/情境缩放三类各占1/3）",
+            "策略选择记录表（'这题我选择___策略，因为___'）",
+            "检索练习卷（无参考独立完成）",
+            "'我的策略工具箱'总结模板"
+          ]
+        },
+        {
+          "session_id": "s5",
+          "goal": "未见情境迁移：在全新情境中独立应用比较推理与缩放策略",
+          "activities": [
+            "第1天：3道未见情境题独立完成——果汁配方甜度比较、多人分匹萨分配判断、非标准长度单位缩放——每题完整写出推理链",
+            "第2天：自我检查与修正——回顾第1天的推理，用'基准检查''偏差检查''情境检查'三步自我验证，至少修正一处可改进的推理"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 25,
+            "session_count": 2
+          },
+          "input_materials": [
+            "未见情境迁移题集（3道全新题，含至少1道需论证'不加/不减'的题目）",
+            "自我验证清单（基准检查/偏差检查/情境检查/结论检查）"
+          ]
+        },
+        {
+          "session_id": "s6",
+          "goal": "延迟复测与复习锚点：验证长期保持并巩固薄弱环节",
+          "activities": [
+            "第1天：延迟复测——复用n-benchmark-reason和n-contrast-bias的核心任务（基准推理4题+对比偏差识别4题），与s1/s2成绩对比",
+            "第2天：基于复测结果的针对性补救——如基准推理回退则重温数轴锚点，如偏差回退则追加对比案例讨论；监护人参与'学习旅程回顾'"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 25,
+            "session_count": 2
+          },
+          "input_materials": [
+            "延迟复测卷（基准推理4题+对比偏差4题，与原题同构但数值不同）",
+            "s1/s2基线成绩对照表",
+            "补救练习卡片组（按薄弱点定制）",
+            "学习旅程回顾模板（'三周前我___，现在我___，因为我学会了___'）"
+          ]
+        }
+      ],
+      "assessment_schedule": {
+        "immediate": [
+          "s1末：无视觉提示下用基准独立判断4/5对分数大小关系并口头解释",
+          "s2末：10组对比卡片中正确识别并纠正≥8组全数偏差陷阱",
+          "s3末：至少3个未见情境中独立完成缩放推理并正确",
+          "s4末：混合练习中策略选择正确率≥85%；检索练习中≥4/5题独立完成",
+          "s5末：至少2/3未见情境题主推理链与结论正确"
+        ],
+        "transfer": [
+          "s5 三道未见情境题（果汁配方甜度、多人分匹萨、非标准长度缩放）：独立完成完整推理链",
+          "至少一题要求论证'不需要额外操作'或'不缩放'的理由"
+        ],
+        "delayed": [
+          "s6 延迟复测：基准推理与对比偏差核心任务保持≥80%正确率",
+          "与s1/s2基线对比：基准推理正确率不下降超过15%，对比偏差识别不下降超过10%"
+        ]
+      },
+      "review_anchors": [
+        "s1第4天次日（s2第1天）：快速检索基准推理3题，确认进入对比案例的前沿稳固",
+        "s2第4天次日（s3第1天）：回顾对比偏差识别中最易错的两类陷阱，作为情境缩放的偏差预警",
+        "s3第5天后的第4天（s4期间）：交错练习中自然回顾情境缩放策略",
+        "s5完成后一周（s6）：延迟复测，覆盖基准推理与对比偏差核心节点"
+      ],
+      "risks": [
+        {
+          "risk_id": "r-1",
+          "description": "全数偏差根深蒂固，对比案例不足以在4天内完全纠正——学习者可能在情境缩放中再次用整数直觉替代分数推理",
+          "mitigation": "s3每个情境题开头加入'先判断：这个分数与1/2比是大还是小？'的强制基准检查步骤；s4交错练习中保持≥1/3的对比偏差题；监护人被培训在s3中追问'这个数代表的是整个东西的多少？'",
+          "criticality": "high"
+        },
+        {
+          "risk_id": "r-2",
+          "description": "机械通分策略在时间压力下回退——学习者可能因为'更快'而放弃基准推理重新计算通分",
+          "mitigation": "游戏化积分规则中'使用基准推理'得分高于'使用通分计算正确'得分；s2明确展示'本可用基准却通分'的冗余案例；所有练习不限时",
+          "criticality": "high"
+        },
+        {
+          "risk_id": "r-3",
+          "description": "监护人过度支架——在s3实践中直接给出答案或暗示正确方向，削弱学习者的独立推理机会",
+          "mitigation": "监护人参与指南明确规定'倾听→追问→记录'三步法，禁止给答案；首日由教师示范正确的追问方式；提供具体追问话术卡",
+          "criticality": "medium"
+        },
+        {
+          "risk_id": "r-4",
+          "description": "每日25分钟连续3周可能导致学习者疲劳，后半程注意力下降影响交错练习与迁移效果",
+          "mitigation": "每会话开头3分钟设为游戏化热身（低难度卡片快速成功体验）；s4-s6每会话留2分钟'我的进步'自我记录提升动机；监护人观察并在疲劳迹象出现时调整当天活动顺序（先游戏后练习）",
+          "criticality": "medium"
+        },
+        {
+          "risk_id": "r-5",
+          "description": "未见情境迁移题与练习情境差异过大，学习者无法自发迁移策略",
+          "mitigation": "迁移题设计与s3/s4的情境保持结构同构（都有'比较→判断→决策'三步），仅变化表面内容；s5前在s4末做一次'迁移预览'——展示一道不同表面但同结构的情境题并讨论'这道题和我们做过的有什么相同？'",
+          "criticality": "medium"
+        }
+      ],
+      "alternative_routes": [
+        {
+          "trigger": "s1第4天未达标（基准推理正确率<4/5）",
+          "adjustment": "在s2第1天前插入1天补救——用数轴回归基础，仅比较与1/2的关系，不引入对比案例；s2压缩为3天，将反例故事合并到第3天"
+        },
+        {
+          "trigger": "s2末全数偏差识别率<8/10",
+          "adjustment": "s3前2天中加入每天3分钟偏差预警（快速回顾2组最顽固陷阱）；s3第3天监护人实践中增加偏差检查步骤；若一周后延迟复测仍低则标记为需S6专项干预"
+        },
+        {
+          "trigger": "s3情境缩放独立正确率<3/5题",
+          "adjustment": "回退脚手架层级——s4第1天改为半完成情境补步（回到第二阶支架），确认推理链完整后再进入交错练习；若仍不达则增加s3第5天为双倍时长（监护人+教师联合辅导）"
+        },
+        {
+          "trigger": "s5迁移题<2/3正确",
+          "adjustment": "不立即进入s6延迟复测——先回退1天做'结构映射'练习：将迁移题与s3/s4中最接近的练习题并列，让学习者标注'相同结构'和'不同表面'；然后再做一套替代迁移题；延迟复测顺延1天"
+        },
+        {
+          "trigger": "s6延迟复测基准推理或对比偏差正确率<80%",
+          "adjustment": "分析退步模式：如为策略遗忘→补1次检索练习+监护人协助'策略工具箱'回顾；如为偏差回退→追加2组对比案例并在日常生活中找分数例子（监护人记录）；复测后一周追加一次远程延迟检查"
+        }
+      ],
+      "exit_criteria": {
+        "per_node": [
+          {
+            "node_id": "n-benchmark-reason",
+            "criteria": "无视觉提示下用基准（1/2或1）独立解释≥4/5对分数的大小关系，解释中不出现通分计算，而是引用基准比较逻辑"
+          },
+          {
+            "node_id": "n-contrast-bias",
+            "criteria": "在10组对比卡片中正确识别并纠正≥8组全数偏差陷阱，能口头解释'分子大≠分数大'和'分母大≠分数小'各至少一例"
+          },
+          {
+            "node_id": "n-contextual-scale",
+            "criteria": "在≥3个未见食谱/长度情境中独立完成缩放推理并正确，能解释情境中的分数比较与抽象比较使用相同推理逻辑"
+          },
+          {
+            "node_id": "n-interleave",
+            "criteria": "混合练习中策略选择正确率≥85%；纯检索练习中≥4/5题独立完成且策略选择合理"
+          },
+          {
+            "node_id": "n-transfer",
+            "criteria": "至少2/3未见情境题的主推理链与结论正确；延迟复测中基准推理与对比偏差任务保持≥80%正确率"
+          }
+        ],
+        "overall": [
+          "三个未见情境迁移题中至少两题主推理链与结论正确",
+          "至少出现一例能论证'不需要缩放/不改变量'的情境判断",
+          "延迟复测中基准推理与对比偏差核心任务正确率均≥80%",
+          "学习者能在无提示情况下用自己的话解释'为什么比较分数大小时，看分子大不一定分数大'",
+          "监护人观察记录确认学习者在日常情境中至少一次自发使用分数比较推理"
+        ]
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "目标连通性",
+        "evidence": [
+          "ordered_learning_nodes 从已证实前沿（数轴定位+等值分数=mastered）出发，经 n-benchmark-reason→n-contrast-bias→n-contextual-scale→n-interleave→n-transfer 连通到目标（情境缩放迁移+未见情境验收）",
+          "每个节点的 selection_rationale 明确说明为什么它是路径的必要环节",
+          "exit_criteria.overall 直接对应 goal_success_contract 中的验收任务"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "先修正确性",
+        "evidence": [
+          "n-benchmark-reason 硬先修为等值分数+数轴定位，均为mastered节点",
+          "n-contrast-bias 硬先修为 n-benchmark-reason 的基准推理框架，order=2→1 满足",
+          "n-contextual-scale 硬先修为 n-benchmark-reason+n-contrast-bias，order=3→2/1 满足",
+          "n-interleave 硬先修为前三个节点，order=4→3/2/1 满足",
+          "n-transfer 硬先修为全部前序节点，order=5→4/3/2/1 满足",
+          "无跨越未掌握硬先修的情况"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "路径最小性",
+        "evidence": [
+          "跳过节点：数轴定位(mastered)→跳过重复的数轴基础训练；等值分数(mastered)→跳过表征训练，不作为独立节点",
+          "路径仅包含5个节点覆盖从比较推理到情境迁移的完整因果链",
+          "每个selection_rationale解释了为何该节点不可跳过",
+          "未出现'看完第X章''刷N道题'等非能力节点的冗余内容"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "时间可行性",
+        "evidence": [
+          "总预算：21天×25分钟=525分钟",
+          "s1: 4×25=100分钟, s2: 4×25=100分钟, s3: 5×25=125分钟, s4: 4×25=100分钟, s5: 2×25=50分钟, s6: 2×25=50分钟；总计525分钟",
+          "首个会话s1: 4天×25分钟，每日活动可在25分钟内完成（5分钟数轴示范/回顾+15分钟卡片练习+5分钟记录与反馈）",
+          "替代路线均包含时间调整方案（如压缩s2为3天、延迟复测顺延1天）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "策略适配性",
+        "evidence": [
+          "全数偏差（误概念）→ n-contrast-bias使用contrast_case+worked_example，符合'误概念优先用对比与worked example'规则",
+          "机械通分（程序性偏差）→ n-benchmark-reason使用explain+worked_example+retrieval，建立新策略替代旧策略",
+          "情境缩放（程序性+迁移目标）→ n-contextual-scale使用worked_example+practice+transfer，渐进撤架",
+          "迁移验收→ n-transfer使用transfer+delayed_retest，符合'迁移目标必须有未见任务'规则",
+          "n-interleave使用interleaving+retrieval防止单一策略模板化"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "教学与测评对齐度",
+        "evidence": [
+          "每个节点exit_criteria.per_node均有可观察、可判定的通过标准（如≥4/5对正确、≥8/10组识别、≥2/3题正确）",
+          "assessment_schedule.immediate中每会话末的测评直接对应节点退出标准",
+          "assessment_schedule.transfer对应n-transfer的退出标准",
+          "assessment_schedule.delayed对应延迟复测的退出标准",
+          "exit_criteria.overall汇总了跨节点的整体验收条件"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "认知负荷",
+        "evidence": [
+          "每节点难度递增：基准推理(单一策略)→对比案例(策略+偏差识别)→情境缩放(策略+情境双重要求)→交错(多策略切换)→迁移(全新情境独立)",
+          "支架逐步撤除：数轴视觉提示(s1)→对比卡片参考(s2)→半完成情境补步(s3第一阶)→纯检索(s4)→无提示独立(s5)",
+          "复习锚点按遗忘曲线设计：次日(s2第1天复习s1)→第4天(s4期间复习s3)→一周后(s6延迟复测)",
+          "每日25分钟时长适中，游戏化元素维持动机但不以速度施压"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "调整空间",
+        "evidence": [
+          "5个替代路线覆盖：基准推理未达标、偏差识别不足、情境缩放困难、迁移成绩不足、延迟复测退步",
+          "每个替代路线的trigger可判定、adjustment可执行",
+          "5个风险均标注criticality并有具体mitigation",
+          "r-1和r-2（high criticality）的mitigation包含多重策略（强制检查步骤+游戏化规则+不限时+监护人培训）",
+          "替代路线不破坏最小路径结构（如s1未达标补救后s2压缩而非整体延期）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "所有8个G5维度均passed=true",
+      "confirmation.status=confirmed，强制确认在2026-07-27T12:00:00Z完成",
+      "路径从已证实前沿（mastered数轴定位+等值分数）连通到目标（情境缩放迁移+未见情境验收）",
+      "首个会话s1在4天×25分钟约束内可执行",
+      "无硬先修跨越、无不可解释冗余、策略匹配偏差/概念类型、退出标准可判定、复习间距合理"
+    ],
+    "verdict": "pass",
+    "route_to": "S6"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "gsc-frac-0001",
+      "ccg-frac-0001",
+      "LS-frac-0001"
+    ],
+    "source_evidence_ids": [
+      "ev-s5-001",
+      "ev-s5-002",
+      "ev-s5-003",
+      "ev-s5-004",
+      "ev-s5-005",
+      "ev-s5-006"
+    ],
+    "source_sections": [
+      "S5-stage-contract §1–§8",
+      "learner_snapshot §学习前沿与偏差",
+      "capability_concept_graph §先修边与节点状态",
+      "goal_success_contract §目标能力与验收任务"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T12:00:00Z"
+}
+```

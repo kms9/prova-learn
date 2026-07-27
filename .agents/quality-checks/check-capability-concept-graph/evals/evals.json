@@ -1,0 +1,47 @@
+{
+  "skill_name": "check-capability-concept-graph",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给定一个 S3 移交信封：PostgreSQL 18 沙箱查询优化能力—概念图，focus_question 明确、三个目标能力（读取执行计划/设计索引/权衡验证）均经 traceability.goal_refs 追溯到节点、硬先修子图为 DAG 且每条 hard 边均有 rationale、每个关键节点有可观察能力陈述与 assessment_item（覆盖 apply/diagnose/explain/transfer/evaluate）、traceability 三向指向 S2 来源与 S1 目标、confirmation.mode=conditional/status=acknowledged。请用 check-capability-concept-graph 独立复核并输出 quality_check_result。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S3 正向例子1；docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S3] An independent G3 pass: all seven dimensions pass, hard prerequisite subgraph independently verified acyclic, traceability intact; route S4.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the verdict rather than echoing the envelope's self-reported pass.",
+        "Structural validation confirms the handoff envelope and the capability_concept_graph artifact against their schemas.",
+        "The hard-prerequisite subgraph is independently verified acyclic and every hard prerequisite edge has a rationale.",
+        "Every target capability is traced to at least one necessary node via traceability.goal_refs.",
+        "Every key node carries an observable capability_statement and at least one assessment_item covering explain/apply/diagnose/transfer.",
+        "Full traceability to S1 goals and S2 sources is verified, and the deterministic route on pass is S4."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "给定一个 S3 移交信封：六年级分数应用题诊断能力—概念图，focus_question 为“为什么这类题该用除法而非减法”，目标能力覆盖表征/解释/应用/迁移，节点含 concept/procedure/strategy/metacognition 且粒度同阶，硬先修边均带 rationale 且子图无环，每个关键节点有误概念与评估题（含一道迁移题），traceability 三向非空、节点事实均来自 S2 已审计来源（无 model_hypothesis 冒充），confirmation.mode=conditional/status=acknowledged。请用 check-capability-concept-graph 独立复核。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S3 正向例子2（设计夹具）] An independent G3 pass routing to S4.",
+      "files": [],
+      "expectations": [
+        "The checker does not adopt the envelope's self-reported pass without re-deriving each dimension.",
+        "Structural validation passes for both the envelope and the capability_concept_graph artifact.",
+        "The acyclic check is performed on the hard-prerequisite subgraph with every hard edge justified by a rationale.",
+        "Each target capability is covered by traceable nodes, including the transfer-level capability.",
+        "Each key node has an observable capability statement and an assessment item, with the transfer acceptance item recognized.",
+        "Node facts trace back only to S2 audited sources (no model hypothesis masquerading as external evidence) and the route is S4."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "给定一个 S3 移交信封：输入为主题目录“SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 调优”，positive_artifact 为 null，无焦点问题、无边 hard|soft 强度与 rationale、无误概念、无 assessment_items/mastery_thresholds、无 traceability，且混入不属于目标最小路径的锁/事务/分区，confirmation.status=pending。请用 check-capability-concept-graph 独立复核。",
+      "expected_output": "[negative/revise_here fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S3 反向例子] The checker must NOT pass G3: topic directory masquerading as a graph, no acyclic/edge-rationale check possible, no assessment, no traceability; route stays S3 (escalates to S2 if nodes lack S2 evidence).",
+      "files": [],
+      "expectations": [
+        "The checker does not return pass and does not adopt any self-reported verdict.",
+        "Structural validation marks the artifact invalid (positive_artifact null / fails capability-concept-graph.schema.json) with errors recorded.",
+        "The acyclic and hard-prerequisite-rationale checks are reported as failed because no typed edges exist.",
+        "Target-capability coverage is reported as failed because no nodes trace to goals.",
+        "Missing assessment items and traceability are preserved as blocking deficiencies rather than coerced to pass.",
+        "The deterministic route stays at S3 (with documented escalation to S2 when node facts lack S2 evidence) and no fabricated pass is emitted."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope with both ordered sections present.",
+      "passed": false,
+      "evidence": "The output is a custom object with top-level keys execution_id, stage, timestamp, model_version, preceding_unit, indicator_results, scaffolding_profile, mastery_rules, s7_decision, handoff. There is no positive_artifact of type mastery_and_replanning_bundle, and neither mastery_verification nor learner_model_update_and_replan sections exist. stage='S7' is labelled but the required bundle envelope is absent."
+    },
+    {
+      "text": "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+      "passed": true,
+      "evidence": "Mastery rests on four distinct items spanning every evidence type the assertion names: F1 '不看材料独立解释 3/5 > 3/7' (independent — scaffolding_profile.prompts_delivered=0, hints_requested=0, independence='full'); F2 '比较 4/9 与 4/11' (near transfer — conditions_evaluated near_transfer_demonstrated=true); F3 '图形表征转到数轴表征' (representation transfer) plus '一周后延迟复测' (delayed retention — delayed_retention_confirmed=true); F4 '食谱缩放中正确使用分数关系' (far transfer — far_transfer_demonstrated=true). This is explicitly 'not one classroom item alone' — it is four independent items. NOTE: this expectation (unlike case-1's) names evidence TYPES, not the six-dimensional schema, so the flat indicator layout still satisfies the literal text; the six-dimension structure is not required here."
+    },
+    {
+      "text": "Each model_patch change from partial to mastered is backed by explicit evidence event IDs and rationale.",
+      "passed": false,
+      "evidence": "No model_patch array exists. There is no per-node before→mastered transition recorded with evidence_event_ids; s7_decision.action='advance' merely asserts an advancement decision with no traceable per-node patches."
+    },
+    {
+      "text": "The update is version-checked (expected_model_version matched, update_status=applied); version_conflict and not_executed remain the honest fallback states defined by the schema.",
+      "passed": false,
+      "evidence": "model_version reports expected=6, loaded=6, match=true, backend='persistent', backend_status='operational', but there is no update object, no update_status='applied' field, and no representation of the version_conflict or not_executed fallback states. The version match is noted but not structured as a schema-conformant version-checked update."
+    },
+    {
+      "text": "Attribution NODE_MASTERED routes deterministically to S6 (next node), with a maintenance plan in review_schedule; complete is reserved for true goal-level achievement.",
+      "passed": false,
+      "evidence": "There is no attribution object with primary='NODE_MASTERED'. s7_decision.action='advance' (not 'continue'); handoff.target_unit='G7', target_domain='分数运算（乘除）' — it routes forward to the next content unit G7, not to pipeline stage S6. No review_schedule (retrieval/spacing/interleaving/delayed_retest) is produced, and the continue-vs-complete distinction is not exercised (a generic 'advance' is used)."
+    },
+    {
+      "text": "Content-quality vs learner-knowledge are distinguished: because content and graph are verified correct, mastery is attributed to the learner rather than to a content fix.",
+      "passed": true,
+      "evidence": "mastery_rules.content_graph_alignment='correct', validated_at_load=true, pre_determined=true; conditions_evaluated are all favourable (all_indicators_mastered=true, zero_prompt_requirement=true, delayed_retention_confirmed=true, near_transfer_demonstrated=true, far_transfer_demonstrated=true). All four indicators are marked outcome='mastered' and attributed to the learner; no content-fix or source-correction action is suggested; handoff.prerequisites_satisfied lists learner achievements, not content corrections."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "total": 6,
+    "pass_rate": 0.333
+  },
+  "execution_metrics": {
+    "total_steps": 1,
+    "num_turns": 1,
+    "errors_encountered": 0,
+    "output_chars": 2544,
+    "transcript_chars": 932,
+    "total_tokens": 32524
+  },
+  "timing": {
+    "executor_duration_seconds": 44,
+    "total_duration_seconds": 40.355
+  },
+  "claims": [
+    {
+      "claim": "All four indicators reach mastery under full independence, justifying advancement",
+      "type": "quality",
+      "verified": true,
+      "evidence": "scaffolding_profile.prompts_delivered=0, hints_requested=0, independence='full'; indicator_results F1–F4 all outcome='mastered'; mastery_rules.conditions_evaluated all true. The behavioral substance is sound even though the structured six-dimensional evidence is absent."
+    },
+    {
+      "claim": "Model versions match expected=6, loaded=6",
+      "type": "factual",
+      "verified": true,
+      "evidence": "model_version.expected=6, model_version.loaded=6, model_version.match=true, backend='persistent', backend_status='operational'."
+    },
+    {
+      "claim": "The handoff routes into the next pipeline stage",
+      "type": "process",
+      "verified": false,
+      "evidence": "handoff.target_unit='G7' (the next content domain 分数运算乘除), not a pipeline stage; this is the key behavioral divergence from the skill, which routes NODE_MASTERED to stage S6."
+    },
+    {
+      "claim": "The response is returned as ONLY a valid JSON object with no markdown fence and no commentary",
+      "type": "process",
+      "verified": true,
+      "evidence": "response.txt is a single bare JSON object; normalization.json reports original_valid_json=true, leading/trailing_chars_removed=0. The baseline complied with the output-format contract."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Mastery is supported by independent, near/far transfer, representation transfer and delayed-retention evidence together, not by one classroom item alone.",
+        "reason": "This assertion is format-agnostic (it names evidence TYPES and plurality, not the six-dimensional schema), so the without_skill output legitimately passes it: F1–F4 cover independent, near transfer, far transfer, representation transfer and delayed retention across four distinct items. That is a GOOD property — it is one of the few assertions that measures behavioral substance rather than schema conformance. Keep it as-is; just be aware it does not distinguish with_skill from without_skill on this case, because the baseline also produces the required evidence-type spread."
+      },
+      {
+        "reason": "The most discriminating behavioral gap in this case — the baseline routes to content unit G7 while the skill routes to pipeline stage S6, and only the skill emits a spaced review_schedule — is only weakly captured because the relevant assertion (5) is schema-coupled (NODE_MASTERED, review_schedule). A format-agnostic companion assertion such as 'the handoff targets a pipeline stage (S5/S6/S7), not a new content domain' and 'a delayed-retest/maintenance plan is scheduled' would surface this difference even for the baseline."
+      }
+    ],
+    "overall": "Expectations 2 and 6 are format-agnostic and the baseline passes them on substance; 1, 3, 4, 5 are schema-coupled and fail by construction. The standout behavioral difference (route to S6 + maintenance plan vs route to G7 + flat 'advance') is real but under-asserted; adding format-agnostic routing/maintenance assertions would make the with/without gap more visible."
+  }
+}

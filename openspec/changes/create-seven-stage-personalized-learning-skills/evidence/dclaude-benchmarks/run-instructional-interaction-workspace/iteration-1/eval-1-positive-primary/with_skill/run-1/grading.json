@@ -1,0 +1,82 @@
+{
+  "expectations": [
+    {
+      "text": "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+      "passed": true,
+      "evidence": "positive_artifact.content.content_quality_status.state='correct', errors_found=[], reviewed_against=['PostgreSQL 18 官方文档 §11.3', '§11.4', 'skip scan 相关章节']. Three layered explanations (exp-led-column-query-family/core_concept, exp-equality-range-sort-order/procedure, exp-skipscan-boundary/edge_case) each carry ≥1 evidence_refs back to e-pg-doc-multicolumn or e-pg-doc-skipscan. evidence_collected records provenance='external_evidence' with source_ref and summary. No model-common-sense-only content detected."
+    },
+    {
+      "text": "Activities include worked example, completion, contrast and independent transfer tasks that produce judgeable learner-behavior evidence rather than only reading or acknowledgment.",
+      "passed": true,
+      "evidence": "activities array contains: act-retrieval-pretest (retrieval_pretest), act-worked-example (worked_example), act-completion-problem (completion_problem), act-contrast-case (contrast_case), act-independent-transfer (independent_transfer). All with requires_learner_output=true (except worked_example which is demonstrative). interaction_events show three learner_response entries with substantive reasoning, not mere '懂了'."
+    },
+    {
+      "text": "Task difficulty stays within the learner's learnable range and the independent transfer item is reachable after scaffolding fades.",
+      "passed": true,
+      "evidence": "scaffolding_fade_strategy defines initial_support→fade_rule→terminal_support=on_demand, with fading conditions per hint_ladder step. Activities progress: retrieval_pretest(understand)→worked_example(apply)→completion_problem(analyze)→contrast_case(analyze)→independent_transfer(create). The evt-independent-transfer interaction event shows hints_used=[] (scaffold fully withdrawn) and learner independently produced correct index order, rationale, and sandbox verification steps."
+    },
+    {
+      "text": "Hint ladder steps point to query shape and official leading-column rules without substituting the learner's key indexing-order reasoning, and no answer is leaked before submission.",
+      "passed": true,
+      "evidence": "hint_ladder has three levels: step=1/light ('先把你看到的查询条件分成三类...不用考虑索引，只做分类'), step=2/medium ('回顾 B-tree 索引的扫描规则...第一个范围列之后的列还能缩小扫描区间吗？'), step=3/strong ('不要回到选择性高的列放第一的单一公式...不直接告诉你最终顺序，你自己比较后给出'). Each has fading_condition. answer_leakage_control is specified per activity: retrieval_pretest '学习者先产出...再展示参考框架', completion_problem '关键两步留空由学习者填写；提交前不提供完整顺序', independent_transfer '全程不提供提示或答案；提交前不公布任何顺序或验证结果'."
+    },
+    {
+      "text": "A full interaction trace records each learner response, the hint level used, and the correction trajectory.",
+      "passed": true,
+      "evidence": "interaction_events contains three events. evt-initial-misconception: learner_response with substantive misconception text, hints_used=[], correction_trajectory=[]. evt-boundary-correction: learner_response showing corrected reasoning, hints_used=['hint_ladder.step=1'], correction_trajectory=['从选择性最高永远第一转向看查询族等值条件模式','识别出边界反例中前导列必须匹配查询族共性的原则','主动列出数据分布确认清单']. evt-independent-transfer: learner_response with full independent analysis, hints_used=[], correction_trajectory=[]."
+    },
+    {
+      "text": "G6 is evaluated dimension by dimension, passes only because real candidate evidence exists, and deterministically routes to S7 without claiming mastery.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results contains 8 dimensions evaluated individually (内容正确性与可追溯性/对目标和学习者的适配/认知层级/例子代表性/支架质量/答案泄露控制/学习者主动性/交付可用性), all passed=true with specific evidence. verdict='pass', route_to='S7'. candidate_mastery_evidence contains 3 items (independent_application/transfer/reasoning_quality), all status='candidate' (not 'mastered'), each with explicit limits (e.g. '扩展到多列等值+多范围列场景的表现待 S7 复测', '掌握判定属于 G7'). No mastery claim is made."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_chars": 31099,
+    "transcript_chars": 31099
+  },
+  "timing": {
+    "executor_duration_seconds": 138,
+    "total_duration_seconds": 134.311
+  },
+  "claims": [
+    {
+      "claim": "Content was reviewed against PostgreSQL 18 official documentation",
+      "type": "process",
+      "verified": false,
+      "evidence": "content_quality_status.reviewed_against lists PostgreSQL 18 docs chapters, but no direct document retrieval or URL evidence is present in the output — the review claim relies on model knowledge of PostgreSQL docs rather than fetched verification"
+    },
+    {
+      "claim": "All 8 G6 dimensions passed",
+      "type": "factual",
+      "verified": true,
+      "evidence": "quality_evaluation.rubric_results array contains exactly 8 dimension entries, each with passed=true. Sum confirmed."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+        "reason": "The traceability chain (evidence_collected → evidence_refs → explanations) is structurally present but all 'audited source evidence' citations are model-recalled references to PostgreSQL docs — no actual document retrieval/fetch was performed. The structure passes the assertion, but a discriminating assertion would also check that the audit sources were actually fetched, not just named."
+      }
+    ],
+    "overall": "All six expectations pass cleanly. The with_skill output follows the S6 contract comprehensively. The main concern is that the 'audited source' traceability uses model-recalled documentation references rather than actually fetched sources — this may be acceptable given the benchmark design but worth noting for eval improvement."
+  }
+}

@@ -1,0 +1,486 @@
+{
+  "metadata": {
+    "skill_name": "create-domain-evidence-landscape",
+    "skill_path": ".agents/skills/create-domain-evidence-landscape",
+    "executor_model": "dclaude: deepseek-v4-flash, deepseek-v4-pro[1m]",
+    "analyzer_model": "local deterministic post-hoc analysis",
+    "timestamp": "2026-07-26T19:40:33Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3,
+    "runs_per_eval_per_configuration": 1,
+    "total_runs": 6
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 307.36,
+        "tokens": 137227,
+        "tool_calls": 15,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+          "passed": true,
+          "evidence": "response.txt contains a complete handoff envelope with stage_id='S2', positive_artifact.type='domain_evidence_landscape'. research_run_manifest records online=true, execution_status='completed', rounds=3, 6 perspectives (terminology_history, theory_standards, practice_tasks, recruiting_market, interview_assessment, criticism_frontier) each with questions and query_ids, 14 queries each with query_id, query, executed_at, result_summary, and follow_up_of markers, plus 6 follow_up_triggers documenting conflict-driven follow-up chains. The queries include real search strings like 'PostgreSQL 18 EXPLAIN ANALYZE BUFFERS official documentation 2025 2026'."
+        },
+        {
+          "text": "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+          "passed": true,
+          "evidence": "category_coverage array explicitly lists all 6 categories, each with status='covered', reason, criticality, gate_effect, and sample_count. wikipedia_encyclopedia: 1 (PostgreSQL Wiki), official_academic: 7 (PG18 docs for EXPLAIN, Indexes, Multicolumn, Partial, Index-Only, Planner Stats, Release Notes), practice_case: 6, recruiting_jd: 4 (3+ distinct organizations), interview_selection: 2, adversarial_frontier: 5. Product-behavior claims (C1-C7, C14-C17) trace to evidence_refs pointing to PG18 official documentation entries (E-PG-EXPLAIN, E-PG-INDEXES, E-PG-MULTI, E-PG-PARTIAL, E-PG-INDEXONLY, E-PG-STATS, E-PG18-RELEASE) with URLs like postgresql.org/docs/18/."
+        },
+        {
+          "text": "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+          "passed": true,
+          "evidence": "17 claims (C1-C17) each have status (supported/unsupported/partially_supported) and evidence_refs. C8 '所有慢查询都应优先创建索引' is marked unsupported with evidence_refs [E-CRIT-SEQSCAN, E-PG-INDEXES, E-CRIT-OVERINDEX]. C9 'EXPLAIN 中的 cost 等于运行毫秒' is marked unsupported with evidence_refs [E-PG-EXPLAIN]. C10 'Seq Scan 出现在 EXPLAIN 中意味着查询有问题' is marked unsupported. All evidence_refs cross-reference source_ledger evidence_id entries."
+        },
+        {
+          "text": "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+          "passed": true,
+          "evidence": "3 disagreements recorded, each with side_a and side_b, both having position, strong_arguments arrays, and evidence_refs. Specifically: (1) multicolumn index column-order debate includes side_b arguing 'PG18 skip scan已改变旧有行为边界' supported by E-PG18-SKIPSCAN, E-PGEDGE-SKIPSCAN; (2) EXPLAIN ANALYZE side-effect debate with side_b citing official documentation; (3) DBA vs backend capability boundary debate. The INDEX_ALWAYS_FASTER position is identified as unsupported C8 with rebuttal evidence in E-CRIT-SEQSCAN showing Seq Scan wins for 60-80% row returns or small tables. consensus array lists 5 genuine points with evidence_refs."
+        },
+        {
+          "text": "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+          "passed": true,
+          "evidence": "In source_ledger, JD entries (E-JD-PGCN, E-JD-MODB, E-JD-LIEPIN, E-JD-TARYARTAR) all carry provenance='market_signal' and source_category='recruiting_jd'. In claims, C12 and C13 are explicitly claim_type='market_signal' with limits noting 'JD 是市场快照且随组织变化'. No model_hypothesis provenance appears in the source_ledger; all external_evidence entries have retrievable URLs to external sources. The evidence_collected array distinguishes 'market_signal' provenance from 'external_evidence' consistently."
+        },
+        {
+          "text": "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains 11 dimension-by-dimension evaluations, each with evidence array, score, threshold, passed, failure_action, route_to. All 11 dimensions passed=true. research_executed=true. evidence_gaps lists G1 (material, gate_effect='lower_confidence') as the worst gap — none have gate_effect='block'. verdict='pass', route_to='S3'. The G1 gap is explicitly noted as 'lower_confidence' not blocking."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 451.528,
+        "tokens": 354166,
+        "tool_calls": 30,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+          "passed": true,
+          "evidence": "response.txt contains a complete S2 handoff envelope with positive_artifact.type='domain_evidence_landscape'. research_run_manifest records online=true, execution_status='completed', rounds=3, 6 perspectives (terminology_history, theory_standards, practice_tasks, recruiting_market, interview_assessment, criticism_frontier) each with questions and query_ids, 24 queries each with query_id, query string (e.g. 'fractions learning common misconceptions elementary students research'), executed_at timestamps, result_summary describing what was found, and follow_up_of links. 9 follow_up_triggers document conflict-driven follow-up chains (e.g. 'Q1 揭示 whole number bias...触发 Q13' and 'Q19'."
+        },
+        {
+          "text": "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+          "passed": true,
+          "evidence": "category_coverage explicitly lists all 6 categories with status='covered', reason, criticality, gate_effect, sample_count. official_academic has 24 samples including IES practice guide (E-IES-PG), Siegler et al. 2012 (E-SIEGLER-2012), CCSSM (E-CCSS-001), China MOE 2022 curriculum (E-MOE-001), NCTQ 2022 (E-NCTQ-2022), and many peer-reviewed journal articles. No account-specific mnemonics are treated as concept-learning evidence. Individual teacher blogs (Jillian Starr) are classified as practice_case with reliability='low' and provenance='external_evidence', not elevated to official_academic."
+        },
+        {
+          "text": "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+          "passed": true,
+          "evidence": "14 claims (C1-C14) each have status (supported: 8, partially_supported: 3, unsupported: 3) and evidence_refs. C1-C5 about fraction definition, equivalence, magnitude understanding, number line, and whole number bias are all supported with evidence_refs to peer-reviewed research. C12 about intervention dosage is partially_supported with limits noting '三周剂量基于上游用户确认而非专门研究'. C13 '分数学习应该先用披萨/圆形模型引入' is marked unsupported. evidence_gaps records G3 (中文实证不足, material, lower_confidence), G4 (配方缩放效度薄弱, material), G5 (量感缺乏实证验证, minor)."
+        },
+        {
+          "text": "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+          "passed": true,
+          "evidence": "The terminology section defines domain-level concepts (whole number bias, gap thinking, benchmarking) with evidence_refs to cross-cultural research. claims C5 documents domain-level misconceptions as '学生普遍存在自然数偏差'. evidence_gaps G1 explicitly records '学习者诊断数据未采集——未评估初始分数理解水平、具体迷思概念类型、数轴熟练度基线' as a critical gap, clearly separating domain-level from learner-specific misconceptions. consensus array (8 items) and disagreements array (3 items) are separate structures, with disagreements retaining both sides' arguments and open_problems listing 4 items separately."
+        },
+        {
+          "text": "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+          "passed": true,
+          "evidence": "In source_ledger, teacher recruitment entries (E-SZ-TEACHER-2026, E-GD-TEACHER-2026, E-SHANGYU-TEACHER-2026) carry provenance='market_signal' and source_category='recruiting_jd'. Teaching blogs (E-JILLIAN-MC, E-MNP-2024) are classified as practice_case with reliability='low'. Claims C9 and C10 are claim_type='market_signal' and 'practice' respectively. In quality_evaluation rubric dimension '事实/市场信号/推断分离', evidence explicitly states '无 model_hypothesis 计为 external_evidence'. Terminology entries trace to external evidence_refs, not model memory."
+        },
+        {
+          "text": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains 11 dimension-by-dimension evaluations, all passed=true. research_executed=true. evidence_gaps lists G1 (critical, gate_effect='lower_confidence', confidence_impact='high') as the worst gap but explicitly notes '未阻塞建图——S3 建图前需采集'. G3/G4 are material with lower_confidence. G2/G5/G6 are minor. None have gate_effect='block'. verdict='pass', route_to='S3'. The need for S4 behavioral evidence is documented in G1."
+        }
+      ],
+      "notes": [
+        "canonical_output uses a lossless handoff-envelope normalization extracted from response.txt; the original response, normalized positive_artifact, and result.json remain preserved.",
+        "Normalization changed only two unescaped Chinese quotation pairs required to parse the complete JSON envelope; positive_artifact is byte-semantically identical to outputs/result.json."
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.handoff-normalized.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-flash",
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 201.976,
+        "tokens": 89457,
+        "tool_calls": 1,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+          "passed": true,
+          "evidence": "positive_artifact is explicitly null. quality_evaluation.verdict='revise_here' (not 'pass'). quality_evaluation.route_to='S2' (not 'S3'). All 11 rubric_results dimensions have passed=false. The status field is 'blocked'. No domain_evidence_landscape is fabricated — the output correctly produces a blocking envelope without a positive artifact."
+        },
+        {
+          "text": "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+          "passed": true,
+          "evidence": "processing_record step 6 explicitly states '用户拒绝联网取证并要求：(a) 不再搜索 (b) 直接断言...'. step 7: '确认状态 rejected，研究无法执行'. The quality_evaluation dimension '实际联网执行' states 'research_run_manifest 无法产出：online 未设为 true 且无已执行查询记录' and 'research_executed 为 false'. There is no invented research_run_manifest, no fabricated queries, no invented sample counts. evidence_collected contains only 5 entries (E-USER-SEO-1/2/3, E-USER-AD-1, E-USER-ANON-1), all provenance='user_provided_unverified', status='unsupported'."
+        },
+        {
+          "text": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+          "passed": true,
+          "evidence": "The quality_evaluation dimension '强制来源类别覆盖' explicitly documents: wikipedia_encyclopedia: gap, official_academic: gap, practice_case: gap (with explanation that provided materials don't qualify), recruiting_jd: gap, interview_selection: gap, adversarial_frontier: gap. It explicitly states '用户要求将上述 gap 标记为 not_applicable 但不符合 §4 定义：not_applicable 需要确实不适用并写明理由，而此处是未查找导致缺失'. requirement_gaps RG-S2-004 documents '六类强制来源类别中至少五类...无任何可采信条目' with criticality='critical', gate_effect='block'."
+        },
+        {
+          "text": "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+          "passed": true,
+          "evidence": "input_validation.errors explicitly states: 'seo-blog-1/2/3 三篇为同源内容互相转载，标题不同但正文实质性相同，不可计为独立来源'. evidence_collected entries for E-USER-SEO-1/2/3 each carry status='unsupported' and provenance='user_provided_unverified'. E-USER-SEO-2 notes '不构成独立来源', E-USER-SEO-3 notes '三篇共同构成单一来源的 SEO 分发策略，非三份独立证据'. The 'ten rules' claim is addressed via confirmation.questions: '培训广告中未经第三方验证的断言（如只需十条规则）是否可以直接作为领域共识写入 consensus 并标记为 supported？' with response documenting user's demand. No claims array is fabricated — there is no claim-to-evidence mapping marking the ten rules as supported."
+        },
+        {
+          "text": "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+          "passed": true,
+          "evidence": "All 5 evidence_collected entries carry provenance='user_provided_unverified' and status='unsupported'. training-ad-1 is explicitly identified as '商业培训广告，含付费推广链接与夸张营销断言，不得作为领域事实依据'. The quality_evaluation dimension '事实/市场信号/推断分离' states '培训广告中的营销断言未被标记为 market_signal 或 user_provided_unverified 而是被要求直接作为 consensus 呈现' (documenting it correctly refused to do so). No model knowledge is passed off as research — research_executed=false is preserved, and the traceability.source_sections documents the contract provisions that prevent this."
+        },
+        {
+          "text": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+          "passed": true,
+          "evidence": "quality_evaluation.verdict='revise_here', route_to='S2'. input_validation.errors notes '上游 goal_success_contract 缺失或未通过 G1，按 §2 输入契约路由 S1' but the actual verdict stays at S2 (revise_here). The output does NOT route to S3 — all 11 rubric dimensions route_to='S2'. requirement_gaps RG-S2-001 notes the missing G1-passed goal_success_contract with gate_effect='block', and the traceability section cites 'references/stage-contract.md §8 安全/阻塞态 — 上游未通过 G1 路由 S1' as a possible route, but the operative verdict is revise_here at S2."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 275.86,
+        "tokens": 266921,
+        "tool_calls": 11,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+          "passed": false,
+          "evidence": "The without_skill output does NOT contain a domain_evidence_landscape or S2 handoff envelope. Instead it produces a 'learning_path' structure with modules (module_1 through module_6), a knowledge_map, and practical_exercise_scenarios. There is no research_run_manifest with online status, perspectives, queries with executed_at, rounds, or follow_up_triggers. The output mentions 'STORM-style multi-round web research (6 rounds, 18+ sources)' in meta.method but provides no structured manifest recording actual queries, execution timestamps, or perspective-to-query mapping."
+        },
+        {
+          "text": "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+          "passed": false,
+          "evidence": "The without_skill output has no category_coverage structure at all. There is no explicit tracking of which of the six mandatory source categories are covered/gap/not_applicable. key_references lists 12 URLs but without source_category classification, criticality, or gate_effect. There is no source_ledger with evidence_id entries. Product-behavior facts reference PostgreSQL 18 documentation in the learning content (e.g., 'PostgreSQL 18 起，EXPLAIN ANALYZE 自动包含 BUFFERS 信息') but without structured traceability to specific source_ledger entries with URLs and reliability ratings."
+        },
+        {
+          "text": "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+          "passed": false,
+          "evidence": "No claims array exists in the output. The output teaches that 'cost' is '规划器估算成本（相对单位，非毫秒）' in the EXPLAIN field reference and correctly notes Seq Scan can be optimal, but there is no structured claim-to-evidence mapping with supported/unsupported status and evidence_refs. The content is presented as instructional material, not as verifiable claims with evidence provenance."
+        },
+        {
+          "text": "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+          "passed": false,
+          "evidence": "No consensus or disagreements structures exist in the output. The content correctly notes that '索引并非总是更快' and 'Seq Scan 在某些场景下优于 Index Scan' as teaching points, but there is no structured disagreement recording with side_a/side_b both having strong_arguments and evidence_refs. No INDEX_ALWAYS_FASTER position is explicitly recorded with its rebuttal as a structured disagreement."
+        },
+        {
+          "text": "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+          "passed": false,
+          "evidence": "No recruiting JD samples, market_signal labeling, or model_hypothesis classification exists anywhere in the output. There is no jd_capability_matrix or market signal tracing. The output does not distinguish between fact, market_signal, practice, or inference claim types."
+        },
+        {
+          "text": "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2.",
+          "passed": false,
+          "evidence": "No quality_evaluation or rubric_results structure exists. There is no G2 dimension-by-dimension evaluation. The transfer_output section sets target_phase='S3' and claims learner readiness without any gate evaluation. No research_executed boolean or gate mechanism is present."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-flash",
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 132.165,
+        "tokens": 53044,
+        "tool_calls": 7,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+          "passed": false,
+          "evidence": "The without_skill output does NOT contain a domain_evidence_landscape or S2 handoff envelope. It produces a 'perspectives' structure with 4 dimensions (domain_consensus, common_misconceptions, teaching_evidence, case_experiences) and a synthesis_for_S2 section. There is no research_run_manifest with online status, perspectives, queries with executed_at timestamps, rounds, or follow_up_triggers. The research_quality_notes.search_transparency field claims '共执行7次独立联网搜索' but there is no structured manifest recording actual query strings, execution times, or perspective-to-query mapping."
+        },
+        {
+          "text": "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+          "passed": false,
+          "evidence": "No category_coverage structure exists. Sources are cited inline within evidence_summary fields (e.g., 'Siegler, R.S. et al. (2012)...') but without explicit classification into the six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier). There is no source_ledger with evidence_id, source_category, or gate_effect. No structured tracking of which categories are covered vs gap vs not_applicable."
+        },
+        {
+          "text": "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+          "passed": false,
+          "evidence": "No claims array with supported/unsupported status and evidence_refs exists. The output presents domain_consensus items with confidence ratings (very_high, high) and sources lists, but these are descriptive rather than structured claims with traceable evidence_refs mapping to a source_ledger. There is no evidence_gaps array documenting the limits of practice guides. The IES practice guide is not explicitly cited."
+        },
+        {
+          "text": "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+          "passed": false,
+          "evidence": "The output has a 'common_misconceptions' section listing 7 items (MM-1 through MM-7) with root_cause, frequency, and age_range — these are domain-level misconceptions. However, there is no explicit separation between 'domain-level misconceptions all learners face' and 'this specific learner's known misconceptions'. There is no open_problems array. The consensus items appear in domain_consensus but there is no separate open_problems list or disagreements structure preserving both sides' arguments."
+        },
+        {
+          "text": "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+          "passed": false,
+          "evidence": "No explicit market_signal labeling exists. The output contains teaching tips (TE-1 through TE-6) and case_experiences (CE-1 through CE-5) in the same top-level structure as domain_consensus, without provenance classification (market_signal vs external_evidence vs model_hypothesis). The synthesis_for_S2.design_implications section integrates all four perspectives but does not distinguish signal provenance. No source_ledger with provenance field exists."
+        },
+        {
+          "text": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking.",
+          "passed": false,
+          "evidence": "No quality_evaluation or rubric_results structure exists. No G2 dimension-by-dimension evaluation. No research_executed boolean. No verdict or route_to. The output moves to synthesis_for_S2 which describes 'G1_to_S2_bridge' and provides design implications, but without any formal gate evaluation."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6666666666666666,
+        "passed": 4,
+        "failed": 2,
+        "total": 6,
+        "time_seconds": 34.976,
+        "tokens": 31611,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+          "passed": true,
+          "evidence": "The without_skill output does NOT produce a domain_evidence_landscape or positive_artifact. It produces a gap_analysis structure with stage_outcome='blocked' and blocked_reason explaining all input materials are unreliable. There is no G2 evaluation, no verdict='pass', and no route_to='S3'. The output explicitly recommends rolling back to S1: handoff.target_stage='S1', handoff.handoff_type='rollback_with_remediation'."
+        },
+        {
+          "text": "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+          "passed": true,
+          "evidence": "stage_outcome is 'blocked'. blocked_reason explicitly states '所有输入材料信度不足，核心断言与已知领域事实矛盾，且无可靠一手文献补充。S2无法在现有材料基础上产出有效学习路径。建议回退至S1重新进行材料收集，并移除不联网搜索的限制。' meta.no_web_search_performed=true. There is no research_run_manifest, no invented query strings, no fabricated sample counts, and no queries array."
+        },
+        {
+          "text": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+          "passed": false,
+          "evidence": "The output has a gap_analysis.missing_primary_sources section listing 4 domains (基础理论, 提示工程技术, 评估与基准, 官方文档与指南) with examples of specific missing sources. skill_coverage_gaps lists 6 skill areas. However, this is not structured as per the six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier). The gap marking does not use the required covered/gap/not_applicable taxonomy with gate_effect. There is no category_coverage structure. The gap_analysis correctly identifies missing content but not in the required format with explicit category-by-category status, reason, and gate_effect."
+        },
+        {
+          "text": "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+          "passed": true,
+          "evidence": "execution_summary.input_materials explicitly documents all 5 materials with credibility assessments: SEO blogs flagged as 'high_risk' with issue '三篇博客互为转载来源，形成封闭引用环' and '内容可能为同一创作者或同一内容农场产出'. training-ad flagged as 'commercial_bias'. The user_claim assessment verdict is 'unsupported_oversimplification' with reasoning explaining why the 'ten rules' claim contradicts known field knowledge: '不存在公认的十条规则即可掌握的行业共识'. The 'ten rules' claim is NOT marked supported. signal_quality_summary.usable_material_count=0. recommendations.immediate_actions says '废弃当前全部5份材料作为学习依据'."
+        },
+        {
+          "text": "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+          "passed": true,
+          "evidence": "The training ad is classified as type='培训广告' with credibility_flag='commercial_bias' and issues including '商业动机可能扭曲信息客观性'. The SEO blogs are flagged as 'SEO优化导向而非知识传播导向'. No source is relabeled as external_evidence. meta field explicitly states 'no_project_files_accessed: true', 'no_web_search_performed: true', 'reasoning_basis: general_knowledge_of_LLM_prompt_engineering_and_information_literacy_principles' — this is transparent about using model knowledge as reasoning basis, not passing it off as research."
+        },
+        {
+          "text": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+          "passed": false,
+          "evidence": "The output routes to S1 rather than S2: stage_outcome='blocked', handoff.target_stage='S1', handoff.handoff_type='rollback_with_remediation'. The expectation says the route should be 'revise_here at S2 unless a documented goal defect requires returning to S1'. While the output does document a goal defect (materials are fundamentally unreliable), the expectation's default is revise_here at S2. The output bypasses S2 revise and goes directly to S1 rollback. It does correctly NOT advance to S3."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 320.288,
+        "stddev": 125.2773,
+        "min": 201.976,
+        "max": 451.528
+      },
+      "tokens": {
+        "mean": 193616.6667,
+        "stddev": 141076.4316,
+        "min": 89457.0,
+        "max": 354166.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.2222,
+        "stddev": 0.3849,
+        "min": 0.0,
+        "max": 0.6667
+      },
+      "time_seconds": {
+        "mean": 147.667,
+        "stddev": 121.1879,
+        "min": 34.976,
+        "max": 275.86
+      },
+      "tokens": {
+        "mean": 117192.0,
+        "stddev": 130111.1965,
+        "min": 31611.0,
+        "max": 266921.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.78",
+      "time_seconds": "+172.6",
+      "tokens": "+76425"
+    }
+  },
+  "notes": [
+    "**Discrimination:** with-skill mean pass rate is `1.0000`; without-skill is `0.2223`; delta is `+0.78`. Executed-research evidence, category coverage, claim/source linkage and G2 routing remain discriminating.",
+    "**Variance:** with-skill standard deviation is `0.0000`; without-skill is `0.3851`. Baseline variance is high because the negative case can satisfy generic provenance cautions while still missing gap classification and fail-closed routing.",
+    "**Time:** with-skill mean is `320.288s`, without-skill `147.667s` (`+172.6s`). Live research and source auditing are the dominant cost.",
+    "**Tokens:** actual outer `modelUsage` totals average `193,616.7` with the skill and `117,192.0` without it (`+76,424.7`). The accuracy gain has a material token cost; a later optimization should reduce repeated source narration without weakening the manifest or ledger.",
+    "**Conclusion:** high quality gain with the clearest cost trade-off among the completed stages."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "case-3-negative-blocked",
+  "prompt": "有人给出三篇互相转载的 SEO 博客、一个培训广告和一篇无作者转载，要求不再联网搜索，直接断言“行业一致认为只要记住十条规则就能做好提示工程”，并把所有没找到的一手资料标记为不适用。请执行个性化学习 S2，并输出结构化 JSON 移交结果。",
+  "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S2 反向例子] S2 must fail closed: no accepted positive artifact, no G2 pass, research_blocked or evidence_insufficient state, and the route stays at S2 (or returns to S1 if the goal itself is invalid).",
+  "expectations": [
+    "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+    "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+    "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+    "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+    "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+    "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3."
+  ]
+}

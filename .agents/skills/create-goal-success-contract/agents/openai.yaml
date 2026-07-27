@@ -1,0 +1,4 @@
+interface:
+  display_name: "目标与成功契约"
+  short_description: "将学习诉求校准为可观察、可验收且经过确认的目标契约"
+  default_prompt: "使用 $create-goal-success-contract 把我的学习目标校准成可观察、可验收的成功契约。"

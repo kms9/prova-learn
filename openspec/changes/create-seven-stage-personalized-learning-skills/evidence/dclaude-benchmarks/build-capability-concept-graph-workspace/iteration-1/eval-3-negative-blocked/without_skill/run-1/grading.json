@@ -1,0 +1,106 @@
+{
+  "expectations": [
+    {
+      "text": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+      "passed": false,
+      "evidence": "The output ACCEPTS the topic sequence as a valid structure and PRODUCES a positive artifact: a dependency_graph with 7 nodes (sql_basics, indexes, execution_plans, locks, transactions, partitioning, query_optimization), 6 edges with reasons, a learning_path with 7 recommended_sequence entries, and a personalization section with risk_areas. The metadata section acknowledges input_has_focal_questions=false, input_has_misconceptions=false, input_has_assessments=false, input_has_mastery_rules=false, input_has_source_mappings=false — but despite recognizing these are absent, the output proceeds to construct a full positive artifact rather than rejecting the input. The graph is labeled 'linear_dag' and presented as a valid deliverable."
+    },
+    {
+      "text": "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+      "passed": false,
+      "evidence": "The output does NOT identify these as missing elements that block graph construction. Instead, it fabricates replacements: (a) No focus question — instead creates a 'dependency_graph' organized by topic order, (b) No typed nodes — creates 'category' labels (foundation/core/advanced) and 'difficulty' ratings (beginner/intermediate/advanced/expert) instead of concept/procedure/strategy/representation/metacognition types, (c) No capability_statements — creates 'description' and 'key_concepts' fields, (d) Edges have 'reason' fields rather than rationale with hard/soft distinction, (e) No misconceptions — creates 'risk_areas' with generic risks instead, (f) No assessment_items — creates 'checkpoint' statements as learning objectives, (g) No mastery_thresholds — absent entirely, (h) No traceability — absent entirely. The metadata section passively notes these are missing ('input_has_focal_questions': false, etc.) but this is documentation of absence, not identification of blocking deficiencies."
+    },
+    {
+      "text": "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+      "passed": false,
+      "evidence": "The output labels the graph 'linear_dag' in metadata.graph_type — this ASSUMES acyclicity without verification. No cycle check, topological sort, or acyclicity verification is performed. The edges have 'reason' fields (e.g. '索引的理解需要先掌握 SQL 基本查询语法') but these are generic explanations, not prerequisite explainability assessments. The output assumes the linear chapter order is valid rather than reporting that acyclicity cannot be established from a bare topic directory."
+    },
+    {
+      "text": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+      "passed": false,
+      "evidence": "The output EXTENSIVELY invents domain evidence: (a) key_concepts for each node (8 concepts per node, 56 total invented facts about SQL, B+Tree, locks, transactions, partitioning, query optimization), (b) estimated_hours per topic (8, 6, 5, 5, 5, 4, 6 — specific fabricated numbers), (c) difficulty ratings (beginner→intermediate→advanced→expert), (d) weight values (1.0, 1.2, 1.3, 1.4, 1.5, 1.1, 1.6), (e) risk_areas with specific mitigations (e.g. 'MVCC 实现细节复杂，容易与锁概念混淆'), (f) suggested_resources_type per topic, (g) learning_strategy per topic (bottom_up/top_down). This is precisely the behavior the expectation forbids — model knowledge presented as if it were structured domain evidence."
+    },
+    {
+      "text": "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+      "passed": false,
+      "evidence": "Traceability to S1/S2 is NOT reported as absent — the output simply omits it. No mention of 'traceability', 'S1', 'S2', or 'upstream return' exists in the output. There is no attribution of unsupported node facts. The metadata passively notes input_has_source_mappings=false but takes no action — it does not flag this as a blocking deficiency or attribute unsupported facts for upstream return. The output presents all fabricated domain facts (56 key_concepts, estimated hours, difficulty ratings) as if they were established, without any provenance tracking."
+    },
+    {
+      "text": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+      "passed": false,
+      "evidence": "G3 effectively PASSES — the output is a complete, positive, structured result with a dependency_graph, learning_path, and personalization. No blocking is declared. No route_to S3, S2, or S1 exists. No invalidated downstream scope is recorded. The output presents the topic directory as a valid, complete learning pathway deliverable. There is no gate check, no quality evaluation, no verdict — the output treats 'input has these topics' as sufficient to produce a finished artifact."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 3299,
+    "transcript_chars": 32911
+  },
+  "timing": {
+    "executor_duration_seconds": 47,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": 44.463
+  },
+  "claims": [
+    {
+      "claim": "具备基本计算机知识，无 SQL 经验",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fabricated learner profile detail. The prompt provides no learner background information — just a topic directory. This is model-invented."
+    },
+    {
+      "claim": "graph_type: linear_dag",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The graph is assumed to be a DAG without verification. The topic directory is a linear sequence (SQL基础→索引→执行计划→锁→事务→分区→查询优化) — labeling it 'linear_dag' is a post-hoc label, not a verified structural property."
+    },
+    {
+      "claim": "total_estimated_hours: 39",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Completely fabricated estimate with no methodology or evidence basis. Individual topic hour estimates (8, 6, 5, 5, 5, 4, 6) are all invented."
+    },
+    {
+      "claim": "锁机制抽象度高，缺乏直观感受 — mitigation: 通过并发模拟工具可视化锁等待和死锁发生过程",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Fabricated risk assessment and mitigation strategy. The prompt provides no information about learner difficulties or risk areas."
+    },
+    {
+      "claim": "input_has_focal_questions: false, input_has_misconceptions: false, input_has_assessments: false, input_has_mastery_rules: false, input_has_source_mappings: false",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The metadata section correctly acknowledges the input deficiencies. However, this passive documentation does not constitute rejection — the output proceeds to fabricate a full artifact regardless."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+        "reason": "This is the most discriminating assertion in the negative case. The without_skill output invents 56 key_concepts, estimated hours, difficulty ratings, risk areas, and learning strategies — exactly the behavior the assertion is designed to catch. The contrast with the with_skill output (which produces zero invented domain facts) validates this assertion's power."
+      },
+      {
+        "assertion": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+        "reason": "Essential assertion that tests the core rejection behavior. The without_skill output fails spectacularly — it produces a full dependency_graph, learning_path, and personalization section. The metadata section's passive acknowledgment ('input_has_focal_questions': false) shows the model recognizes the deficiencies but proceeds anyway, confirming this is a behavioral gap (knowing vs. acting) that the skill's rejection contract is designed to prevent."
+      },
+      {
+        "reason": "The negative case expectations are well-designed to test rejection behavior comprehensively. They check: (1) non-acceptance, (2) identification of deficiencies, (3) not assuming unverifiable properties, (4) not fabricating evidence, (5) attributing upstream, (6) deterministic routing. All 6 dimensions correctly discriminate between the with_skill (passes all) and without_skill (fails all) runs. No weak or trivial assertions."
+      }
+    ],
+    "overall": "All 6 expectations correctly fail. The without_skill output for the negative/blocked case demonstrates exactly the failure mode the skill is designed to prevent: given a bare topic directory, a general-purpose model fabricates a complete learning pathway with invented domain knowledge, estimated hours, difficulty ratings, and risk assessments. The output acknowledges the input deficiencies in metadata but does not act on them — it treats the topic list as sufficient to produce a positive artifact. The 1-turn, 47-second execution (vs. 9 turns, 115 seconds with the skill) reflects the model's failure to engage the skill's structured rejection process."
+  }
+}

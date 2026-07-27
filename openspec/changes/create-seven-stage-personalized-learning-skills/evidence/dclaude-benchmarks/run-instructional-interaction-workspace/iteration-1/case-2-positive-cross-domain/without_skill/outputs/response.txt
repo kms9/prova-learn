@@ -1,0 +1,87 @@
+```json
+{
+  "stage": "S6",
+  "learner_profile": {
+    "current_grade": 6,
+    "prior_milestone": "G5_passed",
+    "current_node": {
+      "id": "6.NF.A.1",
+      "name": "解释并比较等值与大小不同的分数",
+      "domain": "分数",
+      "description": "使用视觉模型、数轴和推理比较分数大小，理解单位分数的相对大小，并能将分数比较应用于比例推理场景"
+    }
+  },
+  "evidence_log": [
+    {
+      "id": "E1",
+      "behavior": "学习者先用等长条形比较1/2与1/5",
+      "category": "视觉表征",
+      "performance": "无提示独立完成",
+      "implies": "能自主选择并使用面积模型进行分数大小比较，具备分数视觉化比较的策略意识"
+    },
+    {
+      "id": "E2",
+      "behavior": "自己画数轴并定位2/3",
+      "category": "数轴表征",
+      "performance": "无提示独立完成",
+      "implies": "能将分数映射到线性度量模型，理解分数在数轴上的相对位置"
+    },
+    {
+      "id": "E3",
+      "behavior": "撤掉图形后解释'整体相同时分成更多份每份为何更小'",
+      "category": "概念推理",
+      "performance": "无提示独立完成",
+      "implies": "脱离具体图形后仍能进行抽象概念解释，理解单位分数的反比关系（分母越大，分数值越小）"
+    },
+    {
+      "id": "E4",
+      "behavior": "半完成题需一级提示",
+      "category": "程序性独立",
+      "performance": "需一级提示后完成",
+      "implies": "在部分步骤中执行流畅度尚未完全自动化，轻度脚手架即可桥接到独立完成"
+    },
+    {
+      "id": "E5",
+      "behavior": "无提示完成从4人到6人的未见配方缩放并解释每一步",
+      "category": "迁移应用",
+      "performance": "无提示独立完成",
+      "implies": "能将分数比较与等值推理迁移到全新情境（比例缩放），具备乘法推理与解释性语言的双重能力"
+    }
+  ],
+  "proficiency_determination": {
+    "current_node_mastery": "proficient",
+    "confidence": "high",
+    "summary": "学习者在当前节点展现出跨表征、跨情境的一致理解：视觉模型（条形、数轴）独立运用，核心概念可脱离图形进行抽象解释，且能将分数推理成功迁移到未见过的配方缩放问题并逐步解释。唯一的脚手架需求出现于半完成题的局部步骤（一级提示），不构成概念性障碍。综合判断为已掌握本节点。",
+    "indicator_breakdown": {
+      "visual_representation": "mastered",
+      "number_line_representation": "mastered",
+      "conceptual_reasoning": "mastered",
+      "procedural_fluency": "developing",
+      "transfer_and_explanation": "mastered"
+    }
+  },
+  "decision": {
+    "action": "advance",
+    "readiness": "ready_with_light_scaffolding",
+    "rationale": "5项证据中4项为无提示独立完成，唯一需提示项仅涉及程序性局部步骤且一级提示即可解锁。迁移表现（未见配方缩放+逐步解释）是深度理解的强信号，表明学习者已超越机械比较进入比例推理层面。建议推进至下一节点，同时在程序性练习中预设轻量脚手架。"
+  },
+  "recommended_next_node": {
+    "id": "6.RP.A.1",
+    "name": "理解比率概念并使用比率推理解决问题",
+    "domain": "比率与比例推理",
+    "rationale": "学习者在配方缩放任务中已展示初步的比例推理能力，从分数比较自然过渡到比率概念是最近发展区的合理延伸"
+  },
+  "scaffolding_profile": {
+    "hint_level": "minimal",
+    "trigger_condition": "仅当学习者在程序执行中出现停顿超过30秒或首次尝试错误时提供一级提示",
+    "fade_strategy": "在同类问题的第二题起撤回提示，迫使独立检索策略",
+    "note": "学习者当前只需一级提示即可完成，不应过度脚手架化；优先等待而非预设提示"
+  },
+  "personalized_notes": {
+    "strength": "概念解释能力与跨情境迁移突出，可在后续节点中安排同伴解释或'小老师'角色以巩固",
+    "watch_point": "程序性流畅度（E4）需在后续节点的练习中持续监测，若再次出现同模式则增加刻意练习密度",
+    "language_asset": "逐步骤解释能力（E5）表明数学语言表达是优势通道，可在新节点中优先使用'先做再说'或'边说边做'的教学序列"
+  },
+  "timestamp": "2026-07-27"
+}
+```

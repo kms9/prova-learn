@@ -1,0 +1,88 @@
+{
+  "expectations": [
+    {
+      "text": "Equivalent-fraction representation evidence is preserved as a tested state and is not discarded because of the comparison error.",
+      "passed": true,
+      "evidence": "node NF2_equivalent_fraction_identification is status 'tested_mastered' with evidence_refs ['E1','E3'] (number-line positioning of 2/3 and 4/6, and the diagram-aided 2/3=4/6 judgment); NF1_number_line_positioning is also 'tested_mastered' on E1. The comparison error (E2) is recorded separately on NF4/NF5 and did not discard the equivalence competence."
+    },
+    {
+      "text": "Mechanical cross-multiplication without explanation is not treated as conceptual mastery, and prompt-assisted recipe success is distinguished from independent transfer.",
+      "passed": true,
+      "evidence": "Cross-multiplication is split into NF4_fraction_comparison_procedural (tested_mastered) vs NF5_fraction_comparison_conceptual (tested_not_mastered, error_type conceptual_misconception), so the mechanical procedure is NOT treated as conceptual mastery; misconception CROSS_MULTIPLY_AS_BLACK_BOX captures it. Prompt-assisted success (E3 diagram, E4 first-wrong-then-correct-with-diagram) is separated from independent transfer: transfer_performance.status='not_demonstrated' on E5 (two novel-context problems failed)."
+    },
+    {
+      "text": "The whole-number-bias misconception is captured as a coded entry with at least two supporting observations rather than a single item.",
+      "passed": false,
+      "evidence": "The misconceptions[] array contains only two codes: CROSS_MULTIPLY_AS_BLACK_BOX (evidence_refs ['E2'] — a single observation) and EQUIVALENCE_REQUIRES_VISUAL_VERIFICATION (evidence_refs ['E3','E4']). Neither is a whole-number-bias misconception, and the entry most plausibly adjacent to it (cross-multiply black box) has only one supporting observation. Burden of proof not met: no coded whole-number-bias entry with >=2 observations exists."
+    },
+    {
+      "text": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+      "passed": true,
+      "evidence": "All seven node_states carry hint_dependency {level, evidence_refs} and confidence_calibration {self_confidence, observed_alignment} (values null/unknown because no self-rating was supplied in the input). transfer_performance.status='not_demonstrated', evidence_refs ['E5'], summary states both structurally-isomorphic unseen-context problems failed independent transfer."
+    },
+    {
+      "text": "The learning frontier names a nearest learnable node with traceable evidence and a rationale rather than the broad goal of understanding fractions.",
+      "passed": true,
+      "evidence": "learning_frontier.nearest_learnable_node_id='NF3_equivalent_fraction_justification', evidence_refs ['E1','E2','E3','E4'], rationale explains NF1/NF2 are independently mastered and NF3 is correct only under visual scaffold with high hint dependency, so it is the nearest bottleneck; alternative_candidate_node_ids=['NF5_fraction_comparison_conceptual']. It is a concrete node, not the broad goal."
+    },
+    {
+      "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results lists seven dimensions each with passed:true; verdict='pass', route_to='S5'."
+    }
+  ],
+  "summary": { "passed": 5, "failed": 1, "total": 6, "pass_rate": 0.833 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 11360,
+    "transcript_chars": 913,
+    "duration_ms": 333840,
+    "usage": { "input_tokens": 76197, "output_tokens": 30770, "cache_read_input_tokens": 367232, "cost_usd": 1.333851 },
+    "note": "No metrics.json or tool-call log; isolated LLM completion (web_search/fetch = 0). Notably long run (333.84s) with 30,770 output tokens."
+  },
+  "timing": {
+    "executor_duration_seconds": 337,
+    "total_duration_seconds": 333.84,
+    "grader_duration_seconds": null
+  },
+  "claims": [
+    {
+      "claim": "The response is clean JSON with no prose preamble and no markdown fence.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/response.txt begins directly with '{\"schema_version\":\"1.0.0\"...'; no fence, no commentary. This is the only run of the six that fully satisfies the executor output contract."
+    },
+    {
+      "claim": "confidence_calibration is structurally recorded but vacuous for every node.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Every node_state has confidence_calibration {self_confidence:null, observed_alignment:'unknown'}. This is acceptable because the case-2 input provides no learner self-rating, but no actual calibration was performed."
+    },
+    {
+      "claim": "The scenario behavior is mechanical cross-multiplication, not whole-number bias.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The prompt states the learner cross-multiplies 3/5 vs 4/7 correctly but cannot explain it. The output correctly diagnoses CROSS_MULTIPLY_AS_BLACK_BOX rather than fabricating whole-number bias — which is why expectation 3 fails."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this configuration directory."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The whole-number-bias misconception is captured as a coded entry with at least two supporting observations rather than a single item.",
+        "reason": "This expectation appears mis-calibrated to its own scenario. The described behavior is correct-but-unexplained cross-multiplication (a black-box procedure), which is not whole-number bias; the skill correctly avoided fabricating a whole-number-bias code. The expectation punishes a correct diagnosis. Either change the scenario to exhibit actual whole-number bias, or reword to test that the procedural/conceptual split is captured with >=2 observations."
+      },
+      {
+        "assertion": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+        "reason": "All confidence_calibration values are null/unknown yet this expectation passes. Consider requiring a non-null observed_alignment when any self-rating is present, so vacuous calibration cannot satisfy the assertion by accident."
+      }
+    ],
+    "overall": "Strong artifact; one expectation (whole-number-bias) fails on substance and that expectation itself looks mis-calibrated to the scenario. This is also the only contract-clean (no preamble, no fence) run."
+  }
+}

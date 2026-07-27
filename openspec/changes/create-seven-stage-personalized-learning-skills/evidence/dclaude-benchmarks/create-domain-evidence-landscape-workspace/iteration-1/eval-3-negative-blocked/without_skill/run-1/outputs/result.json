@@ -1,0 +1,150 @@
+{
+  "stage": "S2",
+  "stage_name": "个性化学习-信源评估与知识缺口分析",
+  "execution_summary": {
+    "task": "对用户提供的提示工程学习材料进行信源可信度评估、信息质量审查和知识缺口识别",
+    "input_materials": [
+      {
+        "type": "SEO博客-互相转载",
+        "count": 3,
+        "credibility_flag": "high_risk",
+        "issues": [
+          "三篇博客互为转载来源，形成封闭引用环",
+          "无独立一手研究或实验数据支撑",
+          "SEO优化导向而非知识传播导向",
+          "内容可能为同一创作者或同一内容农场产出"
+        ]
+      },
+      {
+        "type": "培训广告",
+        "count": 1,
+        "credibility_flag": "commercial_bias",
+        "issues": [
+          "商业动机可能扭曲信息客观性",
+          "倾向于夸大简化以促进转化",
+          "通常缺乏同行评议或可验证的实验证据"
+        ]
+      },
+      {
+        "type": "无作者转载",
+        "count": 1,
+        "credibility_flag": "unverifiable",
+        "issues": [
+          "无法追溯作者专业背景和资质",
+          "无法验证内容是否经过篡改",
+          "缺乏问责主体"
+        ]
+      }
+    ],
+    "user_claim": "行业一致认为只要记住十条规则就能做好提示工程",
+    "claim_assessment": {
+      "verdict": "unsupported_oversimplification",
+      "reasoning": "提示工程是一个活跃发展的研究领域，学术界和产业界对其最佳实践存在持续讨论和分歧。不存在公认的'十条规则即可掌握'的行业共识。主流文献（如OpenAI、Anthropic的官方指南，ACL/NeurIPS等顶会论文）强调提示工程涉及上下文学习、思维链推理、少样本示例、角色设定、格式控制、幻觉缓解等多维度技巧，远超十条简单规则的范畴。该断言更符合营销话术特征而非技术事实。"
+    },
+    "constraint_analysis": {
+      "no_web_search": {
+        "impact": "用户禁止联网搜索，导致无法交叉验证材料中的任何声称，也阻断了查找一手文献的途径",
+        "consequence": "所有评估仅能基于内部知识进行，无法确认具体博客或培训的具体内容"
+      },
+      "primary_sources_marked_na": {
+        "impact": "用户将未找到的一手资料标记为不适用，系统性地排除了可验证的高质量信息源",
+        "consequence": "学习材料的质量基线被人为压低，形成信息茧房"
+      }
+    },
+    "signal_quality_summary": {
+      "overall_credibility": "极低",
+      "red_flags": [
+        "信息来源全部为低信度类型（SEO转载环、广告、匿名转载）",
+        "核心断言过度简化至失真程度",
+        "主动排除一手文献验证途径",
+        "学习材料总量不足以支撑任何严肃的知识体系构建"
+      ],
+      "usable_material_count": 0,
+      "needs_remediation": true
+    }
+  },
+  "gap_analysis": {
+    "missing_primary_sources": [
+      {
+        "domain": "基础理论",
+        "examples": "Transformer架构原始论文、注意力机制原理解析、大语言模型预训练/微调/对齐相关文献"
+      },
+      {
+        "domain": "提示工程技术",
+        "examples": "思维链(Chain-of-Thought)原始论文、ReAct范式论文、少样本提示的系统性研究、提示注入与防御研究"
+      },
+      {
+        "domain": "评估与基准",
+        "examples": "MMLU/BIG-bench/HELM等标准评测框架、人类偏好对齐研究(RLHF/DPO)"
+      },
+      {
+        "domain": "官方文档与指南",
+        "examples": "OpenAI提示工程指南、Anthropic提示指南、各主流模型的技术报告"
+      }
+    ],
+    "skill_coverage_gaps": [
+      "提示的迭代调试方法论",
+      "复杂推理任务的提示策略（如自一致性、思维树）",
+      "多模态提示工程",
+      "提示的安全性、鲁棒性与对抗性攻击",
+      "评估提示效果的量化方法",
+      "不同模型对提示的敏感性差异"
+    ]
+  },
+  "recommendations": {
+    "immediate_actions": [
+      "废弃当前全部5份材料作为学习依据",
+      "解除联网搜索限制以获取可验证的一手文献",
+      "从权威来源重新构建学习材料库"
+    ],
+    "material_replacement_strategy": [
+      {
+        "priority": 1,
+        "source_type": "学术论文",
+        "suggested_venues": [
+          "ACL Anthology",
+          "arXiv cs.CL",
+          "NeurIPS/ICML proceedings"
+        ]
+      },
+      {
+        "priority": 2,
+        "source_type": "官方技术文档",
+        "suggested_sources": [
+          "OpenAI Cookbook",
+          "Anthropic Docs",
+          "Google AI 提示指南"
+        ]
+      },
+      {
+        "priority": 3,
+        "source_type": "有署名和引用的技术博客",
+        "criteria": "作者可验证的从业背景 + 引用一手文献 + 包含可复现的实验/代码"
+      }
+    ]
+  },
+  "stage_outcome": "blocked",
+  "blocked_reason": "所有输入材料信度不足，核心断言与已知领域事实矛盾，且无可靠一手文献补充。S2无法在现有材料基础上产出有效学习路径。建议回退至S1重新进行材料收集，并移除不联网搜索的限制。",
+  "handoff": {
+    "target_stage": "S1",
+    "handoff_type": "rollback_with_remediation",
+    "required_before_retry": [
+      "enable_web_search",
+      "collect_primary_sources_from_credible_venues",
+      "verify_author_credentials_and_citations",
+      "ensure_minimum_material_diversity"
+    ],
+    "structured_handoff_data": {
+      "disqualified_materials": 5,
+      "minimum_required_primary_sources": 3,
+      "minimum_unique_authors_or_organizations": 2,
+      "credibility_threshold": "must_include_at_least_one_peer_reviewed_or_official_source"
+    }
+  },
+  "meta": {
+    "execution_mode": "isolated_baseline",
+    "no_project_files_accessed": true,
+    "no_web_search_performed": true,
+    "reasoning_basis": "general_knowledge_of_LLM_prompt_engineering_and_information_literacy_principles"
+  }
+}

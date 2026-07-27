@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "case-3-negative-blocked",
+  "prompt": "G1/G3 已通过，目标能力、图谱节点、先修边和诊断项均有效。当前唯一的学习者行为输入是自评“我对这个主题 8/10”，并回答了一道口号式问题“索引能加速查询吗？是”。没有推理、提示层级、迁移题、耗时或第二个观察。请执行个性化学习 S4 并输出结构化 JSON。",
+  "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S4 反向例子] No accepted positive learner_snapshot, no G4 pass; emit diagnostic tasks plus pending/evidence_insufficient and remain at S4, or return upstream to S3 if the items cannot produce target evidence.",
+  "expectations": [
+    "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+    "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+    "The output does not assert independence or transfer ability that was never observed.",
+    "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+    "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+    "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid)."
+  ]
+}

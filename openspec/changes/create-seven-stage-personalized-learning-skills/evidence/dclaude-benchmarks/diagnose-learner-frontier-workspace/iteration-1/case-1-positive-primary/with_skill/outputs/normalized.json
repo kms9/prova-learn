@@ -1,0 +1,438 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S4",
+  "run_id": "s4-pg-query-opt-20260727-001",
+  "learner_id": "learner-demo-01",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "gsc-pg-qo-0001",
+      "ccg-pg-qo-0001"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "capability_concept_graph": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G1 goal_success_contract 和 G3 capability_concept_graph 已通过上游门，节点与先修边有效",
+    "所有诊断项均可产生目标行为证据，图谱中关键节点均具有可执行诊断任务",
+    "学习者行为 D1–D4 是多次独立观察的真实回答，非模拟或自述",
+    "学习者自评 8/10 仅用作选题线索与置信度校准参考，不作为掌握状态判定依据"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "RG-001",
+      "description": "explain_analyze_safety 节点仅有一次观察且未触发写风险意识测试，证据不足以判定掌握或未掌握",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    },
+    {
+      "id": "RG-002",
+      "description": "无学习者回答耗时数据，hint_dependency 仅能通过提示层级推断",
+      "criticality": "low",
+      "gate_effect": "none"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "展示初步节点状态、误概念和学习前沿后，学习者自述“确实习惯按选择性排序列，没想过查询形状和 ORDER BY 也会约束索引”，与 D3 行为一致；对数据分布变化场景表示“没意识到要重新看统计信息”",
+    "questions": [
+      "你对“把选择性最高的列放前面”这条规则的形成来源是什么？是否会根据不同查询类型调整？",
+      "数据分布变化后，你通常如何决定是否重新评估索引？",
+      "你对自己 PostgreSQL 查询优化熟练度 8/10 是基于哪些具体任务的经验？"
+    ],
+    "response": "学习者确认多列索引选择依赖口头规则而非统计信息分析；承认分布变化后不会主动复测；自评 8/10 源于日常写 SQL 的流畅感而非优化诊断经验",
+    "status": "confirmed",
+    "confirmed_at": "2026-07-27T12:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "D1",
+      "provenance": "learner_behavior",
+      "source_ref": "diag-explain-diff",
+      "summary": "能解释普通 EXPLAIN 与 EXPLAIN ANALYZE 的差别：知道后者实际执行查询并返回实际时间与行数，但未提及对 INSERT/UPDATE/DELETE 的写操作副作用或风险",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "D2",
+      "provenance": "learner_behavior",
+      "source_ref": "diag-estimate-vs-actual",
+      "summary": "能指出 EXPLAIN 输出中估算行数与实际行数的差异，但不能解释统计信息（pg_statistic、ANALYZE 命令、autovacuum 对统计更新的作用）如何影响估算",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "D3",
+      "provenance": "learner_behavior",
+      "source_ref": "diag-multicolumn-index",
+      "summary": "为 tenant_id=? AND status=? ORDER BY created_at DESC 选索引时只说“把选择性最高的列放前面”，未考虑 ORDER BY 排序列可以消除排序、等值谓词与范围谓词在索引列顺序上的差异、以及查询形状约束",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "D4",
+      "provenance": "learner_behavior",
+      "source_ref": "diag-workload-change",
+      "summary": "数据分布变化后仍沿用同一索引，不尝试 EXPLAIN 重新评估计划、不要求 ANALYZE 更新统计信息、不重新测量实际行数",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "S4.1 声明每节点推断规则：plan_tree_basics 需独立解释计划树结构且区分 EXPLAIN/EXPLAIN ANALYZE → mastered；estimated_vs_actual_recognition 需独立识别差异并说明来源 → mastered；explain_analyze_safety 需主动提及写操作风险 → 单次观察不足 → insufficient_evidence；planner_statistics_reasoning 需解释统计信息对计划的因果作用 → 多项证据指向未掌握；multicolumn_index_order 需在非机械选择性规则前提下给出合理列顺序 → 未掌握；workload_change_transfer 需在分布变化情境下自发复测 → transfer_failure",
+    "S4.2 执行诊断任务：D1 覆盖 plan_tree_basics 与 explain_analyze_safety；D2 覆盖 estimated_vs_actual_recognition 与 planner_statistics_reasoning；D3 覆盖 multicolumn_index_order 与 planner_statistics_reasoning；D4 覆盖 workload_change_transfer",
+    "S4.3 区分答对/独立/迁移：D1 和 D2 为无提示独立完成（hint=none），但 D1 对写安全未覆盖；D3 暴露机械规则依赖，仍独立完成但结论错误；D4 为未见情境且未通过 — 迁移失败",
+    "S4.4 置信度校准：自评 8/10(≈0.80-0.85) vs 行为证据（planner_statistics_reasoning 和 multicolumn_index_order 均存在概念误念）→ overconfident",
+    "S4.5 递归定位学习前沿：从目标节点回溯，planner_statistics_reasoning 是最近证据支持「可学习但尚未掌握」的节点 — 学习者已能读计划与识别估算偏差，填补统计信息理解即可开启多列索引判断；alternative_candidate 为 multicolumn_index_order（若偏重索引设计实践则以此为前沿）",
+    "S4.6 G4 量规七维度逐项评价：全部通过"
+  ],
+  "positive_artifact": {
+    "type": "learner_snapshot",
+    "schema_version": "1.0.0",
+    "artifact_id": "ls-pg-0001",
+    "content": {
+      "learner_id": "learner-demo-01",
+      "model_version": 3,
+      "as_of": "2026-07-27T12:00:00Z",
+      "node_states": [
+        {
+          "node_id": "plan_tree_basics",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "D1"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "D1"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "estimated_vs_actual_recognition",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "D2"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "D2"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "explain_analyze_safety",
+          "status": "insufficient_evidence",
+          "evidence_refs": [
+            "D1"
+          ],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {
+            "level": "unknown",
+            "evidence_refs": [
+              "D1"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "planner_statistics_reasoning",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "D2",
+            "D3"
+          ],
+          "error_type": "conceptual_misconception",
+          "hint_dependency": {
+            "level": "low",
+            "evidence_refs": [
+              "D2"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.85,
+            "observed_alignment": "overconfident"
+          }
+        },
+        {
+          "node_id": "multicolumn_index_order",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "D3"
+          ],
+          "error_type": "conceptual_misconception",
+          "hint_dependency": {
+            "level": "high",
+            "evidence_refs": [
+              "D3"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.8,
+            "observed_alignment": "overconfident"
+          }
+        },
+        {
+          "node_id": "workload_change_transfer",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "D4"
+          ],
+          "error_type": "transfer_failure",
+          "hint_dependency": {
+            "level": "high",
+            "evidence_refs": [
+              "D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        }
+      ],
+      "learning_frontier": {
+        "nearest_learnable_node_id": "planner_statistics_reasoning",
+        "evidence_refs": [
+          "D2",
+          "D3"
+        ],
+        "rationale": "学习者已能独立阅读计划树并识别估算行数与实际行数的偏差，但把统计信息与多列索引顺序当成机械规则而非因果模型。填补统计信息对计划估算的作用即可解锁多列索引判断与适应性索引维护，因此 planner_statistics_reasoning 是最近可学习节点",
+        "alternative_candidate_node_ids": [
+          "multicolumn_index_order"
+        ]
+      },
+      "misconceptions": [
+        {
+          "code": "SELECTIVITY_FIRST_ALWAYS",
+          "description": "认为多列索引首列必须取全局选择性最高的列，忽略谓词类型（等值 vs 范围）、ORDER BY 排序列可消除排序开销、以及查询形状对列顺序的约束",
+          "evidence_refs": [
+            "D3"
+          ],
+          "related_node_ids": [
+            "multicolumn_index_order",
+            "planner_statistics_reasoning"
+          ]
+        },
+        {
+          "code": "EXPLAIN_ANALYZE_READ_ONLY_ASSUMED",
+          "description": "未意识到 EXPLAIN ANALYZE 实际执行查询，对 INSERT/UPDATE/DELETE 等写操作可能产生副作用或数据风险",
+          "evidence_refs": [
+            "D1"
+          ],
+          "related_node_ids": [
+            "explain_analyze_safety"
+          ]
+        }
+      ],
+      "capability_gaps": [
+        {
+          "node_id": "planner_statistics_reasoning",
+          "description": "不能解释统计信息（pg_statistic、ANALYZE、autovacuum）对估算行数与计划选择的作用机制",
+          "evidence_refs": [
+            "D2"
+          ]
+        },
+        {
+          "node_id": "workload_change_transfer",
+          "description": "数据分布变化后不重新测量、不评估现有索引是否仍适用、沿用既有索引方案",
+          "evidence_refs": [
+            "D4"
+          ]
+        }
+      ],
+      "transfer_performance": {
+        "status": "not_demonstrated",
+        "evidence_refs": [
+          "D4"
+        ],
+        "summary": "分布变化场景为未见/变式情境，学习者未自发迁移诊断与评估行为，沿用既有索引且不要求复测统计信息或执行计划"
+      },
+      "diagnosis_evidence_mapping": [
+        {
+          "conclusion": "能独立区分并解释 EXPLAIN 与 EXPLAIN ANALYZE 的输出差异",
+          "evidence_refs": [
+            "D1"
+          ]
+        },
+        {
+          "conclusion": "能独立识别估算行数与实际行数的差异",
+          "evidence_refs": [
+            "D2"
+          ]
+        },
+        {
+          "conclusion": "不能解释统计信息对查询计划估算与选择的作用，存在选择性优先的误概念",
+          "evidence_refs": [
+            "D2",
+            "D3"
+          ]
+        },
+        {
+          "conclusion": "多列索引列顺序判断依赖机械选择性规则，未考虑谓词类型、排序需求与查询形状约束",
+          "evidence_refs": [
+            "D3"
+          ]
+        },
+        {
+          "conclusion": "数据分布变化后未迁移诊断与索引评估能力，迁移未通过",
+          "evidence_refs": [
+            "D4"
+          ]
+        }
+      ],
+      "items_needing_retest_or_human_confirmation": [
+        {
+          "node_id": "explain_analyze_safety",
+          "kind": "retest",
+          "reason": "仅有一次观察 D1 且学习者未提及写操作风险；需用包含 INSERT/UPDATE/DELETE 场景的安全边界诊断任务补采证据后再定状态"
+        }
+      ],
+      "evidence_validity": {
+        "valid_until": "2026-08-26T00:00:00Z",
+        "stale_evidence_refs": [],
+        "policy": "诊断证据 30 天内有效；过期仅作线索，关键结论需复测后再生效"
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "测量与目标对齐度",
+        "evidence": [
+          "node_states 覆盖 plan_tree_basics、estimated_vs_actual_recognition、explain_analyze_safety、planner_statistics_reasoning、multicolumn_index_order、workload_change_transfer 六个关键节点，每个节点均与 G3 图谱诊断项对齐"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "planner_statistics_reasoning 由 D2 和 D3 双项支撑",
+          "multicolumn_index_order 由 D3 支撑（单次但诊断任务设计能可靠暴露误概念）",
+          "explain_analyze_safety 显式标注 insufficient_evidence 而非强行判定",
+          "diagnosis_evidence_mapping 中每条结论都有对应 evidence_refs"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "猜对识别",
+        "evidence": [
+          "D1 和 D2 为无提示独立完成，error_type=none，status=tested_mastered",
+          "D3 独立完成但概念错误，error_type=conceptual_misconception，status=tested_not_mastered",
+          "D4 未见情境未通过，error_type=transfer_failure，status=tested_not_mastered",
+          "transfer_performance.status=not_demonstrated 明确记录迁移未通过"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "提示依赖记录",
+        "evidence": [
+          "每个 node_state 均包含 hint_dependency，分别记录 level 和 evidence_refs",
+          "plan_tree_basics: none; estimated_vs_actual_recognition: none; explain_analyze_safety: unknown; planner_statistics_reasoning: low; multicolumn_index_order: high; workload_change_transfer: high"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "错误分类一致性",
+        "evidence": [
+          "D1 partial_reasoning（写安全未覆盖）→ explain_analyze_safety error_type=partial_reasoning",
+          "D2 不能解释统计信息 + D3 机械选择性规则 → planner_statistics_reasoning error_type=conceptual_misconception",
+          "D3 单一口号式规则 → multicolumn_index_order error_type=conceptual_misconception",
+          "D4 未见情境沿用旧方案 → workload_change_transfer error_type=transfer_failure"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "偏差控制",
+        "evidence": [
+          "自评 8/10 仅记录于 confidence_calibration.self_confidence，不写入任何节点的 status",
+          "planner_statistics_reasoning 和 multicolumn_index_order 虽自评高但行为证据指向未掌握，observed_alignment=overconfident",
+          "所有 status 判定均源自 D1-D4 行为证据，自评未被当作掌握依据"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "结论可解释性",
+        "evidence": [
+          "diagnosis_evidence_mapping 中 5 条结论均映射到具体 evidence_refs",
+          "learning_frontier 由 D2 和 D3 支持并附 rationale 解释可从该节点开始学习的原因",
+          "misconceptions 中 SELECTIVITY_FIRST_ALWAYS 和 EXPLAIN_ANALYZE_READ_ONLY_ASSUMED 均有对应 evidence_refs 和 related_node_ids"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "learning_frontier.evidence_refs 包含 D2 和 D3，均为有效期内的 learner_behavior 证据",
+      "关键结论均有多项对齐观察或显式标注 evidence_insufficient",
+      "区分了答对（D1/D2 识别与解释）、独立（hint=none）与迁移（D4 未通过）",
+      "自评 8/10 未覆盖行为证据，偏差控制通过"
+    ],
+    "verdict": "pass",
+    "route_to": "S5"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "gsc-pg-qo-0001",
+      "ccg-pg-qo-0001"
+    ],
+    "source_evidence_ids": [
+      "D1",
+      "D2",
+      "D3",
+      "D4"
+    ],
+    "source_sections": [
+      "docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S4 正向例子1",
+      "docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S4"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T12:00:00Z"
+}

@@ -1,0 +1,483 @@
+{
+  "metadata": {
+    "skill_name": "create-goal-success-contract",
+    "skill_path": ".agents/skills/create-goal-success-contract",
+    "executor_model": "dclaude: deepseek-v4-flash, deepseek-v4-pro[1m]",
+    "analyzer_model": "local deterministic post-hoc analysis",
+    "timestamp": "2026-07-26T19:40:33Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3,
+    "runs_per_eval_per_configuration": 1,
+    "total_runs": 6
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 210.066,
+        "tokens": 244310,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a goal_success_contract inside a stage S1 handoff envelope.",
+          "passed": true,
+          "evidence": "response.txt contains a full S1 handoff envelope with schema_version, stage_id=S1, run_id, status=completed, and positive_artifact.type=goal_success_contract with artifact_id=gsc-pg-opt-0001. The contract contains target_problem, target_scene, terminology_corrections, observable_capabilities, final_assessment, pass_rules, scope, exclusions, constraints, external_research_seed, open_questions, and confirmed_items. The envelope also includes input_contract, input_validation, assumptions, requirement_gaps, confirmation, evidence_collected, processing_record, quality_evaluation, and traceability."
+        },
+        {
+          "text": "Every target capability has observable evidence and the final assessment distinguishes recall from transfer.",
+          "passed": true,
+          "evidence": "5 observable_capabilities defined: cap-explain-read (4 observable_evidence items), cap-scan-diagnosis (4 items), cap-index-design (4 items), cap-statistics-check (3 items), cap-systematic-workflow (4 items). Total 19 specific observable evidence items. final_assessment.unseen_or_transfer_required=true with 3 unseen query tasks covering different failure modes: scan diagnosis, statistics deviation, and composite filter+sort+paginate. Pass rules require all 3 tasks to include EXPLAIN ANALYZE output interpretation, bottleneck identification, optimization design with justification, and post-optimization verification."
+        },
+        {
+          "text": "The output records actually executed live pre-research, query or retrieval details, source-category coverage, and evidence provenance rather than treating model memory as external evidence.",
+          "passed": true,
+          "evidence": "external_research_seed.search_executed=true. 9 search queries listed (e.g., 'PostgreSQL EXPLAIN ANALYZE query optimization basics 2025', 'site:postgresql.org/docs/18 index types overview'). 10 sources with full URLs and provenance tags (external_evidence, market_signal). category_coverage with 5 categories: wikipedia_encyclopedia (covered), official_academic (covered), recruiting_jd (covered, 2 JD samples), interview_selection (covered, 2 assessment samples), adversarial_frontier (not_applicable with auditable reason). evidence_collected array has 12 entries with provenance field distinguishing external_evidence (10), market_signal (2), and model_hypothesis (1, explicitly marked status=unknown). Model knowledge is segregated as e-model-cap with provenance=model_hypothesis, source_ref=null, status=unknown."
+        },
+        {
+          "text": "The output records sandbox constraints, at least one explicit exclusion, and mandatory confirmation as resolved.",
+          "passed": true,
+          "evidence": "constraints documented: duration=4周, effort_per_period=每周约6小时, total_effort=约24小时, environment=PostgreSQL 18 沙箱, production_access=禁止, assessment=三个未见查询的独立实操验收, pass_threshold=三题中至少两题全部正确. 8 exclusions listed (源码级优化器开发, 复杂多表连接, 分区表, 生产环境操作, 非B-tree索引高级应用, 服务器参数调优, DBA运维, PL/pgSQL优化). confirmation.mode=mandatory, 7 confirmation questions asked, response covers all 7 items, status=confirmed, confirmed_at=2026-07-27T00:00:00Z."
+        },
+        {
+          "text": "G1 is evaluated dimension by dimension and passes only if all required dimensions pass.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains 8 dimensions: 目标可观察性, 成功标准可判定性, 场景真实性, 外部现实校准度, 强制类别覆盖, 边界清晰, 约束完整, 目标—验收一致. Each dimension has evidence array, score, threshold, passed, failure_action, route_to fields. All 8 dimensions passed=true. quality_evaluation.verdict=pass because all dimensions pass."
+        },
+        {
+          "text": "The deterministic route is S2 when G1 passes.",
+          "passed": true,
+          "evidence": "quality_evaluation.verdict=pass, quality_evaluation.route_to=S2. The route is explicitly S2 as G1 passes with all 8 dimensions passing."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 175.166,
+        "tokens": 178096,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+          "passed": true,
+          "evidence": "4 observable_capabilities defined across multiple cognitive levels: cap-compare (multiple comparison strategies — benchmark, number line, equivalent conversion), cap-equivalent (generation, explanation, and verification using area models and number lines), cap-context (recipe scaling application — doubling, halving, measuring with unit cups), cap-numberline (placement of proper/improper/mixed fractions, positional comparison, equivalent fraction co-location). Each capability has 3 specific observable_evidence items spanning concrete (fraction strips), representational (number lines, area models), and abstract (multiplicative reasoning) levels. Representations include: number lines, area models, fraction strips, recipe cards, measuring cups."
+        },
+        {
+          "text": "The pass rule contains an independently required transfer task rather than only mechanical speed or recall.",
+          "passed": true,
+          "evidence": "pass_rules explicitly require: (1) '未见迁移题至少50%题目独立完成且推理正确（不依赖提示）' — independently required transfer task with unseen problems; (2) '机械通分使用占比不超过解题策略的50%' — explicitly caps mechanical speed/recall; (3) '学习者能在验收后用自己的话解释'什么是等值分数'和'怎样比较两个分数大小'' — requires conceptual explanation, not recall. final_assessment.unseen_or_transfer_required=true with ≥2 unseen transfer tasks using novel contexts (length拼接, liquid分装, time分配) distinct from training scenarios."
+        },
+        {
+          "text": "Executed external pre-research and auditable source coverage are recorded.",
+          "passed": true,
+          "evidence": "external_research_seed.search_executed=true with retrieval_date=2026-07-27. 5 search queries listed (e.g., 'fraction mathematics Wikipedia definition numerator denominator equivalent', '义务教育数学课程标准 2022 分数 第三学段 内容要求 学业要求'). 5 sources with full URLs and provenance: e-wiki-fraction (Wikipedia, external_evidence), e-cn-curriculum (Chinese national curriculum standards, external_evidence), e-intl-standards (IXL grade 6 standards, external_evidence), e-assessment-samples (market_signal), e-recipe-numberline (Fractions Learning Pathways, external_evidence). category_coverage with 6 entries: wikipedia_encyclopedia, official_curriculum, international_standards, recruiting_jd (not_applicable with auditable reason: '六年级学习者场景不属于招聘/岗位市场'), interview_assessment, teaching_practice. outer.json confirms webSearchRequests=7."
+        },
+        {
+          "text": "Both guardian and learner confirmation is represented as resolved.",
+          "passed": true,
+          "evidence": "confirmation.response.confirmed_by='监护人与六年级学习者共同确认'. confirmation.status='confirmed', confirmed_at='2026-07-27T00:00:00Z'. 4 confirmation questions asked covering goal capabilities, assessment modalities, exclusions, and time constraints. Response records confirmed_scope, confirmed_assessment, confirmed_exclusions, confirmed_resources. confirmed_items array lists 6 items all attributed to guardian+learner joint confirmation."
+        },
+        {
+          "text": "Constraints and exclusions are explicit.",
+          "passed": true,
+          "evidence": "constraints section documents: duration=3周, effort_per_day=25分钟, total_effort=约8.75小时, learner_grade=小学六年级, language=中文（简体）, setting=家庭学习，监护人陪同与监督, materials=需数轴纸/白板、量杯实物或图纸、印刷配方卡, assessment_mode=监护人依据 pass_rules 独立评判. exclusions list 5 items: 机械通分速度, 分数乘除法深度运算, 复杂多步混合运算, 分数与小数/百分数互化的系统训练, 竞赛难度或超纲内容."
+        },
+        {
+          "text": "A passing G1 routes to S2.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results contains 8 dimensions all with passed=true. quality_evaluation.verdict='pass', quality_evaluation.route_to='S2'."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-flash",
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 103.879,
+        "tokens": 71800,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not claim G1 pass.",
+          "passed": true,
+          "evidence": "quality_evaluation.verdict='blocked', NOT 'pass'. All 8 rubric_results dimensions have passed=false. quality_evaluation.evidence states 'G1全部8维度failed'. No G1 pass claim anywhere in the output. The status at the top level is 'blocked', not 'completed'."
+        },
+        {
+          "text": "The output identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
+          "passed": true,
+          "evidence": "quality_evaluation.rubric_results[0] (目标可观察性) states: ''AI专家'无可观察定义，observable_capabilities无法分解为具体能力项' and '每项能力需要≥1可观察证据，实际得0'. rubric_results[1] (成功标准可判定性) states: '100道选择题无法满足unseen_or_transfer_required=true' and '选择题仅验证记忆/识别，不能验证迁移应用能力'. requirement_gaps[2] (gap-003) states: '选择题仅验证记忆/识别层面，无法验证诊断、应用、迁移和创造等高阶能力；unseen_or_transfer_required无法满足' with criticality=critical, gate_effect=block. requirement_gaps[4] (gap-005) states: ''AI专家'无可观察定义——无法分解为具体可观察能力项'."
+        },
+        {
+          "text": "The lack of executed research is preserved as research_blocked or an equivalent explicit blocking state.",
+          "passed": true,
+          "evidence": "processing_record states: '识别S1强制联网预检冲突：学习者禁止联网但S1不可降级→触发Fail closed'. quality_evaluation.evidence states: 'S1强制联网预检不可降级（stage-contract.md §4）；学习者明确禁止联网→research_blocked'. quality_evaluation.rubric_results[4] (强制类别覆盖) states all categories are gaps because '全部类别因禁止联网而未覆盖'. requirement_gaps[3] (gap-004) states: '学习者要求不联网、仅凭模型知识——S1强制联网预检不可降级' with criticality=critical, gate_effect=block. The blocking state is explicitly recorded as research_blocked and the overall status is 'blocked'."
+        },
+        {
+          "text": "Model knowledge is not relabeled as external evidence.",
+          "passed": true,
+          "evidence": "evidence_collected contains 3 entries: e-user-001 with provenance='user_provided_unverified' and status='partially_supported'; e-model-001 with provenance='model_hypothesis', source_ref=null, status='unknown'; e-model-002 with provenance='model_hypothesis', source_ref=null, status='unknown'. Both model-derived items are explicitly labeled as model_hypothesis with unknown status, clearly distinguished from external_evidence. No model knowledge is presented with provenance='external_evidence'. The processing_record explicitly states the executor followed 'stage-contract.md §8：无检索能力→blocked，不得用模型记忆替代预检'."
+        },
+        {
+          "text": "Mandatory confirmation remains unresolved.",
+          "passed": true,
+          "evidence": "confirmation.status='pending', confirmed_at=null. confirmation.response.missing_refusals lists 6 items the learner refused to provide: 使用场景, 范围与边界, 排除项, 地区/行业/职级, 时间资源细节, 实操/迁移验收意愿. The confirmation section includes 6 questions asked but notes the learner '明确拒绝补充使用场景/范围/验收方式'. confirmation.mode='mandatory' and trigger describes what must be confirmed, but status remains pending because the learner refused to engage."
+        },
+        {
+          "text": "The route stays at S1 and no fabricated positive artifact is accepted.",
+          "passed": true,
+          "evidence": "quality_evaluation.route_to='S1'. positive_artifact=null (explicitly null, not just absent). processing_record states: 'positive_artifact=null（无法在阻塞态下生成有效goal_success_contract）'. quality_evaluation.verdict='blocked'. The top-level status is 'blocked'. The output explicitly refuses to fabricate a positive artifact, citing 'example.md示例B（'七天成为AI专家'反向案例）：无可观察目标+无联网预检→blocked'."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/with_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 64.707,
+        "tokens": 33921,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output contains a goal_success_contract inside a stage S1 handoff envelope.",
+          "passed": false,
+          "evidence": "No goal_success_contract or S1 handoff envelope found. The output is a different structure: learner_profile, s1_overview, weekly_plan with day-by-day modules and hands-on exercises. It uses keys like 'phase', 'target_outcome', 'prerequisites', 'post_s1_direction', 'weekly_plan', 'resources', 'risk_mitigation', 'metadata'. No schema_version, stage_id, input_contract, confirmation, evidence_collected, quality_evaluation, or traceability sections. The output is a lesson plan, not a goal_success_contract inside an S1 handoff envelope."
+        },
+        {
+          "text": "Every target capability has observable evidence and the final assessment distinguishes recall from transfer.",
+          "passed": false,
+          "evidence": "No observable_capabilities structure with capability_id/statement/observable_evidence exists. The output has learning objectives per module (e.g., 'EXPLAIN vs EXPLAIN ANALYZE 的区别') and hands-on exercises, but these are instructional activities, not observable capability definitions with evidence items. The final_assessment section has assessment_queries with expected_skills, but there is no unseen_or_transfer_required flag. The pass_criteria mention '三条中至少两条的执行时间降低 50% 以上' which is performance-based but does not explicitly distinguish recall from transfer."
+        },
+        {
+          "text": "The output records actually executed live pre-research, query or retrieval details, source-category coverage, and evidence provenance rather than treating model memory as external evidence.",
+          "passed": false,
+          "evidence": "No external pre-research recorded. The resources.primary_references section lists 4 URLs (PostgreSQL docs, wiki) but these are static recommendations, not evidence of executed live search. outer.json modelUsage shows webSearchRequests=0. No search queries, no category coverage, no provenance tagging. The without_skill executor was explicitly instructed 'Do NOT read or use .agents/skills' and was told to use 'general reasoning and any live research you independently decide to perform' — no live research was performed (0 web searches). All knowledge appears to come from model memory presented without provenance distinction."
+        },
+        {
+          "text": "The output records sandbox constraints, at least one explicit exclusion, and mandatory confirmation as resolved.",
+          "passed": false,
+          "evidence": "No structured constraints, exclusions, or confirmation mechanism. The learner_profile mentions 'environment: PostgreSQL 18 沙箱，无生产变更权限' but this is buried in profile data, not in a constraints/exclusions section. The risk_mitigation section lists risks but these are mitigations, not explicit exclusions. No mandatory confirmation exists — there is no confirmation section with questions, responses, and resolved status. The output assumes the learner's input is sufficient without seeking confirmation."
+        },
+        {
+          "text": "G1 is evaluated dimension by dimension and passes only if all required dimensions pass.",
+          "passed": false,
+          "evidence": "No G1 evaluation exists. There is no quality_evaluation section, no rubric_results, no dimension-by-dimension assessment. The output has no concept of G1 gate evaluation."
+        },
+        {
+          "text": "The deterministic route is S2 when G1 passes.",
+          "passed": false,
+          "evidence": "No G1 evaluation exists, therefore no route_to field. The metadata mentions 'next_phase_suggestion: S2' as a free-text suggestion, not as a deterministic routing decision based on G1 pass."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-1-positive-primary/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 257.054,
+        "tokens": 140498,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The contract defines observable fraction capabilities across multiple cognitive levels and representations.",
+          "passed": false,
+          "evidence": "No formal contract exists. The output is a week-by-week lesson plan (week_1_sessions with 7 daily entries) with learning_objectives per session, but these are instructional goals (e.g., '用自己的话解释分数表示整体被等分成若干份后取若干份'), not observable_capabilities with capability_id/statement/observable_evidence structure. The output mentions core_objectives at the plan level and assessment_modalities, but these are broad categories ('数轴解释', '配方缩放', '未见迁移题'), not structured capability definitions with multiple cognitive levels and evidence items. Representations are present across activities (fraction strips, number lines, paper folding, recipe cards) but are not organized as capability-verification evidence."
+        },
+        {
+          "text": "The pass rule contains an independently required transfer task rather than only mechanical speed or recall.",
+          "passed": false,
+          "evidence": "No formal pass_rules structure exists. The assessment_preparation_notes.three_week_assessment_blueprint mentions a transfer_component ('两道未见过的情境题，涉及新分母组合或多步骤分数推理') and passing_criteria that include '使用了至少两种不同策略', but these are embedded in descriptive notes rather than as formal, independently required pass rules. The non_goals list includes '机械通分速度训练' but this is a design principle, not a pass rule. The session plan includes a transfer challenge problem on day 7, but this is a learning activity, not a contract-level pass rule that independently gates success."
+        },
+        {
+          "text": "Executed external pre-research and auditable source coverage are recorded.",
+          "passed": false,
+          "evidence": "No external pre-research recorded. outer.json modelUsage shows webSearchRequests=4, indicating some web searches were performed, but no search queries, source URLs with provenance, or category coverage are documented in the output. The output does not contain an external_research_seed section, evidence_collected array, or any structured record of what was searched and retrieved. The pedagogical_framework mentions '研究验证的概念教学策略' and some URLs are referenced in session activities (e.g., Australian Curriculum Lessons), but these are inline mentions, not auditable research records."
+        },
+        {
+          "text": "Both guardian and learner confirmation is represented as resolved.",
+          "passed": false,
+          "evidence": "No structured confirmation mechanism. The plan_metadata.co_design_notes states '监护人与学习者共同确认：三周内每天 25 分钟...' and stakeholders lists ['监护人', '学习者'], but there is no confirmation section with specific questions, individual responses, resolved status, and confirmed_at timestamp. The confirmation is asserted in a single sentence rather than represented as a structured, verified process. No individual confirmation items are tracked as resolved."
+        },
+        {
+          "text": "Constraints and exclusions are explicit.",
+          "passed": false,
+          "evidence": "No formal constraints or exclusions sections. The plan_metadata includes non_goals: ['机械通分速度训练', '大量纸笔计算练习', '死记硬背口诀']. The learner_profile mentions 'total_duration: 3周, daily_session_minutes: 25'. But there is no unified constraints object with duration, effort, environment, materials, and assessment_mode, and no explicit exclusions list. Constraints are scattered across metadata, learner_profile, and session descriptions."
+        },
+        {
+          "text": "A passing G1 routes to S2.",
+          "passed": false,
+          "evidence": "No G1 evaluation exists. No quality_evaluation section, no rubric_results, no verdict, no route_to field. The output has no concept of gate evaluation or deterministic routing."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-2-positive-cross-domain/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.16666666666666666,
+        "passed": 1,
+        "failed": 5,
+        "total": 6,
+        "time_seconds": 56.095,
+        "tokens": 33899,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output does not claim G1 pass.",
+          "passed": true,
+          "evidence": "No G1 evaluation exists in the output. There is no quality_evaluation section, no rubric_results, no verdict field. The output is a lesson plan (stage=S1_个性化学习分析, learner_profile, goal_decomposition, knowledge_point_taxonomy, daily_schedule, assessment_blueprint) with no concept of G1 gate evaluation. It neither claims G1 pass nor fail — G1 is simply absent."
+        },
+        {
+          "text": "The output identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
+          "passed": false,
+          "evidence": "The output does NOT identify the target as non-observable. Instead, it accepts the goal and reframes it: goal_decomposition.refined_goal='七天内掌握 AI 核心通识体系，通过 100 题选择题测试（≥80分）'. The output treats the 100-choice-question assessment as valid and builds a comprehensive assessment_blueprint around it with question_distribution, difficulty_distribution, and scoring_strategy. The learner_profile.inferred.risk_factors notes '目标过于宏大（七天 vs AI专家）——需将目标收敛为AI通识达标' but this is risk mitigation, not identification of non-observability. The assessment is accepted as sufficient (depth_level='概念理解 + 原理辨析 + 典型应用 —— 适配选择题考核') rather than identified as recall-only and insufficient for transfer. The output proceeds to define 9 knowledge domains, a 7-day schedule, and an assessment blueprint — it operationalizes the recall-only assessment rather than rejecting it."
+        },
+        {
+          "text": "The lack of executed research is preserved as research_blocked or an equivalent explicit blocking state.",
+          "passed": false,
+          "evidence": "No research_blocked or blocking state exists. metadata.notes states '按学习者要求未引用任何联网资源，所有知识域和考点基于模型训练数据中的 AI 教育体系构建' and 'no_external_resources: 按学习者要求未引用任何联网资源'. This acknowledges the constraint but treats it as a design parameter, not a blocking condition. The output proceeds to build a complete study plan using model knowledge. outer.json shows webSearchRequests=0 confirming no research was attempted, but the lack of research is not preserved as a blocking state — it's treated as a satisfied constraint ('按学习者要求')."
+        },
+        {
+          "text": "Model knowledge is not relabeled as external evidence.",
+          "passed": false,
+          "evidence": "All knowledge in the output comes from model training data and is presented as authoritative fact without provenance labeling. The knowledge_point_taxonomy defines 9 domains with key_topics (e.g., '监督学习核心算法：线性回归、逻辑回归、SVM、决策树、随机森林'), the daily_schedule prescribes specific hour allocations, and the assessment_blueprint specifies question distributions — all presented as factual curriculum design. No evidence entries have provenance='model_hypothesis' or status='unknown'. The metadata acknowledges model knowledge was used ('基于模型训练数据中的 AI 教育体系构建') but this is a blanket disclaimer in metadata, not per-claim provenance labeling. Individual claims like '选择题仅能验证记忆和识别' or specific knowledge domain boundaries are not labeled as model-derived."
+        },
+        {
+          "text": "Mandatory confirmation remains unresolved.",
+          "passed": false,
+          "evidence": "No confirmation mechanism exists at all. There is no confirmation section, no questions asked, no response recorded, no status field. The output treats the learner's refusal to provide additional information as a constraint to work within ('拒绝补充信息意味着方案需自包含且可独立执行') rather than as a blocking condition requiring mandatory confirmation. The plan is built entirely on inferred assumptions (inferred.assumed_starting_level, inferred.assumed_daily_study_hours=6, inferred.learning_preference) without seeking confirmation from the learner."
+        },
+        {
+          "text": "The route stays at S1 and no fabricated positive artifact is accepted.",
+          "passed": false,
+          "evidence": "While no explicit route_to=S2 exists, the output fabricates a complete positive artifact: a full 7-day AI expert study plan with 9-domain knowledge taxonomy, daily schedule with hour allocations, assessment blueprint with 100-question distribution, difficulty calibration, scoring strategy, risk assessment, and progress tracking checkpoints. This constitutes a fabricated positive artifact — the output accepts the vague '七天成为AI专家' goal and builds an elaborate operational plan around it rather than blocking. The stage is labeled 'S1_个性化学习分析' (not S2) but the content is a fully realized learning plan that would normally be produced in later stages. The metadata.scope_rationale explicitly reframes the goal ('将AI专家收敛为AI通识体系达标') to make it achievable rather than blocking on its non-observability."
+        }
+      ],
+      "notes": [
+
+      ],
+      "executor_route": "dclaude",
+      "executor_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "grader_route": "dclaude",
+      "grader_models": [
+        "deepseek-v4-pro[1m]"
+      ],
+      "canonical_output": "outputs/result.json",
+      "route_provenance": {
+        "route": "dclaude",
+        "models": [
+          "deepseek-v4-pro[1m]"
+        ],
+        "outer_json": "eval-3-negative-blocked/without_skill/run-1/outer.json",
+        "exit_code": 0,
+        "is_error": false
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 163.037,
+        "stddev": 54.1226,
+        "min": 103.879,
+        "max": 210.066
+      },
+      "tokens": {
+        "mean": 164735.3333,
+        "stddev": 87027.6139,
+        "min": 71800.0,
+        "max": 244310.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.0556,
+        "stddev": 0.0962,
+        "min": 0.0,
+        "max": 0.1667
+      },
+      "time_seconds": {
+        "mean": 125.952,
+        "stddev": 113.6193,
+        "min": 56.095,
+        "max": 257.054
+      },
+      "tokens": {
+        "mean": 69439.3333,
+        "stddev": 61538.6115,
+        "min": 33899.0,
+        "max": 140498.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.94",
+      "time_seconds": "+37.1",
+      "tokens": "+95296"
+    }
+  },
+  "notes": [
+    "**Discrimination:** with-skill mean pass rate is `1.0000`; without-skill is `0.0556`; delta is `+0.94`. The contract, research provenance, mandatory confirmation and deterministic G1 route strongly separate the configurations.",
+    "**Variance:** with-skill standard deviation is `0.0000`; without-skill is `0.0962`. All three skill runs are stable; the small baseline variance comes from one blocked case satisfying a single generic expectation.",
+    "**Time:** with-skill mean is `163.037s`, without-skill `125.952s` (`+37.1s`). The added time is consistent with research/contract construction rather than a faster prose answer.",
+    "**Tokens:** actual outer `modelUsage` totals average `164,735.3` with the skill and `69,439.3` without it (`+95,296`). The prior aggregate proxy used output characters, so it understated route token use; the corrected figures show a material cost with high variance at `n=3`.",
+    "**Conclusion:** strong, stable discrimination. Keep the blocked case because it confirms fail-closed behavior rather than only rewarding verbosity."
+  ]
+}

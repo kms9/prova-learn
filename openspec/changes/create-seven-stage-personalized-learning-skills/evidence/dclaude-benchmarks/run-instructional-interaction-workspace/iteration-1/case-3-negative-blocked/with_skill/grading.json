@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not accept untraceable or unverified content as audited evidence and does not fabricate a passing content_quality_status.",
+      "passed": true,
+      "evidence": "positive_artifact is null — no artifact is accepted. evidence_collected contains ev-lecture-content with provenance='model_hypothesis', status='unsupported', source_ref=null, explicitly marking the lecture as untraceable. No content_quality_status with state='correct' is fabricated. requirement_gaps includes gap-no-traceable-evidence (criticality='high'): '5000字讲义未标明来源追溯与适用边界，关键内容缺乏审计证据引用'."
+    },
+    {
+      "text": "The output recognizes that the handout plus immediate answers produces no judgeable independent learning evidence, only acknowledgment.",
+      "passed": true,
+      "evidence": "requirement_gaps includes gap-no-learner-output (criticality='critical'): '学习者全程未产出任何独立作答或可判定行为证据，仅回复'懂了''. evidence_collected includes ev-learner-dongle with provenance='learner_behavior', status='unsupported', summary='学习者最终回复'懂了'，无任何独立作答、中间步骤、错误修正或迁移尝试'. The rubric_results for 学习者主动性 notes 'interaction_events 为空：无任何 learner_response 含独立推理；仅'懂了'不是 learner_behavior 证据'."
+    },
+    {
+      "text": "The output identifies that difficulty and learner agency are unverified because no independent item was attempted.",
+      "passed": true,
+      "evidence": "requirement_gaps includes gap-no-transfer-evidence (criticality='critical'): '缺失 candidate_mastery_evidence：无独立迁移、延迟保持或推理质量证据'. The rubric_results for 认知层级 notes '单一讲义形式仅覆盖remember/understand层级，无apply/analyze/evaluate/create层级活动'. The rubric_results for 对目标和学习者的适配 notes '长篇讲义未对齐节点exit_criteria与学习者前沿；无 learner_snapshot 驱动的难度与支架适配'."
+    },
+    {
+      "text": "Immediate answer exposure is flagged as answer leakage and the hint/feedback layer is absent, so hints cannot substitute for the learner's reasoning is moot and failing.",
+      "passed": true,
+      "evidence": "requirement_gaps includes gap-answer-leakage (criticality='critical'): '每道题后立刻显示标准答案，无法区分学习者'会做'与'看懂''. Also gap-no-hint-structure (criticality='critical'): '教学交互缺失逐级提示阶梯（hint_ladder）和反馈规则（feedback_rules）'. The rubric_results for 答案泄露控制 is failed with evidence '每道题后立刻显示标准答案；未区分独立任务的提交与答案公布时机；学习者回复'懂了'可能仅是看懂答案而非独立做出'. The 支架质量 dimension is failed: '无 hint_ladder 逐级提示阶梯；无 scaffolding_fade_strategy 渐隐策略；无 feedback_rules'."
+    },
+    {
+      "text": "No learner response, hint level or correction trajectory is fabricated; absent interaction evidence is recorded as a gap rather than invented.",
+      "passed": true,
+      "evidence": "positive_artifact is null — no fabricated interaction_events, no invented learner_response, no fake hints_used, no manufactured correction_trajectory. The processing_record explicitly states: '审查教学交互记录：仅发现一篇5000字讲义、即时答案展示、学习者'懂了'回复'. requirement_gaps documents all absences (gap-no-learner-output, gap-no-hint-structure, gap-no-transfer-evidence). The rubric_results for 学习者主动性 confirms 'interaction_events 为空'. Nothing is invented."
+    },
+    {
+      "text": "G6 does not pass, no valid mastery candidate is emitted, and the deterministic route is revise_here at S6 rather than S7.",
+      "passed": true,
+      "evidence": "quality_evaluation.verdict='revise_here', route_to='S6'. All 8 rubric_results dimensions have passed=false. positive_artifact=null. No candidate_mastery_evidence emitted — no mastery candidate at all. quality_evaluation.evidence explicitly states: 'G6量规全部8维 passed=false；无 candidate_mastery_evidence，禁止进入S7'. The route is deterministically S6, not S7."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_chars": 8040,
+    "transcript_chars": 8040
+  },
+  "timing": {
+    "executor_duration_seconds": 85,
+    "total_duration_seconds": 81.573
+  },
+  "claims": [
+    {
+      "claim": "All 8 G6 rubric dimensions failed (passed=false)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "quality_evaluation.rubric_results contains 8 entries, all with passed=false. Individual evidence confirms each failure reason is distinct and grounded in the S6 contract."
+    },
+    {
+      "claim": "The output matches the S6 stage contract §8 line 97 negative example pattern",
+      "type": "process",
+      "verified": true,
+      "evidence": "traceability.source_sections includes 'stage-contract.md §8 line 97: 长篇讲义 + 即时答案 + '懂了' → G6失败'. The output correctly identifies the negative fixture pattern described in the contract."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+
+    ],
+    "overall": "All six expectations pass cleanly. The with_skill output correctly handles the negative/blocked case: it fails closed, identifies all critical gaps, fabricates nothing, and routes deterministically to revise_here at S6. This demonstrates the skill correctly implements the G6 gate's fail-closed behavior."
+  }
+}

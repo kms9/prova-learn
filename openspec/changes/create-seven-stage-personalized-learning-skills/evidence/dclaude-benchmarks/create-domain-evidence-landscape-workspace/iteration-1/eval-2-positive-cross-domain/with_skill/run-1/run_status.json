@@ -1,0 +1,46 @@
+{
+  "exit_code": 0,
+  "is_error": false,
+  "subtype": "success",
+  "duration_ms": 451528,
+  "modelUsage": {
+    "deepseek-v4-pro[1m]": {
+      "inputTokens": 103985,
+      "outputTokens": 29579,
+      "cacheReadInputTokens": 910848,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 1.7148240000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 32000
+    },
+    "deepseek-v4-flash": {
+      "inputTokens": 216095,
+      "outputTokens": 4507,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 1.1931500000000002,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "usage": {
+    "input_tokens": 103985,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 910848,
+    "output_tokens": 29579,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "",
+    "iterations": [],
+    "speed": "standard"
+  }
+}

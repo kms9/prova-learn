@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "case-3-negative-blocked",
+  "prompt": "有人提交一份课程目录式计划：第1周看完数据库原理第1-5章、第2周看10个索引视频、第3周刷100道题、第4周做项目；没有 learner_snapshot，没有能力图谱节点，没有学习前沿证据，也没有节点进入/退出条件或测评安排，但希望立即进入 S6 教学。请执行个性化学习 S5 并输出结构化 JSON。",
+  "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 反向例子 (line 545)] S5 must fail closed: the copied course catalog is rejected as a personalized plan, no positive artifact is accepted, G5 does not pass, and the route returns to S4 for a supported frontier (or S3 only if the graph itself is invalid).",
+  "expectations": [
+    "The copied table of contents, video quota and question count is not accepted as a path connecting a confirmed frontier to the target.",
+    "Chapters and videos are identified as non-capability nodes with unexplained redundancy and no hard-prerequisite discipline.",
+    "No fabricated first session or starting state is accepted as executable.",
+    "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+    "No per-node exit criteria exist and none are fabricated.",
+    "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6."
+  ]
+}

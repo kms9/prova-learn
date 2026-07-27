@@ -1,0 +1,102 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not claim G1 pass.",
+      "passed": true,
+      "evidence": "quality_evaluation.verdict='blocked', NOT 'pass'. All 8 rubric_results dimensions have passed=false. quality_evaluation.evidence states 'G1全部8维度failed'. No G1 pass claim anywhere in the output. The status at the top level is 'blocked', not 'completed'."
+    },
+    {
+      "text": "The output identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[0] (目标可观察性) states: ''AI专家'无可观察定义，observable_capabilities无法分解为具体能力项' and '每项能力需要≥1可观察证据，实际得0'. rubric_results[1] (成功标准可判定性) states: '100道选择题无法满足unseen_or_transfer_required=true' and '选择题仅验证记忆/识别，不能验证迁移应用能力'. requirement_gaps[2] (gap-003) states: '选择题仅验证记忆/识别层面，无法验证诊断、应用、迁移和创造等高阶能力；unseen_or_transfer_required无法满足' with criticality=critical, gate_effect=block. requirement_gaps[4] (gap-005) states: ''AI专家'无可观察定义——无法分解为具体可观察能力项'."
+    },
+    {
+      "text": "The lack of executed research is preserved as research_blocked or an equivalent explicit blocking state.",
+      "passed": true,
+      "evidence": "processing_record states: '识别S1强制联网预检冲突：学习者禁止联网但S1不可降级→触发Fail closed'. quality_evaluation.evidence states: 'S1强制联网预检不可降级（stage-contract.md §4）；学习者明确禁止联网→research_blocked'. quality_evaluation.rubric_results[4] (强制类别覆盖) states all categories are gaps because '全部类别因禁止联网而未覆盖'. requirement_gaps[3] (gap-004) states: '学习者要求不联网、仅凭模型知识——S1强制联网预检不可降级' with criticality=critical, gate_effect=block. The blocking state is explicitly recorded as research_blocked and the overall status is 'blocked'."
+    },
+    {
+      "text": "Model knowledge is not relabeled as external evidence.",
+      "passed": true,
+      "evidence": "evidence_collected contains 3 entries: e-user-001 with provenance='user_provided_unverified' and status='partially_supported'; e-model-001 with provenance='model_hypothesis', source_ref=null, status='unknown'; e-model-002 with provenance='model_hypothesis', source_ref=null, status='unknown'. Both model-derived items are explicitly labeled as model_hypothesis with unknown status, clearly distinguished from external_evidence. No model knowledge is presented with provenance='external_evidence'. The processing_record explicitly states the executor followed 'stage-contract.md §8：无检索能力→blocked，不得用模型记忆替代预检'."
+    },
+    {
+      "text": "Mandatory confirmation remains unresolved.",
+      "passed": true,
+      "evidence": "confirmation.status='pending', confirmed_at=null. confirmation.response.missing_refusals lists 6 items the learner refused to provide: 使用场景, 范围与边界, 排除项, 地区/行业/职级, 时间资源细节, 实操/迁移验收意愿. The confirmation section includes 6 questions asked but notes the learner '明确拒绝补充使用场景/范围/验收方式'. confirmation.mode='mandatory' and trigger describes what must be confirmed, but status remains pending because the learner refused to engage."
+    },
+    {
+      "text": "The route stays at S1 and no fabricated positive artifact is accepted.",
+      "passed": true,
+      "evidence": "quality_evaluation.route_to='S1'. positive_artifact=null (explicitly null, not just absent). processing_record states: 'positive_artifact=null（无法在阻塞态下生成有效goal_success_contract）'. quality_evaluation.verdict='blocked'. The top-level status is 'blocked'. The output explicitly refuses to fabricate a positive artifact, citing 'example.md示例B（'七天成为AI专家'反向案例）：无可观察目标+无联网预检→blocked'."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "num_turns": 9,
+    "output_chars": 8905,
+    "transcript_chars": 9662,
+    "total_tokens": 71800,
+    "web_search_requests": 0,
+    "cost_usd": 0.5603
+  },
+  "timing": {
+    "executor_duration_seconds": 107,
+    "total_duration_seconds": 103.879
+  },
+  "claims": [
+    {
+      "claim": "The output correctly references example.md 示例B (the negative/blocked fixture) as precedent",
+      "type": "process",
+      "verified": true,
+      "evidence": "processing_record states: '参照example.md示例B（'七天成为AI专家'反向案例）：无可观察目标+无联网预检→blocked'. traceability.source_sections includes 'example.md §示例B 反向/阻塞'. This shows the skill's example file was consulted and applied correctly."
+    },
+    {
+      "claim": "All 8 G1 dimensions were evaluated and all failed",
+      "type": "quality",
+      "verified": true,
+      "evidence": "quality_evaluation.rubric_results contains 8 dimensions, each with passed=false. quality_evaluation.evidence states 'G1全部8维度failed'. The dimensions cover: 目标可观察性, 成功标准可判定性, 场景真实性, 外部现实校准度, 强制类别覆盖, 边界清晰, 约束完整, 目标—验收一致."
+    },
+    {
+      "claim": "Zero web searches were performed, respecting the learner's no-network constraint while still enforcing the blocking rule",
+      "type": "process",
+      "verified": true,
+      "evidence": "outer.json modelUsage shows webSearchRequests=0. The output correctly treats the no-network constraint as a blocking condition rather than attempting to work around it."
+    },
+    {
+      "claim": "The output identifies 5 critical requirement gaps with gate_effect=block",
+      "type": "quality",
+      "verified": true,
+      "evidence": "requirement_gaps contains 7 entries. 5 have criticality='critical' and gate_effect='block' (gap-001 through gap-005). 2 have criticality='high' and gate_effect='block' (gap-006, gap-007). All 7 gaps block progression."
+    },
+    {
+      "claim": "Output was returned as raw JSON with no markdown fence (per executor instruction: 'Return ONLY one valid JSON object as the final answer, with no markdown fence and no evaluation commentary')",
+      "type": "quality",
+      "verified": false,
+      "evidence": "response.txt starts with ```json markdown fence opener and ends with ``` markdown fence closer. This violates the executor's instruction to return ONLY one valid JSON object with no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Model knowledge is not relabeled as external evidence.",
+        "reason": "This is a critical assertion for the negative case and it's well-designed. The with_skill run correctly labels e-model-001 and e-model-002 as model_hypothesis with status=unknown. However, the assertion only checks labeling — it doesn't check whether model-derived claims are presented as fact within quality_evaluation.evidence statements (e.g., '选择题仅能验证记忆和识别（Bloom分类法L1-L2）' is itself a model-knowledge claim presented as evaluative fact). Consider adding a sub-check that evaluative conclusions about the learner's request are grounded in cited external sources, not model judgment."
+      },
+      {
+        "assertion": "The route stays at S1 and no fabricated positive artifact is accepted.",
+        "reason": "The assertion correctly identifies positive_artifact=null and route_to=S1. The skill handles this correctly. A possible enhancement: also check that the output does not contain any content that could be mistaken for a positive artifact (e.g., a partially filled contract that happens to not have the positive_artifact key but still contains goal-like structures)."
+      }
+    ],
+    "overall": "The negative/blocked case expectations are well-designed. They check for fail-closed behavior across all key dimensions: no false G1 pass, non-observable target identification, research_blocked state preservation, model-knowledge provenance honesty, unresolved confirmation, and no fabricated artifacts. The with_skill run correctly blocks on all dimensions. This is the most important test case for safety."
+  }
+}

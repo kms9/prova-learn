@@ -1,0 +1,88 @@
+{
+  "expectations": [
+    {
+      "text": "The path connects the confirmed frontier (comparison reasoning developing, contextual transfer not mastered) to the target without reteaching already-mastered representation nodes.",
+      "passed": true,
+      "evidence": "The weekly_plan progresses from Week 1 '比较推理基础——从全数思维到分数思维' → Week 2 '情境缩放深度——从比较到乘除推理' → Week 3 '综合巩固、验收与延迟复测准备'. Week 1 starts from comparison reasoning (developing frontier), not from representation basics. Week 1 Day 1 uses 数轴定位 and 等值分数 as tools, not as reteaching targets. Already-mastered skills are used as scaffolding (e.g., Day 2 uses 数轴 as anchor visualization) but not re-taught as independent units."
+    },
+    {
+      "text": "Strategies target the known whole-number misconception and contrast cases rather than only increasing drill volume, with no unexplained redundancy.",
+      "passed": true,
+      "evidence": "Week 1 week_misconception_intervention.target='whole_number_bias' with 4 intervention strategies (面积模型对比, 数轴定位, 认知冲突提问, 语言重塑). Day 3 uses 对比案例 to challenge whole-number bias. Week 2 week_misconception_intervention.target='mechanical_common_denom' with 4 strategies (面积模型重演, 策略决策训练, 意义优先规则, 反例强化). Day 11 explicitly targets mechanical common-denom with '偏差暴露诊断' and '通分的意义重建'. Strategies use contrast cases, not drill volume."
+    },
+    {
+      "text": "Each session fits the 25-minute daily constraint and the first session is executable within constraints.",
+      "passed": true,
+      "evidence": "Every daily session follows warmup_5min + core_15min + wrapup_5min = 25 minutes. Day 1 structure: warmup_5min='卡片排序热身', core_15min='认知冲突：同分子与同分母的比较推理' (3 stages), wrapup_5min='今日推理日志'. Guardian role specified for each segment. Total: 21 days × 25 min = 525 minutes matching the 3-week constraint."
+    },
+    {
+      "text": "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+      "passed": false,
+      "evidence": "learner_profile.learner_guardian_confirmation mentions path_priority and acceptance_criteria, but there is no explicit confirmation object with status='confirmed' containing all four required items (path overview, stage goals, time commitment, priority, first-session contract). The output uses its own schema (plan_id, plan_type, weekly_plan) without the stage contract's mandatory confirmation envelope. The confirmation is mentioned informally in prose but not resolved as a structured confirmed block."
+    },
+    {
+      "text": "Per-node exit criteria are observable and the speed-only criterion is explicitly excluded from overall exit criteria.",
+      "passed": false,
+      "evidence": "No exit_criteria.per_node structure exists. expected_outcomes provides target indicators (e.g., '能从4种以上策略中灵活选择最优比较方法') but these are outcome descriptions, not per-node exit criteria with observable/decidable thresholds. assessment_plan has formative/summative/delayed_retest assessments, which are assessment schedules, not per-node exit criteria. Speed exclusion IS explicit: gamification_system.core_principle='以策略深度和解释质量为核心评分维度，速度不作为排名标准', but the per-node exit criteria component is missing entirely."
+    },
+    {
+      "text": "Transfer and delayed review are explicit and G5 routes deterministically to S6 when all dimensions pass.",
+      "passed": false,
+      "evidence": "Transfer and delayed review ARE explicit: assessment_plan.delayed_retest at Day 26, summative assessment includes unseen context transfer (Part B 未见情境迁移×2). However, there is NO quality_evaluation or rubric_results object evaluating G5 dimensions. No verdict field. No route_to field. The output uses s6_proceed_decision in a completely different schema rather than the stage contract's quality_evaluation→route_to pattern."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 3,
+    "total": 6,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "total_turns": 1,
+    "total_tokens": 41278,
+    "output_tokens": 11600,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 181,
+    "total_duration_seconds": 177.108
+  },
+  "claims": [
+    {
+      "claim": "每日设置5分钟亲子讨论环节",
+      "type": "quality",
+      "verified": true,
+      "evidence": "design_principles includes '监护人协同：每日设置5分钟亲子讨论环节'. Each daily session has a wrapup_5min component with guardian_role specified. guardian_involvement_plan.daily_roles documents the guardian's daily engagement."
+    },
+    {
+      "claim": "The output is a complete 21-day personalized learning plan",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The weekly_plan covers exactly 21 days (7+7+7) with daily sessions, each structured as warmup_5min+core_15min+wrapup_5min. The plan is comprehensive with gamification, guardian involvement, misconception tracking, assessment, and delayed retest design. However, it does not follow the stage contract output schema."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+        "reason": "The without_skill output produces a rich daily plan with guardian involvement but skips the formal confirmation envelope. This assertion would benefit from requiring the explicit confirmation.status='confirmed' field rather than accepting informal mentions of confirmation."
+      },
+      {
+        "assertion": "G5 routes deterministically to S6 when all dimensions pass.",
+        "reason": "The without_skill output never produces a G5 rubric evaluation. This is a discriminating assertion — it correctly catches that the output lacks the stage contract's quality gate. Consider also asserting on schema compliance (schema_version, stage_id fields) to catch format drift at the structural level."
+      }
+    ],
+    "overall": "The without_skill output is qualitatively rich and pedagogically sound but diverges completely from the stage contract output schema. It produces a weekly_plan with 21 daily sessions instead of an S5 envelope with ordered_learning_nodes, confirmation, quality_evaluation, and route_to. Assertions 4-6 correctly identify this schema non-compliance. The evals are well-designed for discriminating skill-vs-no-skill differences."
+  }
+}

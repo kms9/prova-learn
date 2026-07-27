@@ -1,0 +1,9 @@
+{
+  "skill_name": "create-domain-evidence-landscape",
+  "case_id": 1,
+  "eval_name": "eval-1",
+  "source": {},
+  "route": "gclaude",
+  "iteration": 1,
+  "expectations_count": 6
+}

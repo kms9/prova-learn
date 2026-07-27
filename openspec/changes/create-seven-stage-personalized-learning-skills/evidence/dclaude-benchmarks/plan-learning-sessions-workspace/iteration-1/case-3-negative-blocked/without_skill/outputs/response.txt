@@ -1,0 +1,115 @@
+```json
+{
+  "s5_evaluation": {
+    "evaluation_id": "S5-20260727-001",
+    "evaluation_timestamp": "2026-07-27T00:00:00Z",
+    "stage": "S5",
+    "stage_name": "个性化学习诊断与就绪评估",
+    "input_summary": {
+      "submission_type": "课程目录式计划",
+      "raw_content": {
+        "week_1": "看完数据库原理第1-5章",
+        "week_2": "看10个索引视频",
+        "week_3": "刷100道题",
+        "week_4": "做项目"
+      },
+      "format_issues": [
+        "缺少具体教材/资源标识（书名、作者、版本、视频来源）",
+        "刷题范围未指定（题型、难度、来源平台）",
+        "项目主题、范围、技术栈、验收标准均未定义",
+        "时间为粗粒度周级，无具体日程与里程碑"
+      ]
+    },
+    "required_artifacts_check": {
+      "learner_snapshot": {
+        "status": "MISSING",
+        "severity": "BLOCKING",
+        "description": "未提供学习者画像，无法确定当前知识水平、学习风格、先备知识、认知起点"
+      },
+      "capability_graph_nodes": {
+        "status": "MISSING",
+        "severity": "BLOCKING",
+        "description": "未提供能力图谱节点，无法确定目标能力集合、依赖关系、以及计划覆盖的能力域"
+      },
+      "learning_frontier_evidence": {
+        "status": "MISSING",
+        "severity": "BLOCKING",
+        "description": "未提供学习前沿证据，无法区分已知与未知、已掌握与待学习，无法定位最近发展区(ZPD)"
+      },
+      "node_entry_exit_conditions": {
+        "status": "MISSING",
+        "severity": "BLOCKING",
+        "description": "未定义能力图谱节点的进入条件（前置知识验证）与退出条件（掌握标准），无法判断学习是否真正发生"
+      },
+      "assessment_arrangement": {
+        "status": "MISSING",
+        "severity": "BLOCKING",
+        "description": "无任何测评安排（诊断性测评、形成性测评、总结性测评），无法验证学习效果与进度"
+      }
+    },
+    "readiness_assessment": {
+      "can_proceed_to_S6": false,
+      "overall_readiness_level": "NOT_READY",
+      "readiness_score": 0.05,
+      "blocking_gaps_count": 5,
+      "critical_findings": [
+        "提交内容为课程目录而非个性化学习计划——仅有内容大纲，无学习者适配",
+        "缺少所有S5必需的结构化数据工件（5项全部缺失）",
+        "计划粒度不足以支撑教学决策：无知识点级别映射、无时间精度、无难度分层",
+        "无法建立学习者模型→教学策略之间的因果链路"
+      ]
+    },
+    "diagnosis": {
+      "root_cause": "提交者将'内容大纲'与'个性化学习计划'混为一谈。课程目录式计划仅描述了'教什么内容'，但个性化学习需要回答：谁在学（learner_snapshot）、从哪里开始学（learning_frontier）、学什么能力（capability_graph）、怎么知道学会了（exit_conditions）、何时测评（assessment）。这五项缺失使得S6教学缺乏任何个性化依据，实质等同于无差别讲授。",
+      "risk_if_forced_proceed": "若强行进入S6，教学将退化为非个性化讲授，违背个性化学习系统设计目标，无法追踪学习效果，无法自适应调整策略。"
+    },
+    "required_remediation": {
+      "action": "REJECT_PLAN_RETURN_TO_PREPARATION",
+      "steps": [
+        {
+          "step": 1,
+          "artifact": "learner_snapshot",
+          "action": "完成学习者初始诊断测评，生成包含知识基线、认知风格、学习动机、先备知识结构的学习者画像"
+        },
+        {
+          "step": 2,
+          "artifact": "capability_graph_nodes",
+          "action": "根据目标领域（数据库原理）构建能力图谱，定义节点（如：关系模型理解、SQL查询、索引机制、事务与并发、项目实践），标注节点间依赖边"
+        },
+        {
+          "step": 3,
+          "artifact": "learning_frontier_evidence",
+          "action": "基于learner_snapshot与capability_graph做差距分析，定位学习前沿——已掌握节点（可跳过）与待攻克节点（需教学），生成ZPD边界"
+        },
+        {
+          "step": 4,
+          "artifact": "node_entry_exit_conditions",
+          "action": "为每个能力图谱节点定义进入条件（前置节点达标+诊断测评通过）和退出条件（掌握度≥阈值、可迁移应用、限时正确率达标）"
+        },
+        {
+          "step": 5,
+          "artifact": "assessment_arrangement",
+          "action": "制定三阶段测评方案：诊断性测评（入学定位）、形成性测评（每节点学后即时反馈）、总结性测评（阶段性与项目综合评审）"
+        },
+        {
+          "step": 6,
+          "artifact": "personalized_learning_plan",
+          "action": "在以上5项工件齐备后，重新生成包含时间线、节点路由、资源匹配、自适应分支策略的个性化学习计划，再次提交S5评审"
+        }
+      ]
+    },
+    "s6_proceed_decision": {
+      "decision": "DENIED",
+      "reason": "5项BLOCKING级别工件缺失，无法进入S6教学阶段",
+      "re_submission_required": true,
+      "minimum_artifacts_for_resubmission": [
+        "learner_snapshot",
+        "capability_graph_nodes",
+        "learning_frontier_evidence",
+        "node_entry_exit_conditions",
+        "assessment_arrangement"
+      ]
+    }
+  }
+}
+```

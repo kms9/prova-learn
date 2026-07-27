@@ -1,0 +1,396 @@
+{
+  "skill_name": "create-seven-stage-personalized-learning-skills",
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "case-1-positive-primary",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+            "passed": true,
+            "evidence": "result.json: stage_id='S2', positive_artifact.type='domain_evidence_landscape', research_executed=true, research_run_manifest.online=true, execution_status='completed', rounds=3, 6 perspectives each with questions+query_ids, 14 queries each with query_id/query/executed_at/result_summary/follow_up_of, 6 follow_up_triggers documenting causal chains."
+          },
+          {
+            "text": "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+            "passed": true,
+            "evidence": "category_coverage: all 6 categories status='covered', each with reason/criticality/gate_effect/sample_count. official_academic=7 PG18 doc entries in source_ledger with publisher='PostgreSQL Global Development Group'. Product-behavior facts (EXPLAIN semantics, index types, planner stats) trace to E-PG-EXPLAIN through E-PG-STATS."
+          },
+          {
+            "text": "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+            "passed": true,
+            "evidence": "17 claims (C1-C17): C8='所有慢查询都应优先创建索引'=unsupported (refs: E-CRIT-SEQSCAN,E-PG-INDEXES,E-CRIT-OVERINDEX); C9='cost等于运行毫秒'=unsupported (E-PG-EXPLAIN); C10='Seq Scan意味着有问题'=unsupported; C11=skip scan万能=unsupported. All evidence_refs match source_ledger evidence_ids."
+          },
+          {
+            "text": "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+            "passed": true,
+            "evidence": "disagreements: 3 entries each with side_a/side_b/strong_arguments/evidence_refs/status='partial_resolution'. Multi-column index rule disagreement has side B arguing '先测量再决定...警惕把经验规则当绝对定律' backed by E-PG18-SKIPSCAN, E-PGEDGE-SKIPSCAN, E-CRIT-OVERINDEX. C8 explicitly rebuts INDEX_ALWAYS_FASTER. consensus (5 items) separate from disagreements."
+          },
+          {
+            "text": "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+            "passed": true,
+            "evidence": "source_ledger JD entries (E-JD-PGCN/E-JD-MODB/E-JD-LIEPIN/E-JD-TARYARTAR): provenance='market_signal'. Non-JD sources: provenance='external_evidence'. Claims C12/C13: claim_type='market_signal' with limits. No model_hypothesis items — all evidence has specific source URLs."
+          },
+          {
+            "text": "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2.",
+            "passed": true,
+            "evidence": "quality_evaluation.rubric_results: 11 dimensions all passed=true with evidence. verdict='pass', route_to='S3'. research_executed=true. evidence_gaps: 4 gaps, G1=material with gate_effect='lower_confidence' (non-blocking), G2-G4=minor with gate_effect='none'."
+          }
+        ],
+        "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "errors_encountered": 0,
+          "output_chars": 77980,
+          "tokens": { "input": 114619, "output": 22608, "total": 137227, "cache_read": 643456 }
+        },
+        "timing": {
+          "executor_duration_seconds": 310,
+          "total_duration_seconds": 307.36,
+          "duration_ms": 307360
+        },
+        "claims": [
+          { "claim": "PostgreSQL 18 起 BUFFERS 在 EXPLAIN ANALYZE 时默认启用", "type": "factual", "verified": true, "evidence": "E-PG18-BUFFERS source_ledger entry documents PG18 BUFFERS-by-default change; confirmed by E-PG-EXPLAIN official docs and E-PG18-RELEASE." },
+          { "claim": "14 条真实 WebSearch 查询均已记录且可追溯", "type": "process", "verified": true, "evidence": "research_run_manifest.queries: exactly 14 entries, each with query_id/query/executed_at/result_summary. 10 of 14 have follow_up_of chain markers." },
+          { "claim": "六类来源类别均被覆盖，招聘样本≥3个不同组织", "type": "factual", "verified": true, "evidence": "category_coverage: all 6 covered. recruiting_jd=4 samples from postgres.cn, 墨天轮, 猎聘, 太阳塔 (≥3 orgs)." }
+        ],
+        "user_notes_summary": { "uncertainties": [], "needs_review": [], "workarounds": [] },
+        "eval_feedback": { "suggestions": [], "overall": "All six expectations pass with full structural compliance. The domain_evidence_landscape includes a rich research_run_manifest, complete category_coverage, traceable claims, balanced disagreements, proper signal separation, and a deterministic G2 route to S3." }
+      }
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "case-1-positive-primary",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+            "passed": false,
+            "evidence": "result.json is a flat learning-path document (learner_profile, learning_path.modules, knowledge_map). No 'type':'domain_evidence_landscape', no S2 handoff envelope with stage_id/schema_version, no structured research_run_manifest. Meta mentions 'STORM-style multi-round web research (6 rounds, 18+ sources)' in prose only — not a verifiable manifest with query_id/executed_at/follow_up_of."
+          },
+          {
+            "text": "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+            "passed": false,
+            "evidence": "No category_coverage array. key_references section (12 items) undifferentiated by mandatory category — no per-category status, reason, or gate_effect. PG18 docs are referenced but not in a formal source_ledger with source_category assignment."
+          },
+          {
+            "text": "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+            "passed": false,
+            "evidence": "No claims array with formal claim_id/status/claim_type/evidence_refs. Content organized as learning modules with descriptive prose rather than verifiable claims. No way to independently verify whether false rules are correctly identified."
+          },
+          {
+            "text": "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+            "passed": false,
+            "evidence": "No disagreements array. No consensus array. Knowledge presented as single narrative without distinguishing consensus from contested claims. INDEX_ALWAYS_FASTER myth addressed implicitly in index notes but not as structured dispute."
+          },
+          {
+            "text": "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+            "passed": false,
+            "evidence": "No source provenance labeling (market_signal vs external_evidence). No JD samples or recruiting data present. Output relies on model training knowledge without labeling it as such."
+          },
+          {
+            "text": "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2.",
+            "passed": false,
+            "evidence": "No quality_evaluation section, no rubric_results, no verdict, no route_to. transfer_output section recommends S3 but without deterministic G2 dimension-by-dimension gate evaluation."
+          }
+        ],
+        "summary": { "passed": 0, "failed": 6, "total": 6, "pass_rate": 0.0 },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "errors_encountered": 0,
+          "output_chars": 28393,
+          "tokens": { "input": 223232, "output": 26879, "total": 266921, "cache_read": 225280 }
+        },
+        "timing": {
+          "executor_duration_seconds": 279,
+          "total_duration_seconds": 275.86,
+          "duration_ms": 275860
+        },
+        "claims": [
+          { "claim": "Output executed 'STORM-style multi-round web research (6 rounds, 18+ sources)' per meta.method", "type": "process", "verified": false, "evidence": "No structured query manifest — only prose claim in meta.research_rounds. No query_id/executed_at/result_summary to verify execution. output_chars (28k vs 78k with_skill) suggests less research captured, even if searches occurred." },
+          { "claim": "Output provides comprehensive PG18 learning path with EXPLAIN interpretation, diagnosis, and index strategy", "type": "quality", "verified": true, "evidence": "6 structured modules with exercises, code examples, and field-by-field EXPLAIN output interpretation. Content is substantive teaching material but lacks the formal domain_evidence_landscape contract." }
+        ],
+        "user_notes_summary": {
+          "uncertainties": ["Meta claims 18+ sources researched but no source_ledger or query manifest to verify"],
+          "needs_review": ["Output is a useful learning guide but fails the S2 handoff envelope structural contract on all six expectations"],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [],
+          "overall": "All expectations fail because the without_skill output is a conventional learning-path tutorial rather than a structured domain_evidence_landscape. Content is not wrong but fails structural and provenance requirements of the S2 contract."
+        }
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "case-2-positive-cross-domain",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+            "passed": true,
+            "evidence": "result.json: type='domain_evidence_landscape', schema_version='1.0.0', artifact_id='del-fraction-grade6-001'. research_executed=true, research_run_manifest.online=true, execution_status='completed', rounds=3, 6 perspectives each with id/name/questions/query_ids, 24 queries each with query_id/query/executed_at/result_summary/follow_up_of, 9 follow_up_triggers documented."
+          },
+          {
+            "text": "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+            "passed": true,
+            "evidence": "category_coverage: all 6 categories='covered' with reason/criticality/gate_effect/sample_count. official_academic=24 samples: IES practice guide (E-IES-PG), CCSSM, MOE 2022, Siegler 2012, Booth 2014, Bailey 2014, Lenz 2024 etc. Personal blogs (Jillian Starr, reliability=low) categorized as practice_case not official_academic."
+          },
+          {
+            "text": "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+            "passed": true,
+            "evidence": "14 claims (C1-C14) each with status/claim_type/evidence_refs/limits. C12 (三周干预)=partially_supported with limits '干预研究效应量差异极大...三周剂量基于上游用户确认而非专门研究'. C13 (先用披萨模型)=unsupported with limits. evidence_gap G1 explicitly notes learner diagnosis data uncollected."
+          },
+          {
+            "text": "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+            "passed": true,
+            "evidence": "terminology: 12 domain-level terms including whole_number_bias, gap_thinking. disagreements (3) separate from consensus (8) and open_problems (4). G1 gap: '未采集学习者的初始分数诊断数据——迷思概念类型、数轴熟练度...基线未知' — keeps this learner's misconceptions distinct from domain-level patterns."
+          },
+          {
+            "text": "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+            "passed": true,
+            "evidence": "source_ledger teacher JD entries: provenance='market_signal', source_category='recruiting_jd'. TpT/Instagram: reliability='low'. C9: claim_type='market_signal'. No model_hypothesis claims — all evidence has specific URLs in source_ledger."
+          },
+          {
+            "text": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking.",
+            "passed": false,
+            "evidence": "research_executed=true and 6 evidence_gaps are present (G1=critical, gate_effect='lower_confidence'). But unlike eval-1 with_skill, no quality_evaluation section exists — no rubric_results, no verdict, no route_to at the top level. The contractual G2 evaluation artifact is absent even though the substantive conditions (research done, gaps transparent) appear met."
+          }
+        ],
+        "summary": { "passed": 5, "failed": 1, "total": 6, "pass_rate": 0.833 },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "errors_encountered": 0,
+          "output_chars": 72699,
+          "tokens": { "input": 103985, "output": 29579, "total": 354166, "cache_read": 910848 }
+        },
+        "timing": {
+          "executor_duration_seconds": 454,
+          "total_duration_seconds": 451.528,
+          "duration_ms": 451528
+        },
+        "claims": [
+          { "claim": "24 条查询分布在 3 轮中覆盖 6 个视角", "type": "process", "verified": true, "evidence": "research_run_manifest.queries: 24 entries (Q1-Q24), rounds inferred from follow_up_of chains. 6 perspectives confirmed. 9 follow_up_triggers document causal chains." },
+          { "claim": "分数大小理解是代数成功的最强预测因子", "type": "factual", "verified": true, "evidence": "Consensus item 1 supported by E-BAILEY-2014, E-BOOTH-2014, E-SIEGLER-2012, E-BJORKHAMMER-2025. Cross-checked against source_ledger entries." },
+          { "claim": "中国2022课标新增量感核心素养要求更高分数教学标准", "type": "factual", "verified": true, "evidence": "C11=supported, evidence_refs: E-MOE-001 (MOE 2022 curriculum). Limits note classroom evidence gap." }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": ["Missing quality_evaluation rubric_results/verdict/route_to: the content demonstrates G2 pass conditions but does not produce the formal evaluation artifact that expectation 6 requires"],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "assertion": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps are transparent and non-blocking",
+              "reason": "This checks both (a) the formal G2 evaluation artifact exists AND (b) routing is correct. Eval-1 with_skill passes both. This output has the substance (research done, gaps transparent) but lacks the quality_evaluation object. Consider splitting into two expectations or making the structural requirement explicit."
+            }
+          ],
+          "overall": "The domain_evidence_landscape content is excellent and would likely pass G2 on substance. The sole failure is the missing quality_evaluation structure — everything else passes with strong evidence."
+        }
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "case-2-positive-cross-domain",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+            "passed": false,
+            "evidence": "result.json: top-level keys are stage/topic/execution_summary/perspectives/synthesis_for_S2 — not a domain_evidence_landscape type. No schema_version, no research_run_manifest with online/execution_status/queries. research_quality_notes says '共执行7次独立联网搜索' in prose only — no per-query manifest with timestamps."
+          },
+          {
+            "text": "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+            "passed": false,
+            "evidence": "No category_coverage array. No formal source_ledger with source_category. Sources cited inline in perspective items but not organized by six mandatory categories with covered/not_applicable/gap status."
+          },
+          {
+            "text": "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+            "passed": false,
+            "evidence": "No claims array with formal status/evidence_refs. Domain_consensus items (DC-1 to DC-5) list sources and confidence but not supported/partially_supported/unsupported ternary with evidence_refs mapping to a source_ledger."
+          },
+          {
+            "text": "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+            "passed": false,
+            "evidence": "common_misconceptions (MM-1 to MM-7) lists domain-level misconceptions but this learner's specific misconceptions are not separated. No open_problems section. synthesis_for_S2 mentions gaps implicitly but not as structured open problems."
+          },
+          {
+            "text": "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+            "passed": false,
+            "evidence": "No provenance labeling (market_signal vs external_evidence). case_experiences include anecdotal teacher reports and Instagram projects without distinguishing evidentiary weight from peer-reviewed research."
+          },
+          {
+            "text": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking.",
+            "passed": false,
+            "evidence": "No G2 evaluation. No rubric_results, verdict, or route_to. synthesis_for_S2 has design implications and bridge notes but no formal quality_evaluation with dimension-by-dimension gate assessment."
+          }
+        ],
+        "summary": { "passed": 0, "failed": 6, "total": 6, "pass_rate": 0.0 },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "errors_encountered": 0,
+          "output_chars": 24013,
+          "tokens": { "input": 46167, "output": 6877, "total": 53044, "cache_read": 111872 }
+        },
+        "timing": {
+          "executor_duration_seconds": 135,
+          "total_duration_seconds": 132.165,
+          "duration_ms": 132165
+        },
+        "claims": [
+          { "claim": "Output completed live multi-perspective research per execution_summary", "type": "process", "verified": false, "evidence": "No structured query manifest. Research_quality_notes says '共执行7次独立联网搜索' but without per-query timestamps or result_summaries. Cannot distinguish actual web searches from model memory." },
+          { "claim": "分数大小理解是后续数学成就的最强预测因子", "type": "factual", "verified": true, "evidence": "DC-1 cites Siegler 2012, Booth & Newton 2014, Torbeyns 2015 with confidence='very_high'. Content aligns with with_skill output's more rigorously sourced version." }
+        ],
+        "user_notes_summary": {
+          "uncertainties": ["Execution summary claims live research but no query manifest exists — cannot distinguish actual searches from model memory"],
+          "needs_review": ["Output organized by teaching categories (共识/误概念/教学证据/个案) rather than S2 contractual structure (source_ledger/category_coverage/claims/G2 evaluation)"],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [],
+          "overall": "All expectations fail on structure. The output contains useful pedagogical synthesis in a narrative/perspective format incompatible with the domain_evidence_landscape contract."
+        }
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "case-3-negative-blocked",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+            "passed": true,
+            "evidence": "result.json: positive_artifact=null, status='blocked', quality_evaluation.verdict='revise_here', all 11 rubric_results.passed=false. No fabricated domain_evidence_landscape."
+          },
+          {
+            "text": "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+            "passed": true,
+            "evidence": "rubric_results[0] ('实际联网执行'): passed=false, 'research_run_manifest 无法产出：online 未设为 true 且无已执行查询记录', '用户拒绝所有联网搜索请求，research_executed 为 false'. No invented queries or fabricated sample counts."
+          },
+          {
+            "text": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+            "passed": true,
+            "evidence": "rubric_results[1] ('强制来源类别覆盖'): all 5 missing categories explicitly 'gap' — 'wikipedia_encyclopedia: gap', 'official_academic: gap', etc. Output explicitly rejects not_applicable: '用户要求将上述 gap 标记为 not_applicable 但不符合 §4 定义：not_applicable 需要确实不适用并写明理由，而此处是未查找导致缺失'."
+          },
+          {
+            "text": "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+            "passed": true,
+            "evidence": "input_validation.errors: 'seo-blog-1/2/3 三篇为同源内容互相转载...不可计为独立来源'. evidence_collected: all 5 entries provenance='user_provided_unverified', status='unsupported'. rubric_results[3]: '行业一致认为只要记住十条规则就能做好提示工程...无任何可追溯的独立证据支撑...该断言仅出现在同源 SEO 博客与培训广告中'."
+          },
+          {
+            "text": "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+            "passed": true,
+            "evidence": "evidence_collected: training-ad-1 provenance='user_provided_unverified'. rubric_results[8]: '培训广告中的营销断言未被标记为 market_signal 或 user_provided_unverified 而是被要求直接作为 consensus 呈现' — documents the skill correctly blocked this mislabeling. No model_hypothesis items."
+          },
+          {
+            "text": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+            "passed": true,
+            "evidence": "quality_evaluation.verdict='revise_here', route_to='S2'. input_validation also notes goal_success_contract missing → could route S1. Neither case routes to S3."
+          }
+        ],
+        "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "errors_encountered": 0,
+          "output_chars": 16717,
+          "tokens": { "input": 75357, "output": 14100, "total": 89457, "cache_read": 161920 }
+        },
+        "timing": {
+          "executor_duration_seconds": 205,
+          "total_duration_seconds": 201.976,
+          "duration_ms": 201976
+        },
+        "claims": [
+          { "claim": "五份用户材料中三份为同源互相转载", "type": "factual", "verified": true, "evidence": "input_validation.errors explicitly states seo-blog-1/2/3 '正文实质性相同，不可计为独立来源'." },
+          { "claim": "G2 全部十一维度 passed=false", "type": "factual", "verified": true, "evidence": "quality_evaluation.rubric_results: all 11 entries have passed=false with individual evidence arrays." },
+          { "claim": "用户要求将缺失类别标记为 not_applicable 但被技能拒绝", "type": "process", "verified": true, "evidence": "rubric_results[1]: '用户要求将上述 gap 标记为 not_applicable 但不符合 §4 定义'. confirmation.response documents the rejected request." }
+        ],
+        "user_notes_summary": { "uncertainties": [], "needs_review": [], "workarounds": [] },
+        "eval_feedback": {
+          "suggestions": [],
+          "overall": "The skill correctly fails closed on all six expectations. Textbook negative/blocked fixture: no positive artifact, research_blocked, gaps preserved as gaps, derivative sources identified, route stays at S2."
+        }
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "case-3-negative-blocked",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output does not fabricate a positive domain_evidence_landscape and does not claim a G2 pass.",
+            "passed": true,
+            "evidence": "result.json: stage_outcome='blocked', blocked_reason explains all materials insufficient. No positive artifact. No G2 pass claim. handoff targets S1 with rollback_with_remediation."
+          },
+          {
+            "text": "The lack of executed live research is preserved as research_blocked or an equivalent explicit blocking state, with research_executed false and no invented query manifest or sample counts.",
+            "passed": true,
+            "evidence": "meta: no_web_search_performed=true, no_project_files_accessed=true. constraint_analysis.no_web_search: impact='用户禁止联网搜索，导致无法交叉验证材料中的任何声称'. No invented queries or fabricated counts."
+          },
+          {
+            "text": "Missing authoritative, primary, or adversarial source categories are marked gap rather than not_applicable, each with a reason and gate_effect rather than silently dropped.",
+            "passed": true,
+            "evidence": "constraint_analysis.primary_sources_marked_na: explicitly calls out that user marked missing primary sources as not_applicable, notes this '系统性地排除了可验证的高质量信息源'. gap_analysis.missing_primary_sources lists 4 domains with examples. usable_material_count=0. Sources are treated as missing/gap, not silently dropped — and the user's attempt to label them not_applicable is flagged as problematic."
+          },
+          {
+            "text": "The three derivative SEO sources are not treated as independent and cannot establish consensus; their dependence and low reliability are recorded, and the 'ten rules' claim is left unsupported with no evidence_refs to independent sources rather than marked supported.",
+            "passed": true,
+            "evidence": "input_materials: SEO blogs flagged '三篇博客互为转载来源，形成封闭引用环', credibility_flag='high_risk'. claim_assessment: verdict='unsupported_oversimplification', reasoning cites OpenAI/Anthropic guides and ACL/NeurIPS papers as counter-evidence. usable_material_count=0."
+          },
+          {
+            "text": "Market signals and promotional content are not relabeled as external evidence, and model knowledge is not relabeled as research.",
+            "passed": true,
+            "evidence": "input_materials: training ad flagged 'commercial_bias' with '商业动机可能扭曲信息客观性'. meta: reasoning_basis='general_knowledge_of_LLM_prompt_engineering_and_information_literacy_principles' — explicitly acknowledges model knowledge basis. recommendations prioritize peer-reviewed and official sources."
+          },
+          {
+            "text": "The route is revise_here at S2 unless a documented goal defect requires returning to S1; in no case does it advance to S3.",
+            "passed": true,
+            "evidence": "stage_outcome='blocked'. handoff: target_stage='S1', handoff_type='rollback_with_remediation'. Routes to S1 due to documented goal defect: '所有输入材料信度不足，核心断言与已知领域事实矛盾'. Does NOT advance to S3."
+          }
+        ],
+        "summary": { "passed": 6, "failed": 0, "total": 6, "pass_rate": 1.0 },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "errors_encountered": 0,
+          "output_chars": 6116,
+          "tokens": { "input": 29620, "output": 1991, "total": 31611, "cache_read": 0 }
+        },
+        "timing": {
+          "executor_duration_seconds": 38,
+          "total_duration_seconds": 34.976,
+          "duration_ms": 34976
+        },
+        "claims": [
+          { "claim": "所有输入材料信度不足，usable_material_count=0", "type": "factual", "verified": true, "evidence": "signal_quality_summary: overall_credibility='极低', usable_material_count=0, red_flags列出4项具体问题." },
+          { "claim": "提示工程不存在'十条规则即可掌握'的行业共识", "type": "factual", "verified": true, "evidence": "claim_assessment: verdict='unsupported_oversimplification', cites OpenAI/Anthropic guides and top-tier venues as counter-evidence from model knowledge." }
+        ],
+        "user_notes_summary": {
+          "uncertainties": ["Without-skill output correctly blocks but uses a different structural format — expectations are met because they check behavioral outcomes (no fabrication, research blocked, gaps preserved, no S3 advance) rather than structural compliance"],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "reason": "Expectation 3 is phrased around the six-category source coverage structure, but the without-skill output for eval-3 correctly identifies gaps without using the formal category_coverage format. The behavioral intent (gaps are gaps, not not_applicable) is met. Consider whether a structural expectation is appropriate for negative/blocked cases where no formal artifact is produced."
+            }
+          ],
+          "overall": "The without-skill output correctly identifies blocking conditions and refuses to fabricate, matching the behavioral intent of all six expectations. Structural differences from the with_skill output are acceptable for a blocked/negative scenario."
+        }
+      }
+    }
+  ]
+}

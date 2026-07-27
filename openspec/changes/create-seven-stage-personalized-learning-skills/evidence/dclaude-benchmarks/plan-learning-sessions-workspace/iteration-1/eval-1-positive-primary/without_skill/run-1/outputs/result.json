@@ -1,0 +1,872 @@
+{
+  "stage": "S5",
+  "stage_name": "Personalized Learning Handoff",
+  "learner_snapshot": "LS-001",
+  "target_contract": "PostgreSQL 18 Query Optimization",
+  "capability_graph_version": "compatible",
+  "generated_at": "2026-07-27T00:00:00Z",
+  "precondition_verification": {
+    "upstream_artifacts": [
+      {
+        "name": "PostgreSQL 18 Target Contract",
+        "status": "passed",
+        "version": "compatible"
+      },
+      {
+        "name": "Capability Graph",
+        "status": "passed",
+        "version": "compatible"
+      },
+      {
+        "name": "Learner Snapshot LS-001",
+        "status": "passed",
+        "version": "compatible"
+      }
+    ],
+    "first_session_contract_confirmed": true,
+    "learner_sequencing_preference": "estimation_and_statistics_model_first_then_multi_column_indexes"
+  },
+  "learner_profile": {
+    "mastered": [
+      {
+        "competency": "plan_tree_reading",
+        "evidence": "Can parse EXPLAIN output, identify node types (Seq Scan, Index Scan, Nested Loop, Hash Join, Merge Join), and trace row flow through plan hierarchy",
+        "ceiling": "Correctly interprets plan direction (outer→inner) and startup vs total cost distinction"
+      },
+      {
+        "competency": "scan_methods",
+        "evidence": "Understands Sequential Scan, Index Scan, Index Only Scan, Bitmap Index Scan + Bitmap Heap Scan; knows when each is chosen based on selectivity thresholds and visibility map",
+        "ceiling": "Can explain why bitmap scans bridge index and sequential approaches for intermediate selectivity"
+      }
+    ],
+    "learning_frontier": [
+      {
+        "id": "F1",
+        "topic": "estimation_vs_actual_discrepancy",
+        "current_state": "Can run EXPLAIN ANALYZE but does not systematically diagnose why estimated rows diverge from actual rows; attributes discrepancies vaguely to 'statistics being wrong'",
+        "target_state": "Methodically identifies root causes: outdated ANALYZE, correlated columns defeating independence assumption, skewed distributions, insufficient statistics_target, missing extended statistics"
+      },
+      {
+        "id": "F2",
+        "topic": "predicate_selectivity_computation",
+        "current_state": "Knows selectivity determines plan shape but cannot compute or approximate selectivity from pg_stats structures (MCV, histogram, n_distinct)",
+        "target_state": "Can manually estimate selectivity for equality, range, and LIKE predicates using pg_stats data; can verify estimates against EXPLAIN row predictions"
+      },
+      {
+        "id": "F3",
+        "topic": "multi_column_index_column_ordering",
+        "current_state": "Applies 'highest global selectivity column first' as a mechanical rule without considering query shape, range vs equality conditions, or ORDER BY alignment",
+        "target_state": "Evaluates column ordering holistically: equality vs range, ORDER BY/GROUP BY alignment, covering opportunities, PG18 skip-scan capabilities, and tradeoffs when multiple query patterns share an index"
+      }
+    ],
+    "typical_misconception": {
+      "id": "M1",
+      "statement_zh": "把'全局选择性最高列优先'当成机械规则",
+      "statement_en": "Treats 'place the column with the highest global selectivity first' as a mechanical, universally-applicable rule",
+      "analysis": "This misconception has three layers. Layer 1: confuses global column selectivity (overall NDV ratio) with per-query predicate selectivity (which depends on the specific constant and operator in the WHERE clause). Layer 2: ignores the distinction between equality predicates (where selectivity-first is often correct) and range predicates (where putting the range column first may yield better index pruning despite lower global selectivity). Layer 3: ignores ORDER BY/GROUP BY alignment—an index ordered by (low_selectivity_col, high_selectivity_col) cannot satisfy ORDER BY high_selectivity_col without a sort, even if the reverse ordering would be 'less selective' on paper.",
+      "remediation_strategy": "Present three counter-example categories in Sessions 5–6: (a) range-condition-led ordering where a BETWEEN on a date column should precede an equality on a status column despite status having higher global selectivity; (b) ORDER BY alignment where the sort column drives index ordering regardless of selectivity; (c) PG18 skip-scan scenarios where the planner can now use an index even without a leading-column condition, changing the traditional calculus. Require the learner to EXPLAIN each counter-example and articulate why the selectivity-first rule produces a worse plan.",
+      "intervention_sessions": [
+        5,
+        6
+      ],
+      "resolution_criteria": "Learner can explain at least two scenarios where selectivity-first ordering is suboptimal and can design the correct index for each"
+    }
+  },
+  "constraints": {
+    "duration_weeks": 4,
+    "hours_per_week": 6,
+    "total_hours": 24,
+    "sessions_per_week": 2,
+    "total_sessions": 8,
+    "session_duration_minutes": 90,
+    "environment": "sandbox",
+    "sandbox_spec": {
+      "requirement": "PostgreSQL 18 instance with a pre-loaded dataset (~500K–2M rows across 3–5 tables) exhibiting correlated columns, skewed distributions, and multiple query patterns; pg_restore_relation_stats() used to inject production-realistic statistics where needed",
+      "minimal_tables": [
+        {
+          "name": "orders",
+          "rows": "~1M",
+          "columns": "order_id (PK), customer_id, status, created_at, total_amount, region",
+          "characteristics": "status has skewed distribution (95% 'completed', 3% 'pending', 1% 'cancelled', 1% 'refunded'); created_at is monotonically increasing; customer_id has moderate cardinality (~50K distinct); region has low cardinality (5 values)"
+        },
+        {
+          "name": "order_items",
+          "rows": "~2M",
+          "columns": "item_id (PK), order_id (FK), product_id, quantity, unit_price",
+          "characteristics": "order_id skewed (some orders have many items); product_id has ~10K distinct values"
+        },
+        {
+          "name": "customers",
+          "rows": "~50K",
+          "columns": "customer_id (PK), signup_date, tier, country",
+          "characteristics": "tier correlated with signup_date (older customers tend to be higher tier); country has ~30 values"
+        },
+        {
+          "name": "products",
+          "rows": "~10K",
+          "columns": "product_id (PK), category_id, price, discontinued",
+          "characteristics": "category_id has ~50 distinct values; price and category_id are correlated"
+        }
+      ]
+    },
+    "acceptance_criteria": "migration_acceptance_with_3_unseen_queries"
+  },
+  "learning_phases": [
+    {
+      "phase": 1,
+      "title": "Estimation & Statistics Model",
+      "weeks": [
+        1,
+        2
+      ],
+      "sessions": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "rationale": "Learner requested fixing estimation understanding first. This is pedagogically correct: column ordering decisions in Phase 2 depend on understanding how the planner computes selectivity for different column and predicate types. Without Phase 1 foundations, the learner cannot reason about why a particular column ordering yields better or worse plans.",
+      "pg18_features_covered": [
+        "pg_restore_relation_stats() — portable statistics for sandbox realism",
+        "EXPLAIN ANALYZE buffer statistics now included by default",
+        "IN (VALUES) → = ANY transformation and its effect on selectivity estimation"
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "Multi-Column Index Ordering",
+      "weeks": [
+        3,
+        4
+      ],
+      "sessions": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "rationale": "Builds on Phase 1 selectivity knowledge to tackle the core misconception. Introduces PG18 B-tree skip scan as a transformative feature that changes traditional index design rules.",
+      "pg18_features_covered": [
+        "B-tree Skip Scan — using multi-column indexes without leading-column condition",
+        "Index Searches metric in EXPLAIN ANALYZE for diagnosing skip-scan probe counts",
+        "Self-Join Elimination awareness (relevant for ORM-generated query patterns)"
+      ]
+    }
+  ],
+  "session_plan": [
+    {
+      "session": 1,
+      "week": 1,
+      "phase": 1,
+      "title": "PostgreSQL Statistics Infrastructure",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Describe how ANALYZE collects statistics (sampling mechanism, default_statistics_target)",
+        "Navigate the pg_stats view and explain each column's role in estimation",
+        "Use pg_restore_relation_stats() to inject realistic statistics into a sandbox table (PG18)",
+        "Distinguish between reltuples, estimated rows in EXPLAIN, and actual rows in EXPLAIN ANALYZE"
+      ],
+      "topics": [
+        {
+          "name": "ANALYZE internals",
+          "depth": "working",
+          "key_points": [
+            "Random row sampling proportional to default_statistics_target × 300",
+            "Autovacuum-triggered ANALYZE thresholds",
+            "Manual vs automatic ANALYZE scenarios"
+          ]
+        },
+        {
+          "name": "pg_stats view anatomy",
+          "depth": "thorough",
+          "key_points": [
+            "schemaname, tablename, attname",
+            "null_frac: fraction of NULL values",
+            "avg_width: average stored column width (used for costing I/O)",
+            "n_distinct: >0 = actual count, <0 = fraction of reltuples, -1 = all unique",
+            "most_common_vals and most_common_freqs arrays",
+            "histogram_bounds array (covers non-MCV data)",
+            "correlation: physical row ordering correlation with column values (-1 to +1)"
+          ]
+        },
+        {
+          "name": "PG18: pg_restore_relation_stats()",
+          "depth": "applied",
+          "key_points": [
+            "Portable statistics injection without production data",
+            "Compact dump format — <1MB for hundreds of tables",
+            "Enables realistic plan testing in sandbox",
+            "pg_upgrade now preserves stats by default (PG18)"
+          ]
+        }
+      ],
+      "sandbox_exercise": {
+        "title": "Statistics Exploration Lab",
+        "steps": [
+          "Run ANALYZE on the orders table and examine pg_stats for status, created_at, and total_amount",
+          "Summarize what each pg_stats column reveals about the data distribution",
+          "Run EXPLAIN (without ANALYZE) on SELECT * FROM orders WHERE status = 'pending' and note the estimated rows; then run EXPLAIN ANALYZE and compare",
+          "Compute the expected selectivity manually: find 'pending' frequency from most_common_freqs in pg_stats",
+          "Load a second sandbox with pg_restore_relation_stats() using a provided stats dump; observe how estimates change"
+        ],
+        "deliverable": "A short summary table mapping pg_stats columns to their role in selectivity estimation, plus the manual selectivity computation for the 'pending' query verified against EXPLAIN"
+      },
+      "bridge_to_next": "Now you can read pg_stats. Next session: how the planner turns these numbers into row estimates using the MCV list and histogram."
+    },
+    {
+      "session": 2,
+      "week": 1,
+      "phase": 1,
+      "title": "Statistics Structures Deep Dive",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Explain how the MCV list and histogram partition the data and why they are mutually exclusive",
+        "Compute selectivity manually for equality, range, and LIKE predicates using pg_stats data",
+        "Identify when histogram_bounds IS NULL and what that implies for estimation quality",
+        "Understand how correlation statistic influences index scan cost estimates"
+      ],
+      "topics": [
+        {
+          "name": "MCV list mechanics",
+          "depth": "thorough",
+          "key_points": [
+            "Stores up to default_statistics_target entries",
+            "Covers the most frequent values; remaining values are in the histogram",
+            "If n_distinct ≤ statistics_target, histogram may be NULL (all values in MCV)",
+            "MCV selectivity is direct frequency lookup — exact for MCV values"
+          ]
+        },
+        {
+          "name": "Histogram mechanics",
+          "depth": "thorough",
+          "key_points": [
+            "histogram_bounds has N+1 entries dividing non-MCV data into N equal-frequency buckets",
+            "Linear interpolation within a bucket for range selectivity",
+            "If value falls between MCV entries, the non-MCV formula applies: selectivity = (1 - Σmcfs) / (n_distinct - num_mcv)"
+          ]
+        },
+        {
+          "name": "Selectivity computation walkthrough",
+          "depth": "applied",
+          "key_points": [
+            "Equality in MCV: selectivity = most_common_freqs[i]",
+            "Equality NOT in MCV: selectivity = (1 - Σmcfs) / (n_distinct - num_mcv)",
+            "Range with MCV+histogram: mcv_sel + histo_sel × (1 - Σmcfs)",
+            "Range histogram-only: ((bucket_index - 1) + linear_fraction) / num_buckets",
+            "Multiple AND conditions: independence assumption — product of individual selectivities (primary source of estimation error when columns are correlated)"
+          ]
+        },
+        {
+          "name": "correlation statistic",
+          "depth": "working",
+          "key_points": [
+            "Measures physical row ordering relative to column values",
+            "Affects index scan cost: sequential I/O vs random I/O estimates",
+            "random_page_cost and effective_cache_size interaction"
+          ]
+        }
+      ],
+      "sandbox_exercise": {
+        "title": "Manual Selectivity Computation",
+        "steps": [
+          "Query pg_stats for orders.status and orders.created_at; record null_frac, n_distinct, MCV arrays, histogram_bounds",
+          "For WHERE status = 'cancelled': look up in MCV, write down selectivity, multiply by reltuples, verify against EXPLAIN",
+          "For WHERE status = 'refunded': same process",
+          "For WHERE total_amount > 500: identify the bucket in histogram_bounds containing 500, compute selectivity via interpolation, verify against EXPLAIN",
+          "For WHERE status = 'completed' AND total_amount > 500: compute both selectivities, multiply (independence assumption), verify against EXPLAIN — note any discrepancy and discuss why",
+          "For WHERE created_at BETWEEN '2025-06-01' AND '2025-06-30': compute selectivity using histogram range estimation"
+        ],
+        "deliverable": "A worksheet with computed vs EXPLAIN-estimated selectivities for 5 predicates, with annotations explaining any discrepancies"
+      },
+      "bridge_to_next": "You can compute individual predicate selectivity. Next session: how the planner combines them, why independence breaks, and how to diagnose real estimation failures."
+    },
+    {
+      "session": 3,
+      "week": 2,
+      "phase": 1,
+      "title": "Selectivity Computation & Estimation Diagnosis",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Diagnose root causes when EXPLAIN estimates differ significantly from EXPLAIN ANALYZE actuals",
+        "Identify independence-assumption failures in multi-predicate queries",
+        "Understand join selectivity estimation (eqjoinsel) and its data-dependent accuracy",
+        "Explain how PG18's IN → = ANY transformation changes selectivity estimation for IN-lists"
+      ],
+      "topics": [
+        {
+          "name": "Estimation discrepancy diagnosis framework",
+          "depth": "thorough",
+          "key_points": [
+            "Step 1: Compare (actual rows) vs (estimated rows) at EACH plan node, not just the top",
+            "Step 2: Identify the node where the discrepancy first appears — this is the root cause node",
+            "Step 3: Check pg_stats for each filtered column at that node: is ANALYZE recent? Are statistics_target values adequate?",
+            "Step 4: Test independence assumption: compute per-column selectivities, multiply, compare to multi-column EXPAIN estimate. If they match, the planner is applying independence and the problem is correlated columns",
+            "Step 5: If correlated columns, CREATE STATISTICS is the solution (Session 4)",
+            "Common patterns: correlated columns (city+state), skewed distributions with MCV overflow, stale statistics after bulk INSERT/DELETE"
+          ]
+        },
+        {
+          "name": "Join selectivity (eqjoinsel)",
+          "depth": "working",
+          "key_points": [
+            "With MCV lists on both sides: cross-compare MCV frequencies for accurate join estimation",
+            "Without MCV (unique columns): selectivity = (1-nf1)*(1-nf2) / max(rows1, rows2)",
+            "Join estimation errors compound: an error in the inner relation's row estimate feeds into the join cardinality estimate",
+            "Nested Loop vs Hash Join sensitivity to row estimation errors"
+          ]
+        },
+        {
+          "name": "PG18: IN → = ANY transformation",
+          "depth": "applied",
+          "key_points": [
+            "IN (v1, v2, ..., vN) rewritten to = ANY(ARRAY[v1,...,vN]) internally",
+            "Enables more accurate index search count estimation",
+            "Allows skip-scan on multi-column indexes when IN-list appears on non-leading columns"
+          ]
+        }
+      ],
+      "sandbox_exercise": {
+        "title": "Estimation Failure Diagnosis Lab",
+        "steps": [
+          "Run a query joining orders, order_items, and customers with WHERE orders.status = 'completed' AND orders.created_at > '2025-01-01'. Execute EXPLAIN ANALYZE",
+          "Identify the node with the largest estimate-to-actual ratio. Apply the 5-step diagnosis framework",
+          "Isolate: run EXPLAIN on just the subquery for the misestimated node. Compare per-column selectivity products to the multi-column estimate",
+          "Determine whether the error is from (a) stale stats, (b) independence assumption failure, or (c) inadequate statistics_target",
+          "Write a diagnosis report: root cause, evidence, recommended fix"
+        ],
+        "deliverable": "A diagnosis report for 2 estimation-failure scenarios, following the 5-step framework, with pg_stats evidence attached"
+      },
+      "bridge_to_next": "You can diagnose estimation failures. Next session: fixing them with extended statistics — the most important tool for correlated-column scenarios."
+    },
+    {
+      "session": 4,
+      "week": 2,
+      "phase": 1,
+      "title": "Extended Statistics & Fixing Estimation Errors",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Create and verify extended statistics objects (dependencies, ndistinct, mcv kinds)",
+        "Determine which kind(s) of extended statistics are needed for a given estimation failure",
+        "Use PG18's default buffer statistics in EXPLAIN ANALYZE to cross-validate cost estimates",
+        "Adjust default_statistics_target per-column to improve estimation for high-skew columns"
+      ],
+      "topics": [
+        {
+          "name": "CREATE STATISTICS syntax and kinds",
+          "depth": "thorough",
+          "key_points": [
+            "Syntax: CREATE STATISTICS name [(kind, ...)] ON col1, col2, ... FROM table",
+            "dependencies: functional dependency degree — col A determines col B with probability P. Helps for queries WHERE A = x AND B = y",
+            "ndistinct: number of distinct combinations of (col1, col2, ...). Helps for GROUP BY multi-column cardinality estimation",
+            "mcv: multi-column most common value combinations with their frequencies. Most precise — direct lookup for exact value combinations",
+            "Omitting kind builds all three (recommended default)",
+            "Column order in CREATE STATISTICS is NOT significant",
+            "Limitation: values NOT in the multi-column MCV list use a conservative upper bound: selectivity = 1 - Σ(MCV_frequencies), which can overestimate when the combination is truly rare or non-existent"
+          ]
+        },
+        {
+          "name": "Choosing the right extended statistics kind",
+          "depth": "applied",
+          "key_points": [
+            "WHERE city = 'X' AND state = 'Y' with strong correlation: dependencies kind reduces overestimation",
+            "GROUP BY category, subcategory with fewer groups than product-of-individual-NDVs: ndistinct kind",
+            "Specific value combinations that appear repeatedly: mcv kind provides exact frequencies",
+            "Multiple extended stats can apply to the same table; the planner picks the most attribute-covering one"
+          ]
+        },
+        {
+          "name": "Per-column statistics_target tuning",
+          "depth": "working",
+          "key_points": [
+            "ALTER TABLE t ALTER COLUMN c SET STATISTICS N",
+            "Higher N = larger MCV and histogram arrays = better estimates for skewed data at cost of ANALYZE time and pg_statistic storage",
+            "Default is 100; values up to 10000 are common for high-skew columns",
+            "PG18: data distribution unaffected but larger MCV captures more of the tail"
+          ]
+        },
+        {
+          "name": "PG18: EXPLAIN ANALYZE buffer statistics by default",
+          "depth": "applied",
+          "key_points": [
+            "Buffers: shared hit/read/dirtied/written, local hit/read/dirtied/written, temp read/written",
+            "Compare buffer counts across plan alternatives to validate planner I/O cost estimates",
+            "High shared reads relative to shared hits = cold cache scenario; repeated execution may yield different plans"
+          ]
+        }
+      ],
+      "sandbox_exercise": {
+        "title": "Fix Estimation Errors with Extended Statistics",
+        "steps": [
+          "Diagnose the correlated-column scenario: WHERE product.category_id = X AND product.price > Y (these columns are correlated — certain categories have characteristic price ranges)",
+          "Create extended statistics: CREATE STATISTICS prod_cat_price ON category_id, price FROM products; run ANALYZE",
+          "Compare EXPLAIN estimates before and after extended statistics creation",
+          "Repeat for a GROUP BY scenario: SELECT region, status, COUNT(*) FROM orders GROUP BY region, status. Check if ndistinct extended stats improve the GROUP BY cardinality estimate",
+          "Experiment: run ALTER TABLE orders ALTER COLUMN status SET STATISTICS 1000; ANALYZE; observe how MCV list coverage changes for the skewed status column"
+        ],
+        "deliverable": "Before/after EXPLAIN comparisons for 2 scenarios, with annotations explaining which extended statistics kind fixed which estimation error and why"
+      },
+      "phase1_synthesis": "Phase 1 complete. You can now: (a) read and interpret all pg_stats fields, (b) compute selectivity manually for any predicate type, (c) diagnose estimation discrepancy root causes using a systematic framework, and (d) apply extended statistics to fix correlated-column estimation failures. These are the foundations for Phase 2, where estimation understanding directly informs index column ordering decisions.",
+      "bridge_to_next": "Phase 1 complete. Phase 2 begins: multi-column index ordering. The selectivity knowledge you have built is directly applicable — column ordering decisions are fundamentally selectivity decisions mapped onto B-tree structure."
+    },
+    {
+      "session": 5,
+      "week": 3,
+      "phase": 2,
+      "title": "B-tree Index Internals & Column Order Fundamentals",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Explain how column ordering in a composite B-tree index determines the physical ordering of index entries",
+        "Trace index traversal for equality, range, and mixed predicates on multi-column indexes",
+        "Apply the leading-column rule and identify when it prevents index usage",
+        "Explain PG18 B-tree skip scan: how it bypasses the leading-column requirement and when it is chosen by the planner"
+      ],
+      "topics": [
+        {
+          "name": "B-tree composite index structure recap",
+          "depth": "working",
+          "key_points": [
+            "Index entries ordered lexicographically by (col1, col2, col3)",
+            "Equality on leading columns → index can be used for subsequent columns",
+            "Range on a column prevents use of subsequent columns for index-based filtering (pre-PG18, without skip scan)",
+            "Index tuple format: index key + TID pointer to heap"
+          ]
+        },
+        {
+          "name": "Column order and index access patterns",
+          "depth": "thorough",
+          "key_points": [
+            "WHERE a = 1 AND b = 2 AND c = 3 on index (a, b, c): perfect — all columns used",
+            "WHERE a = 1 AND c = 3 on index (a, b, c): a used for scan start, b skipped (filter applied after scan), c not used for index narrowing. Index Cond shows only (a = 1); Filter shows (c = 3)",
+            "WHERE a > 1 AND b = 2 on index (a, b): a used for scan start (range), b cannot narrow the scan beyond a's range. Index Cond: (a > 1); Filter: (b = 2). This is where selectivity-first column ordering often fails — putting the range column first may be better despite lower global selectivity",
+            "WHERE b = 2 on index (a, b): pre-PG18, index NOT usable. PG18: skip scan may apply if a has low cardinality"
+          ]
+        },
+        {
+          "name": "PG18 B-tree Skip Scan",
+          "depth": "thorough",
+          "key_points": [
+            "Allows multi-column index use WITHOUT condition on leading column(s)",
+            "Mechanism: identifies all distinct values of the missing leading column from the index itself, then performs one index search per distinct value",
+            "Prerequisite: leading column must have LOW cardinality (few distinct values). High cardinality → too many probes → planner falls back to Seq Scan",
+            "Also applies when leading column has a non-equality condition (e.g., a > 100) that is not restrictive enough",
+            "EXPLAIN output: shows 'Index Skip Scan' node; Index Searches metric reveals probe count",
+            "This fundamentally changes index design: an index on (low_card_col, high_card_col) can now serve queries on high_card_col alone, reducing the need for separate single-column indexes"
+          ]
+        }
+      ],
+      "misconception_intervention": "First explicit challenge to M1. Pose the question: 'Given index (status, created_at), does WHERE created_at BETWEEN '2025-06-01' AND '2025-06-30' use the index?' Pre-PG18 answer: NO (no leading column condition). PG18 answer: YES if status has few distinct values (skip scan). Discussion: does this mean column ordering doesn't matter? NO — it matters for scan EFFICIENCY (number of probes) and for ORDER BY alignment. This reframes the misconception from 'mechanical rule' to 'context-dependent optimization decision.'",
+      "sandbox_exercise": {
+        "title": "Index Traversal Tracing Lab",
+        "steps": [
+          "Create composite indexes on orders: (a) CREATE INDEX idx_status_date ON orders(status, created_at); (b) CREATE INDEX idx_date_status ON orders(created_at, status)",
+          "For each query below, run EXPLAIN (ANALYZE, BUFFERS) and trace which index columns are used in Index Cond vs Filter: Q1: WHERE status = 'pending' AND created_at > '2025-06-01'. Q2: WHERE created_at > '2025-06-01' (test skip scan on idx_status_date). Q3: WHERE status = 'cancelled' ORDER BY created_at. Q4: WHERE created_at > '2025-01-01' ORDER BY status",
+          "For Q2, compare idx_status_date (may use skip scan if status cardinality is low enough) vs idx_date_status (direct range scan on leading column). Which is faster and why?",
+          "Use the Index Searches metric to count skip-scan probes"
+        ],
+        "deliverable": "A matrix: query × index × (Index Cond, Filter, Index Searches, actual time). Annotated with explanations for which index wins each query and why."
+      },
+      "bridge_to_next": "You understand B-tree traversal and skip scan. Next session: the core misconception — when does selectivity-first column ordering fail, and what principles replace it?"
+    },
+    {
+      "session": 6,
+      "week": 3,
+      "phase": 2,
+      "title": "Column Ordering Principles — Confronting the Misconception",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Articulate at least three scenarios where the 'highest global selectivity column first' rule produces suboptimal (or non-functional) indexes",
+        "Apply the correct column-ordering principles: equality-before-range, ORDER BY alignment, and covering-column positioning",
+        "Design multi-column indexes for a given query that outperform the mechanical-selectivity ordering",
+        "Use EXPLAIN ANALYZE evidence to justify column ordering decisions"
+      ],
+      "topics": [
+        {
+          "name": "Why global selectivity is the wrong metric",
+          "depth": "thorough",
+          "key_points": [
+            "Global selectivity = 1 / n_distinct (fraction of table each distinct value represents on average). This is column-level, not query-level",
+            "Per-query selectivity depends on the specific constant in the WHERE clause. status = 'pending' (3% selectivity) vs status = 'completed' (95% selectivity) — same column, drastically different predicate selectivity",
+            "Even a 'high selectivity' column becomes non-selective with a range predicate: WHERE created_at > '2020-01-01' may match 95% of rows despite created_at having high global selectivity",
+            "The index design question is: which column ordering maximizes the number of index pages PRUNED (not scanned) for the target query?"
+          ]
+        },
+        {
+          "name": "Principle 1: Equality before range",
+          "depth": "thorough",
+          "key_points": [
+            "Equality on leading column narrows the scan to one contiguous range in the index. Range on leading column spreads the scan across multiple index leaf pages",
+            "Example: WHERE status = 'pending' AND created_at BETWEEN 'X' AND 'Y'. Index (status, created_at): scan narrows to 'pending' entries, then narrows further to the date range — efficient. Index (created_at, status): scan covers entire date range, status filtered per-row — less efficient, despite created_at having higher global selectivity",
+            "Counterpoint: if the equality column has extremely low selectivity (matches 50%+ of rows), range-first may be equal or better — context matters"
+          ]
+        },
+        {
+          "name": "Principle 2: ORDER BY / GROUP BY alignment",
+          "depth": "thorough",
+          "key_points": [
+            "An index ordered by (a, b, c) provides pre-sorted data on (a, a+b, a+b+c). It CANNOT satisfy ORDER BY b alone without a sort",
+            "If a query requires ORDER BY created_at, the index MUST have created_at as a prefix column — regardless of selectivity considerations",
+            "Example: WHERE status = 'completed' ORDER BY created_at DESC LIMIT 50. Index (status, created_at): scan 'completed' entries, data is already sorted by created_at — perfect. Index (created_at, status): would require sorting all 'completed' rows by created_at — defeats the purpose",
+            "GROUP BY similarly benefits from index ordering matching the GROUP BY column sequence"
+          ]
+        },
+        {
+          "name": "Principle 3: Covering indexes and column placement",
+          "depth": "working",
+          "key_points": [
+            "Columns in SELECT list that are not in WHERE can be placed at the end of the index to enable Index Only Scans",
+            "Visibility map must be up-to-date for IOS; VACUUM frequency matters",
+            "Tradeoff: wider indexes = more pages = higher maintenance cost. Only include covering columns when IOS benefit outweighs width cost"
+          ]
+        },
+        {
+          "name": "PG18 skip scan impact on column ordering",
+          "depth": "applied",
+          "key_points": [
+            "Skip scan reduces (but does not eliminate) the penalty of putting a rarely-queried column first",
+            "An index on (low_card_col, high_card_col) can serve both: (a) queries with conditions on both columns — efficient direct scan; (b) queries on high_card_col only — skip scan with one probe per distinct low_card_col value",
+            "This can reduce the total number of indexes needed on a table, but does not eliminate the need for careful column ordering for the primary query pattern"
+          ]
+        }
+      ],
+      "misconception_intervention": "Direct confrontation of M1. Three counter-examples presented as EXPLAIN comparisons, each demonstrating a scenario where selectivity-first ordering loses. Learner must articulate why for each one. Then: synthesis exercise — articulate a general decision framework that replaces the mechanical rule.",
+      "sandbox_exercise": {
+        "title": "Counter-Example Construction Lab",
+        "steps": [
+          "Counter-example A (equality-before-range): Write a query WHERE status = 'pending' AND created_at BETWEEN 'X' AND 'Y'. Create indexes idx_A1 (status, created_at) and idx_A2 (created_at, status). Run EXPLAIN ANALYZE for both. Which is faster? Is idx_A1's ordering 'selectivity-first' or 'equality-first'? Articulate why equality-before-range is the correct principle, not selectivity-first",
+          "Counter-example B (ORDER BY alignment): Write a query WHERE created_at > 'X' ORDER BY status LIMIT 100. Create idx_B1 (created_at, status) and idx_B2 (status, created_at). Run EXPLAIN ANALYZE. Observe: idx_B1 requires a Sort node; idx_B2 does not. Despite created_at having higher global selectivity, (status, created_at) wins because it avoids the sort. Articulate why ORDER BY drove the decision",
+          "Counter-example C (mixed workloads): Introduce a second query pattern on the same table: WHERE region = 'US' AND created_at BETWEEN 'X' AND 'Y'. The existing index is (status, created_at). Does this serve the new query efficiently? Design an index that serves both query patterns well, or justify two separate indexes. Use PG18 skip-scan awareness in your reasoning",
+          "Synthesis: Write a 3–5 sentence decision heuristic for multi-column index column ordering that replaces the mechanical selectivity-first rule"
+        ],
+        "deliverable": "EXPLAIN ANALYZE outputs for all counter-examples with annotated explanations, plus a written decision heuristic (3–5 sentences) that captures the principles learned"
+      },
+      "bridge_to_next": "You have internalized the principles. Next session: applying them to real-world scenarios with multiple competing query patterns and advanced PG18 features."
+    },
+    {
+      "session": 7,
+      "week": 4,
+      "phase": 2,
+      "title": "Advanced Multi-Column Index Design",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Design index strategies for tables serving multiple query patterns with competing column-ordering needs",
+        "Evaluate partial indexes as alternatives to multi-column indexes for skewed data distributions",
+        "Use the PG18 Index Searches metric to quantify skip-scan efficiency and inform index design",
+        "Synthesize estimation diagnosis (Phase 1) with index design (Phase 2) in end-to-end optimization scenarios"
+      ],
+      "topics": [
+        {
+          "name": "Multi-query-pattern tradeoff analysis",
+          "depth": "thorough",
+          "key_points": [
+            "List all query patterns hitting the table with their frequencies and latency requirements",
+            "For each pattern, determine optimal column ordering. Identify conflicts (pattern A wants (a,b); pattern B wants (b,a))",
+            "Resolution strategies: (a) prioritize by frequency × latency_sensitivity, (b) PG18 skip scan may allow one index to serve both if the conflicting column has low cardinality, (c) create separate indexes when conflict is irresolvable, (d) consider partial indexes for pattern-specific optimization",
+            "PG18's improved IN → = ANY transformation can make a single index serve more IN-list query shapes"
+          ]
+        },
+        {
+          "name": "Partial indexes as optimization tools",
+          "depth": "working",
+          "key_points": [
+            "CREATE INDEX ... WHERE clause limits index to a subset of rows",
+            "Ideal for queries that always filter on a specific constant: WHERE status = 'active' AND ... can use a partial index WHERE status = 'active'",
+            "Partial index is smaller → faster scans, less maintenance, better cache utilization",
+            "Must verify that the query's WHERE clause logically implies the partial index's WHERE clause (or the planner won't match them)"
+          ]
+        },
+        {
+          "name": "PG18: Index Searches metric deep dive",
+          "depth": "applied",
+          "key_points": [
+            "Shows how many internal index probes a skip scan performed",
+            "Comparing Index Searches across index design alternatives quantifies skip-scan efficiency",
+            "High Index Searches relative to rows returned → skip scan overhead may outweigh benefit → consider different index design",
+            "Use alongside buffer counts for holistic I/O cost analysis"
+          ]
+        },
+        {
+          "name": "Integration: estimation + index design",
+          "depth": "applied",
+          "key_points": [
+            "Accurate statistics → accurate selectivity estimates → correct plan choice between index alternatives",
+            "If statistics are wrong, the planner may choose a suboptimal index even if the 'right' index exists",
+            "End-to-end workflow: (1) diagnose estimation issues → (2) fix with ANALYZE/extended stats → (3) verify plans are now accurate → (4) design/compare indexes on a level playing field"
+          ]
+        }
+      ],
+      "sandbox_exercise": {
+        "title": "Real-World Multi-Query Index Design Challenge",
+        "steps": [
+          "Given the orders table with these query patterns:",
+          "  Q1 (60% of load, OLTP, latency-sensitive): SELECT * FROM orders WHERE customer_id = ? AND status = ? ORDER BY created_at DESC LIMIT 20",
+          "  Q2 (25% of load, reporting): SELECT customer_id, COUNT(*), SUM(total_amount) FROM orders WHERE created_at BETWEEN ? AND ? GROUP BY customer_id",
+          "  Q3 (15% of load, occasional): SELECT * FROM orders WHERE region = ? AND created_at > ? AND status = ?",
+          "Design 1–3 indexes. For each index, run EXPLAIN ANALYZE for each query and note: (a) whether the index is used, (b) whether a sort is needed (for Q1), (c) skip-scan applicability (PG18) for Q3, (d) buffer counts",
+          "Write a recommendation: which index(es) to create, with justification citing specific EXPLAIN evidence",
+          "Stretch: if Q1's status predicate is always 'active', design a partial index alternative and compare performance"
+        ],
+        "deliverable": "An index design recommendation document containing: query pattern analysis, candidate indexes, EXPLAIN ANALYZE comparison matrix, final recommendation with EXPLAIN evidence, and discussion of tradeoffs"
+      },
+      "bridge_to_next": "Final session: integration and migration acceptance. You will face 3 unseen queries and must diagnose, fix, and optimize — demonstrating mastery of both estimation and index design."
+    },
+    {
+      "session": 8,
+      "week": 4,
+      "phase": 2,
+      "title": "Integration, Synthesis & Migration Acceptance",
+      "duration_minutes": 90,
+      "learning_goals": [
+        "Apply the complete optimization workflow to unseen queries: estimate → diagnose → fix → index → verify",
+        "Demonstrate ability to articulate reasoning for each optimization decision using EXPLAIN evidence",
+        "Pass migration acceptance by correctly optimizing 3 unseen queries",
+        "Synthesize the 4-week learning journey into a personal decision framework"
+      ],
+      "topics": [
+        {
+          "name": "End-to-end optimization workflow review",
+          "depth": "synthesis",
+          "key_points": [
+            "1. Run EXPLAIN ANALYZE, read the plan, identify bottlenecks",
+            "2. Check estimates vs actuals at each node; diagnose discrepancies",
+            "3. Inspect pg_stats for relevant columns; check ANALYZE freshness",
+            "4. Fix estimation: ANALYZE, statistics_target, or CREATE STATISTICS",
+            "5. Verify plan accuracy after fix",
+            "6. Design/compare index alternatives using column-ordering principles",
+            "7. Validate final plan with EXPLAIN ANALYZE — does it match expectation?"
+          ]
+        },
+        {
+          "name": "Personal decision framework",
+          "depth": "synthesis",
+          "key_points": [
+            "The learner articulates their own decision heuristic for: (a) when to trust vs question EXPLAIN estimates, (b) how to choose index column ordering without mechanical rules, (c) when extended statistics are worth creating, (d) when PG18 features (skip scan, pg_restore_relation_stats, IN → = ANY) change the answer"
+          ]
+        }
+      ],
+      "migration_acceptance": {
+        "description": "Three unseen queries presented in the sandbox. The learner has 60 minutes to optimize them using the full workflow. Each query tests a distinct competency combination. Acceptance threshold: correct root-cause diagnosis AND a verifiably improved EXPLAIN ANALYZE for all 3 queries.",
+        "queries": [
+          {
+            "id": "ACCEPT-Q1",
+            "title": "Estimation Discrepancy Diagnosis",
+            "competency_tested": "Phase 1: statistics diagnosis and extended statistics",
+            "scenario": "A reporting query on the orders table filters on region and status, joining to order_items. The EXPLAIN estimate is 50 rows but EXPLAIN ANALYZE shows 8,000 actual rows — a 160× misestimation causing a Nested Loop plan where Hash Join would be superior.",
+            "query": "SELECT o.region, o.status, SUM(oi.quantity * oi.unit_price) AS revenue FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.region = 'US' AND o.status IN ('completed', 'pending') GROUP BY o.region, o.status",
+            "hidden_cause": "region and status are correlated (certain regions have different status distributions), and the IN-list selectivity multiplication under independence assumption compounds the error. The solution requires: (a) identifying the correlation via pg_stats comparison, (b) CREATE STATISTICS on (region, status) with dependencies and mcv kinds, and (c) re-running ANALYZE.",
+            "success_criteria": "Post-fix EXPLAIN shows estimated rows within 2× of actual; Hash Join replaces Nested Loop; learner can articulate why extended statistics fixed the problem.",
+            "pg18_relevance": "IN → = ANY transformation affects how the IN-list selectivity is computed; learner should note this in diagnosis."
+          },
+          {
+            "id": "ACCEPT-Q2",
+            "title": "Multi-Column Index Ordering — Non-Mechanical Reasoning",
+            "competency_tested": "Phase 2: column ordering principles, misconception resolution",
+            "scenario": "A latency-sensitive OLTP query needs optimization. The learner is given a table and asked to design the best index. A 'selectivity-first' index already exists and performs poorly. The learner must explain why and propose a superior alternative.",
+            "query": "SELECT order_id, customer_id, total_amount FROM orders WHERE customer_id = 12345 AND created_at BETWEEN '2025-12-01' AND '2025-12-31' ORDER BY created_at DESC LIMIT 50",
+            "existing_index": "idx_created_cust ON orders(created_at, customer_id) — selectivity-first ordering (created_at has higher global selectivity)",
+            "hidden_issue": "The existing index puts the range column first, so the equality condition on customer_id cannot narrow the scan beyond the date range. The index also does not align with ORDER BY created_at DESC (the scan reads all customer_ids within the date range, then sorts).",
+            "solution": "Index on (customer_id, created_at): equality-first narrows scan to one customer's entries, date range further narrows within that customer, and data is already sorted by created_at — no Sort node needed.",
+            "success_criteria": "New index produces an Index Scan (not Index Scan + Sort); execution time improved ≥3×; learner articulates why equality-before-range and ORDER BY alignment drive the decision, not global selectivity.",
+            "pg18_relevance": "Learner should note that skip scan does NOT help here (customer_id has 50K distinct values — too many probes) and that this reinforces the importance of correct column ordering for the primary query pattern."
+          },
+          {
+            "id": "ACCEPT-Q3",
+            "title": "Combined Estimation + Index Design with PG18 Features",
+            "competency_tested": "Integrated Phase 1 + Phase 2 with PG18 feature awareness",
+            "scenario": "A complex query on multiple tables has both estimation errors and missing indexes. The learner must first stabilize estimates, then design indexes considering PG18 skip-scan capabilities.",
+            "query": "SELECT c.tier, p.category_id, COUNT(DISTINCT o.order_id), SUM(oi.quantity) FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE c.country = 'DE' AND o.status = 'completed' AND p.discontinued = false GROUP BY c.tier, p.category_id ORDER BY c.tier, p.category_id",
+            "hidden_issues": [
+              "Estimation: c.tier and c.country are correlated (DE customers skew toward certain tiers) — independence assumption causes GROUP BY cardinality underestimation",
+              "Estimation: p.category_id and p.discontinued are correlated (discontinued products cluster in certain categories)",
+              "Index design: orders needs an index supporting customer_id + status + order_id; customers needs country + tier; products needs category_id + discontinued",
+              "PG18 skip-scan opportunity: an index on (country, tier, customer_id) could serve both WHERE country = 'DE' AND tier lookups via skip-scan if needed elsewhere"
+            ],
+            "solution": "Phase 1: CREATE STATISTICS on (country, tier) for customers and (category_id, discontinued) for products. ANALYZE. Phase 2: CREATE INDEX idx_orders_cust_status ON orders(customer_id, status, order_id) — equality on first two columns, covering order_id for the join. CREATE INDEX idx_customers_country_tier ON customers(country, tier, customer_id) — equality on country, covers tier for GROUP BY and customer_id for join. Verify plan improvements with EXPLAIN ANALYZE.",
+            "success_criteria": "Post-optimization EXPLAIN shows: (a) estimates within 3× of actuals at all join nodes, (b) Index Scan or Index Only Scan on orders and customers (no Seq Scan on large tables), (c) execution time improved ≥5× from baseline, (d) learner can explain how each CREATE STATISTICS and each CREATE INDEX contributes to the improvement.",
+            "pg18_relevance": "Learner should note that Self-Join Elimination awareness is relevant if the query were ORM-generated; Buffer statistics in EXPLAIN ANALYZE used to verify I/O reduction."
+          }
+        ],
+        "scoring": {
+          "pass_threshold": "All 3 queries must show verifiable improvement (EXPLAIN ANALYZE evidence) with correct root-cause articulation",
+          "Q1_weight": "30% — estimation diagnosis and extended statistics",
+          "Q2_weight": "35% — index ordering principles and misconception resolution",
+          "Q3_weight": "35% — integrated optimization with PG18 feature awareness",
+          "minimum_per_query": "Each query must score ≥60%"
+        }
+      },
+      "session_closure": {
+        "reflection_prompt": "The learner writes a 1-paragraph personal decision framework: 'When I encounter a slow PostgreSQL query, I will...' This is not graded but serves as a learning artifact for future reference.",
+        "next_steps": "Based on acceptance results, possible paths include: (a) pass → advance to join optimization and parallel query; (b) partial pass → targeted remediation session on weak areas; (c) fail → revisit Phase 1 or Phase 2 with additional practice queries."
+      }
+    }
+  ],
+  "progress_milestones": [
+    {
+      "milestone": "M-PHASE1",
+      "after_session": 4,
+      "description": "Phase 1 complete: estimation diagnosis capability established",
+      "verification": "Learner correctly diagnoses 2/2 estimation failure scenarios in Session 4 exercise, including at least one requiring extended statistics"
+    },
+    {
+      "milestone": "M-MISCONCEPTION",
+      "after_session": 6,
+      "description": "Misconception M1 resolved: learner articulates at least 2 scenarios where selectivity-first ordering fails",
+      "verification": "Session 6 counter-example exercise demonstrates correct reasoning for all 3 counter-examples; written decision heuristic does not contain 'always put highest selectivity column first' or equivalent mechanical language"
+    },
+    {
+      "milestone": "M-ACCEPTANCE",
+      "after_session": 8,
+      "description": "Migration acceptance: 3 unseen queries optimized with EXPLAIN evidence",
+      "verification": "All 3 ACCEPT queries meet success criteria; learner articulates root cause and fix reasoning for each"
+    }
+  ],
+  "misconception_tracking": {
+    "id": "M1",
+    "statement": "Global selectivity highest column first as mechanical rule",
+    "checkpoints": [
+      {
+        "session": 5,
+        "prompt": "After learning skip scan, does column ordering still matter? Why?",
+        "expected_shift": "Yes — ordering determines scan efficiency (pruned pages) and ORDER BY alignment, not just whether the index can be used at all"
+      },
+      {
+        "session": 6,
+        "prompt": "For WHERE status = 'pending' AND created_at > 'X' ORDER BY created_at, which index ordering is correct and why?",
+        "expected_shift": "Equality-first with ORDER BY alignment: (status, created_at) — not selectivity (created_at would be wrong)"
+      },
+      {
+        "session": 7,
+        "prompt": "When designing for multiple query patterns, what replaces the selectivity-first rule?",
+        "expected_shift": "Frequency × latency sensitivity prioritization, skip-scan awareness, and index consolidation analysis"
+      },
+      {
+        "session": 8,
+        "acceptance_evidence": "ACCEPT-Q2 explicitly tests whether the learner reverts to selectivity-first under pressure"
+      }
+    ]
+  },
+  "pg18_feature_integration_map": {
+    "features": [
+      {
+        "feature": "pg_restore_relation_stats()",
+        "sessions_used": [
+          1,
+          2,
+          3,
+          4,
+          8
+        ],
+        "role_in_learning": "Enables realistic statistics in sandbox without production data; used to create scenarios where estimation diagnosis is meaningful"
+      },
+      {
+        "feature": "B-tree Skip Scan",
+        "sessions_used": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "role_in_learning": "Transforms index design discussion from 'can the index be used?' to 'how efficiently is the index used?'; challenges mechanical ordering rules; reduces pressure for single-column indexes"
+      },
+      {
+        "feature": "EXPLAIN ANALYZE buffer statistics (default)",
+        "sessions_used": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "role_in_learning": "Provides I/O cost evidence for comparing plan alternatives; validates whether index design actually reduces disk reads"
+      },
+      {
+        "feature": "Index Searches metric",
+        "sessions_used": [
+          5,
+          6,
+          7
+        ],
+        "role_in_learning": "Quantifies skip-scan probe overhead; enables data-driven decisions about when skip scan is efficient vs when a different index design is needed"
+      },
+      {
+        "feature": "IN (VALUES) → = ANY transformation",
+        "sessions_used": [
+          3,
+          7
+        ],
+        "role_in_learning": "Changes how IN-list selectivity is estimated; enables skip scan on IN-list columns"
+      },
+      {
+        "feature": "Self-Join Elimination",
+        "sessions_used": [
+          7,
+          8
+        ],
+        "role_in_learning": "Awareness for ORM-generated queries; relevant to multi-query-pattern index design when self-joins are present"
+      }
+    ]
+  },
+  "environment_requirements": {
+    "sandbox_setup": {
+      "postgresql_version": "18",
+      "dataset": "4-table e-commerce schema (orders ~1M, order_items ~2M, customers ~50K, products ~10K) with correlated columns and skewed distributions",
+      "pre_configured": [
+        "pg_restore_relation_stats() dump file for realistic statistics injection",
+        "Pre-existing indexes: primary keys, foreign keys, and 2–3 'bad' indexes (e.g., single-column indexes on low-selectivity columns, selectivity-first composite indexes on wrong ordering) for comparison exercises",
+        "Pre-existing extended statistics: none (learner creates them)"
+      ],
+      "tools": "psql or any PostgreSQL client with EXPLAIN ANALYZE output readability",
+      "reset_capability": "Sandbox must be resettable to baseline state between sessions"
+    }
+  },
+  "handoff_checklist": [
+    {
+      "item": "Preconditions verified: upstream artifacts passed, learner preference confirmed, first session contract accepted",
+      "status": "complete"
+    },
+    {
+      "item": "Learning frontier mapped: F1 (estimation discrepancy), F2 (predicate selectivity), F3 (multi-column index ordering)",
+      "status": "complete"
+    },
+    {
+      "item": "Misconception M1 documented with remediation strategy and 4 checkpoints across sessions 5–8",
+      "status": "complete"
+    },
+    {
+      "item": "8-session plan with learning goals, topics, sandbox exercises, and deliverables defined",
+      "status": "complete"
+    },
+    {
+      "item": "Phase 1 (estimation & statistics, sessions 1–4) sequenced before Phase 2 (index ordering, sessions 5–8) per learner preference",
+      "status": "complete"
+    },
+    {
+      "item": "PG18-specific features integrated: skip scan, pg_restore_relation_stats(), EXPLAIN buffer stats, Index Searches metric, IN → = ANY, Self-Join Elimination awareness",
+      "status": "complete"
+    },
+    {
+      "item": "Migration acceptance designed: 3 unseen queries (ACCEPT-Q1: estimation, ACCEPT-Q2: index ordering, ACCEPT-Q3: combined + PG18) with explicit success criteria and scoring weights",
+      "status": "complete"
+    },
+    {
+      "item": "Progress milestones defined: M-PHASE1 (session 4), M-MISCONCEPTION (session 6), M-ACCEPTANCE (session 8)",
+      "status": "complete"
+    },
+    {
+      "item": "Sandbox environment specification complete: PG18, 4-table e-commerce dataset, resettable, preloaded bad indexes for comparison",
+      "status": "complete"
+    },
+    {
+      "item": "Handoff artifact is self-contained: a tutor or automated system can execute all 8 sessions from this JSON alone",
+      "status": "complete"
+    }
+  ],
+  "meta": {
+    "pedagogical_approach": "Diagnosis-before-prescription. The learner first builds estimation diagnostic capability (Phase 1) before designing indexes (Phase 2). This mirrors real-world DBA workflow and prevents cargo-cult index design. Each session follows: concept explanation → sandbox exploration → evidence-based conclusion. The misconception is not simply corrected but confronted with counter-examples the learner must explain in their own words — productive failure before resolution.",
+    "risk_notes": [
+      "If the learner struggles with manual selectivity computation in Sessions 2–3, consider adding an extra practice session before Session 4 and compressing Phase 2 PG18 feature coverage",
+      "If the learner has not used PostgreSQL 18 before, allocate first 15 minutes of Session 1 to verifying the sandbox environment and basic psql navigation",
+      "The 3-query acceptance in Session 8 is time-boxed to 60 minutes. If the learner fails ACCEPT-Q3 (the hardest), consider whether a 30-minute remediation session focused on the specific gap is more appropriate than full repetition"
+    ]
+  }
+}

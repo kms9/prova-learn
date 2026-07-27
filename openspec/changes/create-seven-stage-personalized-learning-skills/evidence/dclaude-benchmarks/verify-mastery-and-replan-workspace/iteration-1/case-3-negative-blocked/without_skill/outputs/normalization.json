@@ -1,0 +1,9 @@
+{
+  "source_file": "response.txt",
+  "original_valid_json": true,
+  "extraction_start": 0,
+  "extraction_end": 2708,
+  "leading_chars_removed": 0,
+  "trailing_chars_removed": 0,
+  "normalized_type": "dict"
+}

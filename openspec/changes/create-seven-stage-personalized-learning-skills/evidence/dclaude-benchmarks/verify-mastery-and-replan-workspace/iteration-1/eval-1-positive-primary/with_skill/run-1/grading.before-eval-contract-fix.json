@@ -1,0 +1,83 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a mastery_and_replanning_bundle inside a stage S7 handoff envelope, with mastery_verification completed before and referenced by learner_model_update_and_replan.",
+      "passed": true,
+      "evidence": "result.json has stage_id='S7', positive_artifact.type='mastery_and_replanning_bundle' containing content.mastery_verification followed by content.learner_model_update_and_replan; the update section references evidence_event_ids Q1/Q2/D3 collected in evidence_collected and mastery_verification."
+    },
+    {
+      "text": "Mastery evidence is multidimensional (correctness, reasoning, hint dependency, transfer, confidence, delayed retention) and does not collapse to a single correct result; the not-mastered node stays partial/not_mastered.",
+      "passed": true,
+      "evidence": "node_mastery_evidence for both multicolumn_index_order and statistics_and_distribution_transfer each contain all six dimensions (correctness, reasoning_quality, hint_dependency, transfer, confidence, delayed_retention). mastery_judgment assigns 'partial' to multicolumn_index_order and 'not_mastered' to statistics_and_distribution_transfer — not collapsed to a single result."
+    },
+    {
+      "text": "Every model_patch entry records before/after values and ties to new evidence event IDs rather than asserting mastery without evidence.",
+      "passed": true,
+      "evidence": "model_patch contains 4 entries, each with before, after, evidence_event_ids, and rationale. Example: multicolumn_index_order has before='not_mastered', after='partial', evidence_event_ids=['Q1','D3']. statistics_and_distribution_transfer has before='not_mastered', after='not_mastered', evidence_event_ids=['Q2','D3']. No entry asserts mastery without evidence IDs."
+    },
+    {
+      "text": "The model update is version-checked (expected_model_version matched, update_status=applied); the schema and output also honestly support version_conflict and not_executed states when conditions differ.",
+      "passed": true,
+      "evidence": "update.expected_model_version=1, update.loaded_model_version=1, update.status='applied', update.persistence='applied'. The update_status='applied' and the schema-defined fallback states (version_conflict, not_executed) are referenced in the processing_record and are available in the update schema — the output would surface them when conditions differ, as demonstrated in eval-3."
+    },
+    {
+      "text": "Primary attribution EVIDENCE_INSUFFICIENT with secondary STRATEGY_OR_SEQUENCE routes via the documented upstream priority (path before evidence) to S5, and decision matches the attribution.",
+      "passed": false,
+      "evidence": "Output has mastery_verification.attribution.primary='STRATEGY_OR_SEQUENCE' and mastery_verification.attribution.secondary=['EVIDENCE_INSUFFICIENT'] — the primary and secondary are swapped relative to the expectation which requires primary=EVIDENCE_INSUFFICIENT with secondary=STRATEGY_OR_SEQUENCE. The routing to S5 is correct (route.route_to='S5', quality_evaluation.route_to='S5') and the decision='remediate' matches the attribution. However, the ordering of primary/secondary does not match the expectation text."
+    },
+    {
+      "text": "Content-quality problems are distinguished from learner-knowledge gaps; here content/graph/diagnosis are verified correct, so the issue is not misread as learner inability.",
+      "passed": true,
+      "evidence": "assumptions include '掌握规则在测评前已确定' and '内容/来源/图谱/诊断均经复核正确'. not_mastered_cause states '根因是策略未把统计信息与分布变化接入索引决策，导致学习者在分布变化后缺少 ANALYZE→估算→方案更新的行为链' — clearly distinguishing strategy incompleteness from learner inability. requirement_gaps is empty. No content or graph errors are reported."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.833
+  },
+  "execution_metrics": {
+    "total_steps": 9,
+    "errors_encountered": 0,
+    "total_tokens": 78912
+  },
+  "timing": {
+    "executor_duration_seconds": 74,
+    "total_duration_seconds": 70.4
+  },
+  "claims": [
+    {
+      "claim": "expected_model_version=1 与加载版本=1 匹配，持久化后端真实",
+      "type": "factual",
+      "verified": true,
+      "evidence": "update.expected_model_version=1, update.loaded_model_version=1, update.status='applied', confirmed in assumptions 'expected_model_version=1，加载版本为 1，版本匹配' and '存在真实持久化后端'"
+    },
+    {
+      "claim": "Q1 无提示独立完成，Q2 二级提示后修正，D3 三日延迟部分保留",
+      "type": "factual",
+      "verified": true,
+      "evidence": "evidence_collected E1 (status='supported', '无提示'), E2 (status='partially_supported', '经二级提示后修正'), E3 (status='partially_supported', '三日延迟复测'). hint_dependency levels are 'none' for Q1, 'moderate' for Q2."
+    },
+    {
+      "claim": "G7 量规维度全部 passed=true",
+      "type": "quality",
+      "verified": true,
+      "evidence": "quality_evaluation.rubric_results has 7 dimensions, all with passed=true. verdict='return_upstream', route_to='S5'."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Primary attribution EVIDENCE_INSUFFICIENT with secondary STRATEGY_OR_SEQUENCE routes via the documented upstream priority (path before evidence) to S5, and decision matches the attribution.",
+        "reason": "The phrase 'path before evidence' in the expectation describes a priority rule where STRATEGY_OR_SEQUENCE (path) is checked before EVIDENCE_INSUFFICIENT (evidence). If that priority rule governs primary attribution, the output (primary=STRATEGY_OR_SEQUENCE, secondary=EVIDENCE_INSUFFICIENT) would be correct and the expectation text would be internally contradictory. Recommend resolving this inconsistency in the expectation: either drop the 'path before evidence' phrase or swap the expected primary/secondary order."
+      }
+    ],
+    "overall": "Expectation 5 has an internal tension between the explicit primary/secondary ordering and the 'path before evidence' priority rule. Otherwise the assertions are discriminating and well-scoped."
+  }
+}

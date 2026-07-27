@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S4",
+  "run_id": "s4-dlf-eval2-run1-rerun-20260727",
+  "learner_id": "learner-g6-frac-001",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "goal_success_contract:grade6-fractions",
+      "capability_concept_graph:grade6-fractions"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "capability_concept_graph": "1.0.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G1 六年级分数目标契约与 G3 能力图已通过，节点与先修边有效。",
+    "诊断题已对齐目标与先修链，覆盖解释、比较、迁移与置信度任务类型。",
+    "既有学习者记录身份一致、证据在有效期内。",
+    "本例未提供自评与耗时数据；置信度校准记为 unknown，不据此判定掌握。"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "RG-001",
+      "description": "诊断未采集各题耗时数据，无法用于流畅度/自动化校准。",
+      "criticality": "low",
+      "gate_effect": "lower_confidence"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "展示初步节点状态、误概念与最近学习前沿；本例为正向诊断，无学习者异议、无高风险分班/跳级、无自述与行为冲突，故按告知级确认继续。",
+    "questions": [
+      "确认诊断范围覆盖等值分数表示/解释、比较、按比例放大与迁移，并接受有效期？",
+      "学习者对节点状态或最近学习前沿是否有异议，是否需要对争议节点追加测试？"
+    ],
+    "response": "学习者确认诊断范围与有效期，对节点状态与前沿无异议，未要求追加测试。",
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T09:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "EV-001",
+      "provenance": "learner_behavior",
+      "source_ref": "诊断题：在数轴上定位 2/3 与 4/6 并说明二者关系",
+      "summary": "在数轴上正确定位 2/3 与 4/6，并口头说明二者相等；全程无提示。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EV-002",
+      "provenance": "learner_behavior",
+      "source_ref": "诊断题：比较 3/5 与 4/7",
+      "summary": "比较 3/5 与 4/7 时仅机械交叉相乘得到正确结论，但无法解释为何更大或更小。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EV-003",
+      "provenance": "learner_behavior",
+      "source_ref": "诊断题：判断 2/3 与 4/6 是否相等并解释理由",
+      "summary": "提供图示后能说明 2/3 与 4/6 相等；未见/未用图示前未独立给出概念性解释。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EV-004",
+      "provenance": "learner_behavior",
+      "source_ref": "诊断题：将配方从 4 人改为 6 人",
+      "summary": "配方由 4 人改为 6 人时第一次独立作答错误；经图示提示后答对。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EV-005",
+      "provenance": "learner_behavior",
+      "source_ref": "迁移题1：未见情境（变式）",
+      "summary": "未见情境迁移题1独立作答错误，未能迁移等值/比例关系。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EV-006",
+      "provenance": "learner_behavior",
+      "source_ref": "迁移题2：未见情境（变式）",
+      "summary": "未见情境迁移题2独立作答错误，未能迁移等值/比例关系。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "声明推断规则：对每个节点预先定义什么观察算掌握/未掌握/证据不足，避免事后调分。",
+    "沿目标与先修链组合解释、比较、迁移与置信度任务；题集含无错（数轴定位）、隐蔽错（机械比较）、需升级题（配方缩放、未见情境迁移）。",
+    "收集真实行为观察，逐条记录正确性、推理过程、提示层级与错误类型。",
+    "执行三项区分：答对（表示题独立答对）、独立会做（仅表示题）、迁移（两道未见情境题均失败）。",
+    "执行提示—掌握不变量：tested_mastered 仅授予 hint_dependency.level=none 的等值分数表示节点；需图示支架的解释/比例放大节点保持 tested_not_mastered。",
+    "递归定位最近学习前沿 frac_equiv_explanation（表示已掌握、解释可学但依赖支架、并支撑比较/放大/迁移缺口）。",
+    "生成版本化 learner_snapshot，再按 G4 七维度逐项评价。"
+  ],
+  "positive_artifact": {
+    "type": "learner_snapshot",
+    "schema_version": "1.0.0",
+    "artifact_id": "learner_snapshot:learner-g6-frac-001:v1",
+    "content": {
+      "learner_id": "learner-g6-frac-001",
+      "model_version": 1,
+      "as_of": "2026-07-27T09:00:00Z",
+      "node_states": [
+        {
+          "node_id": "frac_equiv_representation",
+          "status": "tested_mastered",
+          "evidence_refs": ["EV-001"],
+          "error_type": "none",
+          "hint_dependency": {"level": "none", "evidence_refs": ["EV-001"]},
+          "confidence_calibration": {"self_confidence": null, "observed_alignment": "unknown"}
+        },
+        {
+          "node_id": "frac_equiv_explanation",
+          "status": "tested_not_mastered",
+          "evidence_refs": ["EV-003"],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {"level": "low", "evidence_refs": ["EV-003"]},
+          "confidence_calibration": {"self_confidence": null, "observed_alignment": "unknown"}
+        },
+        {
+          "node_id": "frac_comparison",
+          "status": "tested_not_mastered",
+          "evidence_refs": ["EV-002"],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {"level": "none", "evidence_refs": ["EV-002"]},
+          "confidence_calibration": {"self_confidence": null, "observed_alignment": "unknown"}
+        },
+        {
+          "node_id": "frac_proportional_scaling",
+          "status": "tested_not_mastered",
+          "evidence_refs": ["EV-004"],
+          "error_type": "procedural_error",
+          "hint_dependency": {"level": "medium", "evidence_refs": ["EV-004"]},
+          "confidence_calibration": {"self_confidence": null, "observed_alignment": "unknown"}
+        },
+        {
+          "node_id": "frac_transfer_novel",
+          "status": "tested_not_mastered",
+          "evidence_refs": ["EV-005", "EV-006"],
+          "error_type": "transfer_failure",
+          "hint_dependency": {"level": "none", "evidence_refs": ["EV-005", "EV-006"]},
+          "confidence_calibration": {"self_confidence": null, "observed_alignment": "unknown"}
+        }
+      ],
+      "learning_frontier": {
+        "nearest_learnable_node_id": "frac_equiv_explanation",
+        "evidence_refs": ["EV-001", "EV-003"],
+        "rationale": "学习者已独立掌握等值分数的表示（EV-001），且在图示支架下能给出等值解释（EV-003），故等值分数的概念解释是最近一个可学但尚未独立掌握的节点；该节点是机械比较（EV-002）、按比例放大（EV-004）与迁移缺口（EV-005/EV-006）的共同先修，优先在此建网最有效，而非宽泛地学习分数。",
+        "alternative_candidate_node_ids": ["frac_comparison", "frac_proportional_scaling"]
+      },
+      "misconceptions": [
+        {
+          "code": "MECH-PROC-OVER-CONCEPT",
+          "description": "倾向于以机械程序（如交叉相乘、直接套算）替代概念与比例推理：在比较（EV-002）与配方缩放（EV-004）中均表现为得到或寻求一个数值答案却无法解释或一次性正确迁移。",
+          "evidence_refs": ["EV-002", "EV-004"],
+          "related_node_ids": ["frac_comparison", "frac_proportional_scaling"]
+        }
+      ],
+      "capability_gaps": [
+        {"node_id": "frac_equiv_explanation", "description": "等值分数的概念解释未独立建立，依赖图示支架。", "evidence_refs": ["EV-003"]},
+        {"node_id": "frac_comparison", "description": "分数比较缺乏概念理解，仅机械交叉相乘。", "evidence_refs": ["EV-002"]},
+        {"node_id": "frac_proportional_scaling", "description": "按比例放大首次独立作答错误，需支架支持。", "evidence_refs": ["EV-004"]},
+        {"node_id": "frac_transfer_novel", "description": "对未见情境未能迁移等值/比例关系。", "evidence_refs": ["EV-005", "EV-006"]}
+      ],
+      "transfer_performance": {
+        "status": "not_demonstrated",
+        "evidence_refs": ["EV-005", "EV-006"],
+        "summary": "两道未见情境迁移题均独立作答失败，迁移能力尚未建立。"
+      },
+      "diagnosis_evidence_mapping": [
+        {"conclusion": "学习者已独立掌握等值分数的表示（数轴定位与口头说明相等）。", "evidence_refs": ["EV-001"]},
+        {"conclusion": "等值分数的概念解释依赖图示支架，未独立建立。", "evidence_refs": ["EV-003"]},
+        {"conclusion": "分数比较仅停留在机械交叉相乘，缺乏概念理解。", "evidence_refs": ["EV-002"]},
+        {"conclusion": "按比例放大（配方缩放）首次独立失败，需支架支持。", "evidence_refs": ["EV-004"]},
+        {"conclusion": "对未见情境未能迁移。", "evidence_refs": ["EV-005", "EV-006"]},
+        {"conclusion": "存在以机械程序替代概念/比例推理的误概念。", "evidence_refs": ["EV-002", "EV-004"]}
+      ],
+      "items_needing_retest_or_human_confirmation": [
+        {"node_id": "frac_equiv_explanation", "kind": "retest", "reason": "需在撤除图示支架后复测是否独立解释等值分数。"},
+        {"node_id": "frac_proportional_scaling", "kind": "retest", "reason": "需在无提示下复测按比例放大以确认独立掌握。"}
+      ],
+      "evidence_validity": {
+        "valid_until": "2026-10-25T23:59:59Z",
+        "stale_evidence_refs": [],
+        "policy": "行为证据有效期为 90 天；过期证据只作线索，关键结论需复测后再生效。"
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "测量与目标对齐度",
+        "evidence": ["关键节点（等值分数表示/解释、比较、按比例放大、迁移）均具有对齐目标与先修链的诊断项。", "node_states 与 goal_success_contract 对齐。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据充分性",
+        "evidence": ["关键结论由≥2 对齐观察或显式不足支撑；误概念 MECH-PROC-OVER-CONCEPT 由 EV-002 与 EV-004 两条对齐观察支持。", "迁移结论由 EV-005、EV-006 两题支持。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "猜对识别",
+        "evidence": ["区分答对/独立/迁移：表示题独立答对记 tested_mastered；比较题机械答对但无解释记 tested_not_mastered；迁移题失败记 transfer_failure。", "transfer_performance.status=not_demonstrated。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "提示依赖记录",
+        "evidence": ["每节点 hint_dependency 已记录：表示 none、解释 low、比较 none（概念缺口非提示）、比例放大 medium、迁移 none。", "tested_mastered 仅出现在 hint_dependency.level=none 的节点。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "错误分类一致性",
+        "evidence": ["error_type 与证据一致：表示 none、解释与比较 partial_reasoning、比例放大 procedural_error、迁移 transfer_failure。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "偏差控制",
+        "evidence": ["本例无自评输入，结论完全基于行为证据；年限/偏好问卷未参与掌握判定。", "置信度校准记为 unknown 而非据缺失自评推断。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "结论可解释性",
+        "evidence": ["diagnosis_evidence_mapping 中每条结论均可追溯到证据。", "learning_frontier.evidence_refs=[EV-001,EV-003] 可追溯。"],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "EV-001", "EV-002", "EV-003", "EV-004", "EV-005", "EV-006",
+      "全维度 passed=true，学习前沿有多项有效期内的行为证据。"
+    ],
+    "verdict": "pass",
+    "route_to": "S5"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "goal_success_contract:grade6-fractions",
+      "capability_concept_graph:grade6-fractions"
+    ],
+    "source_evidence_ids": ["EV-001", "EV-002", "EV-003", "EV-004", "EV-005", "EV-006"],
+    "source_sections": ["docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S4 正向例子2"],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T09:00:00Z"
+}

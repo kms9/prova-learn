@@ -1,0 +1,4 @@
+interface:
+  display_name: "教学交互质量检查（S6/G6）"
+  short_description: "独立复核 S6 的 session_package_and_trace 是否达到门 G6（工件质量，非学习效果），给出可追溯的放行/返工裁决"
+  default_prompt: "使用 $check-instructional-interaction 独立复核这个 S6 移交信封的教学工件是否达到 G6，并输出 quality_check_result。"

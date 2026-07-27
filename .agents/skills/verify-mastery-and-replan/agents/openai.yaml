@@ -1,0 +1,4 @@
+interface:
+  display_name: "掌握验证与重规划"
+  short_description: "用多维证据验证节点掌握，以版本检查原子更新学习者模型并选择补救或下一路径"
+  default_prompt: "使用 $verify-mastery-and-replan 验证当前节点的掌握情况、版本化更新学习者模型并决定下一路由。"

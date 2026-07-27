@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "canonical_skill_names": [
+    "create-goal-success-contract",
+    "create-domain-evidence-landscape",
+    "build-capability-concept-graph",
+    "diagnose-learner-frontier",
+    "plan-learning-sessions",
+    "run-instructional-interaction",
+    "verify-mastery-and-replan"
+  ],
+  "canonical_workspace_template": "<skill-name>-workspace/iteration-1",
+  "canonical_run_template": "eval-*/<configuration>/run-1",
+  "canonical_grading_template": "eval-*/<configuration>/run-1/grading.json",
+  "canonical_count": {
+    "skills": 7,
+    "evals": 21,
+    "runs": 42,
+    "grading_files": 42,
+    "benchmarks": 7,
+    "viewers": 7,
+    "grader_route_records": 7
+  },
+  "canonical_output_rule": "For each benchmark run, benchmark.json.runs[].canonical_output names the only output artifact graded for the current result.",
+  "historical_noncanonical": [
+    {
+      "path_template": "<skill-name>-workspace/iteration-1/case-*/<configuration>",
+      "reason": "Pre-adapter execution and grading evidence retained for audit history. It may contain pre-fix expectations or outputs and must not be aggregated after the canonical eval-* layer is materialized."
+    },
+    {
+      "path": "legacy-create-goal-success-contract-workspace",
+      "reason": "Historical metadata-only layout with canonical=false marker; excluded from the seven canonical workspaces."
+    },
+    {
+      "path_template": "<skill-name>-workspace/iteration-1/historical-aggregate-grading.json",
+      "reason": "Noncanonical early aggregate retained after removing the misleading root grading.json name."
+    },
+    {
+      "path_template": "<skill-name>-workspace/iteration-1/grader_run_status.json",
+      "reason": "Original grader attempt status retained even when a later clean grader-route.json supersedes it for canonical grading."
+    }
+  ],
+  "repair_adjudications": [
+    {
+      "skill": "create-domain-evidence-landscape",
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "canonical_output": "outputs/result.json",
+      "reason": "Two descriptive string thresholds were normalized to boolean true so the already-boolean rubric decisions conform to the shared handoff contract; the evidence text retains the quantitative counts."
+    },
+    {
+      "skill": "create-domain-evidence-landscape",
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "canonical_output": "outputs/result.handoff-normalized.json",
+      "reason": "The original extractor selected only the nested positive_artifact. The canonical file losslessly extracts the complete envelope from response.txt, fixes two unescaped Chinese quotation pairs, and preserves a deep-equal positive_artifact."
+    },
+    {
+      "skill": "build-capability-concept-graph",
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "canonical_output": "outputs/result.json",
+      "reason": "One descriptive string threshold was normalized to boolean true so the already-boolean coverage decision conforms to the shared handoff contract; the evidence text retains the per-capability count."
+    },
+    {
+      "skill": "diagnose-learner-frontier",
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "canonical_output": "outputs/result.gclaude-rerun.json",
+      "reason": "Current expectation removes unsupported whole-number-bias wording and the repaired artifact enforces the hint/mastery invariant."
+    },
+    {
+      "skill": "diagnose-learner-frontier",
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "canonical_output": "outputs/result.gclaude-rerun.json",
+      "reason": "The repaired negative artifact fails closed at S4 with positive_artifact null rather than using the pre-fix S1 route."
+    },
+    {
+      "skill": "verify-mastery-and-replan",
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "canonical_output": "outputs/result.json",
+      "reason": "The current expectation matches the stage-contract upstream priority: STRATEGY_OR_SEQUENCE primary, EVIDENCE_INSUFFICIENT secondary, route S5."
+    }
+  ],
+  "validation_records": [
+    "../../reviews/canonical-s4-s7-grading-integrity.inner.json",
+    "../../reviews/canonical-s4-s7-grading-integrity.route.json"
+  ]
+}

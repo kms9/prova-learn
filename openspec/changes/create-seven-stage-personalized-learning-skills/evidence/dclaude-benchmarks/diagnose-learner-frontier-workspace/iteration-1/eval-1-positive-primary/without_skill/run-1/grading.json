@@ -1,0 +1,86 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a versioned learner_snapshot inside a stage S4 handoff envelope with the strict {type, schema_version, artifact_id, content} wrapper.",
+      "passed": false,
+      "evidence": "Graded artifact outputs/result.json is a generic learning plan with top-level keys stage, stage_name, learner_profile, diagnostic_findings, personalized_learning_plan, proficiency_recalibration, handoff. There is no learner_snapshot and no object with the {type, schema_version, artifact_id, content} wrapper; no schema_version field exists anywhere."
+    },
+    {
+      "text": "Node states are decided by behavioral observations, and the self-rating 8/10 does not override behavior evidence or mark any disputed node tested_mastered.",
+      "passed": false,
+      "evidence": "There is no node_states structure and no per-node tested/not-tested status decided from behavior; diagnostic_findings F1-F5 are prose gap descriptions, not graph-node states. While adjusted_proficiency drops 8->4 (self-rating not blindly trusted), the skill-specific construct of disputed nodes / tested_mastered does not exist in the output, so the expectation cannot be satisfied."
+    },
+    {
+      "text": "The snapshot distinguishes answered-correctly, independent-without-prompts, and transferable outcomes, including a recorded transfer failure on the distribution-change task.",
+      "passed": false,
+      "evidence": "No snapshot exists. There is no answered-correctly / independent-without-prompts / transferable distinction and no transfer_performance field. F4 notes the workload-change behavior in prose but it is not classified as a recorded transfer failure tied to a node."
+    },
+    {
+      "text": "Each node state records hint dependency and confidence calibration, and the overconfident index-rule belief is captured as a coded misconception with evidence.",
+      "passed": false,
+      "evidence": "No node_states, so no per-node hint_dependency or confidence_calibration. The selectivity-first issue appears only as prose under F3 ('correct_approach' / root_cause); it is not a coded misconception entry with a code and evidence_refs."
+    },
+    {
+      "text": "The learning frontier names a nearest learnable node with traceable evidence refs and a rationale, not the final goal.",
+      "passed": false,
+      "evidence": "There is no learning_frontier naming a nearest-learnable concept-graph node. learning_path_sequence lists modules M1-M4 and high_priority_focus names 'F2', but these are learning modules/gaps, not graph nodes, and there are no evidence_refs."
+    },
+    {
+      "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+      "passed": false,
+      "evidence": "There is no G4 rubric and no dimension-by-dimension gate evaluation. handoff.to_stage mentions 'S5' as a forward destination but it is a planning recommendation, not a G4 pass verdict."
+    }
+  ],
+  "summary": { "passed": 0, "failed": 6, "total": 6, "pass_rate": 0.0 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 12043,
+    "transcript_chars": 1031,
+    "num_turns": 8,
+    "duration_ms": 103702,
+    "graded_artifact": "outputs/result.json",
+    "usage": { "input_tokens": 63018, "output_tokens": 5909, "cache_read_input_tokens": 77952, "cost_usd": 0.501791, "model": "deepseek-v4-pro[1m]" },
+    "note": "No metrics.json or tool-call log; isolated LLM completion (web_search/fetch = 0, exit_code 0). transcript_chars is executor_prompt size; output_chars is the char count of outputs/result.json."
+  },
+  "timing": {
+    "executor_duration_seconds": 107,
+    "total_duration_seconds": 103.702,
+    "grader_duration_seconds": null,
+    "timing_source": "timing.json (graded artifact is the original outputs/result.json)"
+  },
+  "claims": [
+    {
+      "claim": "The baseline correctly recognized the self-rating as overconfident and adjusted proficiency downward.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "learner_profile.adjusted_proficiency=4 with adjustment_reason citing four systematic gaps; proficiency_recalibration.current_self_assessment='8/10 — 过度自信'."
+    },
+    {
+      "claim": "The baseline produced a high-quality domain learning plan but not the skill's S4 handoff artifact.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "personalized_learning_plan with M1-M4 modules, resource URLs, and a 10-level proficiency rubric is substantive, but it uses none of the required S4 schema (no learner_snapshot, node_states, G4 rubric, learning_frontier)."
+    },
+    {
+      "claim": "The graded artifact outputs/result.json is a clean bare-JSON object.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/result.json parses as a JSON object with no prose preamble and no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this run directory."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "All six expectations are schema-bound to the skill's S4 artifact, so the baseline (which emits a sensible but schema-free learning plan) scores 0/6. This is fine for measuring skill-vs-baseline, but the rubric cannot credit the baseline's genuinely correct diagnostic reasoning (e.g., overconfidence detection) — consider one cross-cutting diagnostic-correctness expectation independent of the skill schema so partial baseline credit is visible."
+      }
+    ],
+    "overall": "Baseline output is substantive domain planning but structurally incompatible with every expectation; 0/6 is correct under the schema-bound expectations."
+  }
+}

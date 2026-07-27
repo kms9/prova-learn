@@ -1,0 +1,97 @@
+{
+  "expectations": [
+    {
+      "text": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+      "passed": true,
+      "evidence": "status is 'blocked', positive_artifact is null. The output explicitly rejects the input: '输入仅为主题目录...不具备能力—概念图的任何必备要素'. input_validation.status is 'fail' with 8 errors documented. processing_record step 5: '拒绝建图 — positive_artifact=null，status=blocked，失效下游范围至少 [S4,S5,S6,S7]'. No fabricated graph, learning pathway, or positive artifact is produced."
+    },
+    {
+      "text": "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+      "passed": true,
+      "evidence": "input_validation.missing_fields explicitly lists: 'focus_question', 'edges[].prerequisite_strength', 'edges[].rationale', 'nodes[].capability_statement', 'nodes[].common_misconceptions', 'assessment_items', 'mastery_thresholds', 'remediation_entries', 'traceability'. input_validation.errors provides specific explanations for each missing element: '无焦点问题：术语列表无法回答...', '无边理由：边仅为章节顺序，未标注 hard/soft 强度与 rationale', '无误概念、评估题、掌握门槛或补救入口', '无来源映射'. requirement_gaps further detail 7 specific gaps with criticality and gate_effect."
+    },
+    {
+      "text": "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[0] ('结构无环性'): score=false, passed=false, evidence '无边标注 hard/soft 强度，无法提取硬先修子图进行无环性检查'. rubric_results[1] ('先修边可解释性'): score=false, passed=false, evidence '边仅为章节顺序，无 rationale，无法解释为何某节点是另一节点的先修'. Both dimensions are explicitly reported as failed due to inability to verify, not assumed to pass."
+    },
+    {
+      "text": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+      "passed": true,
+      "evidence": "evidence_collected has exactly 1 entry: ev-input-inspection-001 with provenance 'model_hypothesis' and status 'unsupported'. This is an inspection of the input itself, not invented domain evidence. No S2 evidence is fabricated — source_ref is null. The evidence correctly marks itself as unsupported. No domain-specific claims about SQL, PostgreSQL, or indexing are invented. The output stays within meta-analysis of the input structure."
+    },
+    {
+      "text": "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[6] ('全链路可追溯性'): score=false, passed=false, evidence 'traceability 完全缺失，节点不可追溯到 S1 目标或 S2 来源，goal_refs 与 source_refs 均为空'. requirement_gaps[0] (gap-g1-missing) routes to S1 with gate_effect 'block'. requirement_gaps[1] (gap-g2-missing) routes to S2 with gate_effect 'block'. rubric_results[2] ('目标覆盖率') failure_action is 'return_upstream', route_to 'S1'. rubric_results[6] failure_action is 'return_upstream', route_to 'S2'. All unsupported facts are attributed upstream."
+    },
+    {
+      "text": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+      "passed": true,
+      "evidence": "quality_evaluation.verdict is 'revise_here', route_to is 'S3'. rubric_results show mixed routing: '结构无环性'→S3, '先修边可解释性'→S3, '目标覆盖率'→S1 (return_upstream), '节点粒度一致性'→S3, '能力与概念区分度'→S3, '评估题有效性'→S3, '全链路可追溯性'→S2 (return_upstream). processing_record step 5: '失效下游范围至少 [S4,S5,S6,S7]'. The deterministic route correctly distinguishes S3-local defects from S1/S2 upstream returns, and invalidated downstream scope is documented."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 9,
+    "errors_encountered": 0,
+    "output_chars": 8440,
+    "transcript_chars": 76665
+  },
+  "timing": {
+    "executor_duration_seconds": 115,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": 111.644
+  },
+  "claims": [
+    {
+      "claim": "输入仅为主题目录 'SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 查询优化'，不具备能力—概念图的任何必备要素",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The input in executor_prompt.txt matches this exact topic directory. The output correctly identifies it as matching Example B (反向/阻塞) from the skill references."
+    },
+    {
+      "claim": "G1 goal_success_contract 缺失，G2 domain_evidence_landscape 缺失",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The prompt states '没有焦点问题、边的理由、误概念、评估题、掌握规则或来源映射' — confirming no G1/G2 artifacts were provided. input_validation correctly reports both as missing."
+    },
+    {
+      "claim": "七个 G3 维度全部 failed",
+      "type": "factual",
+      "verified": true,
+      "evidence": "All 7 rubric_results entries have passed=false. Dimensions: 结构无环性, 先修边可解释性, 目标覆盖率, 节点粒度一致性, 能力与概念区分度, 评估题有效性, 全链路可追溯性."
+    },
+    {
+      "claim": "失效下游范围至少 [S4,S5,S6,S7]",
+      "type": "process",
+      "verified": true,
+      "evidence": "processing_record step 5 explicitly records '失效下游范围至少 [S4,S5,S6,S7]'. The blocked status at S3 invalidates all downstream stages."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+        "reason": "This is an excellent and discriminating assertion for the negative case. It correctly catches the without_skill run which fabricates extensive domain knowledge. The with_skill run passes because it restricts itself to meta-analysis of the input structure."
+      },
+      {
+        "assertion": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+        "reason": "Strong assertion that checks for nuanced routing behavior — the output correctly distinguishes between S3-local fixes and upstream returns to S1/S2. The mixed routing (some dimensions→S3, some→S1, some→S2) demonstrates understanding that different defect types require different remediation paths."
+      }
+    ],
+    "overall": "All 6 expectations pass with strong evidence. The with_skill output for the negative/blocked case demonstrates correct rejection behavior: it identifies all missing elements, reports every quality dimension as failed, does not fabricate evidence, clearly routes defects (S3-local vs. S1/S2 upstream), and records the invalidated downstream scope. The output matches the skill's Example B (反向/阻塞) pattern precisely. The contrast with the without_skill run (which fabricates a full learning path) validates that the skill's rejection logic is non-trivial — a general model without the skill accepts the topic directory and produces a positive artifact."
+  }
+}

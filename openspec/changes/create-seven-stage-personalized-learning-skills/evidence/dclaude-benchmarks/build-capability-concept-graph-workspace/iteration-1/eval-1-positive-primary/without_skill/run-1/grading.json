@@ -1,0 +1,90 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+      "passed": false,
+      "evidence": "Response lacks a proper S3 handoff envelope (no schema_version, stage_id, run_id, status fields). The graph uses 'capabilities' (C1-C6) and 'concepts' (K1-K20) sections, but capabilities have 'proficiency' fields and concepts have 'category' fields — not the typed node taxonomy (concept/procedure/strategy/representation/metacognition). No focus_question field exists. The structure is a topic-organized capability map with concept knowledge items, not a typed capability-concept graph."
+    },
+    {
+      "text": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+      "passed": false,
+      "evidence": "Edges use relation types (prerequisite_of, co_requisite, feedback, assessed_by, enables, contextualizes, augments, informs) but lack prerequisite_strength (hard/soft). No cycle verification or topological sort is performed or reported. The hard-prerequisite subgraph cannot be isolated because edges are not marked hard/soft. C1→C2→C3→C4→C5→C6 forms a linear chain but this is an observation, not a verified DAG property."
+    },
+    {
+      "text": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+      "passed": false,
+      "evidence": "Edges use a 'label' field (e.g. '定位慢查询后才能解读其执行计划') rather than a 'rationale' field. No prerequisite_strength field exists — hard and soft edges are not distinguished. Edges between capabilities have labels but edges between concepts and capabilities have only relation types with no explanatory rationale. For example, 'K1→C2 assessed_by' has no justification text."
+    },
+    {
+      "text": "Every target capability traces to the nodes required to diagnose and assess it.",
+      "passed": false,
+      "evidence": "Capability nodes (C1-C6) have sub_capabilities as string arrays and concepts have related_capabilities arrays, but there is no explicit traceability from target capability to supporting nodes. Concepts reference capabilities but capabilities do not reference which concepts are required to assess them. The mapping is fragmented — there is no unified traceability that enables verifying each capability has adequate node coverage."
+    },
+    {
+      "text": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+      "passed": false,
+      "evidence": "Concept nodes (K1-K20) have 'description' fields that define the concept but lack a 'capability_statement' field describing observable learner behavior. No common_misconceptions arrays exist on any node. No assessment_items exist on any node (assessment only appears in the g3_handover.assessment_matrix at the capability level, not per-node). No mastery_thresholds exist. Capability nodes have a 'description' but no 'capability_statement' field."
+    },
+    {
+      "text": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+      "passed": false,
+      "evidence": "No traceability array exists. The learning_pathway section references G1/G2/S2 but does not link individual nodes. The g3_handover has a decision 'READY_TO_PROCEED' but no deterministic route (e.g. route_to: 'S4') based on verified invariants. The handover declares G3 PASS without demonstrating all graph invariants hold — it asserts readiness based on the graph's existence, not on verified structural properties."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 11316,
+    "transcript_chars": 100894
+  },
+  "timing": {
+    "executor_duration_seconds": 136,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": 132.747
+  },
+  "claims": [
+    {
+      "claim": "S2 审计覆盖全部证据维度",
+      "type": "process",
+      "verified": false,
+      "evidence": "The response fabricates detailed S2 audit evidence (e.g., '识别 Seq Scan / Index Scan / Index Only Scan / Bitmap Index Scan 节点', PG 18 specific features). The without_skill executor prompt says 'Do NOT read or use .agents/skills' — these claims are model-generated fabrications, not from audited evidence."
+    },
+    {
+      "claim": "学习者已建立从慢查询识别到索引效果验证的完整结构化心智模型",
+      "type": "quality",
+      "verified": false,
+      "evidence": "This claim in g3_handover.sign_off appears to be a forward-looking assertion about what the S3 plan will achieve, not a verified statement about current state. The graph structure itself is a topic sequence with concept encyclopedic entries, not a verified capability model."
+    },
+    {
+      "claim": "fluent: 8 概念 | familiar: 8 概念 | emerging: 3 概念",
+      "type": "quality",
+      "verified": false,
+      "evidence": "These mastery levels are assigned without any assessment evidence. They appear in the handover as claims but have no supporting diagnostic data, assessment results, or evidence traceability."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+        "reason": "This assertion is discriminating — the without_skill output fails because it produces a capability+concept topic map rather than typed nodes. A good assertion that catches the structural gap."
+      },
+      {
+        "reason": "No assertion checks whether the output distinguishes between audited S2 evidence and model-generated claims. The without_skill output fabricates extensive PG 18-specific content and detailed capability descriptions that look like audited evidence but are model inventions. An assertion about evidence provenance would catch this."
+      }
+    ],
+    "overall": "All 6 expectations correctly fail for the without_skill run. The output superficially resembles a capability graph but lacks typed nodes, hard/soft edge marking, per-node assessment items, mastery thresholds, and traceability. It also fabricates detailed domain evidence rather than deferring to S2 audited evidence. The without_skill executor's instructions explicitly forbid reading the skill package, and the resulting output demonstrates what a general-purpose model produces without the skill's structural constraints."
+  }
+}

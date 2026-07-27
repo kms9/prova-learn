@@ -1,0 +1,114 @@
+{
+  "eval_id": 3,
+  "stage": "S4",
+  "stage_name": "diagnose_learner_frontier",
+  "status": "evidence_insufficient",
+  "gate": {
+    "id": "G4",
+    "passed": false,
+    "reason": "Insufficient behavioral evidence to determine a learning frontier. Only a self-rating and a single slogan-style yes/no answer were provided; no reasoning, prompt hierarchy, transfer item, timing, or a second observation exist."
+  },
+  "route": {
+    "decision": "revise_here",
+    "target_stage": "S4",
+    "alternative": {
+      "decision": "return_upstream",
+      "target_stage": "S3",
+      "condition": "Use only if a diagnostic item itself is invalid or uncollectable, making it impossible to ever produce target evidence."
+    }
+  },
+  "input_summary": {
+    "self_rating": "8/10",
+    "observed_answers": [
+      {
+        "item": "Can an index speed up queries?",
+        "response": "Yes",
+        "item_type": "slogan_yes_no",
+        "evidence_value": "low"
+      }
+    ],
+    "missing_dimensions": [
+      "reasoning_trace",
+      "prompt_hierarchy",
+      "transfer_item",
+      "timing_or_effort",
+      "second_independent_observation"
+    ]
+  },
+  "learner_snapshot": {
+    "accepted_positive": false,
+    "frontier_determined": false,
+    "nodes": [
+      {
+        "id": "node_index_speedup",
+        "label": "Indexes accelerate queries",
+        "mastery": "insufficient_evidence",
+        "tested_mastered": false,
+        "cold_start": true,
+        "evidence_basis": "single slogan-style yes/no answer; no reasoning demonstrated",
+        "do_not_assert": ["independence", "transfer", "robustness"]
+      },
+      {
+        "id": "node_index_mechanism",
+        "label": "Why/how indexes accelerate queries",
+        "mastery": "untested",
+        "tested_mastered": false,
+        "cold_start": true,
+        "evidence_basis": "no evidence collected",
+        "do_not_assert": ["independence", "transfer"]
+      },
+      {
+        "id": "node_index_tradeoffs",
+        "label": "Index trade-offs (write cost, storage, when not to index)",
+        "mastery": "untested",
+        "tested_mastered": false,
+        "cold_start": true,
+        "evidence_basis": "no evidence collected",
+        "do_not_assert": ["independence", "transfer"]
+      }
+    ],
+    "self_report_handling": {
+      "self_rating": "8/10",
+      "used_for_mastery": false,
+      "note": "Self-report is recorded as a subjective claim only; it is not substituted for behavioral evidence and does not advance any node to tested_mastered."
+    },
+    "cold_start_handling": {
+      "policy": "Cold-start / unknown nodes remain insufficient_evidence or untested. They are not relabeled as a uniform all-not-mastered profile, because absence of evidence is not evidence of not-mastery."
+    }
+  },
+  "forbidden_inferences": {
+    "notes": [
+      "No node is marked tested_mastered from a self-rating plus one slogan answer.",
+      "No fabricated positive artifact is accepted.",
+      "No independence or transfer ability is asserted where none was observed.",
+      "No determined learning frontier is produced from the insufficient evidence."
+    ]
+  },
+  "diagnostic_tasks": [
+    {
+      "id": "dt-1",
+      "node": "node_index_mechanism",
+      "type": "reasoning_item",
+      "prompt_template": "Explain, in your own steps, how a B-tree index reduces the work to satisfy a lookup query, and give one case where an index does not help.",
+      "evidence_target": "reasoning_trace",
+      "collects": ["reasoning", "prompt_hierarchy"]
+    },
+    {
+      "id": "dt-2",
+      "node": "node_index_tradeoffs",
+      "type": "transfer_item",
+      "prompt_template": "Given a writes-heavy log table that is queried rarely by a non-selective column, decide whether to add an index and justify the trade-off.",
+      "evidence_target": "transfer_item",
+      "collects": ["transfer", "reasoning"]
+    },
+    {
+      "id": "dt-3",
+      "node": "node_index_speedup",
+      "type": "second_observation",
+      "prompt_template": "Run a small query with and without an index on a sample table and report observed timing differences.",
+      "evidence_target": "timing_or_effort + second_independent_observation",
+      "collects": ["timing", "second_observation"]
+    }
+  ],
+  "next_action": "Remain at S4. Collect the diagnostic tasks above to obtain real behavioral evidence before any node can be advanced or a learning frontier determined. If any diagnostic item is itself invalid or uncollectable, return upstream to S3."
+}

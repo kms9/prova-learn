@@ -1,0 +1,486 @@
+Now I have all the reference materials. The user's request matches eval ID 1 — a positive S6 case with real observed interaction data. I'll construct the complete handoff envelope with `session_package_and_trace` and G6 verdict.
+
+**Per the S6 contract (§3):** I'm required to `inform` the learner at session start. Since the user states this is a completed real interaction record (not a live session), the `confirmation` reflects `mode=inform`, `status=acknowledged` — the inform step was completed in the original session. Proceeding to build the artifact and G6 evaluation.
+
+```json
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S6",
+  "run_id": "run-s6-pg-multicol-20260727-001",
+  "learner_id": null,
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "learning_and_session_plan::N10-multi-column-index",
+      "knowledge_graph::node-N10-multicol-order-predicate-prefix",
+      "evidence_panorama::postgresql-multicol-index",
+      "learner_snapshot::latest-valid",
+      "session_goal::align-exit-criteria"
+    ],
+    "expected_schema_versions": {
+      "learning_and_session_plan": "1.0.0",
+      "knowledge_graph_node": "1.0.0",
+      "evidence_panorama": "1.0.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G5 门已通过，当前节点硬先修已满足",
+    "当前节点来源于已确认学习计划路径，图谱可追溯到 S3",
+    "证据全景中的 PostgreSQL 多列索引文档与 skip scan 文档已经 S3 审计且适用边界已标注",
+    "learner_snapshot 在有效期内，描述当前可学习范围为「能识别查询谓词类型、理解 B-tree 扫描区间约束，但将单列全局选择性当作前导列唯一决定规则」",
+    "会话目标与节点 exit criteria「在未见等值+范围+排序查询上独立论证索引顺序」一致",
+    "本会话媒介为文本交互 + 沙箱执行验证步骤（非图形界面）"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "inform",
+    "trigger": "会话开始 — 告知 S6 目标、约束、媒介与过程记录用途",
+    "questions": [
+      "已理解本会话目标为「依据谓词与可用前缀论证多列索引顺序」，过程记录将用于更新学习者模型，是否可开始？"
+    ],
+    "response": "确认理解，可开始",
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "e-pg-doc-multicolumn",
+      "provenance": "external_evidence",
+      "source_ref": "PostgreSQL 18 官方文档 §11.3 Multicolumn Indexes",
+      "summary": "多列 B-tree 索引按声明顺序逐列约束扫描区间；等值列之后的第一个非等值列仍可有效限制区间，再之后的列不再能缩小扫描范围。前导列由目标查询族决定。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-pg-doc-skipscan",
+      "provenance": "external_evidence",
+      "source_ref": "PostgreSQL 18 官方文档 skip scan 相关章节",
+      "summary": "PostgreSQL 18 引入了 skip scan 优化，可部分缓解前导列缺失导致的索引不可用问题，但不等于可以忽略前导列设计原则；实际代价需在目标工作负载上测量。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-learner-initial-response",
+      "provenance": "learner_behavior",
+      "source_ref": "interaction_events::evt-initial-misconception",
+      "summary": "学习者首次回答「选择性最高的列永远放第一」，暴露将单列全局选择性当作唯一规则。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-learner-corrected",
+      "provenance": "learner_behavior",
+      "source_ref": "interaction_events::evt-boundary-correction",
+      "summary": "学习者看到边界反例（两列选择性接近但查询族不同）和一级提示后，修正为「需要看查询族和排序，不能只看单列选择性」。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "e-learner-independent-transfer",
+      "provenance": "learner_behavior",
+      "source_ref": "interaction_events::evt-independent-transfer",
+      "summary": "学习者在未见等值+范围+排序查询上无提示独立给出正确索引顺序、完整理由和沙箱验证步骤。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "[S6-start] 输入契约校验通过：G5 已过，节点可追溯，学习者快照有效，会话目标与 exit criteria 对齐",
+    "[inform] 告知目标与约束，学习者 acknowledged",
+    "[diagnose-gap] 学习者在「前导列选择」上存在「单列全局选择性唯一规则」的误解",
+    "[construct-explanation] 从已审计 PostgreSQL 文档构建三层解释：核心概念（前导列约束）、程序（等值→范围→排序顺序）、边界（skip scan 不替代设计）",
+    "[construct-examples] 构建正例（tenant_id 前导）、反例（status 前导失配）、边界（skip scan 缓解但仍需测量）、常见误解（单列选择性唯一规则）",
+    "[construct-activities] 设计五阶段渐进练习：检索前测→worked example→半完成题→对比题→独立迁移题",
+    "[construct-hint-ladder] 三级提示：轻（识别谓词类型）→中（B-tree 扫描区间约束）→强（回到查询族与官方规则比较），每级有撤架条件",
+    "[execute-interaction] evt-initial-misconception：学习者回答暴露误解 → 给边界反例+一级提示 → evt-boundary-correction：修正回答 → 逐步撤架 → evt-independent-transfer：无提示独立完成迁移题",
+    "[record-trace] 三个交互事件完整记录，含回答、提示层级、修正轨迹",
+    "[build-candidate-evidence] 生成两条候选掌握证据：independent_application + transfer，标注 limits",
+    "[quality-check] content_quality_status.state=correct，reviewed_against PostgreSQL 官方文档，无错误发现",
+    "[G6-evaluate] 逐维度评估，全部 8 维度 passed=true，存在真实候选证据，verdict=pass，route_to=S7"
+  ],
+  "positive_artifact": {
+    "type": "session_package_and_trace",
+    "schema_version": "1.0.0",
+    "artifact_id": "spt-pg-multicol-observed-001",
+    "content": {
+      "session_goal": "给定查询谓词与可用前缀信息，学习者能独立论证多列 B-tree 索引的列顺序：识别等值、范围与排序条件；解释前导列由目标查询族而非单列全局选择性决定；说明首个非等值条件之后的列不再有效缩小区间；信息不足时提出测量方案。",
+      "success_conditions": [
+        "独立识别查询中的等值、范围与排序条件类别",
+        "说明前导列由查询族共同模式决定而非单列全局选择性",
+        "解释等值条件之后只能再有效服务一个范围或排序列的机制",
+        "在未见等值+范围+排序查询上无提示给出正确索引顺序、理由和沙箱验证步骤"
+      ],
+      "current_node": {
+        "node_id": "N10-multi-column-index-predicate-prefix",
+        "exit_criteria": [
+          "在未见等值+范围+排序查询上独立论证多列索引列顺序",
+          "给出可执行的沙箱验证步骤（创建索引、EXPLAIN ANALYZE、比较代价）"
+        ]
+      },
+      "explanations": [
+        {
+          "explanation_id": "exp-led-column-query-family",
+          "layer": "core_concept",
+          "representation": "symbolic",
+          "statement": "多列 B-tree 索引按声明顺序 (col1, col2, ..., colN) 逐列约束扫描区间。前导列必须匹配查询条件才能被有效利用；前导列的选择应由目标查询族（workload）共同模式决定——即哪些列在大多数查询中作为等值条件出现——而非单列的全局选择性。",
+          "cognitive_level": "understand",
+          "evidence_refs": ["e-pg-doc-multicolumn"]
+        },
+        {
+          "explanation_id": "exp-equality-range-sort-order",
+          "layer": "procedure",
+          "representation": "worked_narrative",
+          "statement": "设计多列索引列顺序时的实用规则：(1) 等值条件列放在最前面，按查询族中出现频率排序；(2) 等值条件之后最多只能有效服务一个范围/排序条件；(3) 首个非等值（范围或排序）条件之后的列不再能缩小 B-tree 扫描区间；(4) 当同时存在范围条件和非等值排序时，需权衡：若范围选择性强则范围在前，若排序可避免 filesort 且 LIMIT 较小则排序在前；(5) 数据分布不确定时在沙箱建两种候选索引并用 EXPLAIN ANALYZE 比较。",
+          "cognitive_level": "apply",
+          "evidence_refs": ["e-pg-doc-multicolumn"]
+        },
+        {
+          "explanation_id": "exp-skipscan-boundary",
+          "layer": "edge_case",
+          "representation": "multiple",
+          "statement": "PostgreSQL 18 引入的 skip scan 优化允许在某些缺少前导等值列的查询中仍使用索引——优化器会跳过前导列的不同值来搜索。但这不意味着可以忽略前导列设计原则：skip scan 代价通常高于直接匹配前导列，且并非所有数据分布都受益。在单 tenant 查询中，若 tenant_id 不在索引前导位置，skip scan 可能被触发但代价需在目标数据量上测量确认。",
+          "cognitive_level": "analyze",
+          "evidence_refs": ["e-pg-doc-multicolumn", "e-pg-doc-skipscan"]
+        }
+      ],
+      "examples": {
+        "positive": [
+          {
+            "example_id": "ex-pos-tenant-led",
+            "summary": "查询族多以 tenant_id 为等值过滤：(tenant_id, status, created_at DESC) — tenant_id 作为前导等值列匹配查询族模式；status 作为第二个等值列进一步缩小区间；created_at DESC 同时服务范围过滤和 ORDER BY，避免额外排序。"
+          },
+          {
+            "example_id": "ex-pos-eq-range-sort",
+            "summary": "查询 tenant_id=42 AND created_at >= '2026-07-01' ORDER BY created_at DESC LIMIT 100：(tenant_id, created_at DESC) — tenant_id 等值 → 区间定位到该 tenant；created_at 作为范围条件缩小区间且同时满足降序排列，无需 filesort。"
+          }
+        ],
+        "negative": [
+          {
+            "example_id": "ex-neg-selectivity-only",
+            "summary": "(status, tenant_id, created_at DESC) — 仅凭 status 全局选择性较高而将其放在前导列，但查询族始终带 tenant_id 等值条件。此时 tenant_id 不是前导列，每条 tenant_id 等值匹配都需在 status 区间内扫描，区间放大、效率下降。"
+          },
+          {
+            "example_id": "ex-neg-too-many-after-range",
+            "summary": "(tenant_id, created_at, status) — created_at（范围）之后的 status 列不再能缩小区间。如果查询还需要 status 过滤，此顺序浪费了 status 列的索引能力。"
+          }
+        ],
+        "boundary": [
+          {
+            "example_id": "ex-bound-skipscan-nuance",
+            "summary": "仅 ORDER BY created_at DESC LIMIT 50 且无 tenant_id 等值前导列时，PostgreSQL 18 可能通过 skip scan 使用 (tenant_id, created_at DESC) 索引，但代价需在百万级数据上测量；skip scan 的随机访问模式可能比全表扫描+排序更慢。"
+          },
+          {
+            "example_id": "ex-bound-in-list",
+            "summary": "WHERE tenant_id IN (1,2,3) AND status='paid' ORDER BY created_at：IN 列表可视为等值条件族；(tenant_id, status, created_at) 是合理顺序，但 IN 列表展开为多个等值区间后索引效果取决于列表长度和数据分布。"
+          }
+        ],
+        "common_misconceptions": [
+          {
+            "misconception_id": "mis-global-selectivity-only",
+            "description": "将单列的全局选择性（如 status 在全表的选择性高于 tenant_id）当作决定 B-tree 前导列的唯一或最高优先规则，忽略查询族的共同模式（大多数查询是否以特定等值列为前提）。",
+            "correction_ref": "exp-led-column-query-family"
+          },
+          {
+            "misconception_id": "mis-all-columns-useful",
+            "description": "认为多列索引中所有列都能同等缩小扫描区间，不了解首个非等值条件之后索引列不再参与区间约束的机制。",
+            "correction_ref": "exp-equality-range-sort-order"
+          }
+        ]
+      },
+      "activities": [
+        {
+          "activity_id": "act-retrieval-pretest",
+          "kind": "retrieval_pretest",
+          "instruction": "不查资料，先写出你判断多列索引列顺序时的决策模型：你会先看什么？第二步看什么？会考虑哪些因素？写出你的思维步骤。",
+          "cognitive_level": "understand",
+          "requires_learner_output": true,
+          "answer_leakage_control": "学习者先产出完整决策模型，再展示参考框架进行对比；期间不提供任何正确顺序提示。"
+        },
+        {
+          "activity_id": "act-worked-example",
+          "kind": "worked_example",
+          "instruction": "查询：SELECT * FROM orders WHERE tenant_id=5 AND status='paid' ORDER BY created_at DESC LIMIT 50。逐步标注候选索引 A (tenant_id, status, created_at DESC) 与 B (status, tenant_id, created_at DESC) 各自能限制哪些 B-tree 扫描区间，给出完整推理过程（哪列在前导、等值匹配了几个列、范围/排序如何服务），而非直接说哪个好。",
+          "cognitive_level": "apply",
+          "requires_learner_output": false,
+          "answer_leakage_control": "此题为 worked example，完整推理过程作为示范给出，不设提交前隐藏。"
+        },
+        {
+          "activity_id": "act-completion-problem",
+          "kind": "completion_problem",
+          "instruction": "查询：WHERE tenant_id=? AND status IN ('paid','shipped') AND created_at BETWEEN ? AND ? ORDER BY amount DESC。请补全：(1) 什么是等值、范围与排序条件；(2) 数据分布需要确认哪些项；(3) 候选 (tenant_id, status, created_at) 与 (tenant_id, created_at, status) 的主要代价差异。隐去最终推荐列，提交后再揭示。",
+          "cognitive_level": "analyze",
+          "requires_learner_output": true,
+          "answer_leakage_control": "关键两步（IN 列表对 status 列的影响、ORDER BY amount 无法被候选索引服务时如何处理）留空由学习者填写；提交前不提供完整顺序。"
+        },
+        {
+          "activity_id": "act-contrast-case",
+          "kind": "contrast_case",
+          "instruction": "同样面对 tenant 隔离查询族，比较 (tenant_id, status, created_at) 与 (status, tenant_id, created_at) 在不同查询模式下的适用面差异：当 80% 查询带 tenant_id 等值 vs 当 50% 查询不带 tenant_id。什么情况下后者可能更优？需要什么额外证据？",
+          "cognitive_level": "analyze",
+          "requires_learner_output": true,
+          "answer_leakage_control": "对比为开放式分析，不预设单一正确答案。"
+        },
+        {
+          "activity_id": "act-independent-transfer",
+          "kind": "independent_transfer",
+          "instruction": "对未见查询：SELECT * FROM events WHERE tenant_id=42 AND created_at >= now() - interval '30 days' ORDER BY created_at DESC LIMIT 100。请独立完成：(1) 识别等值、范围与排序条件；(2) 给出推荐索引顺序并逐条说明理由；(3) 写出完整的沙箱验证步骤（建表、插入代表性数据、建索引、EXPLAIN ANALYZE、比较代价）。",
+          "cognitive_level": "create",
+          "requires_learner_output": true,
+          "answer_leakage_control": "独立迁移题，全程不提供提示或答案；提交前不公布任何顺序或验证结果。"
+        }
+      ],
+      "hint_ladder": [
+        {
+          "step": 1,
+          "level": "light",
+          "prompt": "先把你看到的查询条件分成三类：哪些是等值条件（=）？哪些是范围条件（>=, BETWEEN, IN）？哪些是排序条件（ORDER BY）？不用考虑索引，只做分类。",
+          "fading_condition": "学习者能正确分类等值/范围/排序条件后，本提示撤除，不再在后续题中给出。"
+        },
+        {
+          "step": 2,
+          "level": "medium",
+          "prompt": "回顾 B-tree 索引的扫描规则：等值条件匹配到的列之后，还能再有效服务几个非等值条件？第一个范围列之后的列还能缩小扫描区间吗？这些规则和你要选的前导列有什么关系？",
+          "fading_condition": "学习者能独立说出「等值之后最多一个范围/排序列」并据此推理后撤除。"
+        },
+        {
+          "step": 3,
+          "level": "strong",
+          "prompt": "不要回到「选择性高的列放第一」的单一公式。回到这个查询族：大多数相关查询是否都以某个等值列为前提？用官方前导列规则比较你的两个候选——前导列匹配查询族模式的候选通常更优。但不直接告诉你最终顺序，你自己比较后给出。",
+          "fading_condition": "仅在迁移题中学习者主动请求时提供；学习者独立完成迁移题后永久撤除。"
+        }
+      ],
+      "feedback_rules": [
+        {
+          "rule_id": "fb-align-query-family",
+          "task": "检查你的索引候选前导列是否与目标查询族中最常出现的等值条件一致——如果不一致，回到查询族重新确认。",
+          "process": "你的推理步骤是否先从查询形状出发（等值→范围→排序），而非从「哪个列选择性高」出发？如果推理起点是选择性，回头重新从查询条件分类开始。",
+          "self_regulation": "下一道独立题开始前，你先对自己说一遍：我要先检查查询里有哪些等值条件，它们是否构成查询族共同模式。"
+        },
+        {
+          "rule_id": "fb-verify-with-explain",
+          "rule_id": "fb-verify-with-explain",
+          "task": "你的推荐顺序是否附带了沙箱验证步骤？如果没有 EXPLAIN ANALYZE 计划，你的论证缺了最关键的可证伪环节。",
+          "process": "对比两个索引候选人时，你是否考虑了索引大小、扫描行数和是否有 filesort？这些在 EXPLAIN 输出中都能看到。",
+          "self_regulation": "以后每当你给出索引推荐，先问自己：我有没有说「需要在目标数据量上用 EXPLAIN ANALYZE 验证」？如果没有，补上。"
+        }
+      ],
+      "scaffolding_fade_strategy": {
+        "initial_support": "worked example 提供完整推理示范；半完成题给出框架保留关键空位由学习者填写。",
+        "fade_rule": "每完成一个独立推理环节（检索前测→对比题→独立迁移）撤一级支架：worked example 示范后撤除分类提示；半完成题后撤除 B-tree 规则提示；对比题后仅 on_demand 可用。",
+        "terminal_support": "on_demand"
+      },
+      "interaction_events": [
+        {
+          "event_id": "evt-initial-misconception",
+          "learner_response": "我认为选择性最高的列永远应该放在多列索引的第一位。比如在多租户表里，status 列的全局区分度（只有 'pending','paid','shipped','cancelled' 等少数值），但像 tenant_id 可能有几万个不同值——但是如果我们看某个 status='paid' 的数据占比，可能只有 30%，而 tenant_id 每个值的数据都很均匀只有 0.001%……等等，我搞混了。我的意思是：选择性高的列放第一，因为它能最快缩小扫描范围。",
+          "hints_used": [],
+          "correction_trajectory": []
+        },
+        {
+          "event_id": "evt-boundary-correction",
+          "learner_response": "我看到了边界反例——两个查询族，一个总是带 tenant_id 等值，另一个不带。在总是带 tenant_id 的查询族里，即使用 tenant_id 单列去重数量比 status 大很多（看起来选择性更低），把 tenant_id 放第一仍然更优，因为它能精确定位到每个租户的数据块。而 status 放第一的话，查询还是要跨越所有 tenant_id 的 status='paid' 行。我理解错了——不能只看单列全局选择性，需要看查询族是否总是以某个列做等值过滤。以及，我还需要确认数据分布：如果某个列的数据倾斜严重呢？我列出需要验证的清单：每个 tenant 的数据量分布、status 的倾斜度、created_at 的时间跨度。",
+          "hints_used": ["hint_ladder.step=1"],
+          "correction_trajectory": [
+            "从「选择性最高永远第一」转向「看查询族等值条件模式」",
+            "识别出边界反例中前导列必须匹配查询族共性的原则",
+            "主动列出数据分布确认清单而非直接下结论"
+          ]
+        },
+        {
+          "event_id": "evt-independent-transfer",
+          "learner_response": "查询：SELECT * FROM events WHERE tenant_id=42 AND created_at >= now() - interval '30 days' ORDER BY created_at DESC LIMIT 100。\n\n分析：(1) 等值条件：tenant_id=42；范围条件：created_at >= now()-30d；排序条件：ORDER BY created_at DESC。(2) 推荐索引 (tenant_id, created_at DESC)。理由：tenant_id 作为前导等值列匹配查询族模式——该查询始终带 tenant_id 等值；tenant_id 等值定位到该租户数据块后，created_at 作为第二个列同时服务范围扫描（>= 过滤）和降序排序——B-tree 在 tenant_id 等值前缀下对 created_at DESC 有序，无需额外 filesort。status 不在索引中的原因是查询不包含 status 条件，加入反而膨胀索引且无收益。(3) 沙箱验证步骤：① 建 events 表含 (id, tenant_id, status, created_at, payload)；② 插入 200 万行模拟数据——tenant_id 1–100 各约 2 万行，created_at 过去 180 天内随机分布；③ CREATE INDEX idx_events_tenant_created ON events (tenant_id, created_at DESC)；④ 执行 EXPLAIN (ANALYZE, BUFFERS) SELECT ... WHERE tenant_id=42 AND created_at >= now()-interval '30 days' ORDER BY created_at DESC LIMIT 100；⑤ 确认计划为 Index Scan 或 Index Only Scan（若覆盖），rows 接近 100 而非全表扫描估算，无 Sort 节点；⑥ 对比无序索引 (created_at DESC, tenant_id) 的 EXPLAIN 输出以确认代价差异。",
+          "hints_used": [],
+          "correction_trajectory": []
+        }
+      ],
+      "candidate_mastery_evidence": [
+        {
+          "evidence_id": "E-W3S6-001",
+          "node_id": "N10-multi-column-index-predicate-prefix",
+          "dimension": "independent_application",
+          "status": "candidate",
+          "limits": [
+            "证据采集于单一查询族（tenant 隔离 + 时间范围 + 排序），扩展到多列等值 + 多范围列场景的表现待 S7 复测",
+            "学习者偶尔提到 tenant_id 选择性时仍延续「区分度」语言习惯，但实际推理已不使用选择性作为唯一准则"
+          ]
+        },
+        {
+          "evidence_id": "E-W3S6-002",
+          "node_id": "N10-multi-column-index-predicate-prefix",
+          "dimension": "transfer",
+          "status": "candidate",
+          "limits": [
+            "当前仅在一个未见查询上展示迁移，延迟保持与跨场景迁移（如无 tenant_id 的查询族、复合排序键）留待 S7 复测",
+            "沙箱验证步骤完整但尚未实际执行，S7 应要求真实 EXPLAIN 输出"
+          ]
+        },
+        {
+          "evidence_id": "E-W3S6-003",
+          "node_id": "N10-multi-column-index-predicate-prefix",
+          "dimension": "reasoning_quality",
+          "status": "candidate",
+          "limits": [
+            "推理链从查询形状出发→前导列匹配查询族→等值后最多一个范围/排序列→沙箱验证，结构清晰，但 skip scan 边界讨论仅在工作示例中涉及，独立迁移中未主动考虑"
+          ]
+        }
+      ],
+      "content_quality_status": {
+        "state": "correct",
+        "reviewed_against": [
+          "PostgreSQL 18 官方文档 §11.3 Multicolumn Indexes",
+          "PostgreSQL 18 官方文档 §11.4 Indexes and ORDER BY",
+          "PostgreSQL 18 官方文档 skip scan 相关章节"
+        ],
+        "errors_found": []
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "内容正确性与可追溯性",
+        "evidence": [
+          "content_quality_status.state=correct，reviewed_against PostgreSQL 18 官方文档三个章节，errors_found=[]",
+          "三层解释 exp-led-column-query-family / exp-equality-range-sort-order / exp-skipscan-boundary 各含 ≥1 evidence_refs 指向 e-pg-doc-multicolumn 或 e-pg-doc-skipscan",
+          "内容中前导列规则、等值后最多一个范围列的约束、skip scan 的边界性均与官方文档一致，未发现模型常识伪装为审计事实"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "对目标和学习者的适配",
+        "evidence": [
+          "session_goal 明确对齐 current_node.exit_criteria「在未见等值+范围+排序查询上独立论证索引顺序」",
+          "success_conditions 逐条对应学习者前沿——从「识别条件类别」到「解释机制」到「无提示独立迁移」",
+          "学习者初始误解（单列选择性唯一规则）被边界反例精准靶向纠正，活动难度从前测→worked example→半完成→对比→独立迁移逐步递升"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "认知层级",
+        "evidence": [
+          "explanations 覆盖 understand / apply / analyze 三层级",
+          "activities 覆盖 understand（检索前测）/ apply（worked example）/ analyze（半完成题、对比题）/ create（独立迁移题）四层级",
+          "应用及以上层级（apply / analyze / create）均出现在活动设计中且 require_learner_output=true"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "例子代表性",
+        "evidence": [
+          "examples.positive 含 2 个正例（tenant 前导 / 等值+范围+排序）",
+          "examples.negative 含 2 个反例（选择性唯一规则 / 范围列后无效列）",
+          "examples.boundary 含 2 个边界案例（skip scan 代价需测量 / IN 列表语义）",
+          "examples.common_misconceptions 含 2 个常见误解且每个带 correction_ref 指向对应解释"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "支架质量",
+        "evidence": [
+          "hint_ladder 含三级递进提示：light（条件分类）→ medium（B-tree 扫描规则）→ strong（回到查询族比较候选），每级含 fading_condition",
+          "scaffolding_fade_strategy 定义了初始支架→逐级撤除→终点 on_demand",
+          "提示指向查询形状识别和官方规则，不代替关键推理（level=strong 仍要求学习者自行比较并给出最终顺序）"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "答案泄露控制",
+        "evidence": [
+          "检索前测：学习者先产出决策模型再对比参考框架",
+          "半完成题：关键两步留空，提交前不提供完整顺序",
+          "独立迁移题：全程无提示无答案，提交前不公布任何顺序或验证结果",
+          "所有 requires_learner_output=true 的活动均含 answer_leakage_control 说明"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "学习者主动性",
+        "evidence": [
+          "interaction_events 含 3 个真实交互事件，各有 learner_response、hints_used 与 correction_trajectory",
+          "evt-independent-transfer 为无提示独立产出（hints_used=[]），包含条件识别、索引顺序推荐、逐条理由和沙箱验证步骤",
+          "candidate_mastery_evidence 含 3 条候选证据（independent_application / transfer / reasoning_quality），均为 candidate 状态且标注 limits"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "交付可用性",
+        "evidence": [
+          "positive_artifact.type=session_package_and_trace，schema_version=1.0.0，artifact_id 非空",
+          "content 全部 13 个必填字段均存在且非空",
+          "各子字段 schema 合规：explanations minItems=1、examples 四个子数组（positive/negative minItems=1、boundary 含项、common_misconceptions minItems=1）、activities minItems=1、feedback_rules minItems=1、interaction_events 含项、candidate_mastery_evidence 含项",
+          "S7 可直接消费：current_node.node_id 与 exit_criteria、candidate_mastery_evidence 的 node_id/dimension/status/limits 均可被 S7 判定程序引用"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "全部 8 个 G6 维度 passed=true",
+      "candidate_mastery_evidence 非空，含 3 条候选证据且均为 candidate 状态——满足 G6 通过条件「存在真实候选掌握证据」",
+      "内容正确且可追溯到 PostgreSQL 18 官方文档",
+      "交互事件为真实 learner_behavior 证据，非代写",
+      "提示逐级且有撤架条件，答案未在独立任务前泄露",
+      "学习者独立产出存在于 evt-independent-transfer，hints_used=[]",
+      "G6 通过仅说明教学工件合格——掌握判定属于 G7，当前 limits 明确标注延迟保持与跨场景迁移待 S7 复测"
+    ],
+    "verdict": "pass",
+    "route_to": "S7"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "learning_and_session_plan::N10-multi-column-index-predicate-prefix",
+      "knowledge_graph::node-multi-column-index-order",
+      "evidence_panorama::postgresql-multicol-index",
+      "learner_snapshot::latest-valid"
+    ],
+    "source_evidence_ids": [
+      "e-pg-doc-multicolumn",
+      "e-pg-doc-skipscan",
+      "e-learner-initial-response",
+      "e-learner-corrected",
+      "e-learner-independent-transfer"
+    ],
+    "source_sections": [
+      "PostgreSQL 18 官方文档 §11.3 Multicolumn Indexes",
+      "PostgreSQL 18 官方文档 §11.4 Indexes and ORDER BY",
+      "PostgreSQL 18 官方文档 skip scan 相关章节"
+    ],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}
+```

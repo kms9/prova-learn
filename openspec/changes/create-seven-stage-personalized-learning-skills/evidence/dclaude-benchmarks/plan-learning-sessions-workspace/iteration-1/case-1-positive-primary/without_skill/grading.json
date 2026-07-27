@@ -1,0 +1,83 @@
+{
+  "expectations": [
+    {
+      "text": "The path connects the confirmed learner_snapshot frontier to the goal_success_contract target with no gaps.",
+      "passed": true,
+      "evidence": "learning_phases define Phase 1 (Estimation & Statistics Model, sessions 1-4) → Phase 2 (Multi-Column Index Ordering, sessions 5-8), progressing from the frontier topics F1/F2 (estimation discrepancy, predicate selectivity) to F3 (multi-column index ordering) and migration acceptance. learner_profile.learning_frontier explicitly maps F1/F2/F3. The 8-session plan culminates in migration_acceptance with 3 unseen queries (ACCEPT-Q1/Q2/Q3)."
+    },
+    {
+      "text": "Selection rationale explains every node and there is no unexplained redundancy or hard-prerequisite crossing.",
+      "passed": true,
+      "evidence": "learning_phases[0].rationale explains 'Learner requested fixing estimation understanding first. This is pedagogically correct: column ordering decisions in Phase 2 depend on understanding how the planner computes selectivity...' Each session has bridge_to_next connecting it to the next. Phase 1→Phase 2 sequencing respects hard prerequisites (estimation before index design). No chapter/video quotas or course catalog copying."
+    },
+    {
+      "text": "The first session is executable within the stated time and resource constraints.",
+      "passed": true,
+      "evidence": "Session 1 has duration_minutes=90, concrete learning_goals, topics with key_points, and a sandbox_exercise with 5 specific steps and a deliverable. Fits within 2×90min/week constraint at 4 weeks/6 hours per week."
+    },
+    {
+      "text": "Mandatory confirmation (path overview, stage goals, time commitment, priority, first-session contract) is resolved as confirmed.",
+      "passed": false,
+      "evidence": "No explicit confirmation object with status='confirmed' exists in the output. precondition_verification.first_session_contract_confirmed=true and learner_sequencing_preference are noted, and handoff_checklist[0] mentions 'Preconditions verified...first session contract accepted', but there is no structured confirmation.response with path_overview/stage_goals/time_commitment/priority/first_session_contract all resolved as 'confirmed'. The output lacks the mandatory confirmation schema required by the stage contract."
+    },
+    {
+      "text": "Each learning node has observable, decidable per-node exit criteria aligned with assessment.",
+      "passed": false,
+      "evidence": "No exit_criteria.per_node structure exists. The output uses progress_milestones (M-PHASE1, M-MISCONCEPTION, M-ACCEPTANCE) with verification conditions at coarse granularity, and migration_acceptance with per-query success_criteria. However, there are no explicit per-learning-node exit criteria. The output defines sessions/topics/learning_goals rather than ordered_learning_nodes with per-node exit criteria aligned to an assessment_schedule."
+    },
+    {
+      "text": "G5 is evaluated dimension by dimension and the deterministic route is S6 when all dimensions pass.",
+      "passed": false,
+      "evidence": "No quality_evaluation or rubric_results object exists in the output. There is no G5 rubric evaluation with 8 dimensions, no verdict field, and no route_to field. The output follows a different schema (plan_id='S5-FRAC-G6-001') rather than the stage contract schema (schema_version, stage_id, quality_evaluation, route_to)."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 3,
+    "total": 6,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "total_turns": 5,
+    "total_tokens": 139286,
+    "output_tokens": 21770,
+    "web_search_requests": 4,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 320,
+    "total_duration_seconds": 316.163
+  },
+  "claims": [
+    {
+      "claim": "Handoff artifact is self-contained: a tutor or automated system can execute all 8 sessions from this JSON alone",
+      "type": "quality",
+      "verified": true,
+      "evidence": "handoff_checklist[9] states this claim. The JSON is comprehensive with session plans, sandbox exercises, deliverables, bridge_to_next links, and environment_requirements. However, it lacks the stage-contract-mandated quality_evaluation and confirmation structures."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Mandatory confirmation (path overview, stage goals, time commitment, priority, first-session contract) is resolved as confirmed.",
+        "reason": "This assertion would also PASS for outputs that mention confirmation in prose (e.g., 'the learner confirmed the plan') without the structured confirmation object required by the stage contract. Consider requiring an explicit confirmation.status='confirmed' with all four items."
+      },
+      {
+        "assertion": "G5 is evaluated dimension by dimension and the deterministic route is S6 when all dimensions pass.",
+        "reason": "The without_skill output never attempts a G5 rubric evaluation — it uses a completely different schema. The assertion is discriminating but the eval could also verify that the output schema itself matches the stage contract (schema_version, stage_id, quality_evaluation, route_to), which would catch format drift."
+      }
+    ],
+    "overall": "The without_skill output produces a rich, detailed plan but fails to follow the stage contract schema — it uses its own plan_id/plan_type/weekly_plan structure instead of the required S5 envelope with confirmation, quality_evaluation, and route_to. Assertions 4-6 correctly catch this schema non-compliance. Assertions 1-3 are verify-non-trivial even under format drift."
+  }
+}

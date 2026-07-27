@@ -1,0 +1,30 @@
+{
+  "config": "with_skill",
+  "captured_at": "2026-07-27T03:07:15Z",
+  "exit_status": 1,
+  "elapsed_s": 179.04,
+  "result_text": "API Error: Unable to connect to API (ENOTFOUND)",
+  "duration_ms": 173877,
+  "total_cost_usd": 0,
+  "usage": {
+    "input_tokens": 0,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 0,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "",
+    "iterations": [],
+    "speed": "standard"
+  },
+  "modelUsage": {},
+  "num_turns": 1,
+  "is_error": true
+}

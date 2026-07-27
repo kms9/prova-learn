@@ -1,0 +1,575 @@
+{
+  "skill_name": "build-capability-concept-graph",
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "case-1-positive-primary",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+            "passed": true,
+            "evidence": "result.json positive_artifact.type='capability_concept_graph' with focus_question '学习者要依据什么证据选择并验证一个索引方案？'. Nodes typed: representation (n-explain-output), concept (n-plan-nodes, n-est-actual, n-selectivity), procedure (n-multicol-order, n-partial-index), strategy (n-index-tradeoff), metacognition (n-validate-rollback). Wrapped in stage S3 handoff envelope with stage_id='S3', status='completed'."
+          },
+          {
+            "text": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+            "passed": true,
+            "evidence": "quality_evaluation.rubric_results[0] dimension '结构无环性' confirms: '拓扑排序验证: n-explain-output < n-plan-nodes < n-est-actual/n-selectivity < n-multicol-order/n-partial-index < n-index-tradeoff < n-validate-rollback，无反向边'. Score=true, passed=true. Hard-prerequisite subgraph is 8 nodes, 9 edges, topology-verified DAG."
+          },
+          {
+            "text": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+            "passed": true,
+            "evidence": "All 9 edges have prerequisite_strength (hard/soft) and rationale. Hard edge example: n-explain-output→n-plan-nodes rationale='表征 EXPLAIN 输出是识别计划节点与过滤位置的前提'. Soft edge example: n-selectivity→n-partial-index rationale='部分索引谓词蕴含以选择性理解为支撑，但可在主干后补学'. quality_evaluation.rubric_results[1] confirms all edges have hard/soft labels and rationale."
+          },
+          {
+            "text": "Every target capability traces to the nodes required to diagnose and assess it.",
+            "passed": true,
+            "evidence": "traceability.goal_refs links each node to target capabilities: cap-read-plan→[n-explain-output, n-plan-nodes, n-est-actual], cap-design-index→[n-selectivity, n-multicol-order, n-partial-index], cap-validate-tradeoff→[n-index-tradeoff, n-validate-rollback]. quality_evaluation.rubric_results[2] '目标覆盖率' confirms each target capability has ≥1 necessary node."
+          },
+          {
+            "text": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+            "passed": true,
+            "evidence": "All 8 nodes have capability_statement (e.g., n-selectivity: '能根据谓词解释选择性与基数估算对扫描范围的影响'), common_misconceptions (e.g., '把选择性最高的列机械地放在多列索引第一位'), assessment_items (8 items spanning apply/diagnose/explain/transfer/evaluate), and mastery_thresholds (8 thresholds with requires_transfer flags)."
+          },
+          {
+            "text": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+            "passed": true,
+            "evidence": "traceability array covers all 8 nodes with source_refs→S2 evidence (e-doc, e-jd), goal_refs→S1 capabilities, assessment_refs→assessment items. quality_evaluation.verdict='pass', route_to='S4'. All 7 rubric dimensions pass, confirming graph invariants hold before routing."
+          }
+        ],
+        "summary": {
+          "passed": 6,
+          "failed": 0,
+          "total": 6,
+          "pass_rate": 1.0
+        },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "total_steps": 0,
+          "errors_encountered": 0,
+          "output_chars": 22664,
+          "transcript_chars": 16702
+        },
+        "timing": {
+          "executor_duration_seconds": 85,
+          "total_duration_seconds": 82.209,
+          "total_tokens": 76863
+        },
+        "claims": [
+          {
+            "claim": "硬先修子图 DAG 拓扑排序验证通过: 8 节点 9 边，无环",
+            "type": "factual",
+            "verified": true,
+            "evidence": "Edges topology: n-explain-output→n-plan-nodes→{n-est-actual, n-selectivity}→n-multicol-order→n-index-tradeoff→n-validate-rollback, plus n-selectivity→n-partial-index→n-index-tradeoff. All edges go from lower to higher topological order. No reverse edges found."
+          },
+          {
+            "claim": "3 目标能力均可追溯到必要节点，覆盖率 100%",
+            "type": "quality",
+            "verified": true,
+            "evidence": "traceability section maps cap-read-plan→3 nodes, cap-design-index→3 nodes, cap-validate-tradeoff→2 nodes. All 3 target capabilities covered."
+          },
+          {
+            "claim": "8 评估题覆盖 explain/apply/diagnose/transfer/evaluate 五类认知层次",
+            "type": "quality",
+            "verified": true,
+            "evidence": "assessment_items cognitive_level distribution: apply(3 items), diagnose(2), explain(1), transfer(1), evaluate(1) = 5 distinct cognitive levels."
+          }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "reason": "Expectation 2 checks structural acyclicity but doesn't verify the correctness of the hard/soft prerequisite classification itself — e.g., whether n-selectivity→n-partial-index being soft is pedagogically justified. A content-validity check on edge classification could strengthen the eval."
+            }
+          ],
+          "overall": "Assertions are well-designed and discriminating for this eval. Minor gap: edge classification correctness (hard vs soft) is verified structurally but not pedagogically validated."
+        }
+      }
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "case-1-positive-primary",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+            "passed": false,
+            "evidence": "Output has a 'capability_concept_graph' top-level key with 'nodes.capabilities' (C1-C6 with proficiency levels) and 'nodes.concepts' (K1-K20 with domain categories like '执行计划节点','基数估计'). No explicit focus_question field exists (closest is learning_pathway.current.action). Nodes are NOT typed as concept/procedure/strategy/representation/metacognition — they are categorized as 'capability' vs 'concept' with domain-specific category labels. The structure is a capability inventory + concept taxonomy rather than a typed capability_concept_graph."
+          },
+          {
+            "text": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+            "passed": false,
+            "evidence": "Capability edges use relation types: 'prerequisite_of','co_requisite','feedback'. Concept→capability edges use: 'assessed_by','enables','contextualizes','augments','informs'. No edge carries hard/soft prerequisite_strength labeling. No explicit hard-prerequisite subgraph is identified or verified. While the C1→C2→C3→C4→C5 chain is linear and acyclic, the expectation requires an explicit hard-prerequisite subgraph with cycle verification, which is absent."
+          },
+          {
+            "text": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+            "passed": false,
+            "evidence": "Edges have labels (e.g., '定位慢查询后才能解读其执行计划') but no hard/soft distinction exists. All prerequisite edges are type='prerequisite_of' without strength classification. Concept edges use various relation types (assessed_by, enables, augments) that don't map to hard/soft prerequisite semantics. The hard/soft prerequisite model required by S3 is entirely absent."
+          },
+          {
+            "text": "Every target capability traces to the nodes required to diagnose and assess it.",
+            "passed": false,
+            "evidence": "Concepts have 'related_capabilities' fields creating reverse mappings (concept→capability). Edges connect concepts to capabilities (K1→C2 via 'assessed_by'). But there is no formal traceability section with explicit records linking each target capability to the specific diagnostic/assessment nodes. The mapping is informal through edge traversal, not a dedicated traceability structure confirming each capability's support nodes."
+          },
+          {
+            "text": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+            "passed": false,
+            "evidence": "Capabilities have descriptions and sub_capabilities, but no per-node: (a) assessment_items in standard format — concept_mastery heatmap lists mastery labels (fluent/familiar/emerging) without concrete assessment items; (b) common_misconceptions per node — gaps_and_risks exist but aren't structured as per-node misconceptions; (c) mastery_thresholds in standard format — absent. No per-node observable capability statement in the S3 schema sense."
+          },
+          {
+            "text": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+            "passed": false,
+            "evidence": "No formal traceability array with source_refs/goal_refs/assessment_refs per node. g3_handover.decision='READY_TO_PROCEED' but: (a) no rubric_results verifying graph invariants before routing; (b) no explicit route_to='S4' using S3 stage contract; (c) no formal invariant verification (acyclicity, edge explainability, target coverage, etc.). G3 passes without demonstrating invariant checks."
+          }
+        ],
+        "summary": {
+          "passed": 0,
+          "failed": 6,
+          "total": 6,
+          "pass_rate": 0.0
+        },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "total_steps": 0,
+          "errors_encountered": 0,
+          "output_chars": 25323,
+          "transcript_chars": 22979
+        },
+        "timing": {
+          "executor_duration_seconds": 136,
+          "total_duration_seconds": 132.747,
+          "total_tokens": 100894
+        },
+        "claims": [
+          {
+            "claim": "Output labels itself as S3 个性化学习路径生成",
+            "type": "factual",
+            "verified": true,
+            "evidence": "result.json stage='S3', stage_name='个性化学习路径生成'."
+          },
+          {
+            "claim": "G3 handover declares READY_TO_PROCEED",
+            "type": "factual",
+            "verified": true,
+            "evidence": "g3_handover.decision='READY_TO_PROCEED', sign_off.verdict='G3 PASS'."
+          },
+          {
+            "claim": "The output correctly handles the PostgreSQL 18 domain with PG-18-specific features",
+            "type": "quality",
+            "verified": false,
+            "evidence": "Output includes PG 18 specific concepts (K15 B-tree Skip Scan, K16 Enhanced EXPLAIN, K17 AIO/io_uring) without S2 audited evidence — these are model-invented claims not traceable to audited sources. The input didn't specify PG 18 specifics beyond the eval prompt."
+          }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "assertion": "Expectation 1",
+              "reason": "A without-skill run that produces a loosely structured capability+concept taxonomy would still fail this assertion, which is correct. But the assertion could be strengthened by explicitly requiring a 'focus_question' field and node_type enum values."
+            },
+            {
+              "assertion": "Expectation 5",
+              "reason": "The without-skill output contains capability descriptions but no per-node misconceptions or assessment items — this caught a real quality gap. The assertion is discriminating."
+            },
+            {
+              "reason": "The without-skill output invents extensive PG-18-specific content (Skip Scan, AIO, Enhanced EXPLAIN) that no assertion checks — an additional expectation verifying that domain claims are traceable to S2 evidence would catch fabricated knowledge."
+            }
+          ],
+          "overall": "Assertions are effective at distinguishing with-skill from without-skill quality. Consider adding an evidence-provenance assertion to catch fabricated domain knowledge."
+        }
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "case-2-positive-cross-domain",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+            "passed": true,
+            "evidence": "focus_question='学习者如何判断两个分数是否表示相同大小，并运用这种理解来比较分数和解决真实情境问题？'. Multiple representation nodes: n-area-model (representation type) and n-number-line (representation type) with distinct capability statements. Nodes typed across 5 categories: concept(5), representation(2), procedure(1), strategy(2), metacognition(1). The graph is clearly NOT a chapter sequence — it's organized around conceptual prerequisites from unit whole through equivalence to comparison strategies."
+          },
+          {
+            "text": "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+            "passed": true,
+            "evidence": "Hard prerequisite path: n-unit-whole→n-equal-partitioning→n-unit-fraction→n-fraction-quantity→n-equivalent-fractions→n-common-denominator. quality_evaluation.rubric_results[0] '结构无环性' confirms: '拓扑排序验证：n-unit-whole(0), n-equal-partitioning(1), n-unit-fraction(2)...n-common-denominator(5)...所有硬边均从低拓扑序指向高拓扑序，无反向边，无环'. The specific path from unit whole to common denominators is explicitly verified as acyclic."
+          },
+          {
+            "text": "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+            "passed": true,
+            "evidence": "All 10 hard edges have rationale. Example: n-equal-partitioning→n-unit-fraction rationale='单位分数1/b的定义前提是整体被等分为b份——若不等分，1份不能称为1/b；等分是单位分数的构成性前提'. n-equivalent-fractions→n-common-denominator rationale='通分的本质是将两个分数转化为同分母的等值分数——如果不理解等值分数（a/b变为(a×k)/(b×k)），通分只是无意义的机械操作'. Rationales are grounded in fraction concept structure, not generic statements."
+          },
+          {
+            "text": "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+            "passed": true,
+            "evidence": "quality_evaluation.rubric_results[2] '目标覆盖率': cap-compare-fractions traces to 10 nodes, cap-explain-equivalence traces to 6 nodes, cap-solve-context traces to 5 nodes. traceability section's goal_refs confirms: e.g., n-compare-strategies→goal_refs=[cap-compare-fractions, cap-solve-context], n-equivalent-fractions→goal_refs=[cap-explain-equivalence, cap-compare-fractions, cap-solve-context]."
+          },
+          {
+            "text": "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+            "passed": true,
+            "evidence": "All 11 nodes have capability_statement, common_misconceptions, and assessment_items. Domain-appropriate misconception examples: n-unit-fraction: '认为1/3 > 1/2 因为3 > 2（整数思维迁移）'; n-equivalent-fractions: '认为2/3和3/4等值因为分子分母各加了1'; n-compare-strategies: '总是通分比较，即使同分母可直接比较'. Assessment items span explain(2), apply(4), diagnose(2), evaluate(2), transfer(1) — all reaching at least explanation/application/transfer levels."
+          },
+          {
+            "text": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+            "passed": true,
+            "evidence": "traceability array covers all 11 nodes with source_refs→S2 evidence (e-unit-whole, e-equal-partition, e-unit-fraction, e-number-line, e-equivalent-fractions, e-common-denom), goal_refs→S1 capabilities, assessment_refs→assessment items. quality_evaluation.verdict='pass', route_to='S4'. All 7 rubric dimensions pass, confirming invariants hold before deterministic routing to S4."
+          }
+        ],
+        "summary": {
+          "passed": 6,
+          "failed": 0,
+          "total": 6,
+          "pass_rate": 1.0
+        },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "total_steps": 0,
+          "errors_encountered": 0,
+          "output_chars": 40391,
+          "transcript_chars": 39658
+        },
+        "timing": {
+          "executor_duration_seconds": 210,
+          "total_duration_seconds": 206.499,
+          "total_tokens": 85478
+        },
+        "claims": [
+          {
+            "claim": "硬先修DAG拓扑排序无环，共有10条硬边",
+            "type": "factual",
+            "verified": true,
+            "evidence": "10 hard edges verified: 6 on main chain (unit-whole→...→context-modeling), 2 on representation branches, 1 on number-line→fraction-quantity, and equal-partitioning→area-model. All forward edges."
+          },
+          {
+            "claim": "11题覆盖 explain/apply/diagnose/evaluate/transfer 五层认知水平",
+            "type": "quality",
+            "verified": true,
+            "evidence": "Cognitive level distribution: explain(2), apply(4), diagnose(2), evaluate(2), transfer(1). All 5 levels represented."
+          },
+          {
+            "claim": "全部16条边（10条hard + 6条soft）均有rationale字段且非空",
+            "type": "factual",
+            "verified": true,
+            "evidence": "All 16 edges in positive_artifact.content.edges have non-empty prerequisite_strength and rationale fields. Confirmed by quality_evaluation.rubric_results[1]."
+          }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "reason": "The requirement_gaps field identifies 'gap-frac-procedural-fluency' (missing multiplication fluency data) and 'gap-context-problem-types' (missing problem type distribution). The expectations don't check whether identified gaps are appropriately surfaced in the handoff — an additional assertion on gap transparency could be valuable."
+            }
+          ],
+          "overall": "Assertions are comprehensive and discriminating. The cross-domain nature (PostgreSQL→Fractions) is well-handled. Minor gap: the eval doesn't verify whether S2 evidence references (e-unit-whole, etc.) are real audited evidence vs. model-inferred labels."
+        }
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "case-2-positive-cross-domain",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+            "passed": true,
+            "evidence": "Output uses multiple representations throughout: number line (C04 '数轴上的分数定位'), area models (C09 uses 面积模型/分数条/数轴), fraction bars. The competencyConceptMap.description states '以理解为中心的双维度层级结构。纵轴为认知深度（从具象操作到抽象推理），横轴为能力域'. The learning_goal provides implicit direction. While no explicit 'focus_question' field exists, the structure is organized around conceptual development, not a chapter sequence. Nodes progress from unit whole identification through partitioning, unit fractions, representations, equivalence, to strategy and application — this is conceptual, not topical sequencing."
+          },
+          {
+            "text": "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+            "passed": true,
+            "evidence": "Prerequisite edges form a DAG: C01→C02→C03→C04→C05→C07→C08 and C01→C02/C03→C06→C07→C08 and C02/C03→C09→C10→C11→C12. The path from unit whole (C01) to equivalent fractions (C10) to common denominators (C11) is: C01→C02→C03→C09→C10→C11, all 'prerequisite' type edges. 'Reinforcement' edges (C04→C09, C07→C05, C11→C08, C14→C08, C14→C12) are distinguished from prerequisites. All prerequisite edges go from lower-level/earlier nodes to higher-level/later nodes — no reverse edges, no cycles."
+          },
+          {
+            "text": "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+            "passed": false,
+            "evidence": "Prerequisite edges lack rationale: they contain only {from, to, type: 'prerequisite'} triples with no rationale field. Example: C01→C02 is just {from:'C01', to:'C02', type:'prerequisite'} — no explanation of why unit whole identification must precede equal partitioning. Reinforcement edges have 'note' fields (e.g., C04→C09 note='数轴是验证等值的最有力工具'), but prerequisite edges carry zero rationale. The fraction concept structure grounding is entirely absent from edge definitions."
+          },
+          {
+            "text": "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+            "passed": true,
+            "evidence": "competencyStatusSummary in g3HandoffResults tracks all 14 nodes with pre-S3 status and post-S3 targets. Target capabilities implicitly map through prerequisite chains: cap-compare (C06→C07→C08), cap-explain-equivalence (C09→C10→C11→C12), cap-solve-context (C13→C14). Dimension mapping: D2 '比较与排序'→C06,C07,C08; D3 '等值与变换'→C09,C10,C11,C12; D4 '应用与建模'→C13,C14. While not a formal traceability structure, the prerequisite graph provides implicit traceability from each target to its supporting nodes."
+          },
+          {
+            "text": "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+            "passed": false,
+            "evidence": "Nodes have descriptions that function as capability statements (e.g., C04: '在数轴上以「空间」而非「刻度」定位分数；理解分数是数轴上的一个点/距离'). But: (a) no per-node common_misconceptions — s2AuditSummary.gapsIdentified lists general gaps ('比较分数时策略单一') not structured as per-node misconceptions; (b) no concrete assessment_items per node — g3HandoffResults has assessmentMethod descriptions but no specific assessment tasks; (c) no mastery_thresholds per node — g3Decision defines pass/fail thresholds at the G3 level, not per-node mastery criteria. The output lacks the per-node misconception/assessment/threshold decomposition required."
+          },
+          {
+            "text": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+            "passed": false,
+            "evidence": "No formal traceability array. s2AuditSummary.domainsConfirmed provides evidence references but not per-node source mapping. g3HandoffResults.competencyStatusSummary tracks pre-S3→post-S3 status but doesn't link to formal S1/S2 artifact IDs. g3Decision defines pass thresholds conditionally ('if ≤2 nodes remain moderate...') but does not issue an explicit pass/fail verdict. No route_to='S4', no invariant verification before routing. postG3Recommendations.readyFor suggests next steps but without deterministic gate logic."
+          }
+        ],
+        "summary": {
+          "passed": 3,
+          "failed": 3,
+          "total": 6,
+          "pass_rate": 0.5
+        },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "total_steps": 0,
+          "errors_encountered": 0,
+          "output_chars": 29250,
+          "transcript_chars": 27528
+        },
+        "timing": {
+          "executor_duration_seconds": 224,
+          "total_duration_seconds": 221.215,
+          "total_tokens": 132568
+        },
+        "claims": [
+          {
+            "claim": "S2审计覆盖六个证据域",
+            "type": "factual",
+            "verified": true,
+            "evidence": "s2AuditSummary.domainsConfirmed lists 6 domains: 单位整体, 等分, 单位分数, 数轴表征, 等值分数, 通分意义 — each with evidence description and confidence level."
+          },
+          {
+            "claim": "三周15天学习计划按周组织（数轴→等值→情境）",
+            "type": "quality",
+            "verified": true,
+            "evidence": "s3PersonalizedPlan contains week1(theme='数轴·基准·多策略比较', days 1-5), week2(theme='等值原理·通分意义·灵活变换', days 6-10), week3(theme='情境应用·综合建模·反思整合', days 11-15). Each day has title, activity, targetNodes, and diagnostic criteria."
+          },
+          {
+            "claim": "G3 通过条件：所有C01-C14节点≥confirmed",
+            "type": "quality",
+            "verified": false,
+            "evidence": "g3Decision.passThreshold='all C01–C14 nodes ≥ confirmed by end of S3'. But the output is a PLAN (pre-execution), not post-execution results — no actual assessment data confirms these thresholds were met. The claim describes a target, not an achieved outcome."
+          }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "assertion": "Expectation 3",
+              "reason": "This assertion correctly catches that prerequisite edges lack rationale — a key differentiator between the with-skill and without-skill outputs. The assertion is highly discriminating."
+            },
+            {
+              "assertion": "Expectation 5",
+              "reason": "This assertion catches the absence of per-node misconceptions and assessment items. The without-skill output has rich instructional design but lacks the structured per-node decomposition that the skill enforces. Well-designed assertion."
+            },
+            {
+              "reason": "The without-skill output produces a detailed week-by-week instructional plan (s3PersonalizedPlan with 15 daily activities) that no assertion checks — this is a significant quality dimension (actionable learning design) that the evals don't assess. Consider adding an assertion about actionable next-step specificity."
+            }
+          ],
+          "overall": "Assertions 3, 5, and 6 are the most discriminating for this cross-domain eval. The without-skill output is richer than a simple topic list but still fails on edge rationale, per-node assessment decomposition, and formal traceability — which is exactly what the S3 skill enforces."
+        }
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "case-3-negative-blocked",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+            "passed": true,
+            "evidence": "positive_artifact is null. quality_evaluation.verdict='revise_here' (not 'pass'). input_validation.status='fail' with 11 missing_fields. processing_record step 5: '拒绝建图 — positive_artifact=null，status=blocked，失效下游范围至少 [S4,S5,S6,S7]'. The topic sequence 'SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 查询优化' is explicitly rejected."
+          },
+          {
+            "text": "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+            "passed": true,
+            "evidence": "input_validation.missing_fields explicitly enumerates: 'focus_question', 'edges[].prerequisite_strength', 'edges[].rationale', 'nodes[].capability_statement', 'nodes[].common_misconceptions', 'assessment_items', 'mastery_thresholds', 'remediation_entries', 'traceability'. input_validation.errors provides specific diagnosis for each missing element. requirement_gaps lists 7 gaps with criticality ratings and gate_effect (6 'block', 1 'lower_confidence')."
+          },
+          {
+            "text": "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+            "passed": true,
+            "evidence": "quality_evaluation.rubric_results[0] '结构无环性': passed=false, evidence='无边标注 hard/soft 强度，无法提取硬先修子图进行无环性检查'. rubric_results[1] '先修边可解释性': passed=false, evidence='边仅为章节顺序，无 rationale，无法解释为何某节点是另一节点的先修'. Both dimensions are explicitly reported as failed rather than assumed or fabricated."
+          },
+          {
+            "text": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+            "passed": true,
+            "evidence": "evidence_collected has exactly one entry: ev-input-inspection-001 with provenance='model_hypothesis' and status='unsupported'. No evidence entry has status='supported'. source_artifact_ids is empty array. No fabricated S2 audited evidence is created or claimed. The output attributes all gaps to missing G1/G2 upstream artifacts without inventing substitutes."
+          },
+          {
+            "text": "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+            "passed": true,
+            "evidence": "traceability.source_artifact_ids is empty array. rubric_results[2] '目标覆盖率' has failure_action='return_upstream', route_to='S1'. rubric_results[6] '全链路可追溯性' has failure_action='return_upstream', route_to='S2'. confirmation.questions explicitly ask: '是否需先完成 S1（目标契约）定义焦点问题与目标能力？' and '是否需先完成 S2（领域证据）审计术语与来源？'. Node facts without evidence are attributed for upstream return to S1/S2."
+          },
+          {
+            "text": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+            "passed": true,
+            "evidence": "quality_evaluation.verdict='revise_here'. Individual rubric route_to values: S3 for local defects (structure, edges, granularity, capability distinction, assessment), S1 for missing goal definition, S2 for missing evidence. processing_record step 5 records: '失效下游范围至少 [S4,S5,S6,S7]'. The deterministic routing correctly distinguishes local (S3) from upstream (S1/S2) defects and invalidates the downstream scope."
+          }
+        ],
+        "summary": {
+          "passed": 6,
+          "failed": 0,
+          "total": 6,
+          "pass_rate": 1.0
+        },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "total_steps": 0,
+          "errors_encountered": 0,
+          "output_chars": 8717,
+          "transcript_chars": 9036
+        },
+        "timing": {
+          "executor_duration_seconds": 115,
+          "total_duration_seconds": 111.644,
+          "total_tokens": 76665
+        },
+        "claims": [
+          {
+            "claim": "输入仅为主题目录，不具备能力—概念图的任何必备要素",
+            "type": "factual",
+            "verified": true,
+            "evidence": "input_validation.errors confirms: '输入仅为主题目录...不具备能力—概念图的任何必备要素'. The input was exactly 'SQL 基础 → 索引 → 执行计划 → 锁 → 事务 → 分区 → 查询优化' — a linear topic sequence without typed nodes, edges, or any S3 schema element."
+          },
+          {
+            "claim": "七个 G3 维度全部 failed",
+            "type": "factual",
+            "verified": true,
+            "evidence": "quality_evaluation.rubric_results has 7 entries, all with passed=false. Dimensions: 结构无环性, 先修边可解释性, 目标覆盖率, 节点粒度一致性, 能力与概念区分度, 评估题有效性, 全链路可追溯性."
+          },
+          {
+            "claim": "失效下游范围至少 [S4,S5,S6,S7]",
+            "type": "quality",
+            "verified": true,
+            "evidence": "processing_record step 5 explicitly states: '失效下游范围至少 [S4,S5,S6,S7]'. This matches the stage contract — if S3 is blocked, downstream stages S4-S7 cannot proceed."
+          }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "reason": "All 6 expectations pass for this negative case — the skill correctly blocks and diagnoses. However, no assertion verifies that the '锁/事务/分区' nodes are explicitly flagged as potentially extraneous (beyond the minimum viable path). The output does flag this in requirement_gaps[6] ('gap-extraneous-nodes'), but the eval doesn't check for extraneous node identification."
+            }
+          ],
+          "overall": "The negative/blocked eval is well-designed. All expectations correctly pass for the with-skill configuration which properly blocks and diagnoses the invalid input. The eval effectively validates the skill's gatekeeping behavior."
+        }
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "case-3-negative-blocked",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "grading": {
+        "expectations": [
+          {
+            "text": "The topic sequence is not accepted as a passing capability_concept_graph and no fabricated positive artifact is produced.",
+            "passed": false,
+            "evidence": "The output ACCEPTS the topic sequence and produces a full positive artifact: a dependency_graph with 7 nodes (SQL基础, 索引, 执行计划, 锁, 事务, 分区, 查询优化), 6 edges with reasons, a learning_path with recommended_sequence of 7 steps, personalization with risk_areas, and metadata. The metadata acknowledges input deficits ('input_has_focal_questions': false, 'input_has_misconceptions': false, 'input_has_assessments': false, 'input_has_mastery_rules': false, 'input_has_source_mappings': false) but proceeds to fabricate a complete dependency_graph and learning plan anyway."
+          },
+          {
+            "text": "The output identifies the missing focus question, typed nodes with capability statements, justified edges, misconceptions, assessments, mastery thresholds and traceability.",
+            "passed": false,
+            "evidence": "Metadata notes absences as passive flags (input_has_focal_questions=false, etc.) embedded in metadata object — not as blocking deficiencies requiring upstream return. The output does NOT identify these as problems to be fixed; it notes them incidentally while proceeding to build a full dependency_graph. No requirement_gaps section exists. The deficits are treated as descriptive metadata, not as blocking gate conditions."
+          },
+          {
+            "text": "Acyclicity and prerequisite explainability cannot be established and are reported as failed rather than assumed.",
+            "passed": false,
+            "evidence": "The dependency_graph is explicitly constructed as a linear DAG (edges all forward: sql_basics→indexes→execution_plans→locks→transactions→partitioning→query_optimization). Edge reasons are provided (e.g., '索引的理解需要先掌握 SQL 基本查询语法'). Acyclicity is ASSUMED/CONSTRUCTED, not checked and reported as failed. The output labels the graph 'graph_type': 'linear_dag' in metadata — treating acyclicity as a property of the constructed artifact rather than reporting it as unestablishable from the input."
+          },
+          {
+            "text": "The output does not invent domain evidence or relabel model knowledge as S2 audited evidence.",
+            "passed": false,
+            "evidence": "The output invents extensive domain knowledge from the model: each of 7 nodes has detailed key_concepts (8 per node = 56+ invented concepts), estimated_hours, difficulty levels, weight values. The learning_path includes suggested_resources_type, learning_strategy (bottom_up/top_down), checkpoints, and detailed risk_areas with mitigation strategies. ALL of this is model-invented — the input was just 7 topic names. The output contains no S2 evidence references yet fabricates complete instructional content including 'B+Tree 索引结构与原理','MVCC 实现原理','ACID 特性'等."
+          },
+          {
+            "text": "Full traceability to S1 goals and S2 evidence is reported as absent, and any unsupported node fact is attributed for upstream return.",
+            "passed": false,
+            "evidence": "No traceability section exists. No S1 goal references. No S2 evidence references. No upstream attribution. The metadata notes input_has_source_mappings=false as a passive flag but does not attribute any node fact for return to S1 or S2. The output treats the topic sequence as sufficient input and proceeds to build a complete instructional product without questioning provenance."
+          },
+          {
+            "text": "G3 does not pass; the deterministic route is S3 for local graph defects, or S2 when node facts lack evidence, with the invalidated downstream scope recorded.",
+            "passed": false,
+            "evidence": "No G3 decision exists. No quality_evaluation, no rubric_results, no verdict, no route_to. The learning_path presents a recommended_sequence as a complete product ready for use. The metadata field 'method': 'dependency_chain_analysis' treats the process as successfully completed. There is no blocked status, no invalidated downstream scope, no upstream routing. The output reads as a finished learning path generator result, not a blocked gate evaluation."
+          }
+        ],
+        "summary": {
+          "passed": 0,
+          "failed": 6,
+          "total": 6,
+          "pass_rate": 0.0
+        },
+        "execution_metrics": {
+          "total_tool_calls": 0,
+          "total_steps": 0,
+          "errors_encountered": 0,
+          "output_chars": 11152,
+          "transcript_chars": 10524
+        },
+        "timing": {
+          "executor_duration_seconds": 47,
+          "total_duration_seconds": 44.463,
+          "total_tokens": 32911
+        },
+        "claims": [
+          {
+            "claim": "graph_type is 'linear_dag'",
+            "type": "factual",
+            "verified": true,
+            "evidence": "metadata.graph_type='linear_dag'. The 7 nodes form a strict linear chain with 6 forward edges."
+          },
+          {
+            "claim": "method is 'dependency_chain_analysis'",
+            "type": "process",
+            "verified": true,
+            "evidence": "metadata.method='dependency_chain_analysis'. The output analyzes the topic sequence as a dependency chain without questioning whether topics constitute valid graph nodes."
+          },
+          {
+            "claim": "total_estimated_hours is 39",
+            "type": "factual",
+            "verified": false,
+            "evidence": "learning_path.total_estimated_hours=39, computed as sum of node estimated_hours (8+6+5+5+5+4+6=39). But these hour estimates are entirely invented — the input provided no time estimates. The claim is arithmetically consistent but factually ungrounded."
+          }
+        ],
+        "user_notes_summary": {
+          "uncertainties": [],
+          "needs_review": [],
+          "workarounds": []
+        },
+        "eval_feedback": {
+          "suggestions": [
+            {
+              "assertion": "Expectation 1",
+              "reason": "This assertion correctly catches that the without-skill output fabricates a positive artifact from invalid input. It is the most critical discriminator for the negative case."
+            },
+            {
+              "assertion": "Expectation 4",
+              "reason": "This assertion correctly catches extensive domain knowledge fabrication (56+ invented concepts, learning strategies, risk assessments). Critical for distinguishing gatekeeping behavior from unverified generation."
+            },
+            {
+              "reason": "The without-skill output's speed (47s, 32911 tokens) is notably faster than other without-skill runs (132-224s, 100K-132K tokens). This could indicate the output was generated without deep engagement with the S3 task requirements — a potential quality signal not captured by any assertion."
+            }
+          ],
+          "overall": "The negative/blocked eval assertions are highly effective at discriminating with-skill from without-skill behavior. All 6 assertions correctly pass for the skill and fail for the baseline — maximum discrimination. The eval design for this case is excellent."
+        }
+      }
+    }
+  ]
+}

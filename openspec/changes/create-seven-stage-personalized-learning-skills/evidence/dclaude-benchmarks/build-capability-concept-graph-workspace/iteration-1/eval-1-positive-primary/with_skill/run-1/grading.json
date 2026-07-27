@@ -1,0 +1,93 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+      "passed": true,
+      "evidence": "Response is a full S3 handoff envelope (schema_version 1.0.0, stage_id S3, status completed). positive_artifact.type is 'capability_concept_graph' with content containing focus_question '学习者要依据什么证据选择并验证一个索引方案？'. Nodes are typed: representation (n-explain-output), concept (n-plan-nodes, n-est-actual, n-selectivity), procedure (n-multicol-order, n-partial-index), strategy (n-index-tradeoff), metacognition (n-validate-rollback). No bare topic headings."
+    },
+    {
+      "text": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[0] ('结构无环性') passes with evidence: '拓扑排序验证: n-explain-output < n-plan-nodes < n-est-actual/n-selectivity < n-multicol-order/n-partial-index < n-index-tradeoff < n-validate-rollback，无反向边'. 9 edges total, hard-prerequisite subgraph verified acyclic via topological sort."
+    },
+    {
+      "text": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+      "passed": true,
+      "evidence": "All 9 edges have prerequisite_strength ('hard' or 'soft') and rationale fields. Hard edges: e.g. n-explain-output→n-plan-nodes rationale '表征 EXPLAIN 输出是识别计划节点与过滤位置的前提'. Soft edges: e.g. n-selectivity→n-partial-index rationale '部分索引谓词蕴含以选择性理解为支撑，但可在主干后补学'. quality_evaluation.rubric_results[1] confirms all edges marked with rationale."
+    },
+    {
+      "text": "Every target capability traces to the nodes required to diagnose and assess it.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results[2] ('目标覆盖率') confirms: cap-read-plan→n-explain-output, n-plan-nodes, n-est-actual (3 nodes); cap-design-index→n-selectivity, n-multicol-order, n-partial-index (3 nodes); cap-validate-tradeoff→n-index-tradeoff, n-validate-rollback (2 nodes). traceability[].goal_refs maps each node to target capabilities. Every capability has ≥1 necessary node."
+    },
+    {
+      "text": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+      "passed": true,
+      "evidence": "All 8 nodes have: (a) capability_statement field with observable behavior (e.g. n-explain-output: '能用 EXPLAIN (ANALYZE, BUFFERS) 文本与 Buffers 统计表征基线与改进'), (b) common_misconceptions array (at least 1 per node), (c) assessment_items array (8 items covering apply/diagnose/explain/transfer/evaluate cognitive levels), (d) mastery_thresholds array (8 entries with measurable thresholds). Also includes remediation_entries for 5 nodes."
+    },
+    {
+      "text": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+      "passed": true,
+      "evidence": "traceability array covers all 8 nodes. Each entry has source_refs→S2 evidence (e-doc/e-jd), goal_refs→S1 target capabilities, assessment_refs→assessment items. quality_evaluation.verdict is 'pass', route_to is 'S4'. All 7 rubric dimensions passed with score=true."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 11,
+    "errors_encountered": 0,
+    "output_chars": 6619,
+    "transcript_chars": 76863
+  },
+  "timing": {
+    "executor_duration_seconds": 85,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": 82.209
+  },
+  "claims": [
+    {
+      "claim": "G1/G2 已通过，G2 domain_evidence_landscape 涵盖执行计划节点、估算/实际行数、选择性基数、多列/部分索引与写入代价",
+      "type": "process",
+      "verified": true,
+      "evidence": "input_validation.status='pass', assumptions acknowledge G1/G2 passed status, evidence_collected references gsc-pg-0001 and del-pg-0001"
+    },
+    {
+      "claim": "硬先修子图 DAG 拓扑排序验证通过: 8 节点 9 边，无环",
+      "type": "factual",
+      "verified": true,
+      "evidence": "quality_evaluation confirms topological sort with no reverse edges; all hard edges point from lower to higher topological order"
+    },
+    {
+      "claim": "8 评估题覆盖 explain/apply/diagnose/transfer/evaluate 五类认知层次",
+      "type": "quality",
+      "verified": true,
+      "evidence": "assessment_items array: apply(3 items), diagnose(2), explain(1), transfer(1), evaluate(1) — 5 distinct cognitive levels"
+    },
+    {
+      "claim": "全链路 goal→capability→node→assessment→source 可追溯",
+      "type": "quality",
+      "verified": true,
+      "evidence": "traceability records for all 8 nodes all have non-empty source_refs, goal_refs, assessment_refs"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+        "reason": "The traceability source_refs use generic IDs (e-doc, e-jd) rather than evidence-specific references. The assertion passes because the structure exists, but a stronger assertion would check that source_refs map to named, distinct evidence items from S2 rather than placeholders."
+      }
+    ],
+    "overall": "All 6 expectations pass with strong evidence. The output demonstrates genuine task completion — a structurally complete capability-concept graph with typed nodes, justified edges, assessment items, mastery thresholds, traceability, and a passing G3 verdict. One minor note: source_refs are generic (e-doc, e-jd) rather than specific evidence identifiers, but the traceability structure is complete."
+  }
+}

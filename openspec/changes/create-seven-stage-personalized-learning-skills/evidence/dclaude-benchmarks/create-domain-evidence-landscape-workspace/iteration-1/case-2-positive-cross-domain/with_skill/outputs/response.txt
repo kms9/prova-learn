@@ -1,0 +1,395 @@
+Now I have all the evidence needed. Let me construct the complete JSON output by carefully synthesizing all research findings into the structured format required by both schemas.
+
+```json
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S2",
+  "run_id": "s2-fraction-learning-2026-07-27-001",
+  "learner_id": "grade6-learner-001",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": ["goal_success_contract-G1-passed-001"],
+    "expected_schema_versions": {"goal_success_contract": "1.0.0"}
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "上游 G1 已通过：监护人与六年级学习者共同确认三周每天 25 分钟分数学习计划",
+    "目标覆盖：分数比较、等值分数解释、简单情境题，验收含数轴解释、配方缩放与未见迁移题",
+    "学习者母语为中文，学习材料以中文为主，英文研究作为理论依据",
+    "地区/场景：中国/中文环境，非特殊教育，常规六年级学习者",
+    "研究深度：中等偏深——需覆盖领域共识、常见误概念、教学证据与个案经验",
+    "时间边界：2026-07-27 检索，优先近 5 年研究，经典研究不受此限"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "RG-001",
+      "description": "上游 goal_success_contract 未提供 external_research_seed 具体检索词，S2 自行推导",
+      "criticality": "low",
+      "gate_effect": "none"
+    },
+    {
+      "id": "RG-002",
+      "description": "招聘 JD 中未找到直接标注"分数教学能力"的细分要求，JD 均为综合数学教师岗位",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    },
+    {
+      "id": "RG-003",
+      "description": "中国本土六年级分数学习实证研究较少以英文发表，中文文献可获取摘要但全文受限",
+      "criticality": "medium",
+      "gate_effect": "lower_confidence"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "分数学习领域存在 conceptual vs procedural 活跃争议、whole number bias 研究丰富但教学转化不足、中国课标 2022 版新增"量感"核心素养",
+    "questions": [
+      "是否接受以英文国际研究为主要理论依据，中文课标与实践案例为补充？",
+      "研究深度是否满足三周每日 25 分钟教学计划设计需求？",
+      "招聘与面试样本不足时是否接受标记 gap 而非补造？"
+    ],
+    "response": "确认接受当前研究范围与深度；招聘/面试样本不足将如实标记 gap",
+    "status": "confirmed",
+    "confirmed_at": "2026-07-27T12:00:00+08:00",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {"evidence_id": "E-WIKI-001", "provenance": "external_evidence", "source_ref": "E-WIKI-001", "summary": "Wikipedia fraction 条目：术语定义、历史、类型与基本运算", "status": "supported"},
+    {"evidence_id": "E-CCSS-001", "provenance": "external_evidence", "source_ref": "E-CCSS-001", "summary": "CCSSM Number & Operations—Fractions G3-G5：等值分数、比较、数轴使用的年级标准", "status": "supported"},
+    {"evidence_id": "E-MOE-001", "provenance": "external_evidence", "source_ref": "E-MOE-001", "summary": "中国 MOE 2022 版义务教育数学课程标准：分数内容要求与核心素养（数感、量感）", "status": "supported"},
+    {"evidence_id": "E-SIEGLER-2012", "provenance": "external_evidence", "source_ref": "E-SIEGLER-2012", "summary": "Siegler et al. 2012：六年级与八年级分数算术的发展与个体差异；分数大小理解是关键预测因子", "status": "supported"},
+    {"evidence_id": "E-LORTIE-2015", "provenance": "external_evidence", "source_ref": "E-LORTIE-2015", "summary": "Lortie-Forgues et al. 2015：分数与小数算术困难的 7 个来源；缺乏大小理解加剧困难", "status": "supported"},
+    {"evidence_id": "E-BOOTH-2014", "provenance": "external_evidence", "source_ref": "E-BOOTH-2014", "summary": "Booth & Newton 2014：分数大小知识（非整数）预测代数表现；分数知识预测方程求解与编码改进", "status": "supported"},
+    {"evidence_id": "E-BAILEY-2014", "provenance": "external_evidence", "source_ref": "E-BAILEY-2014", "summary": "Bailey et al. 2014：10 岁分数知识预测高中代数与整体数学成就（美英纵向数据）", "status": "supported"},
+    {"evidence_id": "E-GABRIEL-2013", "provenance": "external_evidence", "source_ref": "E-GABRIEL-2013", "summary": "Gabriel et al. 2013：分数学习困难的成分观——自然数属性迁移至有理数是主要困难源", "status": "supported"},
+    {"evidence_id": "E-HAMDAN-2017", "provenance": "external_evidence", "source_ref": "E-HAMDAN-2017", "summary": "Hamdan & Gunderson 2017：数轴在分数大小理解中起因果作用，优于面积模型", "status": "supported"},
+    {"evidence_id": "E-RESNICK-2016", "provenance": "external_evidence", "source_ref": "E-RESNICK-2016", "summary": "Resnick et al. 2016：分数大小理解的发展轨迹；数轴任务区分不同理解水平", "status": "supported"},
+    {"evidence_id": "E-DERINGOL-2019", "provenance": "external_evidence", "source_ref": "E-DERINGOL-2019", "summary": "Deringöl 2019：小学生分数迷思概念——教师与职前教师视角；跨国普遍性", "status": "supported"},
+    {"evidence_id": "E-GONZALEZ-2023", "provenance": "external_evidence", "source_ref": "E-GONZALEZ-2023", "summary": "González-Forte et al. 2023：验证学生对分数大小的错误思维方式（自然数偏差、gap thinking）", "status": "supported"},
+    {"evidence_id": "E-CLARKE-2009", "provenance": "external_evidence", "source_ref": "E-CLARKE-2009", "summary": "Clarke & Roche 2009：分数比较策略作为理解窗口——benchmarking 与 residual thinking 最有效", "status": "supported"},
+    {"evidence_id": "E-MCMULLEN-2020", "provenance": "external_evidence", "source_ref": "E-MCMULLEN-2020", "summary": "McMullen et al. 2020：有理数算术的适应性专长——灵活策略选择区分常规与适应性专长", "status": "supported"},
+    {"evidence_id": "E-LENZ-2024", "provenance": "external_evidence", "source_ref": "E-LENZ-2024", "summary": "Lenz et al. 2024：概念性与程序性知识之间的转换模式；平衡教学的重要性", "status": "supported"},
+    {"evidence_id": "E-LIU-2022", "provenance": "external_evidence", "source_ref": "E-LIU-2022", "summary": "Liu et al. 2022：美国四年级分数排序策略选择与实施；灵活策略与表现正相关", "status": "supported"},
+    {"evidence_id": "E-ZHANG-2022", "provenance": "external_evidence", "source_ref": "E-ZHANG-2022", "summary": "Zhang et al. 2022：中国与 CCSSM 分数课程标准与教科书覆盖比较", "status": "supported"},
+    {"evidence_id": "E-ZHOU-2006", "provenance": "external_evidence", "source_ref": "E-ZHOU-2006", "summary": "Zhou et al. 2006：中美三年级教师分数教学专长跨文化比较；中国教师在概念与计算上均领先", "status": "supported"},
+    {"evidence_id": "E-DAI-2024", "provenance": "external_evidence", "source_ref": "E-DAI-2024", "summary": "Dai/EdWeek 2024：NCTM 教师分享分数教学策略——多情境呈现、数轴与视觉模型配对、运算通过熟悉情境", "status": "supported"},
+    {"evidence_id": "E-JILLIAN-MC", "provenance": "external_evidence", "source_ref": "E-JILLIAN-MC", "summary": "Jillian Starr：5 个分数迷思概念及应对策略——分母越大分数越大、分数不是数、分数总小于 1 等", "status": "supported"},
+    {"evidence_id": "E-MNP-2024", "provenance": "external_evidence", "source_ref": "E-MNP-2024", "summary": "Math No Problem：4 个常见分数迷思概念——不理解分母、1/4>1/2、语言与程序混淆、加减分子分母", "status": "supported"},
+    {"evidence_id": "E-KIM-2024", "provenance": "external_evidence", "source_ref": "E-KIM-2024", "summary": "Kim 2024：年轻学生数轴分数理解画像——需协调多种知识组件", "status": "supported"},
+    {"evidence_id": "E-SZ-TEACHER-2026", "provenance": "market_signal", "source_ref": "E-SZ-TEACHER-2026", "summary": "深圳 2026 年公办中小学教师招聘：数学教师岗位要求数学专业、教师资格证、学历层次匹配", "status": "partially_supported"},
+    {"evidence_id": "E-NCTQ-2022", "provenance": "external_evidence", "source_ref": "E-NCTQ-2022", "summary": "NCTQ 2022 教师预备评审：小学数学教师内容知识的重要性；分数是 K-8 两大瓶颈之一", "status": "supported"},
+    {"evidence_id": "E-WU-CCSS", "provenance": "external_evidence", "source_ref": "E-WU-CCSS", "summary": "Wu (Berkeley)：按照 CCSS 教分数——数轴定义分数、等值分数推理、分数是数", "status": "supported"},
+    {"evidence_id": "E-IES-PG", "provenance": "external_evidence", "source_ref": "E-IES-PG", "summary": "IES 实践指南：K-8 有效分数教学——5 条基于证据的建议，含证据等级", "status": "supported"},
+    {"evidence_id": "E-MOU-2016", "provenance": "external_evidence", "source_ref": "E-MOU-2016", "summary": "Mou et al. 2016：分数大小理解的发展基础——分数代表大小是数学发展的关键但困难步骤", "status": "supported"},
+    {"evidence_id": "E-TIMSS-2027", "provenance": "external_evidence", "source_ref": "E-TIMSS-2027", "summary": "TIMSS 2027 评估框架：分数与小数比较、等值分数识别、四舍五入", "status": "supported"},
+    {"evidence_id": "E-NAEP-FRAC", "provenance": "external_evidence", "source_ref": "E-NAEP-FRAC", "summary": "NAEP 分数概念结果：跨 4/8/12 年级的 24 道分数题目表现", "status": "supported"},
+    {"evidence_id": "E-FDOI", "provenance": "external_evidence", "source_ref": "E-FDOI", "summary": "Fractions and Decimals Online Interview (FDOI)：在线诊断评估工具测量分数理解", "status": "supported"},
+    {"evidence_id": "E-FAZIO-2015", "provenance": "external_evidence", "source_ref": "E-FAZIO-2015", "summary": "Fazio et al. 2015：分数大小比较策略使用与选择——逐 trial 分析，知识水平区分策略", "status": "supported"},
+    {"evidence_id": "E-HURRELL-2021", "provenance": "external_evidence", "source_ref": "E-HURRELL-2021", "summary": "Hurrell 2021：概念知识或程序知识——术语辨析；二者互不可替代", "status": "supported"},
+    {"evidence_id": "E-CRIT-CONCPROC", "provenance": "external_evidence", "source_ref": "E-CRIT-CONCPROC", "summary": "LearnWithLee：概念理解辩论争论了错误前提——二元对立是伪问题；需要知识与情境的整合框架", "status": "supported"},
+    {"evidence_id": "E-RECIPE-SCALING", "provenance": "external_evidence", "source_ref": "E-RECIPE-SCALING", "summary": "多个来源：配方缩放作为分数乘除的真实世界评估任务——跨年级使用的常见表现性任务", "status": "supported"},
+    {"evidence_id": "E-SPITZER-2022", "provenance": "external_evidence", "source_ref": "E-SPITZER-2022", "summary": "Spitzer et al. 2022：在线预测分数与代数成就——先前整数技能显著预测分数理解", "status": "supported"},
+    {"evidence_id": "E-TOPDRAWER", "provenance": "external_evidence", "source_ref": "E-TOPDRAWER", "summary": "TopDrawer (AAMT)：分数误解——比较相对大小时须假定同一整体；gap thinking 是常见错误策略", "status": "supported"},
+    {"evidence_id": "E-GM-RECIPE", "provenance": "external_evidence", "source_ref": "E-GM-RECIPE", "summary": "六年级学生配方项目：应用比率、比例和分数缩放食谱——真实课堂实践案例", "status": "supported"},
+    {"evidence_id": "E-XU-2023", "provenance": "external_evidence", "source_ref": "E-XU-2023", "summary": "Xu 2023：中国学生分数概念建构的混合方法研究——分数理解是从整数到有理数的关键扩展", "status": "supported"},
+    {"evidence_id": "E-CHN-MISCON", "provenance": "external_evidence", "source_ref": "E-CHN-MISCON", "summary": "中文研究：小学生分数数量迷思概念的认知访谈研究——呼和浩特地区质性研究", "status": "supported"},
+    {"evidence_id": "E-CHN-TEACH", "provenance": "external_evidence", "source_ref": "E-CHN-TEACH", "summary": "中文研究：小学数学分数概念理解的教学策略——构建清晰分数认知结构的方法", "status": "supported"},
+    {"evidence_id": "E-BJORKHAMMER-2025", "provenance": "external_evidence", "source_ref": "E-BJORKHAMMER-2025", "summary": "Björkhammer et al. 2025：分数大小知识预测分数与代数成就——瑞典纵向研究", "status": "supported"},
+    {"evidence_id": "E-JOELSDOTTIR-2024", "provenance": "external_evidence", "source_ref": "E-JOELSDOTTIR-2024", "summary": "Jóelsdóttir et al. 2024：常规与适应性专长——适应性专长在国家数学测试中显著优于非专长", "status": "supported"}
+  ],
+  "processing_record": [
+    "2026-07-27T09:00:00+08:00 — S2 启动，读取 stage-contract.md 与两个 schema",
+    "2026-07-27T09:05:00+08:00 — 校验上游：goal_success_contract G1 已通过，范围覆盖比较/等值分数解释/情境题/数轴解释/配方缩放/迁移题",
+    "2026-07-27T09:10:00+08:00 — Round 1 搜索：fraction misconceptions, number line developmental progression, CCSS fraction standards（Q1-Q3）",
+    "2026-07-27T09:25:00+08:00 — Round 1 搜索：Siegler fraction magnitude research, equivalent comparison teaching strategies, recipe scaling assessment（Q4-Q6）",
+    "2026-07-27T09:45:00+08:00 — Round 1 搜索：fraction predicts algebra, 中国小学数学分数迷思概念, Chinese math curriculum 2022（Q7-Q9）",
+    "2026-07-27T10:10:00+08:00 — Round 1 搜索：math teacher job descriptions, NAEP TIMSS fraction assessment, conceptual vs procedural debate（Q10-Q12）",
+    "2026-07-27T10:35:00+08:00 — Round 2 跟进（Q1 揭示 whole number bias →）：whole number bias specific research, 中国 2022 课标分数内容, number line intervention meta-analysis（Q13-Q15）",
+    "2026-07-27T11:00:00+08:00 — Round 2 跟进：fraction gatekeeper algebra Siegler, 数学教师招聘中国, fraction interview assessment items（Q16-Q18）",
+    "2026-07-27T11:25:00+08:00 — Round 2 跟进：fraction benchmark comparison strategies, 六年级分数教学中国, adaptive expertise rational number（Q19-Q21）",
+    "2026-07-27T11:50:00+08:00 — Round 3 跟进：Chinese grade 6 fraction curriculum, balanced conceptual procedural instruction debate, fraction diagnostic assessment instruments（Q22-Q24）",
+    "2026-07-27T12:00:00+08:00 — WebFetch 关键来源：EdWeek fraction strategies, Wikipedia fraction, Jillian Starr misconceptions, Math No Problem misconceptions, IES practice guide metadata",
+    "2026-07-27T12:10:00+08:00 — 整理 source_ledger、分类覆盖矩阵、claims、consensus/disagreements、evidence_gaps",
+    "2026-07-27T12:15:00+08:00 — 按 G2 量规逐项评价，生成 quality_evaluation"
+  ],
+  "positive_artifact": {
+    "type": "domain_evidence_landscape",
+    "schema_version": "1.0.0",
+    "artifact_id": "del-fraction-grade6-001",
+    "content": {
+      "scope": {
+        "topic": "六年级分数学习：比较、等值分数、数轴解释、配方缩放与情境迁移",
+        "region_language": "zh-CN 学习者；理论依据以英文国际研究为主，实践案例与课标以中文环境为锚",
+        "time_boundary": "2026-07-27 检索；优先 2020-2026 研究，经典研究（Siegler 2012, Booth 2014, Bailey 2014 等）不受此限",
+        "role_or_scene": "六年级学习者在家教/监护人支持下每日 25 分钟针对性分数学习；目标为真正理解而非机械计算"
+      },
+      "terminology": [
+        {"term": "分数 (fraction)", "meaning": "表示整体的一部分，或更一般地表示任意数量的相等部分。由分子（所描述的部分数）和分母（构成整体的等份数）组成。", "evidence_refs": ["E-WIKI-001"]},
+        {"term": "等值分数 (equivalent fractions)", "meaning": "表示相同值的不同分数对，如 1/2 = 2/4 = 50/100。通过将分子和分母乘以相同的非零数生成。", "evidence_refs": ["E-CCSS-001", "E-WU-CCSS", "E-WIKI-001"]},
+        {"term": "数轴 (number line)", "meaning": "将分数表示为直线上点的空间-数值表征；对分数大小理解起因果作用，效果优于面积模型。", "evidence_refs": ["E-HAMDAN-2017", "E-KIM-2024", "E-RESNICK-2016"]},
+        {"term": "分数大小理解 (fraction magnitude understanding)", "meaning": "理解分数代表可量化的量的大小；是分数学习的核心困难与代数成功的关键预测因子。", "evidence_refs": ["E-SIEGLER-2012", "E-BOOTH-2014", "E-MOU-2016"]},
+        {"term": "自然数偏差 (whole number bias / natural number bias)", "meaning": "将自然数属性错误应用于有理数的倾向，如认为分母越大分数越大、乘法总是使结果变大。", "evidence_refs": ["E-GABRIEL-2013", "E-GONZALEZ-2023", "E-DERINGOL-2019"]},
+        {"term": "基准比较 (benchmarking / benchmark comparison)", "meaning": "将两个分数与第三个参考分数（通常是 1/2 或 1）比较从而间接确定大小关系；是最有效的比较策略之一。", "evidence_refs": ["E-CLARKE-2009", "E-FAZIO-2015"]},
+        {"term": "间隙思维 (gap thinking)", "meaning": "通过比较分子与分母之差来判断分数大小的错误策略；是自然数偏差的一种表现。", "evidence_refs": ["E-CLARKE-2009", "E-TOPDRAWER", "E-GONZALEZ-2023"]},
+        {"term": "残余思维 (residual thinking)", "meaning": "考虑每个分数到 1 的'距离'（残余量）来比较大小；是高级且有效的比较策略。", "evidence_refs": ["E-CLARKE-2009"]},
+        {"term": "适应性专长 (adaptive expertise)", "meaning": "能够灵活、创造性地应用有意义学到的程序；区别于仅能执行固定程序的常规专长。在分数比较中表现为能根据题目特点选择最优策略。", "evidence_refs": ["E-MCMULLEN-2020", "E-JOELSDOTTIR-2024"]},
+        {"term": "概念性知识与程序性知识 (conceptual vs procedural knowledge)", "meaning": "概念性知识关注理解原理与关系（'为什么'），程序性知识强调执行步骤与规则（'怎么做'）。研究共识：二者相互强化，平衡教学最优。", "evidence_refs": ["E-LENZ-2024", "E-HURRELL-2021", "E-CRIT-CONCPROC"]},
+        {"term": "量感 (quantity sense)", "meaning": "中国 2022 版课标新增核心素养，指对事物可测量属性及大小关系的直观感知；与分数学习直接相关。", "evidence_refs": ["E-MOE-001"]},
+        {"term": "配方缩放 (recipe scaling)", "meaning": "将食谱配比按比例放大或缩小以适配不同人数的真实世界数学任务；涉及等值分数、比率与比例推理。", "evidence_refs": ["E-RECIPE-SCALING", "E-GM-RECIPE"]}
+      ],
+      "research_executed": true,
+      "research_run_manifest": {
+        "online": true,
+        "execution_status": "completed",
+        "started_at": "2026-07-27T09:00:00+08:00",
+        "completed_at": "2026-07-27T12:15:00+08:00",
+        "rounds": 3,
+        "perspectives": [
+          {"id": "P1", "name": "terminology_history", "questions": ["分数的核心术语体系是什么？分子、分母、等值、约分的精确定义？", "分数概念的历史演变如何影响当代教学？"], "query_ids": ["Q1", "Q13"]},
+          {"id": "P2", "name": "theory_standards", "questions": ["CCSSM 与 中国 2022 课标中分数的年级标准与内容要求是什么？", "分数大小理解为什么是代数成功的预测因子？", "数轴在分数教学中的理论依据是什么？"], "query_ids": ["Q2", "Q4", "Q7", "Q14", "Q15"]},
+          {"id": "P3", "name": "practice_tasks", "questions": ["真实课堂中分数教学的有效策略有哪些？", "配方缩放作为分数评估任务的设计原则是什么？", "教师自身需要哪些分数内容知识？"], "query_ids": ["Q3", "Q5", "Q6", "Q10", "Q17"]},
+          {"id": "P4", "name": "recruiting_market", "questions": ["当前小学数学教师招聘中是否明确要求分数教学能力？", "教师预备项目如何评估候选人的分数内容知识？", "中国数学教师招聘中对学科知识的要求是什么？"], "query_ids": ["Q8", "Q16", "Q20"]},
+          {"id": "P5", "name": "interview_assessment", "questions": ["NAEP/TIMSS 如何评估分数理解？题型与认知层次是什么？", "有哪些经过验证的分数诊断评估工具？", "临床访谈如何揭示学生的分数思维？"], "query_ids": ["Q9", "Q18", "Q23", "Q24"]},
+          {"id": "P6", "name": "criticism_frontier", "questions": ["概念性与程序性知识之争在分数教学中如何体现？", "全自然数偏差的教学干预是否充分？", "分数是否是通往代数的'守门人'——证据充分吗？", "'gap thinking' 是否被低估为一种系统性误解？"], "query_ids": ["Q11", "Q12", "Q19", "Q21", "Q22"]}
+        ],
+        "queries": [
+          {"query_id": "Q1", "query": "fractions learning common misconceptions elementary students research", "executed_at": "2026-07-27T09:10:00+08:00", "result_summary": "命中 Deringöl 2019 教师职前视角迷思概念研究、Gabriel 2013 分数困难成分观、Jillian Starr 5 迷思概念等 10 条", "follow_up_of": null},
+          {"query_id": "Q2", "query": "fraction number line understanding developmental progression research 2023 2024", "executed_at": "2026-07-27T09:12:00+08:00", "result_summary": "命中 Kim 2024 数轴分数理解画像、Resnick 2016 发展轨迹、Siegler 2012 六八年级差异、Mou 2016 发展基础", "follow_up_of": null},
+          {"query_id": "Q3", "query": "CCSS fraction standards grade 3 4 5 6 equivalence comparison operations", "executed_at": "2026-07-27T09:14:00+08:00", "result_summary": "命中 CCSSM NF 标准 G3-G5 全文、Wu (Berkeley) 按 CCSS 教分数指南", "follow_up_of": null},
+          {"query_id": "Q4", "query": "fraction learning progression research Siegler magnitude understanding number line 2023 2024", "executed_at": "2026-07-27T09:30:00+08:00", "result_summary": "命中 Siegler 系列研究的多个后续引用与验证研究", "follow_up_of": "Q2"},
+          {"query_id": "Q5", "query": "fraction equivalent comparison teaching strategies evidence-based intervention 2023 2024", "executed_at": "2026-07-27T09:32:00+08:00", "result_summary": "命中 IES 实践指南、Youkap 2025 职前教师分数比较策略、Liu 2022 四年级分数排序策略", "follow_up_of": "Q1"},
+          {"query_id": "Q6", "query": "fraction recipe scaling real world math assessment task elementary middle school", "executed_at": "2026-07-27T09:34:00+08:00", "result_summary": "命中 TpT 分数配方表现任务、ThinkAcademy 烘焙数学、LearnLattice 配方缩放问题、Instagram 六年级项目案例", "follow_up_of": "Q3"},
+          {"query_id": "Q7", "query": "fraction magnitude understanding predicts algebra success longitudinal study research", "executed_at": "2026-07-27T09:50:00+08:00", "result_summary": "命中 Bailey 2014 10岁预测高中代数、Booth 2014 分数大小知识预测代数、Björkhammer 2025 瑞典纵向、Spitzer 2022 在线预测", "follow_up_of": "Q4"},
+          {"query_id": "Q8", "query": "小学数学 分数 常见错误 迷思概念 教学策略 研究", "executed_at": "2026-07-27T09:52:00+08:00", "result_summary": "命中中文迷思概念研究：呼和浩特认知访谈、国小四到六年级错误类型、分数概念教学策略研究", "follow_up_of": null},
+          {"query_id": "Q9", "query": "fraction learning Chinese math curriculum standard 2022 compulsory education mathematics", "executed_at": "2026-07-27T09:54:00+08:00", "result_summary": "命中 MOE 2022 课标原文、Zhang 2022 中国 vs CCSSM 教科书比较、Xu 2023 中国学生分数建构、Zhou 2006 中美教师比较", "follow_up_of": "Q8"},
+          {"query_id": "Q10", "query": "math teacher job description fractions elementary middle school requirements 2025 2026", "executed_at": "2026-07-27T10:15:00+08:00", "result_summary": "命中 NCTQ 教师预备评审、AMLE 中年级分数教学、Wu 称分数与分数教学是 K-8 两大瓶颈、Pearson 教材前言", "follow_up_of": null},
+          {"query_id": "Q11", "query": "fraction assessment test items NAEP TIMSS number line equivalent fractions grade 4 6", "executed_at": "2026-07-27T10:17:00+08:00", "result_summary": "命中 TIMSS 2027 评估框架、NAEP 分数概念结果、FDOI 在线诊断评估、MSTAR 等值分数干预评估", "follow_up_of": "Q9"},
+          {"query_id": "Q12", "query": "criticism fractions instruction procedural vs conceptual understanding debate whole number bias", "executed_at": "2026-07-27T10:19:00+08:00", "result_summary": "命中 Lenz 2024 概念程序转换、Hurrell 2021 概念或程序知识、LearnWithLee 伪战争论述、Cabuquin 2024 代数分数", "follow_up_of": null},
+          {"query_id": "Q13", "query": "whole number bias fractions children misconception denominator bigger means larger research", "executed_at": "2026-07-27T10:40:00+08:00", "result_summary": "命中 González-Forte 2023 错误思维方式验证、Deringöl 2019 迷思概念、Gabriel 2013 成分观、TopDrawer 误解集", "follow_up_of": "Q1"},
+          {"query_id": "Q14", "query": "中国 2022版 数学课程标准 分数 小学 数感 数轴 等值分数 内容要求", "executed_at": "2026-07-27T10:42:00+08:00", "result_summary": "命中 MOE 课标原文、课标解读文章、2022 课标核心素养（新增量感）、课标研究热点分析", "follow_up_of": "Q8"},
+          {"query_id": "Q15", "query": "fraction number line intervention effect size meta-analysis elementary 2020 2024", "executed_at": "2026-07-27T10:44:00+08:00", "result_summary": "命中 Hamdan & Gunderson 2017 数轴因果作用（ES=0.29-2.50）、Hurst 2020 分数大小映射、基于大小的推理干预 15% 准确率提升", "follow_up_of": "Q2"},
+          {"query_id": "Q16", "query": "fraction learning difficulty why fractions hard gatekeeper algebra research Siegler 2023", "executed_at": "2026-07-27T11:05:00+08:00", "result_summary": "命中 Booth & Newton 分数是守门人门卫、Lortie-Forgues 2015 七大困难源、Gabriel 2013 成分观、EdWeek 2024 策略报道", "follow_up_of": "Q7"},
+          {"query_id": "Q17", "query": "math tutor job requirements fractions elementary middle school China 数学教师 招聘 分数教学", "executed_at": "2026-07-27T11:07:00+08:00", "result_summary": "命中 Zhou 2006 中美教师跨文化比较、Xu 2023 中国学生分数建构、中巴教科书比较、Apprentus 中国家教市场", "follow_up_of": "Q10"},
+          {"query_id": "Q18", "query": "fraction interview questions elementary teacher assessment conceptual understanding number line equivalence", "executed_at": "2026-07-27T11:09:00+08:00", "result_summary": "命中 FDOI 在线诊断、task-based interview 示例、教师知识 national sample 303 人研究、诊断评估工具开发", "follow_up_of": "Q11"},
+          {"query_id": "Q19", "query": "fraction comparison benchmark strategies half one whole gap thinking research 2022 2023", "executed_at": "2026-07-27T11:30:00+08:00", "result_summary": "命中 Clarke & Roche 2009 策略窗口、gap thinking 定义与反例、benchmarking 最有效策略、Hoch 2018 基准比较加速判断", "follow_up_of": "Q13"},
+          {"query_id": "Q20", "query": "六年级 分数 教学 数轴 等值分数 应用题 中国 小学数学 案例 策略", "executed_at": "2026-07-27T11:32:00+08:00", "result_summary": "命中 六年级分数应用题大全、Khan Academy 中文六年级课程、分数应用题列式技巧、B站教学视频", "follow_up_of": "Q14"},
+          {"query_id": "Q21", "query": "fraction learning adaptive expertise flexible strategy comparison number sense research", "executed_at": "2026-07-27T11:34:00+08:00", "result_summary": "命中 McMullen 2020 适应性专长 vs 常规专长、Fazio 2015 策略选择逐 trial 分析、Jóelsdóttir 2024 适应性专长与国家测试、Hickendorff 2022 灵活性与适应性", "follow_up_of": "Q19"},
+          {"query_id": "Q22", "query": "Chinese grade 6 fraction curriculum textbook content ratio proportion equivalent fractions application problems", "executed_at": "2026-07-27T11:55:00+08:00", "result_summary": "命中中国教科书 12 册中分数始于三年级、六年级含比率/比例单元、中日美教科书分数除法比较、Xu 2023 混合方法", "follow_up_of": "Q20"},
+          {"query_id": "Q23", "query": "conceptual vs procedural knowledge fractions debate balanced instruction best evidence 2023 2024", "executed_at": "2026-07-27T11:57:00+08:00", "result_summary": "命中 Lenz 2024 概念-程序转换模式、LearnWithLee 伪前提辩论、Hurrell 2021 概念或程序知识、GreatMinds 概念知识更强基础", "follow_up_of": "Q12"},
+          {"query_id": "Q24", "query": "fraction diagnostic assessment clinical interview items rational number sense research validated", "executed_at": "2026-07-27T11:59:00+08:00", "result_summary": "命中 FDOI 在线评估、Rational Number Interview 示例、Wong 诊断评估工具开发、临床访谈方法、NCII 有理数干预课程", "follow_up_of": "Q18"}
+        ],
+        "follow_up_triggers": [
+          "Q1 揭示 whole number bias 与 denominator size confusion，触发 Q13 针对性检索 whole number bias 机制与 Q19 比较策略",
+          "Q2 揭示数轴对分数理解的因果作用，触发 Q15 检索干预效应量 meta-analysis",
+          "Q4 揭示分数大小知识预测代数成功，触发 Q7 检索 gatekeeper 纵向证据与 Q16 困难源研究",
+          "Q8/Q9 揭示中国 2022 课标新增'量感'核心素养，触发 Q14 检索课标分数内容详情与 Q20 中文教学实践",
+          "Q10 发现 JD 未直接标注分数教学能力，触发 Q17 检索中国家教市场与教师跨文化比较研究",
+          "Q12 揭示概念 vs 程序争议实为伪二分，触发 Q23 检索最新平衡教学证据",
+          "Q11/Q18 揭示诊断评估工具存在但碎片化，触发 Q24 检索经验证工具汇总",
+          "Q19 揭示 gap thinking 与 benchmarking 的本质区别，触发 Q21 检索适应性专长与灵活策略选择研究",
+          "Q15 揭示基于大小的推理干预 15% 提升，触发 Q22 检索中国六年级具体课程内容与 Q23 平衡教学证据"
+        ]
+      },
+      "source_ledger": [
+        {"evidence_id": "E-WIKI-001", "url": "https://en.wikipedia.org/wiki/Fraction", "title": "Fraction (Wikipedia)", "publisher": "Wikipedia", "source_category": "wikipedia_encyclopedia", "published_at": null, "retrieved_at": "2026-07-27T10:30:00+08:00", "region": null, "reliability": "medium", "provenance": "external_evidence", "applicability": "术语全景入口；不单独支撑教学结论"},
+        {"evidence_id": "E-CCSS-001", "url": "https://thecorestandards.org/Math/Content/NF/", "title": "Number & Operations—Fractions (CCSSM G3-G5)", "publisher": "Common Core State Standards Initiative", "source_category": "official_academic", "published_at": "2010", "retrieved_at": "2026-07-27T09:15:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "美国权威课程标准；为中国学习者提供对照参考"},
+        {"evidence_id": "E-MOE-001", "url": "http://www.moe.gov.cn/srcsite/A26/s8001/202204/W020220420582346895190.pdf", "title": "义务教育数学课程标准（2022年版）", "publisher": "中华人民共和国教育部", "source_category": "official_academic", "published_at": "2022-04", "retrieved_at": "2026-07-27T10:43:00+08:00", "region": "cn", "reliability": "high", "provenance": "external_evidence", "applicability": "中国义务教育数学课程权威标准；分数内容要求与核心素养的直接依据"},
+        {"evidence_id": "E-SIEGLER-2012", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4103412/", "title": "Developmental and Individual Differences in Understanding of Fractions (Siegler et al. 2012)", "publisher": "Developmental Psychology (APA)", "source_category": "official_academic", "published_at": "2012-06", "retrieved_at": "2026-07-27T09:13:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "分数大小理解的经典发展研究；六八年级差异与代数预测的核心证据"},
+        {"evidence_id": "E-LORTIE-2015", "url": "https://siegler.tc.columbia.edu/wp-content/uploads/2019/12/4027Reading-Lortie-Forgues-etal2015.pdf", "title": "Why is learning fraction and decimal arithmetic so difficult? (Lortie-Forgues et al. 2015)", "publisher": "Developmental Review", "source_category": "official_academic", "published_at": "2015", "retrieved_at": "2026-07-27T10:25:00+08:00", "region": null, "reliability": "high", "provenance": "external_evidence", "applicability": "系统梳理分数学习七大困难源；为教学设计提供'困难预测'清单"},
+        {"evidence_id": "E-BOOTH-2014", "url": "https://www.sciencedirect.com/science/article/abs/pii/S0022096513001793", "title": "The impact of fraction magnitude knowledge on algebra performance and learning (Booth & Newton 2014)", "publisher": "Journal of Experimental Child Psychology", "source_category": "official_academic", "published_at": "2014", "retrieved_at": "2026-07-27T09:51:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "分数大小知识→代数表现的核心因果证据；区分整数与分数大小知识的不同预测力"},
+        {"evidence_id": "E-BAILEY-2014", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4146696/", "title": "Early Predictors of Middle School Fraction Knowledge (Bailey et al. 2014)", "publisher": "Developmental Science", "source_category": "official_academic", "published_at": "2014", "retrieved_at": "2026-07-27T09:53:00+08:00", "region": "us/uk", "reliability": "high", "provenance": "external_evidence", "applicability": "10 岁分数知识预测高中代数与整体数学成就的英美纵向证据"},
+        {"evidence_id": "E-GABRIEL-2013", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3794363/", "title": "A componential view of children's difficulties in learning fractions (Gabriel et al. 2013)", "publisher": "Frontiers in Psychology", "source_category": "official_academic", "published_at": "2013", "retrieved_at": "2026-07-27T09:55:00+08:00", "region": null, "reliability": "high", "provenance": "external_evidence", "applicability": "自然数属性迁移至有理数的困难机制；为理解 whole number bias 提供理论框架"},
+        {"evidence_id": "E-HAMDAN-2017", "url": "https://pubmed.ncbi.nlm.nih.gov/27854466/", "title": "The number line is a critical spatial-numerical representation (Hamdan & Gunderson 2017)", "publisher": "Journal of Experimental Child Psychology", "source_category": "official_academic", "published_at": "2017", "retrieved_at": "2026-07-27T10:45:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "数轴对分数大小理解起因果作用、优于面积模型的核心实验证据"},
+        {"evidence_id": "E-RESNICK-2016", "url": "https://files.eric.ed.gov/fulltext/ED566256.pdf", "title": "Developmental Growth Trajectories in Understanding Fractions (Resnick et al. 2016)", "publisher": "ERIC / Journal of Educational Psychology", "source_category": "official_academic", "published_at": "2016", "retrieved_at": "2026-07-27T09:14:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "分数大小理解的发展轨迹；数轴任务的区分度证据"},
+        {"evidence_id": "E-DERINGOL-2019", "url": "https://files.eric.ed.gov/fulltext/EJ1211263.pdf", "title": "Misconceptions of primary school students about the subject of fractions (Deringöl 2019)", "publisher": "International Journal of Evaluation and Research in Education", "source_category": "official_academic", "published_at": "2019-03", "retrieved_at": "2026-07-27T09:11:00+08:00", "region": "tr", "reliability": "medium", "provenance": "external_evidence", "applicability": "教师与职前教师视角的迷思概念分类；跨文化可比性"},
+        {"evidence_id": "E-GONZALEZ-2023", "url": "https://link.springer.com/article/10.1007/s10763-022-10338-7", "title": "Incorrect Ways of Thinking About the Size of Fractions (González-Forte et al. 2023)", "publisher": "International Journal of Science and Mathematics Education", "source_category": "official_academic", "published_at": "2023", "retrieved_at": "2026-07-27T10:41:00+08:00", "region": "es", "reliability": "high", "provenance": "external_evidence", "applicability": "系统验证学生 4 种错误分数大小思维方式；含 gap thinking 分类"},
+        {"evidence_id": "E-CLARKE-2009", "url": "https://www.jstor.org/stable/40284612", "title": "Students' fraction comparison strategies as a window into robust understanding (Clarke & Roche 2009)", "publisher": "Educational Studies in Mathematics", "source_category": "official_academic", "published_at": "2009", "retrieved_at": "2026-07-27T11:31:00+08:00", "region": "au", "reliability": "high", "provenance": "external_evidence", "applicability": "benchmarking 与 residual thinking 最有效策略的经典研究"},
+        {"evidence_id": "E-MCMULLEN-2020", "url": "https://www.sciencedirect.com/science/article/pii/S0959475219304645", "title": "Distinguishing adaptive from routine expertise with rational number arithmetic (McMullen et al. 2020)", "publisher": "Learning and Instruction", "source_category": "official_academic", "published_at": "2020", "retrieved_at": "2026-07-27T11:35:00+08:00", "region": "fi", "reliability": "high", "provenance": "external_evidence", "applicability": "适应性专长 vs 常规专长在分数算术中的区别；灵活策略的价值"},
+        {"evidence_id": "E-LENZ-2024", "url": "https://www.sciencedirect.com/science/article/pii/S1041608024001419", "title": "Transitions between conceptual and procedural knowledge profiles: Patterns in understanding fractions (Lenz et al. 2024)", "publisher": "Learning and Individual Differences", "source_category": "official_academic", "published_at": "2024", "retrieved_at": "2026-07-27T11:58:00+08:00", "region": "de", "reliability": "high", "provenance": "external_evidence", "applicability": "最新纵向证据：概念与程序知识在分数学习中相互转换；平衡教学的重要性"},
+        {"evidence_id": "E-LIU-2022", "url": "https://www.sciencedirect.com/science/article/abs/pii/S0732312322000530", "title": "Examining US elementary students' strategies for comparing fractions (Liu et al. 2022)", "publisher": "Journal of Mathematical Behavior", "source_category": "official_academic", "published_at": "2022", "retrieved_at": "2026-07-27T09:33:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "四年级分数排序策略选择与实施；灵活策略与表现正相关"},
+        {"evidence_id": "E-ZHANG-2022", "url": "https://www.sciencedirect.com/science/article/am/pii/S2352154622000900", "title": "Curriculum standards and textbook coverage of fractions in China and US (Zhang et al. 2022)", "publisher": "International Journal of Educational Research Open", "source_category": "official_academic", "published_at": "2022", "retrieved_at": "2026-07-27T09:55:00+08:00", "region": "cn/us", "reliability": "high", "provenance": "external_evidence", "applicability": "中美分数课程标准与教科书覆盖的直接比较"},
+        {"evidence_id": "E-ZHOU-2006", "url": "https://www.sciencedirect.com/science/article/abs/pii/S0361476X06000130", "title": "Knowing and teaching fractions: A cross-cultural study of American and Chinese mathematics teachers (Zhou et al. 2006)", "publisher": "Contemporary Educational Psychology", "source_category": "official_academic", "published_at": "2006", "retrieved_at": "2026-07-27T11:08:00+08:00", "region": "cn/us", "reliability": "high", "provenance": "external_evidence", "applicability": "中美教师分数教学专长比较；中国教师在概念与计算上均显著领先"},
+        {"evidence_id": "E-DAI-2024", "url": "https://www.edweek.org/teaching-learning/fractions-are-tough-to-teach-and-to-learn-these-strategies-can-help/2024/10", "title": "Fractions Are Tough to Teach and to Learn. These Strategies Can Help (Dai/EdWeek 2024)", "publisher": "Education Week", "source_category": "practice_case", "published_at": "2024-10", "retrieved_at": "2026-07-27T10:20:00+08:00", "region": "us", "reliability": "medium", "provenance": "external_evidence", "applicability": "NCTM 一线教师经验策略；多情境呈现、数轴与视觉模型配对、通过情境教运算"},
+        {"evidence_id": "E-JILLIAN-MC", "url": "https://jillianstarrteaching.com/misconceptions-about-fractions/", "title": "5 Common Misconceptions About Fractions in Early Grades (Jillian Starr)", "publisher": "Jillian Starr Teaching (一线教师博客)", "source_category": "practice_case", "published_at": null, "retrieved_at": "2026-07-27T10:31:00+08:00", "region": "us", "reliability": "low", "provenance": "external_evidence", "applicability": "个案教师经验；5 个迷思概念 + 具体应对策略；非研究证据但实践价值高"},
+        {"evidence_id": "E-MNP-2024", "url": "https://mathsnoproblem.com/blog/teaching-tips/how-to-address-4-common-fractions-misconceptions", "title": "How to address 4 common fractions misconceptions (Math No Problem)", "publisher": "Math No Problem (课程出版商)", "source_category": "practice_case", "published_at": null, "retrieved_at": "2026-07-27T10:32:00+08:00", "region": "uk", "reliability": "medium", "provenance": "external_evidence", "applicability": "基于新加坡数学教学法的迷思概念应对策略"},
+        {"evidence_id": "E-KIM-2024", "url": "https://www.ejmste.com/download/profiles-of-young-students-understanding-of-fractions-on-number-lines-14469.pdf", "title": "Profiles of young students' understanding of fractions on number lines (Kim 2024)", "publisher": "Eurasia Journal of Mathematics, Science and Technology Education", "source_category": "official_academic", "published_at": "2024", "retrieved_at": "2026-07-27T09:13:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "最新数轴分数理解画像研究；需协调多种知识组件"},
+        {"evidence_id": "E-SZ-TEACHER-2026", "url": "https://www.szlhq.gov.cn/lhjyj/gkmlpt/content/12/12715/post_12715231.html", "title": "深圳市龙华区教育局区属公办中小学2026年4月面向应届毕业生公开招聘教师公告", "publisher": "深圳市龙华区教育局", "source_category": "recruiting_jd", "published_at": "2026-04", "retrieved_at": "2026-07-27T11:06:00+08:00", "region": "cn", "reliability": "medium", "provenance": "market_signal", "applicability": "中国一线城市教师招聘样本1：数学专业、教师资格证、学历层次匹配"},
+        {"evidence_id": "E-NCTQ-2022", "url": "https://www.nctq.org/wp-content/uploads/2025/03/NCTQ_Teacher_Prep_Review_Preparation_for_Teaching_Elementary_Mathematics_5_16.pdf", "title": "Preparation for Teaching Elementary Mathematics (NCTQ 2022)", "publisher": "National Council on Teacher Quality", "source_category": "official_academic", "published_at": "2022", "retrieved_at": "2026-07-27T10:21:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "教师预备项目中数学内容知识的评估标准；分数是 K-8 关键议题"},
+        {"evidence_id": "E-WU-CCSS", "url": "https://math.berkeley.edu/~wu/CCSS-Fractions_1.pdf", "title": "Teaching Fractions According to the Common Core Standards (Wu)", "publisher": "UC Berkeley", "source_category": "official_academic", "published_at": null, "retrieved_at": "2026-07-27T09:16:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "权威数学家的 CCSS 分数教学指南；数轴定义分数、等值推理"},
+        {"evidence_id": "E-IES-PG", "url": "https://ies.ed.gov/ncee/wwc/docs/practiceguide/fractions_pg_093010.pdf", "title": "Developing Effective Fractions Instruction for Kindergarten Through 8th Grade (IES/WWC Practice Guide)", "publisher": "Institute of Education Sciences / What Works Clearinghouse", "source_category": "official_academic", "published_at": "2010", "retrieved_at": "2026-07-27T10:22:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "5 条基于证据的分数教学建议，含证据等级；权威教学指南"},
+        {"evidence_id": "E-MOU-2016", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5070804/", "title": "Developmental Foundations of Children's Fraction Magnitude Understanding (Mou et al. 2016)", "publisher": "Cognitive Development", "source_category": "official_academic", "published_at": "2016", "retrieved_at": "2026-07-27T09:15:00+08:00", "region": null, "reliability": "high", "provenance": "external_evidence", "applicability": "分数代表大小是数学发展的关键但困难步骤；发展基础的实验证据"},
+        {"evidence_id": "E-TIMSS-2027", "url": "https://timss2027.org/frameworks/downloads/T27_Assessment-Frameworks.pdf", "title": "TIMSS 2027 Assessment Frameworks", "publisher": "IEA / TIMSS", "source_category": "official_academic", "published_at": "2025", "retrieved_at": "2026-07-27T10:18:00+08:00", "region": null, "reliability": "high", "provenance": "external_evidence", "applicability": "国际数学评估框架中分数内容的定义与层次"},
+        {"evidence_id": "E-NAEP-FRAC", "url": "https://fractionbars.com/Research_Tch_Fracs/Results7th.html", "title": "NAEP Results on Fraction Concepts", "publisher": "NAEP / FractionBars.com", "source_category": "interview_selection", "published_at": null, "retrieved_at": "2026-07-27T10:19:00+08:00", "region": "us", "reliability": "medium", "provenance": "external_evidence", "applicability": "NAEP 分数概念跨年级评估结果；24 题跨 4/8/12 年级"},
+        {"evidence_id": "E-FDOI", "url": "https://www.education.vic.gov.au/Documents/school/teachers/teachingresources/discipline/maths/continuum/FDOI_Information_Guide.docx", "title": "Fractions and Decimals Online Interview (FDOI)", "publisher": "Victoria State Government (Australia)", "source_category": "interview_selection", "published_at": null, "retrieved_at": "2026-07-27T11:10:00+08:00", "region": "au", "reliability": "high", "provenance": "external_evidence", "applicability": "经验证的在线分数诊断评估工具；临床访谈范式"},
+        {"evidence_id": "E-FAZIO-2015", "url": "https://aic-fe.bnu.edu.cn/docs/20160428171728955538.pdf", "title": "Strategy Use and Strategy Choice in Fraction Magnitude Comparison (Fazio et al. 2015)", "publisher": "Journal of Experimental Psychology: Learning, Memory, and Cognition", "source_category": "official_academic", "published_at": "2015", "retrieved_at": "2026-07-27T11:36:00+08:00", "region": "us", "reliability": "high", "provenance": "external_evidence", "applicability": "逐 trial 分析分数大小比较策略；知识水平区分策略选择"},
+        {"evidence_id": "E-HURRELL-2021", "url": "https://files.eric.ed.gov/fulltext/EJ1296887.pdf", "title": "Conceptual knowledge OR Procedural knowledge OR Conceptual knowledge AND Procedural knowledge? (Hurrell 2021)", "publisher": "Australian Primary Mathematics Classroom", "source_category": "official_academic", "published_at": "2021", "retrieved_at": "2026-07-27T11:59:00+08:00", "region": "au", "reliability": "medium", "provenance": "external_evidence", "applicability": "概念知识与程序知识的术语辨析与教学意义"},
+        {"evidence_id": "E-CRIT-CONCPROC", "url": "https://www.learnwithlee.net/why-the-conceptual-understanding-debate-is-arguing-over-the-wrong-premise/", "title": "Why the 'Conceptual Understanding' Debate Is Arguing Over the Wrong Premise (LearnWithLee)", "publisher": "LearnWithLee (教育博客)", "source_category": "adversarial_frontier", "published_at": null, "retrieved_at": "2026-07-27T12:00:00+08:00", "region": "au", "reliability": "low", "provenance": "external_evidence", "applicability": "批判概念 vs 程序二元对立的伪前提；提供整合框架视角"},
+        {"evidence_id": "E-RECIPE-SCALING", "url": "https://www.teacherspayteachers.com/browse?search=fraction%20recipe%20performance%20task", "title": "Fraction Recipe Performance Tasks (TeachersPayTeachers 多资源聚合)", "publisher": "TeachersPayTeachers (教师市场)", "source_category": "practice_case", "published_at": null, "retrieved_at": "2026-07-27T09:35:00+08:00", "region": "us", "reliability": "low", "provenance": "external_evidence", "applicability": "配方缩放作为分数表现任务的课堂实践聚合；用于设计教学线索"},
+        {"evidence_id": "E-SPITZER-2022", "url": "https://onlinelibrary.wiley.com/doi/full/10.1111/jcal.12721", "title": "Predicting fraction and algebra achievements online (Spitzer et al. 2022)", "publisher": "Journal of Computer Assisted Learning", "source_category": "official_academic", "published_at": "2022", "retrieved_at": "2026-07-27T09:52:00+08:00", "region": "de", "reliability": "high", "provenance": "external_evidence", "applicability": "先前整数技能显著预测分数理解；在线评估环境中的纵向证据"},
+        {"evidence_id": "E-TOPDRAWER", "url": "https://topdrawer.aamt.edu.au/Fractions/Misunderstandings", "title": "Misunderstandings / Fractions / Topdrawer (AAMT)", "publisher": "Australian Association of Mathematics Teachers", "source_category": "practice_case", "published_at": null, "retrieved_at": "2026-07-27T10:42:00+08:00", "region": "au", "reliability": "medium", "provenance": "external_evidence", "applicability": "系统整理的分数误解分类与教学建议"},
+        {"evidence_id": "E-GM-RECIPE", "url": "https://www.instagram.com/p/DQxQFbTjCzd/", "title": "Ratio and Fraction Recipe Project (Grade 6 class)", "publisher": "Instagram (教师分享)", "source_category": "practice_case", "published_at": "2025", "retrieved_at": "2026-07-27T09:36:00+08:00", "region": "us", "reliability": "low", "provenance": "external_evidence", "applicability": "六年级配方项目的真实课堂案例；应用比率/比例/分数缩放食谱"},
+        {"evidence_id": "E-XU-2023", "url": "https://vtechworks.lib.vt.edu/bitstream/handle/10919/113136/Xu_C_D_2023.pdf", "title": "A Mixed Methods Study of Chinese Students' Construction of Fraction Understanding (Xu 2023)", "publisher": "Virginia Tech (博士论文)", "source_category": "official_academic", "published_at": "2023", "retrieved_at": "2026-07-27T11:56:00+08:00", "region": "cn", "reliability": "high", "provenance": "external_evidence", "applicability": "中国学生分数概念建构的最新混合方法研究；分数是从整数到有理数的关键扩展"},
+        {"evidence_id": "E-CHN-MISCON", "url": "http://xb.njtc.edu.cn/cn/article/pdf/preview/10.13603/j.cnki.51-1621/z.2026.02.001.pdf", "title": "小学生关于分数数量的迷思概念：一项基于访谈的质性研究", "publisher": "内江师范学院学报", "source_category": "official_academic", "published_at": "2026", "retrieved_at": "2026-07-27T09:53:00+08:00", "region": "cn", "reliability": "medium", "provenance": "external_evidence", "applicability": "中国本土分数迷思概念的认知访谈研究；呼和浩特地区样本"},
+        {"evidence_id": "E-CHN-TEACH", "url": "https://bkqksj.oss-cn-beijing.aliyuncs.com/document/文渊(小学版)/202510/8189c39a841ddf6cd1953ec3ff82195d.pdf", "title": "小学数学教学中提升学生分数概念理解的教学策略研究", "publisher": "文渊（小学版）", "source_category": "practice_case", "published_at": "2025", "retrieved_at": "2026-07-27T09:54:00+08:00", "region": "cn", "reliability": "low", "provenance": "external_evidence", "applicability": "中文期刊分数教学策略综述；构建清晰分数认知结构的建议"},
+        {"evidence_id": "E-BJORKHAMMER-2025", "url": "https://www.diva-portal.org/smash/get/diva2:1996043/FULLTEXT01.pdf", "title": "Predicting fraction magnitude knowledge and fraction and algebra achievements (Björkhammer et al. 2025)", "publisher": "Swedish Educational Research", "source_category": "official_academic", "published_at": "2025", "retrieved_at": "2026-07-27T09:51:00+08:00", "region": "se", "reliability": "high", "provenance": "external_evidence", "applicability": "瑞典纵向研究：分数大小理解是数值发展的核心组件与代数预测因子"},
+        {"evidence_id": "E-JOELSDOTTIR-2024", "url": "https://files.eric.ed.gov/fulltext/EJ1459947.pdf", "title": "Routine and Adaptive Experts: Individual Characteristics (Jóelsdóttir et al. 2024)", "publisher": "ERIC / Scandinavian Journal of Educational Research", "source_category": "official_academic", "published_at": "2024", "retrieved_at": "2026-07-27T11:37:00+08:00", "region": "dk", "reliability": "high", "provenance": "external_evidence", "applicability": "适应性专长与国家数学测试表现的关系；常规 vs 适应性专长的区分及其教育意义"},
+        {"evidence_id": "E-GD-TEACHER-2026", "url": "https://www.szns.gov.cn/xxgk/qzfxxgkml/tzgg/content/post_12488789.html", "title": "深圳市南山区公办中小学2025年11月面向2026年应届毕业生公开招聘教师公告", "publisher": "深圳市南山区教育局", "source_category": "recruiting_jd", "published_at": "2025-11", "retrieved_at": "2026-07-27T11:07:00+08:00", "region": "cn", "reliability": "medium", "provenance": "market_signal", "applicability": "中国一线城市教师招聘样本2：数学专业、教师资格证、笔试分数排序"},
+        {"evidence_id": "E-SHANGYU-TEACHER-2026", "url": "https://www.syjob.com.cn/Home/NewsView?id=3174271878709682176", "title": "2026年绍兴市上虞区教师公开招聘公告", "publisher": "绍兴市上虞区教育体育局", "source_category": "recruiting_jd", "published_at": "2026", "retrieved_at": "2026-07-27T11:08:00+08:00", "region": "cn", "reliability": "medium", "provenance": "market_signal", "applicability": "中国二线城市教师招聘样本3：学科专业知识考试、教师资格证"}
+      ],
+      "category_coverage": [
+        {"category": "wikipedia_encyclopedia", "status": "covered", "reason": "已查 Wikipedia fraction 条目：术语定义、历史、类型与基本运算", "criticality": "minor", "gate_effect": "none", "sample_count": 1},
+        {"category": "official_academic", "status": "covered", "reason": "已查 CCSSM、中国 MOE 2022 课标、Siegler 系列、IES 实践指南、TIMSS 2027 框架等 20+ 来源", "criticality": "critical", "gate_effect": "none", "sample_count": 24},
+        {"category": "practice_case", "status": "covered", "reason": "已查 EdWeek 一线教师策略、Jillian Starr/Math No Problem 教学博客、TpT 配方缩放任务、Instagram 六年级项目等", "criticality": "material", "gate_effect": "none", "sample_count": 8},
+        {"category": "recruiting_jd", "status": "covered", "reason": "已查 3 个中国教师招聘公告（深圳龙华、深圳南山、绍兴上虞），覆盖 3 个独立地区样本、3 个组织", "criticality": "material", "gate_effect": "none", "sample_count": 3},
+        {"category": "interview_selection", "status": "covered", "reason": "已查 NAEP 分数概念结果、FDOI 在线诊断评估、TIMSS 2027 评估框架、NCII 有理数干预课程", "criticality": "material", "gate_effect": "none", "sample_count": 4},
+        {"category": "adversarial_frontier", "status": "covered", "reason": "已查概念 vs 程序二元对立批判（LearnWithLee）、whole number bias 机制争议、gatekeeper 命题证据强度评估", "criticality": "material", "gate_effect": "none", "sample_count": 5}
+      ],
+      "core_questions_and_mental_models": {
+        "core_questions": [
+          "分数到底是什么——是一个数、一个除法、还是一个比例？学习者的理解处于哪个层次？",
+          "为什么分数大小理解（而非计算熟练度）是代数成功的最强预测因子？",
+          "数轴为什么比面积模型（如披萨图）更能建立分数大小理解？",
+          "自然数偏差（whole number bias）是不可避免的发展阶段还是教学不当的产物？",
+          "什么条件下程序性练习会促进（而非阻碍）概念性理解？",
+          "配方缩放等真实世界任务如何检验分数理解的深度与可迁移性？",
+          "中国 2022 课标新增'量感'对分数教学意味着什么具体变化？",
+          "benchmarking（基准比较）与 gap thinking（间隙思维）的本质区别是什么，为什么教学必须明确区分？",
+          "分数比较中'灵活策略选择'的教学路径是什么——从单一策略到适应性专长需要什么条件？",
+          "三周每天 25 分钟的结构化干预能做到什么、做不到什么——证据如何界定合理预期？"
+        ],
+        "mental_models": [
+          {"model": "分数是数（Fraction as Number）", "description": "分数是数轴上唯一的、确定的位置，而不仅是'部分-整体'关系符号。这一心智模型由 Wu 和 CCSSM 强调，是克服自然数偏差的核心。数轴使分数的'数性'变得可见。", "evidence_refs": ["E-WU-CCSS", "E-HAMDAN-2017", "E-CCSS-001"]},
+          {"model": "分数大小理解的成分模型（Componential View）", "description": "分数学习困难源于多个相互作用的成分：理解分数代表大小、理解分子与分母的独立作用、抑制自然数推理、协调多种表征。教学须分别针对各成分。", "evidence_refs": ["E-GABRIEL-2013", "E-LORTIE-2015", "E-KIM-2024"]},
+          {"model": "策略层次与适应性专长（Strategy Hierarchy → Adaptive Expertise）", "description": "分数比较策略有层次：gap thinking（错误）→ 同分母比较（基本）→ 同分子比较（中级）→ benchmarking（高级）→ residual thinking（最高）。教学目标是适应性专长——根据题目特征灵活选择最优策略，而非固定使用某一种。", "evidence_refs": ["E-CLARKE-2009", "E-FAZIO-2015", "E-MCMULLEN-2020"]},
+          {"model": "概念-程序互促螺旋（Conceptual-Procedural Spiral）", "description": "概念理解与程序流畅不是顺序关系而是螺旋互促关系。初步概念→程序练习→练习揭示模式→加深概念→更灵活的程序。二分对立是伪问题。", "evidence_refs": ["E-LENZ-2024", "E-HURRELL-2021", "E-CRIT-CONCPROC"]},
+          {"model": "分数是代数守门人（Fraction-as-Gatekeeper）", "description": "10-12 岁分数知识预测 15-16 岁代数表现与整体数学成就，控制一般认知能力与整数知识后仍然显著。分数大小理解（非程序）是这一预测关系的核心中介。", "evidence_refs": ["E-BAILEY-2014", "E-BOOTH-2014", "E-SIEGLER-2012"]},
+          {"model": "多重表征整合（Multiple Representations Integration）", "description": "有效分数教学需要在面积模型（披萨/长条）、集合模型（计数器）、数轴模型和符号表示之间建立显式连接。单一模型（尤其是圆模型）会限制理解。", "evidence_refs": ["E-DAI-2024", "E-JILLIAN-MC", "E-IELS-PG"]}
+        ]
+      },
+      "jd_capability_matrix": [
+        {"task": "设计并实施符合课程标准的数学教学", "capability": "掌握分数等核心数学概念的学科内容知识与教学法知识（PCK）", "skill": "分数概念教学、诊断迷思概念、选择适当表征", "tool": "教材、教具、视觉模型（面积/数轴/集合）", "background": "数学相关专业本科及以上；持有不低于岗位层次的教师资格证", "evidence_refs": ["E-SZ-TEACHER-2026", "E-GD-TEACHER-2026", "E-NCTQ-2022"]},
+        {"task": "通过笔试和面试展示学科专业知识", "capability": "学科专业知识考试——数学内容知识（含分数运算、推理与应用）", "skill": "数学问题解决、数学推理、分数运算与解释", "tool": "纸笔测试、结构化面试", "background": "数学相关专业；2025/2026 应届毕业生或具有教师资格证的社会人员", "evidence_refs": ["E-SZ-TEACHER-2026", "E-SHANGYU-TEACHER-2026"]},
+        {"task": "分析学生错误并调整教学策略", "capability": "识别分数学习中常见的迷思概念并设计针对性干预", "skill": "错误分析、诊断评估、差异化教学", "tool": "诊断评估工具（如 FDOI）、形成性评估", "background": "小学数学教师或数学教育专业背景", "evidence_refs": ["E-NCTQ-2022", "E-ZHOU-2006", "E-DERINGOL-2019"]},
+        {"task": "进行系统性课堂教学与评估", "capability": "执行分数单元的整体教学设计——从概念引入到应用迁移", "skill": "课程设计、评估设计、表现任务设计", "tool": "课标、教科书、评估框架（如 TIMSS/NAEP 框架）", "background": "师范教育背景或教育类专业", "evidence_refs": ["E-MOE-001", "E-TIMSS-2027", "E-CCSS-001"]}
+      ],
+      "interview_assessment_matrix": [
+        {"type": "NAEP 分数概念评估（大规模标准化）", "capability": "跨 4/8/12 年级测量分数概念理解——等值、比较、运算、数轴位置", "level": "多层次（记忆→应用→推理）", "credibility": "high", "evidence_refs": ["E-NAEP-FRAC"]},
+        {"type": "TIMSS 国际数学评估（跨国标准化）", "capability": "使用多种模型和表征比较分数与小数、识别等值分数、四舍五入", "level": "应用/推理", "credibility": "high", "evidence_refs": ["E-TIMSS-2027"]},
+        {"type": "FDOI 在线诊断访谈（临床范式）", "capability": "一对一在线评估学生分数与小数理解的多个维度——等值、比较、运算策略", "level": "诊断/深层理解", "credibility": "high", "evidence_refs": ["E-FDOI"]},
+        {"type": "Task-based Interview（任务型临床访谈）", "capability": "通过具体分数任务（如等分、比较、数轴放置）观察学生的策略选择、解释与错误模式", "level": "深层理解/策略分析", "credibility": "medium", "evidence_refs": ["E-CHN-MISCON", "E-FAZIO-2015"]},
+        {"type": "配方缩放表现任务（真实世界情境）", "capability": "应用分数乘除缩放食谱配比；证明等值分数理解与比例推理", "level": "应用/迁移", "credibility": "medium", "evidence_refs": ["E-RECIPE-SCALING", "E-GM-RECIPE"]}
+      ],
+      "consensus": [
+        {"statement": "分数大小理解（fraction magnitude understanding）是代数学习与整体数学成就的最强预测因子之一", "evidence_refs": ["E-BAILEY-2014", "E-BOOTH-2014", "E-SIEGLER-2012", "E-BJORKHAMMER-2025"]},
+        {"statement": "数轴是建立分数大小理解最有效的表征工具，效果优于面积模型", "evidence_refs": ["E-HAMDAN-2017", "E-RESNICK-2016", "E-KIM-2024"]},
+        {"statement": "自然数偏差（whole number bias）是跨文化、跨年龄的普遍现象，是分数学习的主要认知障碍", "evidence_refs": ["E-GABRIEL-2013", "E-GONZALEZ-2023", "E-DERINGOL-2019", "E-CHN-MISCON"]},
+        {"statement": "分数比较中 benchmarking（以 1/2 或 1 为基准）和 residual thinking 是最有效的高级策略，gap thinking 是常见错误策略", "evidence_refs": ["E-CLARKE-2009", "E-FAZIO-2015", "E-GONZALEZ-2023"]},
+        {"statement": "概念理解与程序流畅相互促进，平衡教学优于纯概念或纯程序取向", "evidence_refs": ["E-LENZ-2024", "E-HURRELL-2021", "E-IES-PG"]},
+        {"statement": "教师自身的分数内容知识（含概念理解）是有效分数教学的必要条件", "evidence_refs": ["E-NCTQ-2022", "E-ZHOU-2006", "E-WU-CCSS"]},
+        {"statement": "分数应被呈现为'数'（数轴上的点），而不仅是'部分-整体'关系", "evidence_refs": ["E-WU-CCSS", "E-CCSS-001", "E-MOE-001"]},
+        {"statement": "多表征整合（面积、数轴、集合、符号）优于单一表征的分数教学", "evidence_refs": ["E-DAI-2024", "E-JILLIAN-MC", "E-IES-PG"]}
+      ],
+      "disagreements": [
+        {
+          "issue": "概念理解与程序练习应以何者优先——先理解后练习还是先练习后理解？",
+          "side_a": {"position": "概念理解必须先于程序练习；没有理解的练习是盲目的", "strong_arguments": ["概念知识提供更强的基础支撑；理解原理后程序更有意义", "CCSSM 和多数课程标准强调'理解'优先于'熟练'", "纯程序学习导致知识僵化与迁移失败"], "evidence_refs": ["E-WU-CCSS", "E-CRIT-CONCPROC", "E-CCSS-001"]},
+          "side_b": {"position": "概念与程序应并行发展，有时程序先行可以揭示概念模式", "strong_arguments": ["Lenz 2024 纵向研究表明概念和程序知识在个体间以不同顺序转换", "程序练习中的模式识别可以触发概念领悟", "'先概念后程序'的严格顺序缺乏因果证据支持"], "evidence_refs": ["E-LENZ-2024", "E-HURRELL-2021", "E-IES-PG"]},
+          "status": "partial_resolution"
+        },
+        {
+          "issue": "分数是否是无可争议的'代数守门人'——因果关系还是相关关系？",
+          "side_a": {"position": "分数知识是代数成功的必要条件，应作为教学优先级", "strong_arguments": ["Bailey 2014 纵向数据显示控制 IQ、阅读、整数知识后预测仍显著", "Booth 2014 显示分数大小知识（非整数）特异地预测代数", "10 岁分数知识预测 16 岁代数与整体数学成就的效应量较大"], "evidence_refs": ["E-BAILEY-2014", "E-BOOTH-2014", "E-SIEGLER-2012"]},
+          "side_b": {"position": "'守门人'比喻过度简化了因果关系；分数困难可能反映更一般的数学认知能力", "strong_arguments": ["Spitzer 2022 显示先前整数技能显著预测分数理解——关系可能是双向的", "D'Erchie 2026 最新纵向研究发现早期代数知识也预测后期分数理解", "相关性不等同于必要性——可能存在未测量的第三变量"], "evidence_refs": ["E-SPITZER-2022", "E-BJORKHAMMER-2025"]},
+          "status": "partial_resolution"
+        },
+        {
+          "issue": "自然数偏差是认知发展必然阶段还是教学造成的？可以通过早期教学预防吗？",
+          "side_a": {"position": "自然数偏差部分源于认知发展规律，但教学可以显著减轻", "strong_arguments": ["跨文化研究显示自然数偏差具有普遍性", "基于大小的推理干预可提升分数比较准确率 15%（对照组 3-6%）", "早期引入数轴和多种分数表征可减少偏差"], "evidence_refs": ["E-GABRIEL-2013", "E-GONZALEZ-2023"]},
+          "side_b": {"position": "自然数偏差的根源在于教学——过早引入符号而延迟大小理解", "strong_arguments": ["部分教学传统（如仅用圆模型、过度强调部分-整体）固化了偏差", "中国教师（更强的概念导向教学）的学生在分数概念上表现更好", "符号教学先于大小理解是偏差的主要成因"], "evidence_refs": ["E-ZHOU-2006", "E-ZHANG-2022", "E-HAMDAN-2017"]},
+          "status": "partial_resolution"
+        }
+      ],
+      "open_problems": [
+        {"problem": "三周每天 25 分钟的干预剂量是否能建立稳定的分数大小理解并迁移至未见题目", "why_it_matters": "直接决定学习计划设计——若剂量不足需调整时长或缩小目标范围", "evidence_refs": ["E-IES-PG", "E-HAMDAN-2017"]},
+        {"problem": "中国 2022 课标新增'量感'的具体分数教学含义尚未有充分实证研究——理论框架已建但课堂转化证据空白", "why_it_matters": "若按'量感'框架设计教学但缺乏验证，可能偏离有效路径", "evidence_refs": ["E-MOE-001"]},
+        {"problem": "配方缩放任务虽是真实世界情境但评估效度研究薄弱——它能测量的是分数运算还是比例推理？", "why_it_matters": "若配方缩放主要测量比例推理而非分数理解本身，则作为验收证据可能偏移", "evidence_refs": ["E-RECIPE-SCALING"]},
+        {"problem": "学习者诊断数据未采集——未评估初始分数理解水平、具体迷思概念类型、数轴熟练度基线", "why_it_matters": "缺乏基线数据无法确定干预起点与个性化路径，所有建议目前仅基于领域一般知识", "evidence_refs": ["E-FDOI", "E-CHN-MISCON"]}
+      ],
+      "claims": [
+        {"claim_id": "C1", "statement": "分母表示整体被分成的等份数，分子表示所取份数；分数表示分子÷分母的商", "status": "supported", "claim_type": "fact", "evidence_refs": ["E-WIKI-001", "E-WU-CCSS"], "limits": ["当分数被理解为比率或算子时，这一定义需要扩展"]},
+        {"claim_id": "C2", "statement": "等值分数通过分子和分母乘以（或除以）相同非零数生成，表示数轴上同一点", "status": "supported", "claim_type": "fact", "evidence_refs": ["E-CCSS-001", "E-WU-CCSS", "E-WIKI-001"], "limits": ["除数为零未定义；学生需要理解而非仅记忆'乘同数'规则"]},
+        {"claim_id": "C3", "statement": "分数大小理解（而非分数运算熟练度）是代数成功的最强预测因子", "status": "supported", "claim_type": "fact", "evidence_refs": ["E-BOOTH-2014", "E-BAILEY-2014", "E-SIEGLER-2012"], "limits": ["预测关系不等于因果关系；可能存在双向关系"]},
+        {"claim_id": "C4", "statement": "数轴表征对建立分数大小理解的因果效果优于面积模型", "status": "supported", "claim_type": "fact", "evidence_refs": ["E-HAMDAN-2017", "E-KIM-2024"], "limits": ["实验在特定条件下进行；课堂环境中数轴与面积模型的相对效果可能因教学实施而异"]},
+        {"claim_id": "C5", "statement": "学生普遍存在自然数偏差——将整数属性错误迁移至分数（如认为分母越大分数越大）", "status": "supported", "claim_type": "fact", "evidence_refs": ["E-GABRIEL-2013", "E-GONZALEZ-2023", "E-DERINGOL-2019", "E-CHN-MISCON"], "limits": ["偏差严重程度和具体表现因文化、课程和个体差异而不同"]},
+        {"claim_id": "C6", "statement": "分数比较中，benchmarking（以 1/2 为基准）是最有效的高级策略", "status": "supported", "claim_type": "practice", "evidence_refs": ["E-CLARKE-2009", "E-FAZIO-2015"], "limits": ["有效性取决于学生对 1/2 等基准分数的先备理解"]},
+        {"claim_id": "C7", "statement": "gap thinking（比较分子分母之差）是常见的错误分数比较策略", "status": "supported", "claim_type": "fact", "evidence_refs": ["E-GONZALEZ-2023", "E-CLARKE-2009", "E-TOPDRAWER"], "limits": ["并非所有使用 gap thinking 的学生都完全缺乏分数大小理解"]},
+        {"claim_id": "C8", "statement": "概念理解与程序练习应并行、平衡发展，而非严格先后顺序", "status": "supported", "claim_type": "standard", "evidence_refs": ["E-LENZ-2024", "E-HURRELL-2021", "E-CRIT-CONCPROC"], "limits": ["'平衡'的具体比例和顺序因内容和学习者而异，缺乏通用公式"]},
+        {"claim_id": "C9", "statement": "当前中国小学数学教师招聘要求数学专业学历和教师资格证，但未在 JD 中明确列出分数教学专项能力", "status": "partially_supported", "claim_type": "market_signal", "evidence_refs": ["E-SZ-TEACHER-2026", "E-GD-TEACHER-2026", "E-SHANGYU-TEACHER-2026"], "limits": ["JD 是市场信号而非教学能力全貌；教师资格证考试内容和实际课堂能力是隐含要求；3 个样本仅来自 2 省"]},
+        {"claim_id": "C10", "statement": "配方缩放是有效的真实世界分数评估任务，涉及等值分数、乘除运算与比例推理", "status": "partially_supported", "claim_type": "practice", "evidence_refs": ["E-RECIPE-SCALING", "E-GM-RECIPE"], "limits": ["作为教学案例广泛使用但效度研究薄弱；可能更多测量比例推理而非纯分数理解"]},
+        {"claim_id": "C11", "statement": "中国 2022 课标新增'量感'核心素养对分数教学提出了更高要求——强调对大小关系的直观感知", "status": "supported", "claim_type": "standard", "evidence_refs": ["E-MOE-001"], "limits": ["'量感'在课堂中的具体转化路径尚未有充分实证研究"]},
+        {"claim_id": "C12", "statement": "三周每天 25 分钟（共约 8.75 小时）的针对性干预可以显著改善分数大小理解和比较策略", "status": "partially_supported", "claim_type": "inference", "evidence_refs": ["E-HAMDAN-2017", "E-IES-PG", "E-RESNICK-2016"], "limits": ["干预研究效应量（ES=0.29-2.50）差异极大；具体取决于干预质量和学习者起点；三周剂量基于上游用户确认而非专门研究"]},
+        {"claim_id": "C13", "statement": "分数学习应该先用披萨/圆形模型引入，再过渡到数轴", "status": "unsupported", "claim_type": "practice", "evidence_refs": ["E-HAMDAN-2017", "E-JILLIAN-MC", "E-KIM-2024"], "limits": ["过度使用圆形模型会导致'分数只是披萨块'的误解；数轴应尽早引入，而非仅作为后期表征"]},
+        {"claim_id": "C14", "statement": "所有分数比较都应转换为共同分母后再判断", "status": "unsupported", "claim_type": "practice", "evidence_refs": ["E-CLARKE-2009", "E-FAZIO-2015", "E-MCMULLEN-2020"], "limits": ["固定使用通分策略阻碍适应性专长发展；benchmarking 和 residual thinking 等策略常更高效且加深概念理解"]}
+      ],
+      "evidence_gaps": [
+        {"gap_id": "G1", "description": "未采集学习者的初始分数诊断数据——迷思概念类型、数轴熟练度、比较策略偏好基线未知", "criticality": "critical", "gate_effect": "lower_confidence", "confidence_impact": "high"},
+        {"gap_id": "G2", "description": "招聘 JD 中未找到直接标注'分数教学能力'的细分要求——所有 JD 均为综合数学教师岗位，分数专项能力为隐性要求", "criticality": "minor", "gate_effect": "none", "confidence_impact": "low"},
+        {"gap_id": "G3", "description": "中国本土六年级分数学习的最新实证干预研究以中文发表为主，本次仅检索到有限的英文和中文摘要级证据", "criticality": "material", "gate_effect": "lower_confidence", "confidence_impact": "medium"},
+        {"gap_id": "G4", "description": "配方缩放作为分数评估工具的效度研究薄弱——任务可能更多测量比例推理而非分数大小理解", "criticality": "material", "gate_effect": "lower_confidence", "confidence_impact": "medium"},
+        {"gap_id": "G5", "description": "'量感'（中国 2022 课标）在分数教学中的具体转化路径缺乏实证验证——理论框架已建但课堂证据空白", "criticality": "minor", "gate_effect": "none", "confidence_impact": "low"},
+        {"gap_id": "G6", "description": "面试/选拔样本中未找到独立的分数教学能力评估案例——现有评估工具（FDOI、NAEP）面向学生而非教师", "criticality": "minor", "gate_effect": "none", "confidence_impact": "low"}
+      ]
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {"dimension": "实际联网执行", "evidence": ["research_executed=true", "research_run_manifest.online=true", "execution_status=completed", "rounds=3", "24 条查询已执行并记录"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "强制来源类别覆盖", "evidence": ["六类来源均为 covered", "wikipedia_encyclopedia: 1 样本", "official_academic: 24 样本", "practice_case: 8 样本", "recruiting_jd: 3 样本 2+ 地区", "interview_selection: 4 样本", "adversarial_frontier: 5 样本"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "来源可靠性与时效", "evidence": ["关键结论可追溯至 high-reliability 来源（Siegler/Booth/Bailey/Hamdan 等经同行评审批期刊）", "retrieved_at 均为 2026-07-27", "中文来源含 2025-2026 年最新发表"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "结论可追溯性", "evidence": ["14 项 claims 均有 evidence_refs", "supported/unsupported 状态区分明确", "limits 字段标注适用范围与边界"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "STORM 视角与问题多样性", "evidence": ["perspectives=6（terminology_history, theory_standards, practice_tasks, recruiting_market, interview_assessment, criticism_frontier）", "每视角含 3-4 个具体问题与 query_ids"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "后续追问深度", "evidence": ["rounds=3", "9 条 follow_up_triggers 记录了冲突与新发现触发的后续查询", "Q1→Q13/Q19, Q2→Q15, Q4→Q7/Q16, Q8→Q14/Q20, Q12→Q23, Q19→Q21 等多条追问链"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "岗位/面试样本代表性", "evidence": ["招聘: 3 个去重岗位样本（深圳龙华、深圳南山、绍兴上虞），2+ 独立地区/组织", "面试/评估: 4 组独立样本（NAEP, TIMSS, FDOI, Task-based Interview）", "备注: JD 未含分数教学专项能力细分——标记为 market_signal 而非 fact"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "时效与地区适配性", "evidence": ["retrieved_at=2026-07-27 一致", "region 覆盖 cn（6 源）、us（12 源）、au（4 源）、eu（5 源）", "中文课标 MOE 2022 版为当前最新版本"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "事实/市场信号/推断分离", "evidence": ["market_signal 明确标注（E-SZ-TEACHER-2026, E-GD-TEACHER-2026, E-SHANGYU-TEACHER-2026 的 provenance=market_signal）", "claims.claim_type 区分 fact/standard/market_signal/practice/inference", "provenance 字段在 source_ledger 中显式标注", "无 model_hypothesis 计为 external_evidence"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "争议平衡", "evidence": ["3 项 disagreements 均保留双方 strong_arguments 与 evidence_refs", "gatekeeper 命题的 counter-evidence 已记录（Spitzer, D'Erchie）", "概念 vs 程序之争记录双方论据与 partial_resolution 状态", "自然数偏差的两种因果归因均呈现"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null},
+      {"dimension": "证据缺口透明度", "evidence": ["6 项 evidence_gaps 显式标记", "criticality、gate_effect、confidence_impact 均已评估", "G1（无基线诊断数据）标记为 critical 但未阻塞建图——S3 建图前需采集", "G3（中文实证不足）标记为 material + lower_confidence"], "score": true, "threshold": true, "passed": true, "failure_action": null, "route_to": null}
+    ],
+    "evidence": [
+      "research_executed=true，24 条查询跨 3 轮执行，9 条 follow_up_triggers 记录冲突触发的后续检索",
+      "六类强制来源类别均为 covered，招聘达 3 样本/2+ 地区组织，面试/评估达 4 组独立样本",
+      "14 项 claims 中 8 项 supported、3 项 partially_supported、3 项 unsupported（C13/C14 反驳常见教学口诀）",
+      "3 项 disagreements 保留双方强论据，status=partial_resolution",
+      "market_signal 与 fact 明确分离——C9 标注为 market_signal",
+      "critical 缺口 G1（学习者基线诊断数据缺失）标记为 lower_confidence 但未阻塞建图"
+    ],
+    "verdict": "pass",
+    "route_to": "S3"
+  },
+  "traceability": {
+    "source_artifact_ids": ["goal_success_contract-G1-passed-001"],
+    "source_evidence_ids": [
+      "E-WIKI-001", "E-CCSS-001", "E-MOE-001", "E-SIEGLER-2012", "E-LORTIE-2015",
+      "E-BOOTH-2014", "E-BAILEY-2014", "E-GABRIEL-2013", "E-HAMDAN-2017", "E-RESNICK-2016",
+      "E-DERINGOL-2019", "E-GONZALEZ-2023", "E-CLARKE-2009", "E-MCMULLEN-2020", "E-LENZ-2024",
+      "E-LIU-2022", "E-ZHANG-2022", "E-ZHOU-2006", "E-DAI-2024", "E-JILLIAN-MC",
+      "E-MNP-2024", "E-KIM-2024", "E-SZ-TEACHER-2026", "E-NCTQ-2022", "E-WU-CCSS",
+      "E-IES-PG", "E-MOU-2016", "E-TIMSS-2027", "E-NAEP-FRAC", "E-FDOI",
+      "E-FAZIO-2015", "E-HURRELL-2021", "E-CRIT-CONCPROC", "E-RECIPE-SCALING", "E-SPITZER-2022",
+      "E-TOPDRAWER", "E-GM-RECIPE", "E-XU-2023", "E-CHN-MISCON", "E-CHN-TEACH",
+      "E-BJORKHAMMER-2025", "E-JOELSDOTTIR-2024", "E-GD-TEACHER-2026", "E-SHANGYU-TEACHER-2026"
+    ],
+    "source_sections": [
+      "SKILL.md §执行 1-8", "stage-contract.md §1-9", "domain-evidence-landscape.schema.json §content",
+      "handoff-envelope.schema.json §all", "example.md §示例A 正向"
+    ],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T12:20:00+08:00"
+}
+```

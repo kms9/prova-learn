@@ -1,0 +1,83 @@
+{
+  "expectations": [
+    {
+      "text": "Equivalent-fraction representation evidence is preserved as a tested state and is not discarded because of the comparison error.",
+      "passed": true,
+      "evidence": "learner_profile_summary.strengths preserves the equivalent-fraction competence: 'can correctly locate 2/3 and 4/6 on a number line', 'verbally articulates that 2/3 and 4/6 are equal', 'uses visual diagrams to verify equivalent fractions'. The comparison error is listed separately under gaps, so the equivalence evidence is not discarded. (Substance met; 'tested state' here maps to the baseline's strengths list.)"
+    },
+    {
+      "text": "Mechanical cross-multiplication without explanation is not treated as conceptual mastery, and prompt-assisted recipe success is distinguished from independent transfer.",
+      "passed": true,
+      "evidence": "gaps lists 'cross-multiplication for comparing 3/5 vs 4/7 is purely mechanical without conceptual explanation' and 'cannot explain why cross-multiplication works' — mechanical procedure is treated as a gap, not conceptual mastery. strengths 'responds to diagrammatic scaffolding for proportional reasoning tasks' is distinguished from gaps 'failed first attempt on scaling recipe ... without scaffolding' and 'no independent transfer on two novel context problems'."
+    },
+    {
+      "text": "The whole-number-bias misconception is captured as a coded entry with at least two supporting observations rather than a single item.",
+      "passed": false,
+      "evidence": "The output has no coded misconception entries at all (no misconception array, no codes). Whole-number bias is not captured in any form, coded or otherwise."
+    },
+    {
+      "text": "Each node state records hint dependency and confidence calibration, and the two failed transfer tasks are reflected in transfer_performance.",
+      "passed": false,
+      "evidence": "No node_states, no hint_dependency fields, no confidence_calibration fields, and no transfer_performance structure. The two failed transfer tasks appear only as prose gaps, not in any transfer_performance object."
+    },
+    {
+      "text": "The learning frontier names a nearest learnable node with traceable evidence and a rationale rather than the broad goal of understanding fractions.",
+      "passed": false,
+      "evidence": "The output gives a prose zone_of_proximal_development and learning_objectives LO-4.1..LO-4.4, but no nearest-learnable concept-graph node and no evidence_refs. It states a broad transitional goal rather than naming a single nearest node traceable to observations."
+    },
+    {
+      "text": "G4 is evaluated dimension by dimension and a pass routes deterministically to S5.",
+      "passed": false,
+      "evidence": "There is no G4 rubric and no dimension-by-dimension gate evaluation. progress_indicators.exit_gate is a planning rule, not a G4 pass verdict routing to S5."
+    }
+  ],
+  "summary": { "passed": 2, "failed": 4, "total": 6, "pass_rate": 0.333 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 6810,
+    "transcript_chars": 882,
+    "duration_ms": 39256,
+    "usage": { "input_tokens": 29673, "output_tokens": 2005, "cache_read_input_tokens": 0, "cost_usd": 0.19849 },
+    "note": "No metrics.json or tool-call log; isolated LLM completion (web_search/fetch = 0)."
+  },
+  "timing": {
+    "executor_duration_seconds": 43,
+    "total_duration_seconds": 39.256,
+    "grader_duration_seconds": null
+  },
+  "claims": [
+    {
+      "claim": "The baseline response is clean JSON with no prose preamble and no markdown fence.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "outputs/response.txt begins directly with '{\"personalized_learning_stage\":\"S4\"...'; no fence, no commentary."
+    },
+    {
+      "claim": "The baseline captured the diagnostic reasoning (procedural vs conceptual, scaffolded vs independent) in prose.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "strengths/gaps and stage_diagnosis distinguish representational competence from procedure-bound comparison and scaffold-dependent proportional reasoning, and note zero independent transfer."
+    },
+    {
+      "claim": "The baseline cannot satisfy schema-bound expectations.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "No coded misconceptions, node_states, transfer_performance, learning_frontier node, or G4 rubric — so expectations 3-6 fail structurally."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this configuration directory."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Same pattern as case-1 baseline: the two reasoning-bound expectations (1, 2) pass on substance, but the four schema-bound expectations (3-6) fail. If the benchmark wants to isolate the skill's schema advantage, this is informative; if it wants pure diagnostic correctness, add schema-free diagnostic expectations so the baseline's correct reasoning is visible."
+      }
+    ],
+    "overall": "Baseline is contract-clean and diagnostically reasonable but schema-incompatible; 2/6 reflects the schema-bound rubric."
+  }
+}

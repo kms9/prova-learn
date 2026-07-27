@@ -1,0 +1,26 @@
+{
+  "route": "gclaude",
+  "exit_code": 0,
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "a253e3a4-d5f2-467b-a6e9-2a1765781b33",
+  "uuid": "3631c7f1-b461-4143-952c-014422dc239e",
+  "duration_ms": 165163,
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 307,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 256
+    },
+    "glm-5.2": {
+      "inputTokens": 58392,
+      "outputTokens": 13939,
+      "cacheReadInputTokens": 137920
+    }
+  },
+  "result": {
+    "status": "written",
+    "json_valid": true,
+    "fail_closed": true
+  }
+}

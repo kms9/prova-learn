@@ -1,0 +1,96 @@
+{
+  "expectations": [
+    {
+      "text": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+      "passed": false,
+      "evidence": "No focus_question field exists anywhere in the output. The graph (competencyConceptMap) is organized around 4 dimensions (D1-D4: 表征与意义建构, 比较与排序, 等值与变换, 应用与建模) — a curriculum framework, not a focus question. Nodes are numbered C01-C14 with 'level' values (1-3), organized hierarchically within dimensions. While the s3PersonalizedPlan mentions number line and area model activities, the graph structure itself does not use these as typed node representations. The output reads as a 15-day lesson plan with a concept map appendix, not a capability-concept graph anchored to a focus question."
+    },
+    {
+      "text": "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+      "passed": false,
+      "evidence": "Edges use 'type' values: 'prerequisite' (20 edges) and 'reinforcement' (5 edges). No hard/soft prerequisite_strength distinction exists. No cycle verification or topological sort is performed or reported. The path C01→C02→C03→C09→C10→C11→C12 exists but is unverified. The distinction between 'prerequisite' and 'reinforcement' edges does not map to hard/soft — it maps to dependency vs. practice feedback loops, which is a different taxonomy."
+    },
+    {
+      "text": "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+      "passed": false,
+      "evidence": "Edges have no rationale field. 'Prerequisite' edges list only from/to/type — no explanation of why the dependency exists. For example: {\"from\": \"C02\", \"to\": \"C03\", \"type\": \"prerequisite\"} has no rationale. Reinforcement edges have a 'note' field (e.g. '数轴是验证等值的最有力工具') but prerequisite edges have no explanatory text."
+    },
+    {
+      "text": "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+      "passed": false,
+      "evidence": "Target capabilities are not explicitly defined as capability objects. The dimensions (D1-D4) approximate them: D2 (比较与排序), D3 (等值与变换), D4 (应用与建模). Nodes reference their dimension via a 'dimension' field, so C06-C08 are under D2, C09-C12 under D3, C13-C14 under D4. However, there is no explicit traceability from target capability to nodes — the dimension grouping is organizational, not a verified mapping of 'this capability requires these specific nodes to be diagnosed and assessed.'"
+    },
+    {
+      "text": "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+      "passed": false,
+      "evidence": "Nodes have 'description' fields (e.g. C03: '理解 1/b 的含义，能通过累加单位分数构建任意 a/b，理解分数是单位分数的累加结果') but no separate 'capability_statement' field. No 'common_misconceptions' array exists on any node (the s2AuditSummary.gapsIdentified lists general gaps, not per-node misconceptions). No per-node 'assessment_items' exist — assessment is embedded in daily activities within s3PersonalizedPlan (e.g. day diagnostics) rather than structured as assessment items with cognitive levels per node. No 'mastery_thresholds' per node — the g3HandoffResults.competencyStatusSummary has postS3Target and successCriterion fields that partially serve this role, but they're about expected outcomes after the 3-week plan, not mastery thresholds for assessment."
+    },
+    {
+      "text": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+      "passed": false,
+      "evidence": "No traceability array exists. The s2AuditSummary references evidence domains but does not link them to specific nodes. The g3HandoffResults has a g3Decision section with pass/fail criteria but these are expressed as competency targets, not as verified graph invariants. No deterministic route_to field (e.g. 'S4') — the postG3Recommendations.readyFor mentions '分数加减运算' as the next topic but does not declare a G3→S4 route based on verified invariants. The G3 handoff is a forward-looking plan assessment, not a gate-check based on graph structural properties."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 9,
+    "errors_encountered": 0,
+    "output_chars": 17210,
+    "transcript_chars": 132568
+  },
+  "timing": {
+    "executor_duration_seconds": 224,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": 221.215
+  },
+  "claims": [
+    {
+      "claim": "S2审计显示数轴表征不稳固、比较策略单一",
+      "type": "process",
+      "verified": false,
+      "evidence": "These are model-generated claims about the learner's state. The without_skill executor is instructed not to read .agents/skills — these diagnostic statements are fabrications, not from actual S2 audited evidence."
+    },
+    {
+      "claim": "三周内真正理解分数：会比较分数大小、解释等值分数的含义、解决简单情境题",
+      "type": "process",
+      "verified": true,
+      "evidence": "This goal is stated in the learnerProfile.learningGoal and matches the prompt. However, the claim is embedded in a fabricated learner profile rather than referenced from a G1 contract."
+    },
+    {
+      "claim": "G3 PASS — 建议进入 G4 高级阶段",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The g3HandoffResults declares a pass/fail decision structure but the output presents a lesson plan, not a verified gate check. The 'pass' is based on completing the 15-day plan, not on verifying graph invariants. The g3Decision criteria are described but never evaluated — the output assumes the plan will succeed rather than checking preconditions."
+    },
+    {
+      "claim": "guardian-coached, responds to visual models",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fabricated learner profile details. The prompt mentions '监护人与六年级学习者' but the detailed disposition (strengths, watchpoints) is model-invented."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+        "reason": "Good discriminating assertion. The without_skill output fails because it organizes around dimensions (a curriculum framework), not a focus question. The assertion correctly distinguishes between a capability-concept graph and a dimensional curriculum map."
+      },
+      {
+        "reason": "No assertion checks whether the output distinguishes between the S3 graph construction step and the S4/S5 learning pathway generation step. The without_skill output conflates these — it produces a 15-day lesson plan (S4/S5 territory) within what should be an S3 capability-concept graph. Adding an assertion about scope boundaries would catch this conflation."
+      }
+    ],
+    "overall": "All 6 expectations correctly fail. The without_skill output for the cross-domain case is sophisticated and well-structured as a lesson plan, but it fundamentally misses the S3 contract: it produces a dimensional curriculum map with an embedded 15-day instructional plan, not a typed capability-concept graph with hard/soft prerequisite edges, per-node assessment items, misconceptions, mastery thresholds, and traceability. The output conflates S3 (graph construction) with S4/S5 (pathway generation and instructional design)."
+  }
+}

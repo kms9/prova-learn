@@ -1,0 +1,12 @@
+{
+  "case_id": 2,
+  "config": "without_skill",
+  "graded_at": "2026-07-27T03:01:16Z",
+  "expectation_results": [],
+  "overall_passed": false,
+  "summary": "grader returned no JSON",
+  "grader_elapsed_s": 790.7,
+  "grader_exit_status": 1,
+  "grader_modelUsage": {},
+  "grader_cost_usd": 0
+}

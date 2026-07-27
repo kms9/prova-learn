@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S6",
+  "run_id": "s6-run-rev-20260727-001",
+  "learner_id": "learner-unknown",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "learning_and_session_plan",
+      "graph_node_info",
+      "evidence_landscape",
+      "learner_snapshot"
+    ],
+    "expected_schema_versions": {
+      "learning_and_session_plan": "1.0.0",
+      "graph_node_info": "1.0.0",
+      "evidence_landscape": "1.0.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "教学节点为索引理论基础，已纳入已确认学习计划",
+    "学习者在会话前已完成硬先修节点",
+    "5000字索引理论讲义内容本身正确但无结构化证据引用"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "gap-no-learner-output",
+      "description": "学习者全程未产出任何独立作答或可判定行为证据，仅回复'懂了'",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-no-hint-structure",
+      "description": "教学交互缺失逐级提示阶梯（hint_ladder）和反馈规则（feedback_rules）",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-no-traceable-evidence",
+      "description": "5000字讲义未标明来源追溯与适用边界，关键内容缺乏审计证据引用",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-answer-leakage",
+      "description": "每道题后立刻显示标准答案，无法区分学习者'会做'与'看懂'",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-no-transfer-evidence",
+      "description": "缺失 candidate_mastery_evidence：无独立迁移、延迟保持或推理质量证据",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-no-structured-examples",
+      "description": "教学材料缺少正例、反例、边界案例与常见误解的结构化呈现",
+      "criticality": "high",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "inform",
+    "trigger": "session_start",
+    "questions": [
+      "确认本会话目标为索引理论基础学习，过程记录将用于更新学习者模型"
+    ],
+    "response": null,
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T09:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "ev-lecture-content",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "一篇5000字索引理论讲义，包含B-tree结构、多列索引、查询优化等内容，但无外部审计来源引用",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "ev-learner-dongle",
+      "provenance": "learner_behavior",
+      "source_ref": null,
+      "summary": "学习者最终回复'懂了'，无任何独立作答、中间步骤、错误修正或迁移尝试",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "ev-answer-leakage",
+      "provenance": "learner_behavior",
+      "source_ref": null,
+      "summary": "每道练习题后立即显示标准答案，学习者可能仅'看懂'而非'会做'",
+      "status": "unsupported"
+    }
+  ],
+  "processing_record": [
+    "读取 stage-contract.md、handoff-envelope.schema.json、session-package-and-trace.schema.json",
+    "校验输入契约：学习计划、图谱节点、学习者快照形式存在",
+    "审查教学交互记录：仅发现一篇5000字讲义、即时答案展示、学习者'懂了'回复",
+    "识别多项critical缺陷：答案泄露、无独立作答、无hint_ladder、无candidate_mastery_evidence",
+    "对照G6量规逐维评价：全部8项维度失败",
+    "判定：positive_artifact=null，verdict=revise_here，route_to=S6",
+    "禁止进入S7宣称掌握"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "内容正确性与可追溯性",
+        "evidence": [
+          "5000字讲义无explanation_id/evidence_refs结构",
+          "关键内容缺乏审计来源引用，模型常识包装为事实",
+          "content_quality_status不可判定"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "对目标和学习者的适配",
+        "evidence": [
+          "长篇讲义未对齐节点exit_criteria与学习者前沿",
+          "无 learner_snapshot 驱动的难度与支架适配"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "认知层级",
+        "evidence": [
+          "单一讲义形式仅覆盖remember/understand层级",
+          "无apply/analyze/evaluate/create层级活动"
+        ],
+        "score": 1,
+        "threshold": 2,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "例子代表性",
+        "evidence": [
+          "无结构化positive/negative/boundary/common_misconceptions",
+          "缺失正反例对比与常见误解纠正路径"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "支架质量",
+        "evidence": [
+          "无 hint_ladder 逐级提示阶梯",
+          "无 scaffolding_fade_strategy 渐隐策略",
+          "无 feedback_rules 任务/过程/自我调节反馈"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "答案泄露控制",
+        "evidence": [
+          "每道题后立刻显示标准答案",
+          "未区分独立任务的提交与答案公布时机",
+          "学习者回复'懂了'可能仅是看懂答案而非独立做出"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "学习者主动性",
+        "evidence": [
+          "interaction_events 为空：无任何 learner_response 含独立推理",
+          "仅'懂了'不是 learner_behavior 证据",
+          "candidate_mastery_evidence 为空：无独立应用、推理质量或迁移证据"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      },
+      {
+        "dimension": "交付可用性",
+        "evidence": [
+          "positive_artifact 为 null，无 session_package_and_trace 工件",
+          "缺失 explanations/examples/activities/hint_ladder/feedback_rules/interaction_events/candidate_mastery_evidence"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S6"
+      }
+    ],
+    "evidence": [
+      "长篇讲义+即时答案+'懂了'匹配S6反向示例B（stage-contract.md §8 line 97）",
+      "G6量规全部8维 passed=false",
+      "答案泄露控制与学习者主动性为关键失败维度",
+      "无 candidate_mastery_evidence，禁止进入S7"
+    ],
+    "verdict": "revise_here",
+    "route_to": "S6"
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [],
+    "source_sections": [
+      "stage-contract.md §8 line 97: 长篇讲义 + 即时答案 + '懂了' → G6失败",
+      "example.md 示例B（反向）"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T09:30:00Z"
+}

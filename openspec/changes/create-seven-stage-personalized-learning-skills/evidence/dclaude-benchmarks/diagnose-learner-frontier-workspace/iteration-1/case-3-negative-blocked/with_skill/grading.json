@@ -1,0 +1,93 @@
+{
+  "expectations": [
+    {
+      "text": "The output does not mark any critical node tested_mastered from a self-rating and a single slogan answer, and no fabricated positive artifact is accepted.",
+      "passed": true,
+      "evidence": "positive_artifact is null. There are no node_states and no tested_mastered label anywhere. Evidence E1 (self-rating 8/10) is provenance 'user_provided_unverified', status 'unsupported'; E2 (slogan answer) is learner_behavior, status 'partially_supported', classified as recall-only. processing_record states the self-rating must not be written into any node's tested_mastered. No positive artifact fabricated."
+    },
+    {
+      "text": "Behavior evidence is not substituted by self-report; the absence of reasoning, prompts, transfer and timing is recorded explicitly rather than inferred.",
+      "passed": true,
+      "evidence": "E1 (self-report) is recorded separately and marked unsupported, not used as behavior. requirement_gaps RG-S4-003 explicitly records the absence: '仅一条口号式行为观察...无推理过程、提示层级、耗时、反例、迁移或置信度数据'. Rubric evidence also records 'no reasoning/prompt/transfer/反例' and 'E2 未记录任何提示层级信息'. metadata.data_limitations-style absences are explicit, not inferred."
+    },
+    {
+      "text": "The output does not assert independence or transfer ability that was never observed.",
+      "passed": true,
+      "evidence": "No independence is asserted (hint_dependency.level recorded as unknowable for E2); the 猜对识别 dimension fails precisely because independent/transfer cannot be distinguished. No transfer ability is claimed; the output notes transfer is unmeasurable from a single slogan."
+    },
+    {
+      "text": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+      "passed": false,
+      "evidence": "First conjunct met: no learning_frontier is produced (positive_artifact null; no nearest-learnable node). Second conjunct NOT met: the top-level verdict is 'return_upstream' with route_to 'S1', not S4. Although per-dimension failure_actions include revise_here->S4 and confirmation.questions ask for diagnostic tasks, the final deterministic route leaves S4 and returns upstream to S1, so 'the route stays at S4' is contradicted."
+    },
+    {
+      "text": "Cold-start or unknown nodes remain insufficient_evidence/untested and are not relabeled as a uniform all-not-mastered profile.",
+      "passed": true,
+      "evidence": "No node profile is emitted at all (positive_artifact null). processing_record states critical-node states can only be insufficient_evidence or untested, and explicitly forbids writing the self-rating into any tested_mastered. There is no uniform all-not-mastered relabeling."
+    },
+    {
+      "text": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+      "passed": false,
+      "evidence": "G4 does not pass: 5 of 7 rubric dimensions fail and verdict='return_upstream'. However the deterministic route is route_to 'S1' (return_upstream to S1). The expectation enumerates destinations {revise_here->S4, return_upstream->S3}; S1 is in neither set. The verdict label 'return_upstream' matches the permitted mode, but the destination S1 is outside the enumerated set, so the destination requirement is not met."
+    }
+  ],
+  "summary": { "passed": 4, "failed": 2, "total": 6, "pass_rate": 0.667 },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 9351,
+    "transcript_chars": 750,
+    "duration_ms": 104372,
+    "usage": { "input_tokens": 66625, "output_tokens": 7366, "cache_read_input_tokens": 101888, "cost_usd": 0.568219 },
+    "note": "No metrics.json or tool-call log; isolated LLM completion (web_search/fetch = 0)."
+  },
+  "timing": {
+    "executor_duration_seconds": 108,
+    "total_duration_seconds": 104.372,
+    "grader_duration_seconds": null
+  },
+  "claims": [
+    {
+      "claim": "The skill correctly refused to produce a positive artifact and did not pass G4 (correct negative-case handling).",
+      "type": "quality",
+      "verified": true,
+      "evidence": "status 'blocked', positive_artifact null, input_validation.status 'fail', quality_evaluation.verdict 'return_upstream' (not pass)."
+    },
+    {
+      "claim": "The skill routed to S1, not the expected S4/S3, because it detected missing G1/G3 input artifacts.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "input_validation.missing_fields lists goal_success_contract (G1) and capability_concept_graph (G3); processing_record states 'input_validation 失败路由最早污染阶段 S1（缺失 G1）'; verdict route_to='S1'. The case-3 prompt (unlike case-1/2) never asserts G1/G3 已通过, so this is a faithful contract application — but it lands on a destination the expected_output (S4 or S3) does not enumerate."
+    },
+    {
+      "claim": "RAW DEFECT: the response violates the executor output contract with a prose preamble and a markdown fence.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "executor_prompt.txt required 'ONLY one valid JSON object ... no markdown fence and no evaluation commentary.' response.txt opens with a bulleted prose summary ('Now I have a thorough understanding... Per the contract: ...') and wraps the JSON in a ```json ... ``` fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [
+      "Route destination: the skill returned upstream to S1 (missing G1/G3), while the expected_output and expectations 4/6 enumerate only S4 (revise_here) and S3 (return_upstream). Decide whether S1 is an acceptable stricter return_upstream or an out-of-spec route."
+    ],
+    "workarounds": [],
+    "note": "No user_notes.md exists in this configuration directory; the needs_review item is grader-derived."
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No determined learning frontier is produced from the insufficient evidence, and the route stays at S4 with diagnostic tasks to collect real behavior.",
+        "reason": "The expected_output allows only 'remain at S4' or 'return upstream to S3', but the skill (correctly, per its contract) routed to S1 because the case-3 prompt omits the 'G1/G3 已通过' assertion that case-1/2 include. The expected-destination set should explicitly include 'return to earliest polluted upstream stage (e.g. S1) when an upstream gate artifact is missing', or the prompt should assert gate status to disambiguate. As written, the rubric cannot credit the skill's arguably-correct S1 route."
+      },
+      {
+        "assertion": "G4 does not pass and the deterministic route is revise_here to S4 (or return_upstream to S3 when the diagnostic item itself is invalid).",
+        "reason": "Same root cause: destination is pinned to {S4, S3}. The skill's verdict 'return_upstream' matches the permitted mode but its destination S1 is out of set. Consider grading the route MODE (non-advancing return_upstream vs revise_here) rather than the exact stage, or enumerate S1 as valid."
+      },
+      {
+        "reason": "No expectation checks the output contract (bare JSON, no preamble, no fence); this run emitted a bulleted preamble plus a fence and the rubric does not see it."
+      }
+    ],
+    "overall": "Core negative-case behavior is correct (null artifact, no G4 pass, no fabricated mastery/frontier, explicit evidence-absence recording). The two failures are solely the route destination (S1 vs expected S4/S3), which is at least partly an eval-coverage gap given the prompt omits the gate-status assertion present in the positive cases."
+  }
+}

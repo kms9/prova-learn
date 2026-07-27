@@ -1,0 +1,82 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "configuration": "with_skill",
+  "run_number": 1,
+  "grading": {
+    "expectations": [
+      {
+        "text": "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+        "passed": true,
+        "evidence": "Six explanations with representation fields: exp-frac-part-whole=multiple, exp-frac-comparison-same-whole=concrete, exp-numberline-placement=visual_diagram, exp-inverse-denominator=symbolic, exp-recipe-scaling=worked_narrative, exp-equivalence-scaling=multiple. Bar, number line, and symbolic representations are all explicitly used. Evidence refs point to e-ies-fractions-bar, e-ies-fractions-numberline, e-ccss-6-rp. content_quality_status.reviewed_against includes 'IES Practice Guide: Developing Effective Fractions Instruction' and CCSS standards — all traceable to audited sources."
+      },
+      {
+        "text": "Activities include retrieval, worked example, completion and an independent transfer task that elicit explainable learner evidence, not only mechanical common-denominator speed.",
+        "passed": true,
+        "evidence": "activities array: act-retrieval-pretest (retrieval_pretest), act-worked-example-bars (worked_example), act-numberline-selfdraw (exercise — supplementary), act-verbal-abstract (question — supplementary), act-completion-compare (completion_problem), act-independent-transfer-recipe (independent_transfer). All four required kinds are present. The completion problem requires explanatory reasoning ('请补全并说明每一步的依据') not just mechanical answer. The independent transfer requires explaining each step's fraction reasoning."
+      },
+      {
+        "text": "Difficulty progresses from concrete to abstract within the learner's reachable range and the final scaling task is independently solvable.",
+        "passed": true,
+        "evidence": "Activity progression: bar comparison (concrete visual) → self-drawn number line (visual→spatial) → verbal abstract without graphics (撤除所有图形和数轴后独立口头解释) → completion with framework (partial scaffold) → independent transfer recipe scaling (完全独立完成). scaffolding_fade_strategy explicitly defines: initial_support→fade_rule→terminal_support=on_demand. The independent transfer event (evt-5) shows hints_used=[], indicating the scaling task was solved independently. success_conditions include '在未见配方缩放情境中无提示独立应用分数推理并解释每一步'."
+      },
+      {
+        "text": "Feedback rules address task, process and self-regulation without leaking the answer or substituting the learner's unit-fraction reasoning.",
+        "passed": true,
+        "evidence": "feedback_rules contains two entries. fb-frac-compare: task='比较两个分数时先确认整体是否相同...', process='提示检查：(1)是否用了图形或数轴辅助？(2)是否确认了整体相同？...帮助学习者定位推理链条中断的位置而非直接给出答案', self_regulation='完成比较后让学习者回应：如果下次遇到新分数对...你第一步会做什么？'. fb-recipe-scaling: analogous three-level structure. Neither rule leaks answers — task feedback checks correctness without providing the answer, process feedback diagnoses reasoning steps, self-regulation prompts metacognitive reflection."
+      },
+      {
+        "text": "The interaction trace preserves each response, hint level and correction step, including the moment scaffolding is withdrawn.",
+        "passed": true,
+        "evidence": "Five interaction_events with full detail. evt-1 through evt-3 and evt-5: hints_used=[], learner_response contains full verbatim reasoning. evt-4-completion-compare: hints_used=['hint_ladder.step=2'], correction_trajectory=['在找公分母环节卡住约30秒','一级提示引导回想LCM方法','独立列出倍数并找到12','后续通分与比较全对']. The scaffolding withdrawal is visible: activities 1-3 use visual supports, activity 4 uses partial framework, activity 5 removes all support (hints_used=[])."
+      },
+      {
+        "text": "G6 is evaluated dimension by dimension, passes only with real candidate evidence, and deterministically routes to S7 while deferring mastery to G7.",
+        "passed": true,
+        "evidence": "quality_evaluation.rubric_results contains 8 dimensions evaluated individually (内容正确性与可追溯性/对目标和学习者的适配/认知层级/例子代表性/支架质量/答案泄露控制/学习者主动性/交付可用性), all passed=true. verdict='pass', route_to='S7'. candidate_mastery_evidence has 3 items (independent_application/reasoning_quality/transfer), all status='candidate', each with explicit limits: E-FRAC-W1-1 notes '公分母查找仍需提示辅助', E-FRAC-W1-2 notes '非单位分数抽象比较尚未独立展示', E-FRAC-W1-3 notes '非整数倍和缩量情境未测'. Mastery is explicitly deferred to G7."
+      }
+    ],
+    "summary": {
+      "passed": 6,
+      "failed": 0,
+      "total": 6,
+      "pass_rate": 1.0
+    },
+    "execution_metrics": {
+      "output_chars": 28956,
+      "transcript_chars": 28956
+    },
+    "timing": {
+      "executor_duration_seconds": 146,
+      "total_duration_seconds": 142.651
+    },
+    "claims": [
+      {
+        "claim": "Five interaction events were recorded, 4 of 5 completed with zero hints",
+        "type": "factual",
+        "verified": true,
+        "evidence": "interaction_events has 5 entries. evt-1, evt-2, evt-3, evt-5 all have hints_used=[]. evt-4 has hints_used=['hint_ladder.step=2']. Count verified: 4/5 zero-hint events."
+      },
+      {
+        "claim": "The artifact defers mastery judgment to G7",
+        "type": "quality",
+        "verified": true,
+        "evidence": "quality_evaluation.evidence explicitly states 'G6 通过仅说明教学工件合格——掌握判定留待 G7'. candidate_mastery_evidence items are all status='candidate' with limits noting untested scenarios. No mastery claim is made."
+      }
+    ],
+    "user_notes_summary": {
+      "uncertainties": [],
+      "needs_review": [],
+      "workarounds": []
+    },
+    "eval_feedback": {
+      "suggestions": [
+        {
+          "assertion": "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+          "reason": "Same concern as eval-1: the IES/CCSS citations are model-recalled references. The traceability chain is structurally sound but the audit sources were not actually fetched during execution. A stronger assertion would verify that specific IES recommendation wording or CCSS standard text is quoted rather than paraphrased."
+        }
+      ],
+      "overall": "All six expectations pass. The cross-domain fractions case demonstrates the skill's ability to handle a different subject domain (mathematics education) with the same S6 contract structure — multi-representation explanations, progressive scaffolding, hint ladder, feedback rules, and dimension-by-dimension G6 evaluation. The quality is comparable to eval-1."
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "expectations": [
+    {
+      "text": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries (with perspectives, questions, queries, executed_at, and rounds) rather than summarizing model memory as research.",
+      "passed": true,
+      "evidence": "response.txt contains a complete S2 handoff envelope with positive_artifact.type='domain_evidence_landscape'. research_run_manifest records online=true, execution_status='completed', rounds=3, 6 perspectives (terminology_history, theory_standards, practice_tasks, recruiting_market, interview_assessment, criticism_frontier) each with questions and query_ids, 24 queries each with query_id, query string (e.g. 'fractions learning common misconceptions elementary students research'), executed_at timestamps, result_summary describing what was found, and follow_up_of links. 9 follow_up_triggers document conflict-driven follow-up chains (e.g. 'Q1 揭示 whole number bias...触发 Q13' and 'Q19'."
+    },
+    {
+      "text": "Source-category coverage is explicit across the six mandatory classes, with authoritative pedagogical/academic sources (for example IES practice guides or equivalent learning-science research) recorded as official_academic evidence and account-specific mnemonics NOT treated as concept-learning evidence.",
+      "passed": true,
+      "evidence": "category_coverage explicitly lists all 6 categories with status='covered', reason, criticality, gate_effect, sample_count. official_academic has 24 samples including IES practice guide (E-IES-PG), Siegler et al. 2012 (E-SIEGLER-2012), CCSSM (E-CCSS-001), China MOE 2022 curriculum (E-MOE-001), NCTQ 2022 (E-NCTQ-2022), and many peer-reviewed journal articles. No account-specific mnemonics are treated as concept-learning evidence. Individual teacher blogs (Jillian Starr) are classified as practice_case with reliability='low' and provenance='external_evidence', not elevated to official_academic."
+    },
+    {
+      "text": "Claims about fraction representation, equivalence, and ordering carry supported/partially_supported/unsupported status with evidence_refs, and the limits of practice guides (a general recommendation, not a diagnosis of this learner) are recorded as claim limits or evidence_gaps.",
+      "passed": true,
+      "evidence": "14 claims (C1-C14) each have status (supported: 8, partially_supported: 3, unsupported: 3) and evidence_refs. C1-C5 about fraction definition, equivalence, magnitude understanding, number line, and whole number bias are all supported with evidence_refs to peer-reviewed research. C12 about intervention dosage is partially_supported with limits noting '三周剂量基于上游用户确认而非专门研究'. C13 '分数学习应该先用披萨/圆形模型引入' is marked unsupported. evidence_gaps records G3 (中文实证不足, material, lower_confidence), G4 (配方缩放效度薄弱, material), G5 (量感缺乏实证验证, minor)."
+    },
+    {
+      "text": "Domain-level misconceptions (for example larger denominator means larger fraction) are kept distinct from this learner's misconceptions, and consensus vs open problems are not collapsed into a single list.",
+      "passed": true,
+      "evidence": "The terminology section defines domain-level concepts (whole number bias, gap thinking, benchmarking) with evidence_refs to cross-cultural research. claims C5 documents domain-level misconceptions as '学生普遍存在自然数偏差'. evidence_gaps G1 explicitly records '学习者诊断数据未采集——未评估初始分数理解水平、具体迷思概念类型、数轴熟练度基线' as a critical gap, clearly separating domain-level from learner-specific misconceptions. consensus array (8 items) and disagreements array (3 items) are separate structures, with disagreements retaining both sides' arguments and open_problems listing 4 items separately."
+    },
+    {
+      "text": "Market signals and popular teaching tips are separated from research-grade facts and labeled accordingly, with model hypotheses not counted as external evidence.",
+      "passed": true,
+      "evidence": "In source_ledger, teacher recruitment entries (E-SZ-TEACHER-2026, E-GD-TEACHER-2026, E-SHANGYU-TEACHER-2026) carry provenance='market_signal' and source_category='recruiting_jd'. Teaching blogs (E-JILLIAN-MC, E-MNP-2024) are classified as practice_case with reliability='low'. Claims C9 and C10 are claim_type='market_signal' and 'practice' respectively. In quality_evaluation rubric dimension '事实/市场信号/推断分离', evidence explicitly states '无 model_hypothesis 计为 external_evidence'. Terminology entries trace to external evidence_refs, not model memory."
+    },
+    {
+      "text": "G2 is evaluated dimension by dimension and routes to S3 only when research_executed is true and remaining gaps (for example the need for S4 behavioral evidence of this learner's specific misconceptions) are transparent and non-blocking.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results contains 11 dimension-by-dimension evaluations, all passed=true. research_executed=true. evidence_gaps lists G1 (critical, gate_effect='lower_confidence', confidence_impact='high') as the worst gap but explicitly notes '未阻塞建图——S3 建图前需采集'. G3/G4 are material with lower_confidence. G2/G5/G6 are minor. None have gate_effect='block'. verdict='pass', route_to='S3'. The need for S4 behavioral evidence is documented in G1."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {
+      "Read": 2,
+      "Write": 0,
+      "Bash": 0,
+      "WebSearch": 24,
+      "WebFetch": 4
+    },
+    "total_tool_calls": 30,
+    "total_steps": 44,
+    "errors_encountered": 0,
+    "output_chars": 62000,
+    "transcript_chars": 3500
+  },
+  "timing": {
+    "executor_duration_seconds": 454,
+    "grader_duration_seconds": 0,
+    "total_duration_seconds": 451.528
+  },
+  "claims": [
+    {
+      "claim": "24 live web searches executed across 3 rounds with 6 perspectives",
+      "type": "factual",
+      "verified": true,
+      "evidence": "research_run_manifest.queries contains 24 entries (Q1-Q24) each with query_id, query string, executed_at, result_summary, and follow_up_of references. processing_record logs timestamps from 09:00 to 12:15."
+    },
+    {
+      "claim": "44 source_ledger entries with retrievable URLs across 6 source categories",
+      "type": "factual",
+      "verified": true,
+      "evidence": "source_ledger array contains entries for E-WIKI-001 through E-SHANGYU-TEACHER-2026. Each has url field with academic DOIs (sciencedirect.com, pmc.ncbi.nlm.nih.gov, link.springer.com), government sites (moe.gov.cn, szlhq.gov.cn), and educational resources. Categories span all 6 types with reliability ratings from low to high."
+    },
+    {
+      "claim": "Response contains markdown fence wrapping the JSON output",
+      "type": "factual",
+      "verified": true,
+      "evidence": "response.txt line 1: 'Now I have all the evidence needed. Let me construct the complete JSON output...' Line 3: '```json'. Final line: '```'. Violates executor instruction to return ONLY one valid JSON object with no markdown fence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The output contains a domain_evidence_landscape in an S2 handoff envelope whose research_run_manifest records actually executed live queries",
+        "reason": "Well-designed discriminating assertion. However, it could be strengthened by checking that queries actually use distinct search terms rather than near-duplicates. Q17-Q18 and Q23-Q24 in particular search very similar territory, which is fine but worth noting."
+      },
+      {
+        "reason": "The output includes a markdown fence and prose prefix ('Now I have all the evidence needed...'), violating the executor's instruction. No assertion checks format compliance with the 'ONLY one valid JSON object, no markdown fence' requirement. This is a recurring defect across all with_skill runs."
+      }
+    ],
+    "overall": "Assertions are thorough and discriminating. The cross-domain case (PG → fractions) validates that the skill's structure generalizes. Format compliance defect (markdown fence) exists but is not covered by any assertion."
+  }
+}

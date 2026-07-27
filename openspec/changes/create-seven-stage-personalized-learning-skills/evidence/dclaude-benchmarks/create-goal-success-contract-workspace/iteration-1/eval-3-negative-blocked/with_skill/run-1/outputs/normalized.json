@@ -1,0 +1,266 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S1",
+  "run_id": "gsc-run-20260727-001",
+  "learner_id": null,
+  "status": "blocked",
+  "input_contract": {
+    "artifact_refs": [],
+    "expected_schema_versions": {}
+  },
+  "input_validation": {
+    "status": "fail",
+    "missing_fields": [
+      "目标使用场景",
+      "目标范围与边界",
+      "排除项",
+      "时间/资源约束细节",
+      "可观察验收方式（非纯选择题）"
+    ],
+    "stale_inputs": [],
+    "errors": [
+      "学习者拒绝补充使用场景、范围或验收方式，仅给出'七天成为AI专家'+'100道选择题80分通过'",
+      "学习者要求不联网只凭模型知识，与S1强制联网预检不可降级冲突",
+      "验收方式仅有选择题，无法满足unseen_or_transfer_required"
+    ]
+  },
+  "assumptions": [
+    "学习者意图在7个日历日内通过100道选择题达到80分以宣称'AI专家'",
+    "'AI专家'被宽泛理解为通用AI/机器学习领域，非特定子领域"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "gap-001",
+      "description": "未提供目标使用场景——学习者拒绝补充；无法确定是求职、项目实战、学术研究还是个人兴趣",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-002",
+      "description": "未提供学习范围与边界——学习者拒绝补充；'AI专家'涵盖ML/DL/NLP/CV/RL/MLOps等数十个子领域，无法界定",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-003",
+      "description": "验收方式仅为100道选择题80分通过——选择题仅验证记忆/识别层面，无法验证诊断、应用、迁移和创造等高阶能力；unseen_or_transfer_required无法满足",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-004",
+      "description": "学习者要求不联网、仅凭模型知识——S1强制联网预检不可降级，无法执行Wikipedia术语查询、JD采集、面试样本搜索、一手来源入口定位",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-005",
+      "description": "'AI专家'无可观察定义——无法分解为具体可观察能力项（capability_id/statement/observable_evidence均为空），无法建立可验收证据链",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-006",
+      "description": "未提供地区/行业/职级——无法针对真实岗位/市场信号校准目标",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-007",
+      "description": "'七天'时间约束未说明每日可用时长、资源环境、学习形式（自学/课程/实践），约束不完整",
+      "criticality": "high",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "S1强制确认：目标能力定义、成功证据、范围、地区/行业/职级、时间/资源/形式约束、排除项",
+    "questions": [
+      "你希望'AI专家'具体指什么领域？（机器学习工程/深度学习研究/MLOps/NLP/CV/强化学习/通用AI素养？请选择或定义）",
+      "目标使用场景是什么？（求职面试/实际项目开发/学术研究/个人兴趣/其他？）",
+      "你所在的地区/行业/当前职级是什么？",
+      "7天是指7个日历日吗？每天可用多少小时学习？有什么资源或环境可用？",
+      "除100道选择题外，是否接受将未见过的诊断题、实操任务或项目迁移题纳入验收？如果只考选择题，80分只能证明记忆，不能证明'专家'能力",
+      "学习范围是否有明确边界？哪些内容明确不学？"
+    ],
+    "response": {
+      "learner_provided": "'七天成为AI专家'；验收方式=100道选择题，80分算通过；明确拒绝补充使用场景/范围/验收方式；要求不联网、只凭模型知识给出目标",
+      "missing_refusals": [
+        "使用场景",
+        "范围与边界",
+        "排除项",
+        "地区/行业/职级",
+        "时间资源细节（每日可用时长、学习形式）",
+        "实操/迁移验收意愿"
+      ]
+    },
+    "status": "pending",
+    "confirmed_at": null,
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "e-user-001",
+      "provenance": "user_provided_unverified",
+      "source_ref": null,
+      "summary": "学习者声称目标为'七天成为AI专家'，验收方式为100道选择题80分通过；拒绝补充场景/范围",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "e-model-001",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "'AI专家'通常涵盖机器学习、深度学习、NLP、CV、强化学习、MLOps、AI安全等广泛领域；专家级能力通常需要诊断、设计、迁移、创造等高阶技能",
+      "status": "unknown"
+    },
+    {
+      "evidence_id": "e-model-002",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "选择题仅能验证记忆和识别（Bloom分类法L1-L2），无法验证应用(L3)、分析(L4)、评估(L5)、创造(L6)；80分选择题不能作为'专家'能力的有效证据",
+      "status": "unknown"
+    }
+  ],
+  "processing_record": [
+    "读取S1阶段契约、handoff-envelope.schema.json、goal-success-contract.schema.json、example.md",
+    "解析学习者输入：'七天成为AI专家'+'100道选择题80分通过'+拒绝补充+要求不联网",
+    "执行输入契约校验：缺失目标使用场景(mandatory)、范围/排除项、约束细节→input_validation.status=fail",
+    "识别S1强制联网预检冲突：学习者禁止联网但S1不可降级→触发Fail closed",
+    "参照example.md示例B（'七天成为AI专家'反向案例）：无可观察目标+无联网预检→blocked",
+    "评估G1全部8个维度：目标可观察性/成功标准可判定性/场景真实性/外部现实校准度/强制类别覆盖/边界清晰/约束完整/目标验收一致→全部failed",
+    "确认状态：强制确认未完成→pending",
+    "positive_artifact=null（无法在阻塞态下生成有效goal_success_contract）",
+    "verdict=blocked，route_to=S1"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "目标可观察性",
+        "evidence": [
+          "'AI专家'无可观察定义，observable_capabilities无法分解为具体能力项",
+          "每项能力需要≥1可观察证据，实际得0"
+        ],
+        "score": 0,
+        "threshold": 1,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "成功标准可判定性",
+        "evidence": [
+          "100道选择题无法满足unseen_or_transfer_required=true",
+          "选择题仅验证记忆/识别，不能验证迁移应用能力"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "场景真实性",
+        "evidence": [
+          "target_scene未提供，学习者拒绝补充；无场景则无法定义真实任务和验证条件"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "外部现实校准度",
+        "evidence": [
+          "search_executed=false，未执行任何联网预检",
+          "无terminology_corrections可产出，'AI专家'术语未经外部校准"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "强制类别覆盖",
+        "evidence": [
+          "wikipedia/encyclopedia: gap",
+          "recruiting/JD: gap",
+          "interview/sample: gap",
+          "primary_source_entry: gap",
+          "全部类别因禁止联网而未覆盖"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "边界清晰",
+        "evidence": [
+          "exclusions为空，学习者拒绝定义范围边界",
+          "'AI'涵盖数十个子领域，无限定则学习目标无边界"
+        ],
+        "score": 0,
+        "threshold": 1,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "约束完整",
+        "evidence": [
+          "仅提供'7天'和'100道选择题80分'",
+          "缺失：每日可用时长、学习形式（自学/课程）、资源环境、地区/行业/职级"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      },
+      {
+        "dimension": "目标—验收一致",
+        "evidence": [
+          "'AI专家'要求的诊断/应用/迁移/创造能力与100道选择题的识别/记忆验证严重不匹配",
+          "pass_rules无法与observable_capabilities对齐（capabilities不可分解）"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S1"
+      }
+    ],
+    "evidence": [
+      "S1强制联网预检不可降级（stage-contract.md §4）；学习者明确禁止联网→research_blocked",
+      "'七天成为AI专家'无可观察定义，完全匹配example.md反例B：无可观察目标+无联网预检→G1失败",
+      "100道选择题80分无法满足final_assessment.unseen_or_transfer_required=true",
+      "强制确认未完成：学习者拒绝补充场景/范围/排除项/约束（stage-contract.md §3）",
+      "G1全部8维度failed；关键缺口5项gate_effect=block",
+      "根据stage-contract.md §8：无检索能力→blocked，不得用模型记忆替代预检；强制确认未完成→pending，G1不得通过"
+    ],
+    "verdict": "blocked",
+    "route_to": "S1"
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [
+      "e-user-001",
+      "e-model-001",
+      "e-model-002"
+    ],
+    "source_sections": [
+      "SKILL.md §Fail closed",
+      "stage-contract.md §3确认策略",
+      "stage-contract.md §4强制联网预检",
+      "stage-contract.md §6量规G1",
+      "stage-contract.md §8安全/阻塞态",
+      "example.md §示例B 反向/阻塞"
+    ],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T00:00:00.000Z"
+}

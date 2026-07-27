@@ -1,0 +1,47 @@
+{
+  "skill_name": "check-learning-sessions",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给定一个 S5 移交信封：PostgreSQL 18 沙箱、四周每周 6 小时、面向 SQL 误概念的四会话路径；ordered_learning_nodes 从已证实前沿 n-row-est 连到迁移目标 n-transfer、硬先修 n-row-est/n-stats 先于 n-multicol、selection_rationale 仅跳过已掌握节点、sessions 每周两次 90 分钟、teaching_strategy 含 contrast_case+worked_example、exit_criteria.per_node 与 assessment_schedule.immediate/transfer/delayed 对齐、review_anchors 次日/第4天/一周后、risks 与 alternative_routes 齐备、confirmation.status=confirmed。请用 check-learning-sessions 独立复核并输出 quality_check_result。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 正向例子1] An independent G5 pass: all dimensions pass, mandatory confirmation resolved, first session executable, route S6.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the G5 verdict rather than echoing the envelope's self-reported pass.",
+        "Structural validation confirms the envelope passes handoff-envelope.schema.json and the learning_and_session_plan passes learning-and-session-plan.schema.json.",
+        "The ordered path is verified to connect the confirmed learner-snapshot frontier to the target with no unexplained redundancy and no hard-prerequisite crossing.",
+        "Mandatory confirmation is verified as resolved (status=confirmed) and non-blocking.",
+        "The first session is verified executable within the stated time/resource constraints, and per-node exit criteria are observable and judgeable.",
+        "The verdict is pass with the deterministic route S6, and the result validates against quality-check-result.schema.json."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "给定一个 S5 移交信封：六年级分数学习路径五会话、每天 25 分钟；针对全数偏差、具体—表征—抽象相连、不提前教授机械通分；session 4 异分母加法设硬先修门（等值分数与数轴必须通过）、session 5 含食谱/长度迁移题、含对比与检索、review_anchors 合理、confirmation.status=confirmed；上游 learner_snapshot 与 capability_concept_graph 已通过 G4/G3。请用 check-learning-sessions 独立复核。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 正向例子2] An independent G5 pass routing to S6.",
+      "files": [],
+      "expectations": [
+        "The checker independently re-derives the verdict instead of trusting the envelope's self-reported pass.",
+        "Structural validation of handoff envelope and learning_and_session_plan is performed and recorded.",
+        "The path is verified to connect the confirmed frontier to the fraction target with prerequisite gates respected (e.g., equivalence+number-line before unlike-denominator addition) and no unexplained redundancy.",
+        "Mandatory confirmation is recognized as resolved and non-blocking.",
+        "The first session is executable within 25-minute/day constraints, and per-node exit criteria are observable.",
+        "The verdict is pass with deterministic route S6, validating against quality-check-result.schema.json."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "给定一个 S5 移交信封：提交方案为“第1周看完数据库原理第1-5章、第2周看10个索引视频、第3周刷100道题、第4周做项目”；无 learner_snapshot、无前沿证据、无 ordered_learning_nodes、无 selection_rationale、无 exit_criteria、无延迟复测、confirmation.status=pending、positive_artifact=null。请用 check-learning-sessions 独立复核。",
+      "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 反向例子] The checker must NOT pass G5: catalog copy is not a capability path, no frontier, no exit criteria, unresolved confirmation; route stays S5 (or return_upstream to S4 if no valid frontier at all).",
+      "files": [],
+      "expectations": [
+        "The checker does not return pass and does not echo any self-reported pass.",
+        "Structural validation records artifact_valid=false with positive_artifact=null failing learning-and-session-plan.schema.json.",
+        "Catalog chapters/videos/item-counts are identified as not capability nodes: the path does not connect a confirmed frontier to the target and prerequisite correctness cannot be established.",
+        "Unresolved mandatory confirmation (status=pending) is flagged as blocking and prevents any pass.",
+        "At least one dimension is marked passed=false with failure_action and route_to (first session not executable, no per-node exit criteria).",
+        "The deterministic route stays at S5 (blocked) or escalates return_upstream to S4 when no valid frontier exists; no fabricated pass is emitted, and the result validates against quality-check-result.schema.json."
+      ]
+    }
+  ]
+}

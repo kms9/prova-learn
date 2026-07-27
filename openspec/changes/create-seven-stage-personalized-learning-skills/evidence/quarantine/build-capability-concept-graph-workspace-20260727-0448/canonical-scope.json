@@ -1,0 +1,8 @@
+{
+  "canonical": false,
+  "status": "quarantined_incomplete_external_eval_workspace",
+  "original_path": ".agents/skills/build-capability-concept-graph-workspace",
+  "first_observed_mtime": "2026-07-27T04:48:07+08:00",
+  "reason": "The directory was an incomplete evaluation workspace without SKILL.md and therefore did not belong in the exactly-seven implementation root. It is preserved here rather than deleted.",
+  "canonical_replacement": "../../dclaude-benchmarks/build-capability-concept-graph-workspace/iteration-1"
+}

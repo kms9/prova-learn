@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.skills.example/schemas/quality-check-result-1.0.0.json",
+  "title": "quality_check_result",
+  "description": "Output of an independent stage quality-check skill. Given a stage handoff envelope + named artifact as input, the checker re-derives the gate verdict dimension by dimension and emits this result. Shared shape across the seven check-* skills; this file is copied byte-identically into every quality-check skill.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "check_id",
+    "stage_id",
+    "gate_id",
+    "checked_envelope_ref",
+    "structural_validation",
+    "dimension_results",
+    "verdict",
+    "route_to",
+    "evidence_summary",
+    "checked_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "check_id": {"type": "string", "minLength": 1},
+    "stage_id": {"enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7"]},
+    "gate_id": {"enum": ["G1", "G2", "G3", "G4", "G5", "G6", "G7"]},
+    "checked_envelope_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "stage_id", "artifact_id"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "stage_id": {"enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7"]},
+        "artifact_id": {"type": ["string", "null"]}
+      }
+    },
+    "structural_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handoff_valid", "artifact_valid", "errors"],
+      "properties": {
+        "handoff_valid": {"type": "boolean"},
+        "artifact_valid": {"type": "boolean"},
+        "errors": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "dimension_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimension", "evidence", "score", "threshold", "passed", "failure_action", "route_to"],
+        "properties": {
+          "dimension": {"type": "string", "minLength": 1},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "score": {"type": ["number", "boolean"]},
+          "threshold": {"type": ["number", "boolean"]},
+          "passed": {"type": "boolean"},
+          "failure_action": {"type": ["string", "null"], "enum": ["revise_here", "return_upstream", null]},
+          "route_to": {"type": ["string", "null"], "enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "complete", null]},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "verdict": {"enum": ["pass", "revise_here", "return_upstream", "blocked"]},
+    "route_to": {"enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "complete"]},
+    "confirmation_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode_required", "status", "blocking"],
+      "properties": {
+        "mode_required": {"enum": ["mandatory", "conditional", "inform"]},
+        "status": {"enum": ["pending", "confirmed", "rejected", "acknowledged", "corrected", "not_applicable"]},
+        "blocking": {"type": "boolean"}
+      }
+    },
+    "evidence_summary": {"type": "string", "minLength": 1},
+    "checked_at": {"type": "string", "format": "date-time"}
+  }
+}

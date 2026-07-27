@@ -1,0 +1,64 @@
+{
+  "case_id": 1,
+  "config": "without_skill",
+  "graded_at": "2026-07-27T02:22:25Z",
+  "expectation_results": [
+    {
+      "expectation": "The output contains a capability_concept_graph inside a stage S3 handoff envelope with a focus question and typed concept/procedure/strategy/representation/metacognition nodes rather than only topic headings.",
+      "passed": false,
+      "evidence": "Field is named capability_concept_map (not capability_concept_graph); no focus_question field (only a goal headline and G3 title); legend defines only 'capability' and 'concept' types — no procedure/strategy/representation/metacognition nodes appear anywhere."
+    },
+    {
+      "expectation": "The directed prerequisite edges form an acyclic structure (a DAG) and the hard-prerequisite subgraph contains no cycle.",
+      "passed": true,
+      "evidence": "prereq edges (CON-3→CON-5→CON-1; CON-4→CON-5; CON-7→CON-8→{CON-9,CON-10}→CON-12) and depends edges (CAP-2→3→4→5→6, CAP-7→8) admit a topological order with no back-edge; acyclic by inspection."
+    },
+    {
+      "expectation": "Every hard prerequisite edge carries an explicit rationale, and soft edges are distinguished from hard edges.",
+      "passed": false,
+      "evidence": "Every prereq edge has only {from,to,relation:'prereq'} — no rationale/why field; no strength:hard|soft attribute anywhere, so soft edges are not distinguished from hard edges."
+    },
+    {
+      "expectation": "Every target capability traces to the nodes required to diagnose and assess it.",
+      "passed": false,
+      "evidence": "Each capability lists supporting 'concepts', giving partial diagnostic trace, but there are no dedicated diagnostic/assessment nodes and zero assessment items exist, so no capability can trace to nodes 'required to assess it'."
+    },
+    {
+      "expectation": "Every key node has an observable capability statement plus at least one assessment item, and misconceptions and mastery thresholds are present.",
+      "passed": false,
+      "evidence": "Capabilities have descriptions but no assessment items on any node; no misconception fields anywhere; a mastery_scale and per-node mastery/score exist but no explicit mastery thresholds (target cutoffs) are defined."
+    },
+    {
+      "expectation": "Full traceability links each node to S1 goal capabilities, S2 audited evidence, and assessment items, and G3 passes with a deterministic route to S4 only when all graph invariants hold.",
+      "passed": false,
+      "evidence": "No per-node links to S1 capabilities; only some capabilities mention S2 in free-text 'evidence' (concept nodes do not); no assessment items to link; next_after_g3/S4 route is gated on report review, not on graph-invariant checks."
+    }
+  ],
+  "overall_passed": false,
+  "summary": "Rich capability/concept map, but it lacks required typed nodes, a focus question, edge rationales, hard/soft edge distinction, assessment items, misconceptions, mastery thresholds, and explicit S1/S2/assessment traceability with an invariant-gated S4 route.",
+  "grader_elapsed_s": 84.17,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 4185,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.021478,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 26553,
+      "outputTokens": 5540,
+      "cacheReadInputTokens": 704,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.271617,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.293095
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S4",
+  "run_id": "s4-diagnose-eval3-withskill-rerun-0001",
+  "learner_id": "learner-eval3",
+  "status": "pending",
+  "input_contract": {
+    "artifact_refs": [
+      "goal_success_contract/G1",
+      "capability_concept_graph/G3"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "capability_concept_graph": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G1 goal_success_contract and G3 capability_concept_graph have passed their gates; the goal capability, graph nodes, prerequisite edges and per-node diagnostic items are all valid and capable of producing target evidence.",
+    "The failure mode is absent learner behavior, not invalid inputs or invalid diagnostic items; therefore the route stays in S4 rather than returning upstream to S3.",
+    "Critical nodes cannot be assigned tested_mastered without >=2 aligned behavior observations under hint_dependency.level=none|low; a self-rating and a single slogan answer are excluded from mastery inference."
+  ],
+  "requirement_gaps": [
+    {
+      "id": "GAP-REAL-BEHAVIOR",
+      "description": "No real learner behavior evidence for any critical node: reasoning process, prompt/hint hierarchy, transfer tasks, timing and a second aligned observation are all absent.",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "GAP-MULTI-ALIGNED-OBS",
+      "description": "Critical-node conclusions lack the required >=2 aligned behavior observations; only one self-report and one slogan yes/no answer exist.",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "GAP-HINT-AND-CONFIDENCE",
+      "description": "No hint-dependency or confidence-calibration data recorded for any node; independence and calibration cannot be established.",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "GAP-TRANSFER",
+      "description": "No unseen/variant transfer task attempted; transfer ability is entirely unobserved.",
+      "criticality": "high",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "S4 conditional confirmation escalated to required evidence collection: self-report vs. behavior conflict and insufficient evidence to confirm any critical-node state or locate a learning frontier.",
+    "questions": [
+      "对每个关键节点布置对齐诊断任务（解释/预测/反例/诊断/比较/迁移/置信度），并记录正确性、推理过程、提示层级、耗时（可得时）与置信度。",
+      "在无提示或低提示条件下复测，建立 hint_dependency.level=none|low 的独立证据后，方可标 tested_mastered；只有 medium|high|unknown 提示证据时保持 tested_not_mastered 或 insufficient_evidence。",
+      "增加未见/变式迁移题，确认‘能迁移’而非仅口号识别或猜对。",
+      "对自评—行为冲突或争议节点追加测试；自评 8/10 仅用于选题，不得覆盖行为证据。"
+    ],
+    "response": null,
+    "status": "pending",
+    "confirmed_at": null,
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "EV1-self-rating-8-10",
+      "provenance": "user_provided_unverified",
+      "source_ref": "learner self-report: '我对这个主题 8/10'",
+      "summary": "Self-reported proficiency 8/10. Classified as unverified self-report; used only for topic selection, never to infer mastery or override behavior evidence per fail-closed rules.",
+      "status": "unknown"
+    },
+    {
+      "evidence_id": "EV2-slogan-index-speedup",
+      "provenance": "learner_behavior",
+      "source_ref": "single slogan question: '索引能加速查询吗？是'",
+      "summary": "Single yes/no answer to a leading slogan question; recognition only with no reasoning process, no prompt/hint hierarchy, no transfer and no timing recorded. Cannot establish mastery, independence or transfer for any node.",
+      "status": "unsupported"
+    }
+  ],
+  "processing_record": [
+    "1. Validated inputs: G1 goal_success_contract and G3 capability_concept_graph present; goal/nodes/prerequisite-edges/diagnostic-items all valid -> input_validation.status=pass. No upstream return is warranted on input grounds.",
+    "2. Declared inference rules before collecting evidence: tested_mastered requires >=2 aligned behavior observations under hint_dependency.level=none|low for the same node; self-report, single-item correctness and slogan recognition are excluded from determining critical-node status.",
+    "3. Inspected available learner inputs: only a self-rating (8/10) and one slogan yes/no answer ('索引能加速查询吗？是'). No reasoning, prompt hierarchy, transfer task, timing or second observation.",
+    "4. Classified EV1 self-rating as user_provided_unverified (topic-selection only) and EV2 slogan as learner_behavior that provides no mastery signal (unsupported). Neither counts as aligned behavior evidence for any node.",
+    "5. Could not determine node states: no critical node can be marked tested_mastered, tested_not_mastered, or located as a learning frontier. Critical nodes must remain insufficient_evidence/untested pending real behavior; this is NOT a fabricated all-not-mastered profile.",
+    "6. Fail-closed decision: the learner_snapshot schema requires learning_frontier.evidence_refs (minItems 1) backed by behavior; with no behavior evidence, producing a snapshot would require fabricating a frontier, which is forbidden. Therefore no positive artifact is produced; only diagnostic tasks are emitted and status stays pending.",
+    "7. Evaluated G4 dimension by dimension: 6 of 7 dimensions fail (measurement-to-goal not executed, evidence insufficient, guess not separable, hint/transfer/error/conclusion not demonstrable); only 偏差控制 passes because self-report and slogan did not override behavior evidence.",
+    "8. Routing: diagnostic items are valid (per prompt), so return_upstream to S3 is not triggered; the gap is real behavior collection -> verdict revise_here, route_to S4."
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "测量与目标对齐度",
+        "evidence": [
+          "G3 graph provides aligned diagnostic items for critical nodes (inputs valid), but no learner behavior was collected against any critical node; measurement-to-goal alignment is not demonstrated through executed evidence."
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "Only EV1 (user_provided_unverified self-rating) and EV2 (unsupported slogan) exist; zero aligned behavior observations; critical conclusions lack the required >=2 aligned observations (explicit insufficiency recorded)."
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "猜对识别",
+        "evidence": [
+          "EV2 is recognition to a leading yes/no question; cannot distinguish answered-correctly vs. independent vs. transferable; no independent or transfer task observed."
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "提示依赖记录",
+        "evidence": [
+          "No hint/prompt hierarchy recorded for any node; hint_dependency.level is unknown for all critical nodes."
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "错误分类一致性",
+        "evidence": [
+          "No real task engagement; no error_type can be consistently classified or audited for any node."
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "偏差控制",
+        "evidence": [
+          "Self-rating 8/10 classified user_provided_unverified and used only for topic selection; slogan answer not used to assert mastery; neither overrode behavior evidence."
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "结论可解释性",
+        "evidence": [
+          "No diagnosis conclusions or learning_frontier produced (no behavior evidence to support any); diagnosis_evidence_mapping is empty; traceable positive conclusions cannot be demonstrated."
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      }
+    ],
+    "evidence": [
+      "EV1-self-rating-8-10 (user_provided_unverified; excluded from mastery inference)",
+      "EV2-slogan-index-speedup (learner_behavior; unsupported for mastery)",
+      "No >=2 aligned behavior observations and no determinable learning frontier; G4 fails on 6 of 7 dimensions.",
+      "Diagnostic items are valid per the prompt, so the deterministic route is revise_here -> S4 (not return_upstream to S3)."
+    ],
+    "verdict": "revise_here",
+    "route_to": "S4"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "goal_success_contract",
+      "capability_concept_graph"
+    ],
+    "source_evidence_ids": [
+      "EV1-self-rating-8-10",
+      "EV2-slogan-index-speedup"
+    ],
+    "source_sections": [
+      "evals.json eval_id=3 prompt (negative/blocked fixture)"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}

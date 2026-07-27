@@ -1,0 +1,92 @@
+{
+  "expectations": [
+    {
+      "text": "The single recognition item is classified as evidence insufficient rather than mastery, and no node is marked mastered.",
+      "passed": true,
+      "evidence": "evidence_inventory[0] (the yes/no recognition item) has credibility_assessment='weak_single_recognition'. evidence_sufficiency_judgment.sufficient_for_mastery_0_95=false and sufficient_for_chapter_advance=false. decision.approved_mastery_update=false, decision.rejected_mastery_target=0.95. No node is marked mastered; the run status is 'rejected_with_remediation_plan'."
+    },
+    {
+      "text": "Mastery evidence is required to be multidimensional; missing reasoning, transfer and delayed retention are recorded as not_executed/unknown, not inferred from one correct answer.",
+      "passed": true,
+      "evidence": "quality_indicators records has_reasoning=false, has_independent_application=false, has_cue_hierarchy_data=false, has_transfer_evidence=false, has_delayed_recall=false, has_guessing_probability=false — the missing dimensions are explicitly marked absent, not inferred from the single correct answer. evidence_sufficiency_judgment.rationale states '缺少推理过程、独立应用场景、提示层级数据、迁移任务和延迟测试'. NOTE: the baseline uses boolean false flags rather than the skill's literal tokens 'not_executed'/'unknown', but the substance (missing dimensions recorded, not inferred) is satisfied."
+    },
+    {
+      "text": "No model update or persistence success is claimed; with expected_version=4 and loaded=5 the update_status is version_conflict and no patch is applied.",
+      "passed": true,
+      "evidence": "version_mismatch reports expected=4, actual=5, severity='blocking', action_required='halt_progression', rationale '在此不一致解决前任何状态变更均不可靠'. decision.approved_mastery_update=false, decision.blocking_issue='resolve_version_mismatch_first', and run status='rejected_with_remediation_plan'. No model update or persistence success is claimed and no patch is applied. NOTE: the baseline names this 'version_mismatch.severity=blocking' rather than the skill's literal field 'update_status=version_conflict', but it detects the 4≠5 conflict and blocks the write, satisfying the behavioral substance of the assertion."
+    },
+    {
+      "text": "The claimed 0.95 mastery probability is treated as uncalibrated confidence and rejected as an overreaction to a single result.",
+      "passed": true,
+      "evidence": "input_state.candidate_mastery_probability=0.95; decision.rejected_mastery_target=0.95; decision.recommended_mastery=0.55 with rationale '基于一条弱正反馈（再认正确），在无猜测概率记录的情况下，采用保守贝叶斯先验更新，掌握概率上限不超过0.55；该值反映可能知道但远未确认的状态'. The 0.95 is explicitly rejected as an overreaction to a single weak positive and replaced with a conservative, uncalibrated-conservative estimate."
+    },
+    {
+      "text": "Primary attribution EVIDENCE_INSUFFICIENT yields the deterministic route revise_here to S7 for retesting, not progression to the next chapter.",
+      "passed": false,
+      "evidence": "There is no attribution object and no EVIDENCE_INSUFFICIENT code, and crucially the reroute target is wrong: handoff.target_stage='S1_or_S2', target_action='evidence_collection_loop' — it routes BACKWARD to the foundation stages S1/S2 to restart evidence collection, not to S7 (revise_here, same-stage retesting) as the assertion requires. The output does correctly block chapter progression (decision.approved_chapter_advance=false, next_action='collect_stronger_evidence'), but the deterministic route revise_here→S7 is not produced; S1/S2 ≠ S7."
+    },
+    {
+      "text": "Raw evidence, inferred mastery state and route decision remain separated; the output requires independent, transfer and delayed evidence before any mastery update.",
+      "passed": true,
+      "evidence": "Layers are separated: evidence_inventory (raw evidence e1), evidence_sufficiency_judgment (inferred state), version_mismatch (blocking condition), decision (route/action). decision.prescribed_evidence_collection lists four prioritised evidence types required before any mastery update — reasoning_explanation, independent_application, transfer, delayed_recall — and carry_forward.minimum_evidence_required specifies reasoning_trials:2, application_trials:2, transfer_trials:1, delayed_recall_passed:true, guessing_probability_recorded:true. Independent/transfer/delayed evidence is required before any mastery update."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.8333333333333334
+  },
+  "execution_metrics": {
+    "total_steps": 1,
+    "num_turns": 1,
+    "errors_encountered": 0,
+    "output_chars": 3612,
+    "transcript_chars": 840,
+    "total_tokens": 31021
+  },
+  "timing": {
+    "executor_duration_seconds": 29,
+    "total_duration_seconds": 25.058
+  },
+  "claims": [
+    {
+      "claim": "Mastery probability must not exceed 0.55; the 0.95 claim is rejected",
+      "type": "factual",
+      "verified": true,
+      "evidence": "decision.rejected_mastery_target=0.95, decision.recommended_mastery=0.55; rationale explains the conservative Bayesian update from a single weak positive with no guessing-probability record."
+    },
+    {
+      "claim": "Version mismatch must be resolved before any state change",
+      "type": "process",
+      "verified": true,
+      "evidence": "version_mismatch.severity='blocking', action_required='halt_progression'; decision.blocking_issue='resolve_version_mismatch_first', decision.approved_mastery_update=false."
+    },
+    {
+      "claim": "Reasoning, application, transfer and delayed-recall evidence are required before any mastery update",
+      "type": "process",
+      "verified": true,
+      "evidence": "decision.prescribed_evidence_collection lists reasoning_explanation, independent_application, transfer, delayed_recall (priorities 1–4); carry_forward.minimum_evidence_required sets reasoning_trials:2, application_trials:2, transfer_trials:1, delayed_recall_passed:true."
+    },
+    {
+      "claim": "The response is returned as ONLY a valid JSON object with no markdown fence and no commentary",
+      "type": "process",
+      "verified": true,
+      "evidence": "response.txt is a single bare JSON object; normalization.json reports original_valid_json=true, leading/trailing_chars_removed=0. The baseline complied with the output-format contract."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Primary attribution EVIDENCE_INSUFFICIENT yields the deterministic route revise_here to S7 for retesting, not progression to the next chapter.",
+        "reason": "This is the one genuine behavioral failure in the without_skill run and it is well-targeted: the baseline blocks progression but overshoots the reroute target, sending the learner to S1/S2 (restart evidence collection from foundation) instead of S7 (same-stage targeted retesting). The assertion correctly distinguishes the two. One clarification would help graders: make explicit whether routing to ANY upstream stage is acceptable or whether S7 specifically is required (i.e. 'stays within the current mastery-verification stage for targeted retesting, rather than restarting at an earlier foundation stage'). The current text already implies S7-specific, which is the stricter and more discriminating reading."
+      }
+    ],
+    "overall": "Five of six expectations pass on behavioral substance even though the baseline uses its own field names (version_mismatch/blocking vs update_status=version_conflict; boolean quality_indicators vs not_executed/unknown tokens). The single failure — rerouting to S1/S2 instead of S7 — is a real, discriminating behavioral gap, not merely a schema difference. Consider stating explicitly that S7 (not any upstream stage) is the required reroute target."
+  }
+}

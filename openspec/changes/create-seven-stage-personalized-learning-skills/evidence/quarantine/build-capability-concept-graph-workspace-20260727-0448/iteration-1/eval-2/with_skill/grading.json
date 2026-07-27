@@ -1,0 +1,64 @@
+{
+  "case_id": 2,
+  "config": "with_skill",
+  "graded_at": "2026-07-26T21:04:17Z",
+  "expectation_results": [
+    {
+      "expectation": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+      "passed": true,
+      "evidence": "focus_question explicitly stated; representation nodes N10 (area model) and N11 (number line); structured around target capabilities C1/C2/C3, not a chapter sequence."
+    },
+    {
+      "expectation": "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+      "passed": true,
+      "evidence": "Hard path N1(unit whole)→N10→N3(equivalence)→N6→N7(common denominator) is acyclic; root N1, no back edges; quality rubric confirms DAG."
+    },
+    {
+      "expectation": "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+      "passed": true,
+      "evidence": "All 13 hard edges carry a rationale field with concept-grounded reasoning (e.g., N11→N4, N6→N7)."
+    },
+    {
+      "expectation": "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+      "passed": true,
+      "evidence": "traceability goal_refs map C1→N2/N4/N7/N8/N11/N12/N13, C2→N1/N3/N6/N10, C3→N1/N5/N9/N12."
+    },
+    {
+      "expectation": "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+      "passed": true,
+      "evidence": "All 13 nodes have capability_statement, common_misconceptions, and assessment items; example misconception present (N2 unit-fraction, N6 '同乘k后分数变大'); items span explain/apply/transfer (N8/N12/N13 use diagnose/evaluate)."
+    },
+    {
+      "expectation": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+      "passed": true,
+      "evidence": "Each node has source_refs to S2 audited evidence and goal_refs to C1-C3; quality_evaluation verdict=pass, route_to=S4 after input pass."
+    }
+  ],
+  "overall_passed": true,
+  "summary": "Focus-question-driven multi-representation concept DAG with justified acyclic hard edges, full node/assessment/traceability coverage, routing to S4.",
+  "grader_elapsed_s": 99.86,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 9444,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.047648,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 33280,
+      "outputTokens": 6469,
+      "cacheReadInputTokens": 960,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.328605,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.376253
+}

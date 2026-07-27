@@ -1,0 +1,29 @@
+{
+  "route": "dclaude",
+  "status": "completed",
+  "exit_code": 0,
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "82b923a9-0fe2-4321-96ee-0b9540aea446",
+  "uuid": "a1e3802c-a5ec-4276-9ad4-e93f211f8804",
+  "graded_runs": 6,
+  "canonical_grading_tree": "eval-*/<configuration>/run-1/grading.json",
+  "schema_valid": true,
+  "with_skill_expectations": {
+    "passed": 18,
+    "total": 18
+  },
+  "without_skill_expectations": {
+    "passed": 5,
+    "total": 18
+  },
+  "source_outer": "grader_outer.json",
+  "modelUsage": {
+    "deepseek-v4-pro[1m]": {
+      "inputTokens": 114086,
+      "outputTokens": 21953,
+      "cacheReadInputTokens": 717696,
+      "cacheCreationInputTokens": 0
+    }
+  }
+}

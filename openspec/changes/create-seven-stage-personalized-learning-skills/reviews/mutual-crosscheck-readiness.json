@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.1.0",
+  "status": "completed",
+  "as_of": "2026-07-27",
+  "openspec_progress": {
+    "complete": 46,
+    "total": 46,
+    "remaining_task_ids": []
+  },
+  "accepted_sessions": {
+    "primary_gclaude": {
+      "outer": "final-primary-gclaude-crosscheck.outer.json",
+      "inner": "final-primary-gclaude-crosscheck.inner.json",
+      "route": "final-primary-gclaude-crosscheck.route.json",
+      "session_id": "fa30577e-50fe-4a73-a589-19a4bd09bf9c",
+      "actual_route": "gclaude",
+      "actual_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "verdict": "pass",
+      "blocking_findings": 0,
+      "major_findings": 0
+    },
+    "fallback_for_dclaude": {
+      "outer": "final-fallback-gclaude-crosscheck.outer.json",
+      "inner": "final-fallback-gclaude-crosscheck.inner.json",
+      "route": "final-fallback-gclaude-crosscheck.route.json",
+      "session_id": "196315c6-8487-4f8c-a695-7fbf7122f011",
+      "actual_route": "gclaude",
+      "fallback_for": "dclaude",
+      "actual_models": [
+        "glm-5.1",
+        "glm-5.2"
+      ],
+      "verdict": "pass",
+      "blocking_findings": 0,
+      "major_findings": 0,
+      "required_changes": 0
+    }
+  },
+  "preserved_dclaude_failure": {
+    "outer": "final-dclaude-continuation-3.outer.json",
+    "session_id": "7dfc1e0d-a8c2-403e-95a3-21f81facc9be",
+    "api_error_status": 402,
+    "failure_phase": "before_inference",
+    "modelUsage": {},
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "authorization": "final-route-fallback-approval.md"
+  },
+  "mutual_crosscheck": {
+    "status": "pass",
+    "primary_received_fallback_findings": true,
+    "fallback_received_primary_findings": true,
+    "adjudicated_finding_ids": [
+      "MAJ-01",
+      "MIN-01",
+      "MIN-02",
+      "MIN-03",
+      "MIN-04",
+      "MIN-NEW-01"
+    ],
+    "unresolved_blocking_findings": 0,
+    "unresolved_major_findings": 0,
+    "summary": "final-mutual-crosscheck-summary.md"
+  },
+  "validated_inventory": {
+    "skills": 7,
+    "schemas": 14,
+    "evals": 21,
+    "examples": 7,
+    "canonical_graded_runs": 42,
+    "benchmarks": 7,
+    "viewers": 7,
+    "grader_routes": 7,
+    "strict_handoffs": 21,
+    "strict_positive_artifacts": 14,
+    "blocked_null_artifacts": 7,
+    "integration_chains": 2,
+    "remediation_loops": 1
+  },
+  "route_limitations": [
+    "Both accepted successful sessions used gclaude, so session independence is established but provider diversity is not claimed.",
+    "dclaude HTTP 402 remains preserved as an accepted external route limitation; it is not represented as a successful dclaude audit.",
+    "S7 same-node dynamic mastery evidence remains a documented G7 rubric boundary rather than a Draft 2020-12 cross-array assertion."
+  ],
+  "validation_gates": {
+    "quick_validate": "7/7 pass",
+    "schema_self_check": "14/14 pass",
+    "canonical_grading_reconciliation": "42/42 pass",
+    "strict_handoff_validation": "21/21 pass",
+    "strict_stage_artifact_validation": "14/14 pass",
+    "openspec_strict": "pass"
+  }
+}

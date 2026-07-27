@@ -1,0 +1,31 @@
+{
+  "verdict": "pass_with_changes",
+  "confidence": 0.92,
+  "blocking_findings": [
+    {
+      "id": "BF-1",
+      "category": "environmental_route_block",
+      "artifact": "reviews/final-dclaude-audit.outer.json",
+      "summary": "Independent final dclaude skill-eval route remains blocked by external HTTP 402 Insufficient Balance; no post-repair dclaude inner verdict exists.",
+      "evidence": "final-dclaude-audit.outer.json: is_error=true, api_error_status=402, modelUsage={}, terminal_reason=api_error, result='API Error: 402 Insufficient Balance', session fab95663 (same gate as ERR-037/ERR-043). Historical dclaude executor/grading runs succeeded and the failure occurs before model inference. Provider-side/environmental, NOT a skill-correctness defect; it blocks the completion gate requiring BOTH final routes (non-empty modelUsage + parseable inner JSON) and the mutual findings cross-check (tasks 8.4-8.6, 9.1-9.3 still unchecked).",
+      "required_change": "After dclaude route balance/connectivity is restored, rerun the independent final dclaude skill-eval audit over the full evidence set so its outer result carries non-empty modelUsage and a parseable inner JSON verdict; exchange structured findings with the already-successful gclaude final route (8.5), apply accepted fixes, and re-audit until both verdicts pass with no unresolved blocking/major finding (8.6); then check 8.4-8.6 and 9.1-9.3."
+    }
+  ],
+  "major_findings": [],
+  "minor_findings": [],
+  "confirmed_strengths": [
+    "Criterion 1 (S4 stale-token removal) fully met: grep for 85,135.7 / 43,801.7 / 41,334 (and plain 85135.7/43801.7/+41334) across benchmark.json, benchmark.md, analyzer-notes.md and review.html returns ZERO hits; canonical 66935.3 / 43517.0 / +23418.3 (and 66935/43517/+23418) present in all four artifacts.",
+    "Criterion 2 (JSON run_summary + per-run tokens) exact: benchmark.json run_summary.with_skill.tokens.mean=66935.3333, without_skill.tokens.mean=43517.0, delta.tokens='+23418'; the six per-run result.tokens are exactly 74449 (eval-1 with), 53703 (eval-2 with), 72654 (eval-3 with), 68927 (eval-1 without), 31678 (eval-2 without), 29946 (eval-3 without).",
+    "MN-A residual verified gone: benchmark.json notes[] now reads canonical route-aware figures (66,935.3 / 43,517.0 / +23,418.3), consistent with its own run_summary; the MN-A entry carried in final-gclaude-audit-final.inner.json is stale relative to the current benchmark.json and predates its ERR-055 closure, so it is not a live finding.",
+    "Criterion 3 (ERR closure evidence) confirmed: ERR-044 (viewer cwd plus pass_rate merge anchor), ERR-051 (gclaude self-0-byte outer read), ERR-054 (benchmark.md embedded notes), ERR-055 (benchmark.json notes[] stale sentence) and ERR-056 (jq metric path) each carry RESOLVED status with concrete revalidation evidence.",
+    "No skill-correctness finding remains: the only blocking item is the external dclaude 402 gate (BF-1); the gclaude final route major_findings is empty and no blocking/major/minor skill-correctness issue survives verification."
+  ],
+  "route_limitations": [
+    "Independent final dclaude skill-eval audit is blocked by external HTTP 402 Insufficient Balance with empty modelUsage (ERR-037/ERR-043 OPEN). Environmental/provider-side, not a skill-correctness failure, yet it blocks the spec's explicit completion gate (both final routes with non-empty modelUsage + parseable inner JSON plus the mutual findings cross-check).",
+    "Three S4 (diagnose-learner-frontier) runs — eval-2 with-skill and eval-3 with/without — are graded from successful gclaude repair-route outputs because dclaude returned 402 after the S4 hint-mastery contract fix; original dclaude outputs and the first failed gclaude attempt are retained, route provenance records actual modelUsage, and gclaude evidence is not represented as dclaude."
+  ],
+  "required_reruns": [
+    "Restore dclaude route balance/connectivity and rerun the independent final dclaude skill-eval audit over the full evidence set; it must yield non-empty outer modelUsage and a parseable inner JSON verdict (closes BF-1).",
+    "Perform the mutual structured-findings cross-check between the two final routes (8.5), apply accepted fixes, and re-audit affected routes until both structured verdicts pass with no unresolved blocking or major finding (8.6); then check 8.4-8.6 and 9.1-9.3."
+  ]
+}

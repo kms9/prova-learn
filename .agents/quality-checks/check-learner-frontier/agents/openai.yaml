@@ -1,0 +1,4 @@
+interface:
+  display_name: "学习者前沿质量检查（S4/G4）"
+  short_description: "独立复核 S4 的 learner_snapshot 是否达到门 G4，给出可追溯的放行/返工裁决"
+  default_prompt: "使用 $check-learner-frontier 独立复核这个 S4 移交信封是否达到 G4，并输出 quality_check_result。"

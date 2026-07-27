@@ -1,0 +1,34 @@
+{
+  "route": "gclaude",
+  "status": "completed",
+  "exit_code": 0,
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "25534ebb-4452-4f28-82cd-feaae23ed046",
+  "uuid": "424d9a79-f0a9-47ac-831a-04569d2d910f",
+  "graded_runs": 6,
+  "canonical_grading_tree": "eval-*/<configuration>/run-1/grading.json",
+  "historical_grading_tree": "case-*/<configuration>/grading.json",
+  "schema_valid": true,
+  "with_skill_expectations": {
+    "passed": 18,
+    "total": 18
+  },
+  "without_skill_expectations": {
+    "passed": 8,
+    "total": 18
+  },
+  "source_route_record": "grader-current-gclaude-route.json",
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 380,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 256
+    },
+    "glm-5.2": {
+      "inputTokens": 142076,
+      "outputTokens": 42059,
+      "cacheReadInputTokens": 3664768
+    }
+  }
+}

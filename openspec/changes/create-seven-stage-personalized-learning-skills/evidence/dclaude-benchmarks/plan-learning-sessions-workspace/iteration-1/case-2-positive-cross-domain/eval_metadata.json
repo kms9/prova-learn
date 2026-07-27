@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "case-2-positive-cross-domain",
+  "prompt": "上游工件均已通过：六年级分数学习的目标契约、能力图谱和 learner_snapshot。数轴定位与等值分数已掌握；分数大小比较的解释判为 developing；食谱与长度分配的情境缩放判为 not_mastered；典型偏差为全数偏差和机械通分。约束：三周、每天 25 分钟、保留游戏化卡片但不以速度为唯一标准、监护人参与。学习者与监护人已确认路径优先比较推理而非重复表征训练，并接受包含未见情境迁移题与延迟复测的验收。请完成个性化学习 S5，输出结构化 JSON。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S5 正向例子2 (line 520)] A feasible minimal plan linking fraction-comparison reasoning to contextual transfer, excluding speed-only criteria, with appropriate strategy, delayed review, mandatory confirmation and a passing G5 route to S6.",
+  "expectations": [
+    "The path connects the confirmed frontier (comparison reasoning developing, contextual transfer not mastered) to the target without reteaching already-mastered representation nodes.",
+    "Strategies target the known whole-number misconception and contrast cases rather than only increasing drill volume, with no unexplained redundancy.",
+    "Each session fits the 25-minute daily constraint and the first session is executable within constraints.",
+    "Mandatory confirmation including guardian-and-learner priority and first-session contract is resolved as confirmed.",
+    "Per-node exit criteria are observable and the speed-only criterion is explicitly excluded from overall exit criteria.",
+    "Transfer and delayed review are explicit and G5 routes deterministically to S6 when all dimensions pass."
+  ]
+}

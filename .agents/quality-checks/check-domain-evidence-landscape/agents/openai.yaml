@@ -1,0 +1,4 @@
+interface:
+  display_name: "领域证据全景质量检查（S2/G2）"
+  short_description: "独立复核 S2 的 domain_evidence_landscape 是否达到门 G2，给出可追溯的放行/返工裁决"
+  default_prompt: "使用 $check-domain-evidence-landscape 独立复核这个 S2 移交信封是否达到 G2，并输出 quality_check_result。"

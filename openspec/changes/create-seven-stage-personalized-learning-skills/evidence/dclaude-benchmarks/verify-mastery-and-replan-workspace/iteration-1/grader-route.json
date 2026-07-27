@@ -1,0 +1,35 @@
+{
+  "route": "gclaude",
+  "status": "completed",
+  "exit_code": 0,
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "e6afb653-ec15-4776-98f7-e8467e744516",
+  "uuid": "40f4fbea-8034-4c47-ad95-0eb192d80759",
+  "graded_runs": 6,
+  "canonical_grading_tree": "eval-*/<configuration>/run-1/grading.json",
+  "historical_grading_tree": "case-*/<configuration>/grading.json",
+  "schema_valid": true,
+  "with_skill_expectations": {
+    "passed": 18,
+    "total": 18
+  },
+  "without_skill_expectations": {
+    "passed": 8,
+    "total": 18
+  },
+  "source_route_record": "../../../../reviews/canonical-s4-s7-grading-integrity.route.json",
+  "audit_scope": "S4 and S7 canonical grading integrity; this workspace contributes six of the twelve checked runs",
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 436,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 256
+    },
+    "glm-5.2": {
+      "inputTokens": 75599,
+      "outputTokens": 32714,
+      "cacheReadInputTokens": 907904
+    }
+  }
+}

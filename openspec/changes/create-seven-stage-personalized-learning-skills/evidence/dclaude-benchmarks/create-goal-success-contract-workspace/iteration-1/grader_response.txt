@@ -1,0 +1,15 @@
+The grading is complete. Here's a summary of the findings across all 6 runs:
+
+| # | Eval | Configuration | Pass Rate | Key Result |
+|---|------|---------------|-----------|------------|
+| 1 | case-1-positive-primary | with_skill | **6/6 (1.0)** | Complete S1 handoff envelope with goal_success_contract, 9 live searches, 8 G1 dimensions all passed, routes to S2 |
+| 2 | case-1-positive-primary | without_skill | **0/6 (0.0)** | Produced a weekly lesson plan — no contract structure, no evidence provenance, no G1 evaluation, no routing |
+| 3 | case-2-positive-cross-domain | with_skill | **6/6 (1.0)** | Correctly adapted to K-6 fractions domain; 5 live searches, guardian+learner confirmation resolved, G1 all passed |
+| 4 | case-2-positive-cross-domain | without_skill | **0/6 (0.0)** | Produced a rich 7-day CRA teaching plan but missed all S1 contract requirements; 260s execution, longest of all runs |
+| 5 | case-3-negative-blocked | with_skill | **6/6 (1.0)** | Correct fail-closed: status=blocked, positive_artifact=null, research_blocked, G1 all failed, route stays at S1 |
+| 6 | case-3-negative-blocked | without_skill | **3/6 (0.5)** | Fabricated a full 7-day AI learning plan from model knowledge; 3 expectations passed by coincidence (no G1, honest about model knowledge, no confirmation), but critically failed to identify non-observable target, preserve research_blocked, and avoid fabricating a positive artifact |
+
+**Key observations:**
+- The skill creates a dramatic separation: 1.0 → 0.0 pass rate on positive cases (evals 1 & 2)
+- The negative case (eval 3) reveals the without_skill output's dangerous behavior: it accepts an ill-defined goal and fabricates a plan from model knowledge, while the skill correctly blocks
+- Three eval-3 expectations (1, 4, 5) have limited discriminating power — they pass for without_skill by coincidence rather than because the output demonstrates correct negative-case behavior (noted in eval_feedback)

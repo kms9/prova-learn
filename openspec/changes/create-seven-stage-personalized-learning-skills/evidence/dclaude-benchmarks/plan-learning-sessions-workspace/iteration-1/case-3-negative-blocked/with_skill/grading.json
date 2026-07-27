@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "The copied table of contents, video quota and question count is not accepted as a path connecting a confirmed frontier to the target.",
+      "passed": true,
+      "evidence": "input_validation.status='fail'. input_validation.errors[3]: '提交内容为课程目录式计划（第1周数据库原理章节、第2周索引视频数、第3周刷题量、第4周项目），章节/视频/题量不是能力节点，无 selection_rationale、硬先修边、进入/退出条件或测评安排'. positive_artifact=null. status='blocked'. processing_record[1]: '识别提交内容为课程目录式计划而非个性化学习路径'."
+    },
+    {
+      "text": "Chapters and videos are identified as non-capability nodes with unexplained redundancy and no hard-prerequisite discipline.",
+      "passed": true,
+      "evidence": "requirement_gaps[3] (gap-node-criteria): '提交内容无任何节点进入/退出条件或测评安排，无法判定掌握'. quality_evaluation.rubric_results[2] (路径最小性): '提交内容为课程目录（章节→视频→题量→项目），非从已证实前沿到目标的最小连通子图；100道题可能重复同一模板'. quality_evaluation.rubric_results[1] (先修正确性): '无 capability_concept_graph 故无先修边可验证；课程目录按周编排而非按先修依赖'. evidence_collected[0]: '章节/视频/题量/项目非能力节点'."
+    },
+    {
+      "text": "No fabricated first session or starting state is accepted as executable.",
+      "passed": true,
+      "evidence": "positive_artifact=null. No sessions array exists anywhere in the output. No estimated_time, activities, or session definitions. The output explicitly refuses to fabricate: '正向工件置 null'. quality_evaluation.rubric_results[3] (时间可行性) confirms: '无会话定义与 estimated_time，无首个会话契约'."
+    },
+    {
+      "text": "Mandatory confirmation cannot substitute for the missing learner_snapshot and remains pending or blocked.",
+      "passed": true,
+      "evidence": "confirmation.status='pending', confirmation.response=null, confirmation.questions=[], confirmation.trigger=null. requirement_gaps[0]: '缺少 learner_snapshot（G4）：无已证实学习前沿...无法确定规划起点，criticality=critical, gate_effect=block'. processing_record[2]: '确认无已证实学习前沿证据，强制确认无法进行，confirmation.status=pending'."
+    },
+    {
+      "text": "No per-node exit criteria exist and none are fabricated.",
+      "passed": true,
+      "evidence": "positive_artifact=null. quality_evaluation.rubric_results[5] (教学与测评对齐度): '无 per_node exit_criteria，无 assessment_schedule（immediate/transfer/delayed 均缺失）'. No exit_criteria structure exists anywhere in the output."
+    },
+    {
+      "text": "G5 does not pass and the deterministic route is return_upstream to S4 (or S3 only if the graph is explicitly invalid), not S6.",
+      "passed": true,
+      "evidence": "quality_evaluation.rubric_results: all 8 dimensions have passed=false. quality_evaluation.verdict='return_upstream', route_to='S4'. The rubric shows: 目标连通性→S4, 先修正确性→S3 (graph invalid), remaining 6→S5 (revise_here). Overall route is S4. processing_record[5]: '依据 fail-closed 规则与阶段契约 §8：学习前沿证据不足 → return_upstream 至 S4'. Route is explicitly NOT S6."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_turns": 9,
+    "total_tokens": 73187,
+    "output_tokens": 6209,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 87,
+    "total_duration_seconds": 84.629
+  },
+  "claims": [
+    {
+      "claim": "最早可行动污染阶段为 S4（需先产出 learner_snapshot 确定已证实学习前沿），下游 S5 与 S6 均失效",
+      "type": "factual",
+      "verified": true,
+      "evidence": "processing_record[5] and route_to='S4'. The output correctly identifies S4 as the earliest actionable stage since learner_snapshot is S4's output artifact and is the root cause of the block."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+
+    ],
+    "overall": "No suggestions, evals look solid for this configuration."
+  }
+}

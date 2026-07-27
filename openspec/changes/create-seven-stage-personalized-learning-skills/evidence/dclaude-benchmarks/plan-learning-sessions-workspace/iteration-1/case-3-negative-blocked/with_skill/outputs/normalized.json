@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S5",
+  "run_id": "s5-run-20260727-001",
+  "learner_id": null,
+  "status": "blocked",
+  "input_contract": {
+    "artifact_refs": [],
+    "expected_schema_versions": {
+      "learner_snapshot": "1.0.0",
+      "capability_concept_graph": "1.0.0",
+      "goal_success_contract": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "fail",
+    "missing_fields": [
+      "learner_snapshot",
+      "capability_concept_graph",
+      "goal_success_contract"
+    ],
+    "stale_inputs": [],
+    "errors": [
+      "未提供 learner_snapshot（G4）：无法确定已证实的学习前沿，所有节点起点未知",
+      "未提供 capability_concept_graph（G3）：无法选择最小连通子图、验证硬先修边或匹配评估映射",
+      "未提供 goal_success_contract（G1）：无法对目标能力建立可验收边界与成功标准",
+      "提交内容为课程目录式计划（第1周数据库原理章节、第2周索引视频数、第3周刷题量、第4周项目），章节/视频/题量不是能力节点，无 selection_rationale、硬先修边、进入/退出条件或测评安排",
+      "无已证实学习前沿证据，却要求立即进入 S6 教学——违反 S5 强制确认与门 G5 全部维度"
+    ]
+  },
+  "assumptions": [
+    "假设提交者隐含目标为'掌握数据库原理与索引优化'，但该目标未经 S1 形式化与可验收边界定义",
+    "假设提交者有4周可用时间，但未提供每周可用小时数、会话频率与交付形式"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "gap-learner-snapshot",
+      "description": "缺少 learner_snapshot（G4）：无已证实学习前沿、稳定/不稳定节点或误概念，无法确定规划起点",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-capability-graph",
+      "description": "缺少 capability_concept_graph（G3）：无能力节点、先修边或评估映射，无法选择最小连通子图",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-goal-contract",
+      "description": "缺少 goal_success_contract（G1）：无目标能力、验收任务与边界定义",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-node-criteria",
+      "description": "提交内容无任何节点进入/退出条件或测评安排，无法判定掌握",
+      "criticality": "high",
+      "gate_effect": "block"
+    },
+    {
+      "id": "gap-time-detail",
+      "description": "时间约束仅粗略（4周），缺少每周可用小时数、会话时长与数量",
+      "criticality": "high",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": null,
+    "questions": [],
+    "response": null,
+    "status": "pending",
+    "confirmed_at": null,
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "ev-user-plan-001",
+      "provenance": "user_provided_unverified",
+      "source_ref": "用户提交的课程目录式计划",
+      "summary": "第1周数据库原理第1-5章、第2周10个索引视频、第3周100道题、第4周做项目——章节/视频/题量/项目非能力节点，无前沿证据、无进入退出条件、无测评安排",
+      "status": "unsupported"
+    }
+  ],
+  "processing_record": [
+    "校验输入契约：learner_snapshot、capability_concept_graph、goal_success_contract 均缺失，input_validation.status=fail",
+    "识别提交内容为课程目录式计划而非个性化学习路径：章节/视频/题量/项目非能力节点，无 selection_rationale 与硬先修边",
+    "确认无已证实学习前沿证据，强制确认无法进行，confirmation.status=pending",
+    "对照 G5 量规逐项评估：全部8维度 passed=false，至少5维度因无正向工件而无法评估",
+    "依据 fail-closed 规则与阶段契约 §8：学习前沿证据不足 → return_upstream 至 S4；正向工件置 null",
+    "路由决策：最早可行动污染阶段为 S4（需先产出 learner_snapshot 确定已证实学习前沿），下游 S5 与 S6 均失效"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "目标连通性",
+        "evidence": [
+          "无 learner_snapshot 故无已证实前沿起点，无 capability_concept_graph 故无可连通路径"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "return_upstream",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "先修正确性",
+        "evidence": [
+          "无 capability_concept_graph 故无先修边可验证；课程目录按周编排而非按先修依赖"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "return_upstream",
+        "route_to": "S3"
+      },
+      {
+        "dimension": "路径最小性",
+        "evidence": [
+          "提交内容为课程目录（章节→视频→题量→项目），非从已证实前沿到目标的最小连通子图；100道题可能重复同一模板"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S5"
+      },
+      {
+        "dimension": "时间可行性",
+        "evidence": [
+          "无会话定义与 estimated_time，无首个会话契约；'4周'仅为粗略总时长，无法验证是否可在约束内执行"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S5"
+      },
+      {
+        "dimension": "策略适配性",
+        "evidence": [
+          "无 learning nodes 故无 teaching_strategy；课程目录未按概念类型/错误类型/认知目标匹配教学策略"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S5"
+      },
+      {
+        "dimension": "教学与测评对齐度",
+        "evidence": [
+          "无 per_node exit_criteria，无 assessment_schedule（immediate/transfer/delayed 均缺失）"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S5"
+      },
+      {
+        "dimension": "认知负荷",
+        "evidence": [
+          "无 review_anchors；4周密集安排（第1周5章+第2周10视频+第3周100题+第4周项目）无检索间隔与遗忘曲线匹配"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S5"
+      },
+      {
+        "dimension": "调整空间",
+        "evidence": [
+          "无 risks、无 alternative_routes；课程目录隐含'按周线性推进'假设，无退出标准未达时的补救路径"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S5"
+      }
+    ],
+    "evidence": [
+      "G5 全部 8 维度 passed=false：课程目录式计划复制教材目录，将章节/视频/题量当成能力节点，违反'不要复制教材目录'禁令",
+      "无 learner_snapshot → 学习前沿证据完全缺失 → 不得将证据不足的前沿当作已确定起点",
+      "无 capability_concept_graph → 无法选择最小连通子图、无法验证硬先修",
+      "强制确认无法执行：confirmation.status=pending，无可展示的路径概览、阶段目标或首个会话契约",
+      "positive_artifact=null：未生成具名正向工件 learning_and_session_plan"
+    ],
+    "verdict": "return_upstream",
+    "route_to": "S4"
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [
+      "ev-user-plan-001"
+    ],
+    "source_sections": [
+      "references/stage-contract.md §2 S5输入契约",
+      "references/stage-contract.md §6 S5量规",
+      "references/stage-contract.md §7 S5路由",
+      "references/stage-contract.md §8 S5安全/阻塞态",
+      "references/example.md 示例B（反向/阻塞）"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}

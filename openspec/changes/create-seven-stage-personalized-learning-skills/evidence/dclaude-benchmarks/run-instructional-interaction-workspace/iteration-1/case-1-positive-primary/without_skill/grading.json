@@ -1,0 +1,81 @@
+{
+  "expectations": [
+    {
+      "text": "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+      "passed": false,
+      "evidence": "The output has no layered explanation structure (no explanation_id, no layer, no evidence_refs). No content_quality_status. No evidence_collected with provenance tracking. The session_package_and_trace has session_objectives and activities but explanations are embedded in activity descriptions without any traceability to audited external sources. All index-tuning knowledge appears to come from model common sense."
+    },
+    {
+      "text": "Activities include worked example, completion, contrast and independent transfer tasks that produce judgeable learner-behavior evidence rather than only reading or acknowledgment.",
+      "passed": false,
+      "evidence": "Five activities are present but their types are: consolidation_check (A1), challenge (A2, A3), teaching_output (A4), integration (A5). None match the expected kinds: worked_example, completion_problem, contrast_case, or independent_transfer. The activities do produce learner responses, but the specific scaffolded activity sequence required by the expectation is absent."
+    },
+    {
+      "text": "Task difficulty stays within the learner's learnable range and the independent transfer item is reachable after scaffolding fades.",
+      "passed": false,
+      "evidence": "All five activities are marked difficulty='G6' — no progressive difficulty ramp from easier to harder. No scaffolding_fade_strategy exists. No hint_ladder with fading conditions. The learner goes directly into multi-condition index design challenges without graduated support or a scaffold-withdrawal path to independent transfer."
+    },
+    {
+      "text": "Hint ladder steps point to query shape and official leading-column rules without substituting the learner's key indexing-order reasoning, and no answer is leaked before submission.",
+      "passed": false,
+      "evidence": "No hint_ladder is present in the output. No answer_leakage_control annotations exist on any activity. No feedback_rules with task/process/self-regulation levels. The activities describe expected answers inline without any mechanism to prevent answer exposure before learner submission."
+    },
+    {
+      "text": "A full interaction trace records each learner response, the hint level used, and the correction trajectory.",
+      "passed": false,
+      "evidence": "Each activity has a learner_response field but these are paraphrased summaries ('学习者正确表述了索引前缀匹配机制...'), not verbatim traces. No hints_used arrays exist. No correction_trajectory fields document the learner's path from error to correction. The learning_trace section has aggregate statistics (total_activities=5, passed=5) but no per-event hint/correction detail."
+    },
+    {
+      "text": "G6 is evaluated dimension by dimension, passes only because real candidate evidence exists, and deterministically routes to S7 without claiming mastery.",
+      "passed": false,
+      "evidence": "G6_verdict is a single-paragraph rationale with a flat evidence list — not a dimension-by-dimension rubric evaluation. It states status='PASS' and recommends advancement ('可进入下一学习节点'). No candidate_mastery_evidence with limits is emitted. learner_profile_update.readiness='已准备好进入下一学习节点或接受综合评估' — this asserts readiness rather than deferring mastery judgment to G7."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "output_chars": 10385,
+    "transcript_chars": 10385
+  },
+  "timing": {
+    "executor_duration_seconds": 102,
+    "total_duration_seconds": 98.555
+  },
+  "claims": [
+    {
+      "claim": "Learner passed all 5 activities (learning_trace.total_activities=5, passed=5)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "learning_trace section counts 5 activities with 5 passed, 0 failed; each activity has assessment='pass'"
+    },
+    {
+      "claim": "G6 verdict status is PASS with recommendation to advance to next learning node",
+      "type": "factual",
+      "verified": true,
+      "evidence": "G6_verdict.status='PASS', next_node_recommendation begins '可进入下一学习节点'"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+
+    ],
+    "needs_review": [
+
+    ],
+    "workarounds": [
+
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The without_skill output shows a fundamentally different structural approach — it produces a flat activity log with a summary G6 verdict rather than the structured session_package_and_trace with layered explanations, hint_ladder, feedback_rules, and dimension-by-dimension G6 evaluation. This structure gap is what causes the across-the-board failure, confirming the skill's value."
+      }
+    ],
+    "overall": "All six expectations fail. The without_skill agent produced a reasonable teaching interaction log in its own format, but it lacks every structural element required by the S6 contract: no layered explanations with evidence traceability, no scaffolded activity types, no hint ladder, no answer leakage control, no interaction event traces with hint/correction tracking, and no dimension-by-dimension G6 rubric. The difference between with_skill (6/6 pass) and without_skill (0/6 pass) cleanly demonstrates the skill's impact."
+  }
+}

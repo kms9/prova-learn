@@ -1,0 +1,497 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S4",
+  "run_id": "s4-fraction-g6-20260727-001",
+  "learner_id": "grade6-fraction-learner-01",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "goal_success_contract::G1::fraction-grade6",
+      "capability_concept_graph::G3::fraction-grade6"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0",
+      "capability_concept_graph": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "G1目标成功契约已通过，目标能力为六年级分数推理",
+    "G3能力概念图谱已通过，包含NF1-NF7七个节点及先修边",
+    "学习者身份为六年级学生，所有五条观察来自真实诊断任务行为记录",
+    "观察证据在30天有效期内，无过期证据"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "诊断范围含数轴定位、等值识别与解释、比较推理、比例缩放与情境迁移",
+    "questions": [
+      "是否覆盖全部关心能力？",
+      "初步结论是否符合自我感知？",
+      "交叉相乘不能解释原因是否因机械教学？"
+    ],
+    "response": null,
+    "status": "confirmed",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "E1",
+      "provenance": "learner_behavior",
+      "source_ref": "数轴定位2/3与4/6",
+      "summary": "在数轴上正确定位2/3与4/6并口头说明二者位于同一点因此相等。无提示，独立完成。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "E2",
+      "provenance": "learner_behavior",
+      "source_ref": "比较3/5与4/7",
+      "summary": "使用交叉相乘得3×7=21与5×4=20推出3/5>4/7。过程正确但无法解释为何交叉相乘能比较分数，仅描述步骤。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "E3",
+      "provenance": "learner_behavior",
+      "source_ref": "判断2/3与4/6是否相等",
+      "summary": "先借助图示观察后能正确说明2/3=4/6。推理过程中图示支架为必要条件。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "E4",
+      "provenance": "learner_behavior",
+      "source_ref": "配方4人→6人缩放",
+      "summary": "第一次独立作答错误；经图示提示后第二次答对。独立尝试失败，图示支架下可触发正确推理。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "E5",
+      "provenance": "learner_behavior",
+      "source_ref": "两道未见情境迁移题",
+      "summary": "两道未见情境题均未独立完成迁移。无提示条件下推理中断或使用不适用策略。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "声明推断规则：掌握=独立正确且可解释；未掌握=依赖提示或错误；证据不足=单次或无推理链",
+    "沿目标与先修链部署诊断任务：数轴→等值识别→等值解释→比较程序→比较概念→比例缩放→迁移",
+    "收集5条行为证据E1-E5，记录正确性、推理过程、提示层级与错误类型",
+    "区分答对(E3/E4支架下)、独立会做(E1数轴/E2程序)、能迁移(E5均未通过)",
+    "递归定位前沿至NF3：前置NF1/NF2已独立掌握，NF3在图示下正确但高提示依赖，为下游瓶颈",
+    "按G4量规七维度逐项评价，全部通过后生成learner_snapshot v1"
+  ],
+  "positive_artifact": {
+    "type": "learner_snapshot",
+    "schema_version": "1.0.0",
+    "artifact_id": "ls-fraction-g6-0001",
+    "content": {
+      "learner_id": "grade6-fraction-learner-01",
+      "model_version": 1,
+      "as_of": "2026-07-27T00:00:00Z",
+      "node_states": [
+        {
+          "node_id": "NF1_number_line_positioning",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "E1"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "E1"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "NF2_equivalent_fraction_identification",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "E1",
+            "E3"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "E1"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "NF3_equivalent_fraction_justification",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "E3"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "high",
+            "evidence_refs": [
+              "E3"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "NF4_fraction_comparison_procedural",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "E2"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "E2"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "NF5_fraction_comparison_conceptual",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "E2",
+            "E5"
+          ],
+          "error_type": "conceptual_misconception",
+          "hint_dependency": {
+            "level": "unknown",
+            "evidence_refs": [
+              "E2"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "NF6_multiplicative_scaling",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "E4"
+          ],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {
+            "level": "medium",
+            "evidence_refs": [
+              "E4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        },
+        {
+          "node_id": "NF7_fraction_transfer",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "E5"
+          ],
+          "error_type": "transfer_failure",
+          "hint_dependency": {
+            "level": "unknown",
+            "evidence_refs": [
+              "E5"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": null,
+            "observed_alignment": "unknown"
+          }
+        }
+      ],
+      "learning_frontier": {
+        "nearest_learnable_node_id": "NF3_equivalent_fraction_justification",
+        "evidence_refs": [
+          "E1",
+          "E2",
+          "E3",
+          "E4"
+        ],
+        "rationale": "学习者已独立掌握数轴定位(NF1)和等值识别(NF2)，且在图示支架下能正确解释等值理由(NF3)。NF3距独立掌握最近——仅需撤除图示支架即可实现独立抽象推理。NF3同时是NF5比较概念和NF6比例缩放的前置瓶颈：比较只有机械程序而无概念理解(E2)，缩放仅在图示后部分正确(E4)，均指向等值概念推理未内化。优先巩固NF3系统解锁下游。",
+        "alternative_candidate_node_ids": [
+          "NF5_fraction_comparison_conceptual"
+        ]
+      },
+      "misconceptions": [
+        {
+          "code": "CROSS_MULTIPLY_AS_BLACK_BOX",
+          "description": "将交叉相乘视为比较分数的机械规则，无法解释其背后通分后比较分子的等值推理",
+          "evidence_refs": [
+            "E2"
+          ],
+          "related_node_ids": [
+            "NF4_fraction_comparison_procedural",
+            "NF5_fraction_comparison_conceptual",
+            "NF3_equivalent_fraction_justification"
+          ]
+        },
+        {
+          "code": "EQUIVALENCE_REQUIRES_VISUAL_VERIFICATION",
+          "description": "认为分数等值必须通过图示来验证，未内化分子分母同乘同除非零数的抽象规则",
+          "evidence_refs": [
+            "E3",
+            "E4"
+          ],
+          "related_node_ids": [
+            "NF3_equivalent_fraction_justification",
+            "NF6_multiplicative_scaling"
+          ]
+        }
+      ],
+      "capability_gaps": [
+        {
+          "node_id": "NF3_equivalent_fraction_justification",
+          "description": "有图示时可正确解释等值理由，不能脱离图示独立进行抽象乘性推理",
+          "evidence_refs": [
+            "E3"
+          ]
+        },
+        {
+          "node_id": "NF5_fraction_comparison_conceptual",
+          "description": "能执行交叉相乘程序但不能解释原理，缺乏通分、基准比较等概念策略",
+          "evidence_refs": [
+            "E2"
+          ]
+        },
+        {
+          "node_id": "NF6_multiplicative_scaling",
+          "description": "独立尝试比例缩放失败，需图示提示后才能正确推理",
+          "evidence_refs": [
+            "E4"
+          ]
+        },
+        {
+          "node_id": "NF7_fraction_transfer",
+          "description": "未见情境中无法独立运用分数推理，知识绑定于具体任务表面特征",
+          "evidence_refs": [
+            "E5"
+          ]
+        }
+      ],
+      "transfer_performance": {
+        "status": "not_demonstrated",
+        "evidence_refs": [
+          "E5"
+        ],
+        "summary": "两道结构同构但表面特征不同的未见情境题均未独立完成迁移，分数推理绑定于具体任务表面特征"
+      },
+      "diagnosis_evidence_mapping": [
+        {
+          "conclusion": "学习者能独立在数轴上定位分数并识别等值分数",
+          "evidence_refs": [
+            "E1"
+          ]
+        },
+        {
+          "conclusion": "学习者能独立执行交叉相乘程序比较分数大小",
+          "evidence_refs": [
+            "E2"
+          ]
+        },
+        {
+          "conclusion": "学习者在图示支架下能正确解释等值分数的理由",
+          "evidence_refs": [
+            "E3"
+          ]
+        },
+        {
+          "conclusion": "学习者将交叉相乘视为机械规则，缺乏概念性理解",
+          "evidence_refs": [
+            "E2",
+            "E5"
+          ]
+        },
+        {
+          "conclusion": "学习者依赖视觉/图示支架进行分数推理，抽象乘性推理未内化",
+          "evidence_refs": [
+            "E3",
+            "E4"
+          ]
+        },
+        {
+          "conclusion": "学习者尚不能将分数推理独立迁移到未见情境",
+          "evidence_refs": [
+            "E5"
+          ]
+        },
+        {
+          "conclusion": "最近学习前沿为等值分数独立解释(NF3)，仅需撤除图示支架即可进阶",
+          "evidence_refs": [
+            "E1",
+            "E2",
+            "E3",
+            "E4"
+          ]
+        }
+      ],
+      "items_needing_retest_or_human_confirmation": [
+        {
+          "node_id": "NF3_equivalent_fraction_justification",
+          "kind": "retest",
+          "reason": "仅在图示支架下观察到正确解释；需无图示条件下复测以确认独立抽象推理水平"
+        },
+        {
+          "node_id": "NF5_fraction_comparison_conceptual",
+          "kind": "retest",
+          "reason": "未尝试概念性提示；需补测区分完全不会与有支架可触发"
+        },
+        {
+          "node_id": "NF7_fraction_transfer",
+          "kind": "retest",
+          "reason": "仅两道迁移题且均失败，需多种变式复测确定迁移失败边界"
+        }
+      ],
+      "evidence_validity": {
+        "valid_until": "2026-08-27T00:00:00Z",
+        "stale_evidence_refs": [],
+        "policy": "诊断行为证据30天内有效；过期仅作线索，关键结论需复测后再生效"
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "测量与目标对齐度",
+        "evidence": [
+          "NF1-NF7覆盖六年级分数推理目标能力域，每个节点均有对齐诊断项"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "概念性缺口由E2+E5双项支撑",
+          "图示依赖由E3+E4双项支撑",
+          "程序掌握由E2独立正确支撑",
+          "迁移未建立由E5两道失败支撑",
+          "NF1单次观察不属争议性结论"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "猜对识别",
+        "evidence": [
+          "error_type区分none/conceptual_misconception/partial_reasoning/transfer_failure",
+          "transfer_performance标记not_demonstrated",
+          "hint_dependency逐节点区分"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "提示依赖记录",
+        "evidence": [
+          "7个节点均记录hint_dependency含level与evidence_refs",
+          "NF3标记high/NF6标记medium/NF1NF2NF4标记none"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "错误分类一致性",
+        "evidence": [
+          "NF5标记conceptual_misconception与E2一致",
+          "NF6标记partial_reasoning与E4一致",
+          "NF7标记transfer_failure与E5一致",
+          "可审计回原始行为描述"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "偏差控制",
+        "evidence": [
+          "全部结论基于learner_behavior证据",
+          "未用自评/年限/问卷判定掌握",
+          "self_confidence均为null"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "结论可解释性",
+        "evidence": [
+          "diagnosis_evidence_mapping含7条结论均可追溯",
+          "learning_frontier含evidence_refs与rationale",
+          "misconceptions和capability_gaps均有evidence_refs"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "E1: 数轴独立定位并口头说明相等",
+      "E2: 机械交叉相乘正确但不能解释",
+      "E3: 图示后能解释等值",
+      "E4: 配方缩放首次错→图示后对",
+      "E5: 两道迁移均独立失败"
+    ],
+    "verdict": "pass",
+    "route_to": "S5"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "goal_success_contract::G1::fraction-grade6",
+      "capability_concept_graph::G3::fraction-grade6"
+    ],
+    "source_evidence_ids": [
+      "E1",
+      "E2",
+      "E3",
+      "E4",
+      "E5"
+    ],
+    "source_sections": [
+      "用户提供诊断观察描述"
+    ],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "case-1-positive-primary",
+  "prompt": "上游已通过 G1：学习者是中国互联网中级后端，目标为 PostgreSQL 18 沙箱内独立诊断单表慢查询、读取 EXPLAIN (ANALYZE, BUFFERS)、论证索引并验证，排除优化器内核与多表连接调优。请执行个性化学习 S2，做真实联网 STORM 式多轮研究，并输出结构化 JSON 移交结果。",
+  "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S2 正向例子1 and docs/chat_log/七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S2] A live-researched domain_evidence_landscape with six perspectives, a traceable source ledger, claim-to-evidence mapping, six-category coverage, and a deterministic G2 pass route to S3.",
+  "expectations": [
+    "The output contains a domain_evidence_landscape inside a stage S2 handoff envelope, with research_run_manifest proving that live multi-perspective research was actually executed and recorded (online status, perspectives, questions, queries with executed_at, rounds, follow-up triggers) rather than only naming desired sources.",
+    "All six mandatory source categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier) carry an explicit covered/not_applicable/gap status with reason and gate_effect, and product-behavior facts trace to PostgreSQL 18 official documentation.",
+    "Each claim carries a supported/partially_supported/unsupported status with evidence_refs mapping back to source_ledger entries, and the false rules (index always faster; cost equals milliseconds) are marked unsupported rather than asserted as consensus.",
+    "Consensus and disagreement are not collapsed: disagreements retain both sides' strong arguments and evidence, and the INDEX_ALWAYS_FASTER position is recorded with its rebuttal rather than silently dropped.",
+    "Market signals (recruiting JD samples) are separated from product facts and labeled market_signal, not written as universal knowledge standards; model knowledge is labeled model_hypothesis and not counted as external evidence.",
+    "G2 is evaluated dimension by dimension and routes deterministically to S3 only when research_executed is true and no critical gap blocks graph construction; otherwise it stays at S2."
+  ]
+}

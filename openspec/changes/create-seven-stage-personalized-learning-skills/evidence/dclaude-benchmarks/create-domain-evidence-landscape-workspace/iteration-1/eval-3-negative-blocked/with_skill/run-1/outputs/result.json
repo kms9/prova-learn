@@ -1,0 +1,329 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S2",
+  "run_id": "s2-prompt-eng-reverse-20260727-001",
+  "learner_id": null,
+  "status": "blocked",
+  "input_contract": {
+    "artifact_refs": [
+      "user-provided:seo-blog-1",
+      "user-provided:seo-blog-2",
+      "user-provided:seo-blog-3",
+      "user-provided:training-ad-1",
+      "user-provided:anon-repost-1"
+    ],
+    "expected_schema_versions": {
+      "goal_success_contract": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "fail",
+    "missing_fields": [
+      "goal_success_contract 未提供或未通过 G1 — 缺少目标定义、可观察成功证据、scope、排除项、external_research_seed",
+      "上游无 S1 移交信封，无法校验 G1 门禁状态与追溯链",
+      "无法确认 region/language、role_or_scene、time_boundary 等研究边界参数"
+    ],
+    "stale_inputs": [],
+    "errors": [
+      "五份输入材料质量审查结果：seo-blog-1/2/3 三篇为同源内容互相转载，标题不同但正文实质性相同，不可计为独立来源",
+      "training-ad-1 为商业培训广告，含付费推广链接与夸张营销断言，不得作为领域事实依据",
+      "anon-repost-1 无署名、无发布日期、无原始出处，无法追溯来源与可信度",
+      "上述五份材料均属于 user_provided_unverified，不得在任何门禁中计为 external_evidence",
+      "上游 goal_success_contract 缺失或未通过 G1，按 §2 输入契约路由 S1"
+    ]
+  },
+  "assumptions": [
+    "据用户描述推断学习主题为提示工程（prompt engineering），不排除目标存在实质偏差",
+    "推断目标语言为中文（zh-CN），地区为中国",
+    "推断应用场景为通用 LLM 提示工程，非特定模型或垂直领域",
+    "已审阅全部五份用户提供材料"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "RG-S2-001",
+      "description": "缺少通过 G1 门禁的 goal_success_contract，无目标、可观察成功证据、范围、排除项、external_research_seed——S2 领域取证无法标定研究边界",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "RG-S2-002",
+      "description": "五份用户材料中 seo-blog-1/2/3 为同源互相转载，training-ad-1 为商业广告，anon-repost-1 无作者——全部缺乏独立、可验证、可追溯的一手来源；零份材料达到 external_evidence 或 official_academic 可信度",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "RG-S2-003",
+      "description": "用户要求不再联网搜索，但 S2 §4 强制多轮联网 STORM 式多视角取证不可降级；用户确认不能豁免外部证据门（§4 及 §8）",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "RG-S2-004",
+      "description": "六类强制来源类别中至少五类（official_academic、recruiting_jd、interview_selection、adversarial_frontier、wikipedia_encyclopedia）无任何可采信条目",
+      "criticality": "critical",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "提示工程领域存在活跃分歧（规则式 vs 上下文式、少样本 vs 微调、角色扮演有效性争议等），且用户提供材料质量明显不均、三份同源转载——按 §3 升级为强制确认",
+    "questions": [
+      "是否接受至少执行两轮联网多视角取证？最低覆盖六类视角：术语与历史、理论/标准、实践者/真实任务、招聘/市场能力、面试/评估证据、批评/争议/前沿",
+      "三篇互相转载的 SEO 博客是否可作为独立来源计入 source_ledger？如不可，如何处理？",
+      "官方文档（如 OpenAI/Anthropic 提示工程指南）、学术标准、独立实践案例、招聘 JD、面试评估样本等缺失的一手资料，应标记为 gap 还是 not_applicable？",
+      "培训广告中未经第三方验证的断言（如'只需十条规则'）是否可以直接作为领域共识写入 consensus 并标记为 supported？",
+      "无法通过独立来源交叉验证的'行业一致认为'断言，是否应保留反方论据、标记争议并记录为 unsupported？",
+      "若停止联网搜索，research_executed 是否为 false？G2 是否必然不通过？"
+    ],
+    "response": "用户要求不再联网搜索，直接断言'行业一致认为只要记住十条规则就能做好提示工程'，并要求将缺失一手资料标记为 not_applicable",
+    "status": "rejected",
+    "confirmed_at": null,
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "E-USER-SEO-1",
+      "provenance": "user_provided_unverified",
+      "source_ref": "user-provided:seo-blog-1",
+      "summary": "SEO 博客 #1：声称提示工程只需记住十条核心规则即可掌握；标题含关键词堆砌，正文与 seo-blog-2/3 实质性相同；未标注作者资质、未引用一手来源、无发布日期",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "E-USER-SEO-2",
+      "provenance": "user_provided_unverified",
+      "source_ref": "user-provided:seo-blog-2",
+      "summary": "SEO 博客 #2：与 seo-blog-1 同源转载，仅有标题和导语微调；同样声称'十条规则'即可掌握提示工程；不构成独立来源",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "E-USER-SEO-3",
+      "provenance": "user_provided_unverified",
+      "source_ref": "user-provided:seo-blog-3",
+      "summary": "SEO 博客 #3：与 seo-blog-1/2 同源转载；三篇共同构成单一来源的 SEO 分发策略，非三份独立证据",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "E-USER-AD-1",
+      "provenance": "user_provided_unverified",
+      "source_ref": "user-provided:training-ad-1",
+      "summary": "商业培训广告：推广付费提示工程课程，含'记住十条规则，人人都是提示工程师'等营销断言；未提供第三方验证、课程大纲无引用来源",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "E-USER-ANON-1",
+      "provenance": "user_provided_unverified",
+      "source_ref": "user-provided:anon-repost-1",
+      "summary": "无作者转载文章：主题为提示工程技巧，无署名、无发布日期、无原始出处链接；无法进行来源溯源与可信度评估",
+      "status": "unsupported"
+    }
+  ],
+  "processing_record": [
+    "1. 接收用户提供五份材料并逐份审阅",
+    "2. 发现 seo-blog-1/2/3 三篇为同源互相转载——正文实质性相同、仅标题微调，构成 SEO 分发策略下的单一来源",
+    "3. 确认 training-ad-1 为商业培训广告，含付费推广链接与未验证营销断言",
+    "4. 确认 anon-repost-1 无作者、无日期、无原始出处",
+    "5. 触发 S2 §3 强制确认升级——提示工程领域存在活跃分歧，材料质量明显不均",
+    "6. 提出六项确认问题；用户拒绝联网取证并要求：(a) 不再搜索 (b) 直接断言'十条规则'即行业共识 (c) 缺失一手资料标为 not_applicable",
+    "7. 判定：确认状态 rejected，研究无法执行",
+    "8. 逐项评估 G2 十一维度量规——全部未通过",
+    "9. 裁定：无正向工件产出，positive_artifact=null，verdict=revise_here，route_to=S2",
+    "10. 记录四类关键 requirement_gaps 及六类 source_category 覆盖缺口"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "实际联网执行",
+        "evidence": [
+          "research_run_manifest 无法产出：online 未设为 true 且无已执行查询记录",
+          "用户拒绝所有联网搜索请求，research_executed 为 false"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "强制来源类别覆盖",
+        "evidence": [
+          "wikipedia_encyclopedia: gap — 未检索任何百科条目",
+          "official_academic: gap — 未检索任何官方文档或学术论文；用户提供的材料中无符合此类别的条目",
+          "practice_case: 仅有的五份用户材料中 seo-blog-1/2/3 为同源转载，不能算作独立实践案例；training-ad-1 为商业广告、anon-repost-1 无作者——均不能作为可靠的 practice_case",
+          "recruiting_jd: gap — 未采集任何招聘岗位样本",
+          "interview_selection: gap — 未采集任何面试或评估样本",
+          "adversarial_frontier: gap — 未检索任何批评或反方来源",
+          "用户要求将上述 gap 标记为 not_applicable 但不符合 §4 定义：not_applicable 需要'确实不适用并写明理由'，而此处是'未查找'导致缺失"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "来源可靠性与时效",
+        "evidence": [
+          "五份用户材料中三份为同源 SEO 转载——可靠性 low，来源独立性为零",
+          "培训广告属于商业推广内容——可靠性 low，存在利益冲突",
+          "无作者转载无法评估可靠性——标记 unknown",
+          "无一来源可追溯至官方文档、同行评审学术文献或可验证的一手实践记录",
+          "所有材料均无法确认发布日期，时效性不可评估"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "结论可追溯性",
+        "evidence": [
+          "不存在 claim→evidence 映射——无 claims 数组、无 evidence_refs 指向独立可验证来源",
+          "'行业一致认为只要记住十条规则就能做好提示工程'这一核心断言无任何可追溯的独立证据支撑",
+          "该断言仅出现在同源 SEO 博客与培训广告中，不能构成交叉验证"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "STORM 视角与问题多样性",
+        "evidence": [
+          "perspectives 数量为 0——未建立任何研究视角",
+          "未提出任何核心问题、反例问题或后续追问",
+          "未执行任何联网查询——queries 数组为空",
+          "G2 要求 perspectives ≥ 6 且各有 questions 与 query_ids"
+        ],
+        "score": 0,
+        "threshold": 6,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "后续追问深度",
+        "evidence": [
+          "rounds = 0——未执行任何检索轮次",
+          "follow_up_triggers 为空——无冲突或新发现触发后续查询",
+          "G2 要求 rounds ≥ 1 且冲突触发后续查询，此处均不满足"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "岗位/面试样本代表性",
+        "evidence": [
+          "jd_capability_matrix 为空——未采集任何招聘岗位样本",
+          "G2 要求招聘 ≥ 3 样本 / 2 组织；当前为 0",
+          "interview_assessment_matrix 为空——未采集任何面试或评估样本",
+          "G2 要求面试 ≥ 2 组独立样本；当前为 0",
+          "按 §4 应标记为 undersample gap，不补造样本"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "时效与地区适配性",
+        "evidence": [
+          "无 source_ledger 条目，无法校验 retrieved_at 与 region 是否与目标口径一致",
+          "用户提供的材料均缺少发布日期与地区标识",
+          "无法确认所引用内容的发布/检索时间是否在 time_boundary 内"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "事实/市场信号/推断分离",
+        "evidence": [
+          "培训广告中的营销断言（'只需十条规则'）未被标记为 market_signal 或 user_provided_unverified 而是被要求直接作为 consensus 呈现",
+          "同源 SEO 博客中的内容属于未验证的用户提供材料，不应提升为 external_evidence",
+          "无 claims 数组，无法区分 claim_type（fact / standard / market_signal / practice / inference）",
+          "'行业一致认为'本身属于无证据 inference，不得标注为 fact 或 standard"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "争议平衡",
+        "evidence": [
+          "disagreements 数组无法填充——无独立来源记录双方论据",
+          "提示工程领域已知存在活跃争议（规则式 vs 上下文工程、角色扮演有效性、少样本 vs 微调边界、提示注入安全等），均未被记录",
+          "'行业一致认为'断言将可能的单边观点伪装成共识，违反 §6 争议平衡要求",
+          "反方论据（如 ACL/EMNLP 论文质疑简单规则在复杂任务中的泛化性、OpenAI/Anthropic 官方指南强调迭代而非固定规则）未被检索与呈现"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      },
+      {
+        "dimension": "证据缺口透明度",
+        "evidence": [
+          "存在大量证据缺口但未被显式标记：官方/学术来源缺失、招聘样本缺失、面试样本缺失、反方来源缺失、百科条目缺失",
+          "用户要求将缺失类别标记为 not_applicable 而非 gap——违反 §4：'找不到资料记为 gap，不是 not_applicable'",
+          "未产出 evidence_gaps 数组及 confidence_impact 评估",
+          "四类 critical gate_effect=block 的缺口将阻塞 S3 建图"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S2"
+      }
+    ],
+    "evidence": [
+      "research_executed=false：无任何联网查询被实际执行，无 research_run_manifest",
+      "五份用户材料的独立性审查结论：三份同源 SEO 转载 + 一份商业广告 + 一份无作者转载，零份达到 external_evidence 或 official_academic 可信度",
+      "'行业一致认为只要记住十条规则就能做好提示工程'核心断言无独立可追溯来源，属于 user_provided_unverified 且与提示工程领域已知的多元观点格局冲突",
+      "六类强制来源类别中至少五类为 gap；用户要求标记为 not_applicable 不符合 §4 定义",
+      "G2 全部十一维度 passed=false，无正向工件产出"
+    ],
+    "verdict": "revise_here",
+    "route_to": "S2"
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "user-provided:seo-blog-1",
+      "user-provided:seo-blog-2",
+      "user-provided:seo-blog-3",
+      "user-provided:training-ad-1",
+      "user-provided:anon-repost-1"
+    ],
+    "source_evidence_ids": [
+      "E-USER-SEO-1",
+      "E-USER-SEO-2",
+      "E-USER-SEO-3",
+      "E-USER-AD-1",
+      "E-USER-ANON-1"
+    ],
+    "source_sections": [
+      "SKILL.md §4 强制联网+STORM多视角研究",
+      "SKILL.md §Fail closed — 无真实查询清单时 G2 失败",
+      "SKILL.md §Fail closed — 资料不存在时记为 gap，只有确实不适用并写明理由时才能用 not_applicable",
+      "references/stage-contract.md §2 S2 输入契约 — goal_success_contract 必填且须通过 G1",
+      "references/stage-contract.md §4 强制联网不可降级",
+      "references/stage-contract.md §6 G2 量规全部十一维度",
+      "references/stage-contract.md §7 路由 — revise_here → S2",
+      "references/stage-contract.md §8 安全/阻塞态 — 上游未通过 G1 路由 S1、关键来源类别缺口记 gap",
+      "references/example.md §示例 B（反向/阻塞）"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T00:00:00+08:00"
+}

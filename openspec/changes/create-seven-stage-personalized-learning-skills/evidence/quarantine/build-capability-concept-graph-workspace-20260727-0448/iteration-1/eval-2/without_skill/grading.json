@@ -1,0 +1,64 @@
+{
+  "case_id": 2,
+  "config": "without_skill",
+  "graded_at": "2026-07-26T20:58:02Z",
+  "expectation_results": [
+    {
+      "expectation": "The graph is organized around a focus question and uses multiple representations (e.g. number line, area model) rather than listing fraction rules as a chapter sequence.",
+      "passed": true,
+      "evidence": "north_star '把分数当作数来理解与运用' organizes the map; uses 数轴 (C5) + 等积模型/area + 涂色 representations; milestones themed by concept (分数是数/等值/比较), not a rule chapter sequence."
+    },
+    {
+      "expectation": "The directed prerequisite edges form an acyclic structure and the hard path from unit whole to equivalent fractions and common denominators contains no cycle.",
+      "passed": true,
+      "evidence": "Edges topologically sort with no back-edges: C1→C2→C3→C4→C5→C6→C7 is linear; C8 and K-nodes feed forward only; no cycle in the full edge set."
+    },
+    {
+      "expectation": "Every hard prerequisite edge has an explicit rationale grounded in the fraction concept structure.",
+      "passed": false,
+      "evidence": "Many hard (prerequisite/enables) edges have no rationale note: C1→C2, C2→C3, C3→C4, C4→C5, C4→C6, C6→K2, C7→K4, K1→K3, K2→K3 — only some edges (C5→C6, C6→C7, C7→K1) carry notes."
+    },
+    {
+      "expectation": "Every target capability (comparing, explaining equivalence, applying to context problems) traces to the nodes that support it.",
+      "passed": true,
+      "evidence": "K1 (comparing) ← C7,C8,C4,C5; K2 (explaining equivalence) ← C6; K3 (context problems) ← K1,K2,K4 — each target has incoming support edges."
+    },
+    {
+      "expectation": "Every key node has an observable capability statement, a plausible misconception (e.g. larger numerator and denominator imply a larger fraction), and an assessment item spanning explanation, application or transfer.",
+      "passed": false,
+      "evidence": "Nodes carry only id/name/level/is_bottleneck; there are no per-node observable capability statements, no per-node misconceptions, and no per-node assessment items — only global success_criteria (K1-K4) and week-level exit_criteria exist."
+    },
+    {
+      "expectation": "Traceability connects nodes to S1 capabilities and S2 audited evidence, and G3 routes deterministically to S4 when all invariants hold.",
+      "passed": false,
+      "evidence": "S2 traceability is explicit (basis cites 'S2 审计证据'; C1-C7 ids match evidence levels), but S1 capability traceability is only implicit; next_stage=S4 is declared yet no invariant model or conditional gating ('when all invariants hold') is shown."
+    }
+  ],
+  "overall_passed": false,
+  "summary": "Graph topology and target-capability tracing are sound, but per-node rationales, misconceptions, assessment items, and invariant-gated S4 routing are missing.",
+  "grader_elapsed_s": 106.68,
+  "grader_exit_status": 0,
+  "grader_modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 3139,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.016045,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 26975,
+      "outputTokens": 6311,
+      "cacheReadInputTokens": 704,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.293002,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "grader_cost_usd": 0.30904699999999996
+}

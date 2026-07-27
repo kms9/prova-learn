@@ -1,0 +1,36 @@
+{
+  "route": "gclaude",
+  "route_role": "primary_gclaude",
+  "fallback_for": null,
+  "status": "completed",
+  "exit_code": 0,
+  "is_error": false,
+  "api_error_status": null,
+  "terminal_reason": "completed",
+  "session_id": "fa30577e-50fe-4a73-a589-19a4bd09bf9c",
+  "uuid": "7b0798a3-a839-488b-9c31-bee9820c5aa6",
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 988,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 256,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.005392999999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "glm-5.2": {
+      "inputTokens": 79650,
+      "outputTokens": 34849,
+      "cacheReadInputTokens": 1692480,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 2.115715,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "result_format": "explanatory-prefix-plus-single-json-object",
+  "inner_file": "final-primary-gclaude-crosscheck.inner.json"
+}

@@ -1,0 +1,23 @@
+{
+  "route": "gclaude",
+  "exit_code": 0,
+  "is_error": false,
+  "terminal_reason": "completed",
+  "session_id": "28615eb3-3fb6-421d-89b2-f6c2f4065981",
+  "uuid": "5ebe1b65-5e2e-4e29-9269-c6692a39db90",
+  "duration_ms": 237341,
+  "inner_result": "final-gclaude-audit-rerun.inner.json",
+  "inner_json_valid": true,
+  "modelUsage": {
+    "glm-5.1": {
+      "inputTokens": 435,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 256
+    },
+    "glm-5.2": {
+      "inputTokens": 98458,
+      "outputTokens": 19744,
+      "cacheReadInputTokens": 939072
+    }
+  }
+}

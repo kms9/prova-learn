@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.skills.example/schemas/learner-snapshot-1.0.0.json",
+  "title": "learner_snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "artifact_id", "content"],
+  "properties": {
+    "type": {"const": "learner_snapshot"},
+    "schema_version": {"const": "1.0.0"},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "learner_id",
+        "model_version",
+        "node_states",
+        "learning_frontier",
+        "misconceptions",
+        "capability_gaps",
+        "transfer_performance",
+        "diagnosis_evidence_mapping",
+        "items_needing_retest_or_human_confirmation",
+        "evidence_validity"
+      ],
+      "properties": {
+        "learner_id": {"type": "string", "minLength": 1},
+        "model_version": {"type": "integer", "minimum": 0},
+        "as_of": {"type": ["string", "null"], "format": "date-time"},
+        "node_states": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "node_id",
+              "status",
+              "evidence_refs",
+              "error_type",
+              "hint_dependency",
+              "confidence_calibration"
+            ],
+            "properties": {
+              "node_id": {"type": "string", "minLength": 1},
+              "status": {
+                "enum": [
+                  "tested_mastered",
+                  "tested_not_mastered",
+                  "insufficient_evidence",
+                  "untested"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              },
+              "error_type": {
+                "enum": [
+                  "none",
+                  "recall_only",
+                  "procedural_error",
+                  "conceptual_misconception",
+                  "partial_reasoning",
+                  "transfer_failure",
+                  "guess",
+                  "no_response",
+                  "unknown"
+                ]
+              },
+              "hint_dependency": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["level", "evidence_refs"],
+                "properties": {
+                  "level": {
+                    "enum": ["none", "low", "medium", "high", "unknown"]
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1}
+                  }
+                }
+              },
+              "confidence_calibration": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["self_confidence", "observed_alignment"],
+                "properties": {
+                  "self_confidence": {
+                    "type": ["number", "null"],
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "observed_alignment": {
+                    "enum": ["overconfident", "calibrated", "underconfident", "unknown"]
+                  }
+                }
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {"const": "tested_mastered"}
+                  },
+                  "required": ["status"]
+                },
+                "then": {
+                  "properties": {
+                    "hint_dependency": {
+                      "properties": {
+                        "level": {"enum": ["none", "low"]}
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "learning_frontier": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nearest_learnable_node_id", "evidence_refs", "rationale"],
+          "properties": {
+            "nearest_learnable_node_id": {"type": "string", "minLength": 1},
+            "evidence_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "rationale": {"type": "string", "minLength": 1},
+            "alternative_candidate_node_ids": {
+              "type": "array",
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "misconceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "description", "evidence_refs"],
+            "properties": {
+              "code": {"type": "string", "minLength": 1},
+              "description": {"type": "string", "minLength": 1},
+              "evidence_refs": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string", "minLength": 1}
+              },
+              "related_node_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
+        "capability_gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["node_id", "description", "evidence_refs"],
+            "properties": {
+              "node_id": {"type": "string", "minLength": 1},
+              "description": {"type": "string", "minLength": 1},
+              "evidence_refs": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
+        "transfer_performance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "evidence_refs"],
+          "properties": {
+            "status": {
+              "enum": [
+                "demonstrated",
+                "partial",
+                "not_demonstrated",
+                "insufficient_evidence"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {"type": "string", "minLength": 1}
+            },
+            "summary": {"type": ["string", "null"]}
+          }
+        },
+        "diagnosis_evidence_mapping": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["conclusion", "evidence_refs"],
+            "properties": {
+              "conclusion": {"type": "string", "minLength": 1},
+              "evidence_refs": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
+        "items_needing_retest_or_human_confirmation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["node_id", "kind", "reason"],
+            "properties": {
+              "node_id": {"type": "string", "minLength": 1},
+              "kind": {"enum": ["retest", "human_confirmation"]},
+              "reason": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "evidence_validity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["valid_until", "stale_evidence_refs"],
+          "properties": {
+            "valid_until": {"type": ["string", "null"], "format": "date-time"},
+            "stale_evidence_refs": {
+              "type": "array",
+              "items": {"type": "string", "minLength": 1}
+            },
+            "policy": {"type": ["string", "null"]}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0.0",
+  "stage_id": "S7",
+  "run_id": "s7-btree-eq-20260727-001",
+  "learner_id": "learner-btree-01",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "session_package_and_trace",
+      "node_mastery_rules",
+      "learner_snapshot",
+      "plan_and_graph"
+    ],
+    "expected_schema_versions": {
+      "session_package_and_trace": "1.0.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "会话记录完整且已通过 G6",
+    "节点掌握规则在测评前已确定",
+    "expected_model_version=4 为上游传入的预期版本",
+    "学习者模型存在持久化后端，但当前会话无法写入"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "GAP-EVID-001",
+      "description": "唯一掌握证据为一道识别题，缺少推理质量、独立应用、提示依赖、迁移、置信校准与延迟保持等五维证据",
+      "criticality": "critical",
+      "gate_effect": "block"
+    },
+    {
+      "id": "GAP-VER-001",
+      "description": "expected_model_version=4 但持久层当前版本为 5，版本冲突阻止原子更新",
+      "criticality": "high",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "模型主张基于单次识别题正确即将掌握概率设为 0.95 并推进到下一章——构成重大路径变更，升级为强制确认",
+    "questions": [
+      "是否同意基于单一识别题正确（B-tree 适合等值查询吗？— 是）即判定为已掌握并推进到下一章？"
+    ],
+    "response": {
+      "decision": "rejected",
+      "basis": "EVIDENCE_INSUFFICIENT — 仅识别题正确，无推理、独立应用、迁移、延迟保持或置信校准证据；单次正确不得越级写为高掌握概率",
+      "version_note": "expected_model_version=4 但持久层当前版本为 5，版本冲突，不应用任何补丁"
+    },
+    "status": "rejected",
+    "confirmed_at": "2026-07-27T00:00:00Z",
+    "assumptions_changed": [
+      "推翻模型假设：单次识别正确≠已掌握，不得将 0.95 写入学习者模型"
+    ]
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "E1",
+      "provenance": "learner_behavior",
+      "source_ref": "session_interaction",
+      "summary": "识别题：B-tree 适合等值查询吗？— 答'是'，结果正确。无推理过程、无独立应用、无提示层级记录、无迁移、无延迟复测、无置信校准记录",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "MODEL_CLAIM_001",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "模型主张将掌握概率改为 0.95 并推进到下一章，无推理、独立应用、迁移或延迟证据支撑",
+      "status": "unsupported"
+    },
+    {
+      "evidence_id": "VER_CHECK_001",
+      "provenance": "external_evidence",
+      "source_ref": "learner_model_persistence",
+      "summary": "expected_model_version=4，持久层 load(learner_id, as_of) 返回 current_model_version=5，版本不匹配",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "子流程一 mastery_verification：采集节点 btree_equal_query 多维证据——correctness=correct（仅识别题正确），reasoning_quality=unknown（无推理记录），hint_dependency=not_executed（未记录提示层级），transfer=not_executed（无近/远迁移），confidence=unknown（未记录猜测概率或校准），delayed_retention=not_executed（无延迟保持证据）",
+    "掌握判定：6 维证据中 5 维缺失，无法满足任何预定义掌握规则 → status=evidence_insufficient，attribution.primary=EVIDENCE_INSUFFICIENT",
+    "子流程二 learner_model_update_and_replan：load(learner-btree-01, as_of=2026-07-27) → current_model_version=5，expected_model_version=4 → 版本冲突。不应用任何补丁，model_patch=[]",
+    "update.status=version_conflict，update.persistence=not_executed。即使版本匹配，证据不足也不得将节点标为已掌握",
+    "归因路由：primary=EVIDENCE_INSUFFICIENT（最早污染源），secondary=[]。按路由表 route_to=S7 补测",
+    "重新加载指令：需以 expected_model_version=5 重新加载学习者模型后再执行 S7"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "唯一证据 E1 为识别题正确，correctness 维度外其余 5 维（reasoning_quality/hint_dependency/transfer/confidence/delayed_retention）均为 unknown 或 not_executed"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "掌握规则一致性",
+        "evidence": [
+          "单题识别正确与预定义掌握规则不匹配；0.95 掌握概率没有规则支撑，且与多维证据缺失矛盾"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "提示影响控制",
+        "evidence": [
+          "提示层级未记录（hint_dependency=not_executed），无法评估提示影响"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "迁移与延迟证据",
+        "evidence": [
+          "transfer=not_executed（无近迁移或远迁移），delayed_retention=not_executed（无延迟保持数据）"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "更新前后一致性",
+        "evidence": [
+          "版本冲突：expected_model_version=4 ≠ loaded_model_version=5，model_patch=[]，无更新可追溯。即使版本匹配，0.95 变更也无法追溯到多维新证据"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "调整可解释性",
+        "evidence": [
+          "模型主张推进到下一章，但 0.95 掌握无证据支撑；路径变更无合理理由"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "避免单次结果过度反应",
+        "evidence": [
+          "从单次识别题正确直接跳至 0.95 掌握概率并推进到下一章，构成严重过度反应。confidence=unknown，无校准依据。触犯 fail-closed 规则：无独立应用、迁移或必要延迟证据时不得标为 mastered"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      }
+    ],
+    "evidence": [
+      "E1：识别题正确，但 reasoning_quality/transfer/delayed_retention/hint_dependency/confidence 均缺失",
+      "VER_CHECK_001：expected_model_version=4 与持久层 version=5 冲突",
+      "单次识别正确不得越级写为高掌握概率（SKILL.md §Fail closed + 示例 C）",
+      "多维证据任一关键维度缺失即不得标为已掌握（SKILL.md §子流程一 步骤 4）"
+    ],
+    "verdict": "revise_here",
+    "route_to": "S7"
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [
+      "E1",
+      "MODEL_CLAIM_001",
+      "VER_CHECK_001"
+    ],
+    "source_sections": [
+      "references/example.md §示例 C（反向）— 一次选择题正确即 0.95 掌握",
+      "references/stage-contract.md §7 确定性返工与路由表 — EVIDENCE_INSUFFICIENT → S7",
+      "references/stage-contract.md §8 版本冲突处理 — expected_model_version 不匹配时 version_conflict",
+      "SKILL.md §Fail closed — 无独立应用、迁移或必要延迟证据时不得标为 mastered"
+    ],
+    "fixture_type": "observed"
+  },
+  "created_at": "2026-07-27T00:00:00Z"
+}

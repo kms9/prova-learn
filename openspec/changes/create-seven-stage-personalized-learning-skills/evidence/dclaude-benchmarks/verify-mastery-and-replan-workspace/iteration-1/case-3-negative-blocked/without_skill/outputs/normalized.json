@@ -1,0 +1,101 @@
+{
+  "stage": "S7",
+  "stage_name": "个性化学习评估与决策",
+  "timestamp": "2026-07-27T00:00:00Z",
+  "input_state": {
+    "user_id": null,
+    "current_knowledge_point": "B-tree",
+    "current_chapter": "unknown",
+    "model_version_expected": 4,
+    "model_version_loaded": 5,
+    "prior_mastery_probability": null,
+    "candidate_mastery_probability": 0.95,
+    "requested_action": "advance_to_next_chapter"
+  },
+  "evidence_inventory": [
+    {
+      "evidence_id": "e1",
+      "type": "recognition",
+      "subtype": "yes_no_identification",
+      "item_stem": "B-tree适合等值查询吗？",
+      "model_response": "是",
+      "correctness": true,
+      "quality_indicators": {
+        "has_reasoning": false,
+        "has_independent_application": false,
+        "has_cue_hierarchy_data": false,
+        "has_transfer_evidence": false,
+        "has_delayed_recall": false,
+        "has_guessing_probability": false,
+        "trial_count": 1,
+        "item_format_variety": 1,
+        "difficulty_variance": 0
+      },
+      "credibility_assessment": "weak_single_recognition"
+    }
+  ],
+  "evidence_sufficiency_judgment": {
+    "sufficient_for_mastery_0_95": false,
+    "sufficient_for_chapter_advance": false,
+    "rationale": "单一识别题证据极弱。正确回答一道是非判断题仅表明最低层级的再认能力，无法推断理解深度、应用能力或知识保持。缺少推理过程、独立应用场景、提示层级数据、迁移任务和延迟测试。依据认知诊断理论中掌握推断的最低证据标准，此类证据仅能支撑猜测概率级别的临时估计，远不足以将掌握概率提升至0.95或触发章节推进。"
+  },
+  "version_mismatch": {
+    "expected": 4,
+    "actual": 5,
+    "severity": "blocking",
+    "action_required": "halt_progression",
+    "rationale": "模型版本不匹配：期望版本4但加载返回版本5，学习状态快照和当前模型能力可能存在语义偏移，在此不一致解决前任何状态变更均不可靠。"
+  },
+  "decision": {
+    "approved_mastery_update": false,
+    "rejected_mastery_target": 0.95,
+    "recommended_mastery": 0.55,
+    "recommended_mastery_rationale": "基于一条弱正反馈（再认正确），在无猜测概率记录的情况下，采用保守贝叶斯先验更新，掌握概率上限不超过0.55；该值反映'可能知道但远未确认'的状态。",
+    "approved_chapter_advance": false,
+    "next_action": "collect_stronger_evidence",
+    "prescribed_evidence_collection": [
+      {
+        "priority": 1,
+        "evidence_type": "reasoning_explanation",
+        "description": "要求模型解释'B-tree为什么适合/不适合等值查询'，评估其概念理解的深度和正确性"
+      },
+      {
+        "priority": 2,
+        "evidence_type": "independent_application",
+        "description": "给出具体查询场景，要求模型独立判断等值查询效率，不允许提示或选项"
+      },
+      {
+        "priority": 3,
+        "evidence_type": "transfer",
+        "description": "设计变式问题：对比B-tree与其他索引结构在等值查询下的差异"
+      },
+      {
+        "priority": 4,
+        "evidence_type": "delayed_recall",
+        "description": "间隔至少24小时后重新测试，排除短时记忆干扰"
+      }
+    ],
+    "blocking_issue": "resolve_version_mismatch_first",
+    "blocking_rationale": "版本不匹配必须先解决：确认模型版本并重新加载版本4的快照，或明确记录版本5与版本4之间的学习状态迁移映射。"
+  },
+  "handoff": {
+    "target_stage": "S1_or_S2",
+    "target_action": "evidence_collection_loop",
+    "carry_forward": {
+      "current_mastery_baseline": 0.55,
+      "version_mismatch_flag": true,
+      "rejected_promotion_request": {
+        "to_mastery": 0.95,
+        "to_action": "advance_chapter"
+      },
+      "minimum_evidence_required": {
+        "reasoning_trials": 2,
+        "application_trials": 2,
+        "transfer_trials": 1,
+        "delayed_recall_passed": true,
+        "guessing_probability_recorded": true
+      }
+    }
+  },
+  "status": "rejected_with_remediation_plan"
+}

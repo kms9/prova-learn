@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.skills.example/schemas/session-package-and-trace-1.0.0.json",
+  "title": "session_package_and_trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "artifact_id", "content"],
+  "properties": {
+    "type": {"const": "session_package_and_trace"},
+    "schema_version": {"const": "1.0.0"},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_goal",
+        "success_conditions",
+        "current_node",
+        "explanations",
+        "examples",
+        "activities",
+        "hint_ladder",
+        "feedback_rules",
+        "scaffolding_fade_strategy",
+        "interaction_events",
+        "candidate_mastery_evidence",
+        "content_quality_status"
+      ],
+      "properties": {
+        "session_goal": {"type": "string", "minLength": 1},
+        "success_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "current_node": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["node_id", "exit_criteria"],
+          "properties": {
+            "node_id": {"type": "string", "minLength": 1},
+            "exit_criteria": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+          }
+        },
+        "explanations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["explanation_id", "layer", "representation", "statement", "cognitive_level", "evidence_refs"],
+            "properties": {
+              "explanation_id": {"type": "string", "minLength": 1},
+              "layer": {"enum": ["core_concept", "procedure", "connection", "edge_case"]},
+              "representation": {"enum": ["symbolic", "concrete", "visual_diagram", "worked_narrative", "multiple"]},
+              "statement": {"type": "string", "minLength": 1},
+              "cognitive_level": {"enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]},
+              "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        },
+        "examples": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["positive", "negative", "boundary", "common_misconceptions"],
+          "properties": {
+            "positive": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["example_id", "summary"],
+                "properties": {
+                  "example_id": {"type": "string", "minLength": 1},
+                  "summary": {"type": "string", "minLength": 1}
+                }
+              }
+            },
+            "negative": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["example_id", "summary"],
+                "properties": {
+                  "example_id": {"type": "string", "minLength": 1},
+                  "summary": {"type": "string", "minLength": 1}
+                }
+              }
+            },
+            "boundary": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["example_id", "summary"],
+                "properties": {
+                  "example_id": {"type": "string", "minLength": 1},
+                  "summary": {"type": "string", "minLength": 1}
+                }
+              }
+            },
+            "common_misconceptions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["misconception_id", "description", "correction_ref"],
+                "properties": {
+                  "misconception_id": {"type": "string", "minLength": 1},
+                  "description": {"type": "string", "minLength": 1},
+                  "correction_ref": {"type": "string", "minLength": 1}
+                }
+              }
+            }
+          }
+        },
+        "activities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["activity_id", "kind", "instruction", "cognitive_level", "requires_learner_output"],
+            "properties": {
+              "activity_id": {"type": "string", "minLength": 1},
+              "kind": {"enum": ["exercise", "question", "project", "simulation", "retrieval_pretest", "worked_example", "completion_problem", "contrast_case", "independent_transfer"]},
+              "instruction": {"type": "string", "minLength": 1},
+              "cognitive_level": {"enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]},
+              "requires_learner_output": {"type": "boolean"},
+              "answer_leakage_control": {"type": "string"}
+            }
+          }
+        },
+        "hint_ladder": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["step", "level", "prompt", "fading_condition"],
+            "properties": {
+              "step": {"type": "integer", "minimum": 1},
+              "level": {"enum": ["light", "medium", "strong"]},
+              "prompt": {"type": "string", "minLength": 1},
+              "fading_condition": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "feedback_rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["rule_id", "task", "process", "self_regulation"],
+            "properties": {
+              "rule_id": {"type": "string", "minLength": 1},
+              "task": {"type": "string", "minLength": 1},
+              "process": {"type": "string", "minLength": 1},
+              "self_regulation": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "scaffolding_fade_strategy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["initial_support", "fade_rule", "terminal_support"],
+          "properties": {
+            "initial_support": {"type": "string", "minLength": 1},
+            "fade_rule": {"type": "string", "minLength": 1},
+            "terminal_support": {"enum": ["none", "minimal", "on_demand"]}
+          }
+        },
+        "interaction_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["event_id", "learner_response", "hints_used", "correction_trajectory"],
+            "properties": {
+              "event_id": {"type": "string", "minLength": 1},
+              "learner_response": {"type": "string", "minLength": 1},
+              "hints_used": {"type": "array", "items": {"type": "string"}},
+              "correction_trajectory": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "candidate_mastery_evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidence_id", "node_id", "dimension", "status"],
+            "properties": {
+              "evidence_id": {"type": "string", "minLength": 1},
+              "node_id": {"type": "string", "minLength": 1},
+              "dimension": {"enum": ["independent_application", "reasoning_quality", "transfer", "delayed_retention", "confidence"]},
+              "status": {"enum": ["candidate", "partial", "absent"]},
+              "limits": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "content_quality_status": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reviewed_against"],
+          "properties": {
+            "state": {"enum": ["correct", "has_error", "needs_review"]},
+            "reviewed_against": {"type": "array", "items": {"type": "string"}},
+            "errors_found": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}

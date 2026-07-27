@@ -1,0 +1,454 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.skills.example/schemas/mastery-and-replanning-bundle-1.0.0.json",
+  "title": "mastery_and_replanning_bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "artifact_id", "content"],
+  "properties": {
+    "type": {"const": "mastery_and_replanning_bundle"},
+    "schema_version": {"const": "1.0.0"},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mastery_verification",
+        "learner_model_update_and_replan",
+        "route",
+        "applicability_limits"
+      ],
+      "properties": {
+        "mastery_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "node_mastery_evidence",
+            "mastery_judgment",
+            "attribution",
+            "not_mastered_cause"
+          ],
+          "properties": {
+            "node_mastery_evidence": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "node_id",
+                  "correctness",
+                  "reasoning_quality",
+                  "hint_dependency",
+                  "transfer",
+                  "confidence",
+                  "delayed_retention"
+                ],
+                "properties": {
+                  "node_id": {"type": "string", "minLength": 1},
+                  "correctness": {"$ref": "#/$defs/evidence_dimension_correctness"},
+                  "reasoning_quality": {"$ref": "#/$defs/evidence_dimension_reasoning"},
+                  "hint_dependency": {"$ref": "#/$defs/evidence_dimension_hint"},
+                  "transfer": {"$ref": "#/$defs/evidence_dimension_transfer"},
+                  "confidence": {"$ref": "#/$defs/evidence_dimension_confidence"},
+                  "delayed_retention": {"$ref": "#/$defs/evidence_dimension_delayed"}
+                }
+              }
+            },
+            "mastery_judgment": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["node_id", "status"],
+                "properties": {
+                  "node_id": {"type": "string", "minLength": 1},
+                  "status": {
+                    "enum": [
+                      "mastered",
+                      "partial",
+                      "not_mastered",
+                      "evidence_insufficient"
+                    ]
+                  }
+                }
+              }
+            },
+            "attribution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["primary", "secondary"],
+              "properties": {
+                "primary": {
+                  "enum": [
+                    "EVIDENCE_INSUFFICIENT",
+                    "CONTENT_QUALITY",
+                    "STRATEGY_OR_SEQUENCE",
+                    "DIAGNOSTIC_ERROR",
+                    "GRAPH_ERROR",
+                    "SOURCE_ERROR",
+                    "GOAL_CHANGED",
+                    "NODE_MASTERED",
+                    "GOAL_ACHIEVED"
+                  ]
+                },
+                "secondary": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "EVIDENCE_INSUFFICIENT",
+                      "CONTENT_QUALITY",
+                      "STRATEGY_OR_SEQUENCE",
+                      "DIAGNOSTIC_ERROR",
+                      "GRAPH_ERROR",
+                      "SOURCE_ERROR",
+                      "GOAL_CHANGED",
+                      "NODE_MASTERED",
+                      "GOAL_ACHIEVED"
+                    ]
+                  }
+                }
+              }
+            },
+            "not_mastered_cause": {"type": ["string", "null"]}
+          }
+        },
+        "learner_model_update_and_replan": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "load",
+            "append_evidence",
+            "update",
+            "history",
+            "learner_id",
+            "expected_model_version",
+            "model_version",
+            "model_patch",
+            "update_status",
+            "decision",
+            "adjusted_path",
+            "next_session_contract",
+            "review_schedule"
+          ],
+          "properties": {
+            "load": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "learner_id",
+                "as_of",
+                "current_model_version",
+                "missing_fields",
+                "evidence_validity"
+              ],
+              "properties": {
+                "learner_id": {"type": "string", "minLength": 1},
+                "as_of": {"type": "string", "format": "date-time"},
+                "current_model_version": {"type": "integer", "minimum": 1},
+                "missing_fields": {
+                  "type": "array",
+                  "items": {"type": "string", "minLength": 1}
+                },
+                "evidence_validity": {
+                  "enum": ["valid", "partially_stale", "stale", "unknown"]
+                }
+              }
+            },
+            "append_evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "event_id",
+                  "immutable",
+                  "source_evidence_ids",
+                  "summary"
+                ],
+                "properties": {
+                  "event_id": {"type": "string", "minLength": 1},
+                  "immutable": {"const": true},
+                  "source_evidence_ids": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1}
+                  },
+                  "summary": {"type": "string", "minLength": 1}
+                }
+              }
+            },
+            "update": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expected_model_version",
+                "loaded_model_version",
+                "proposed_model_version",
+                "status",
+                "before",
+                "after",
+                "reason",
+                "persistence"
+              ],
+              "properties": {
+                "expected_model_version": {"type": "integer", "minimum": 1},
+                "loaded_model_version": {"type": "integer", "minimum": 1},
+                "proposed_model_version": {"type": "integer", "minimum": 1},
+                "status": {
+                  "enum": [
+                    "proposed",
+                    "applied",
+                    "not_executed",
+                    "version_conflict"
+                  ]
+                },
+                "before": {"type": "object"},
+                "after": {"type": "object"},
+                "reason": {"type": "string", "minLength": 1},
+                "persistence": {
+                  "enum": ["proposed", "applied", "not_executed"]
+                }
+              }
+            },
+            "history": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "event_id",
+                  "event_type",
+                  "created_at",
+                  "evidence_event_ids",
+                  "decision",
+                  "model_version"
+                ],
+                "properties": {
+                  "event_id": {"type": "string", "minLength": 1},
+                  "event_type": {
+                    "enum": [
+                      "evidence",
+                      "state_inference",
+                      "route_decision",
+                      "model_update"
+                    ]
+                  },
+                  "created_at": {"type": "string", "format": "date-time"},
+                  "evidence_event_ids": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1}
+                  },
+                  "decision": {"type": ["string", "null"]},
+                  "model_version": {"type": "integer", "minimum": 1}
+                }
+              }
+            },
+            "learner_id": {"type": "string", "minLength": 1},
+            "expected_model_version": {"type": "integer", "minimum": 1},
+            "model_version": {"type": "integer", "minimum": 1},
+            "model_patch": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "node_id",
+                  "before",
+                  "after",
+                  "evidence_event_ids",
+                  "rationale"
+                ],
+                "properties": {
+                  "node_id": {"type": "string", "minLength": 1},
+                  "before": {"type": ["string", "number", "null"]},
+                  "after": {"type": ["string", "number", "null"]},
+                  "evidence_event_ids": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1}
+                  },
+                  "rationale": {"type": "string", "minLength": 1}
+                }
+              }
+            },
+            "update_status": {
+              "enum": [
+                "proposed",
+                "applied",
+                "version_conflict",
+                "not_executed"
+              ]
+            },
+            "decision": {
+              "enum": ["continue", "remediate", "skip", "rediagnose", "complete"]
+            },
+            "adjusted_path": {"type": "string", "minLength": 1},
+            "next_session_contract": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "next_session_id",
+                "target_node_id",
+                "objective",
+                "required_evidence",
+                "hint_policy"
+              ],
+              "properties": {
+                "next_session_id": {"type": ["string", "null"]},
+                "target_node_id": {"type": ["string", "null"]},
+                "objective": {"type": "string", "minLength": 1},
+                "required_evidence": {
+                  "type": "array",
+                  "items": {"type": "string", "minLength": 1}
+                },
+                "hint_policy": {"type": "string", "minLength": 1}
+              }
+            },
+            "review_schedule": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["retrieval", "spacing", "interleaving", "delayed_retest"],
+              "properties": {
+                "retrieval": {
+                  "type": "array",
+                  "items": {"type": "string", "minLength": 1}
+                },
+                "spacing": {"type": "string", "minLength": 1},
+                "interleaving": {"type": "string", "minLength": 1},
+                "delayed_retest": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["scheduled", "interval_days", "target_nodes"],
+                  "properties": {
+                    "scheduled": {"type": "boolean"},
+                    "interval_days": {"type": ["integer", "null"], "minimum": 0},
+                    "target_nodes": {
+                      "type": "array",
+                      "items": {"type": "string", "minLength": 1}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "route": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["attribution", "route_to"],
+          "properties": {
+            "attribution": {
+              "enum": [
+                "EVIDENCE_INSUFFICIENT",
+                "CONTENT_QUALITY",
+                "STRATEGY_OR_SEQUENCE",
+                "DIAGNOSTIC_ERROR",
+                "GRAPH_ERROR",
+                "SOURCE_ERROR",
+                "GOAL_CHANGED",
+                "NODE_MASTERED",
+                "GOAL_ACHIEVED"
+              ]
+            },
+            "route_to": {
+              "enum": [
+                "S1",
+                "S2",
+                "S3",
+                "S4",
+                "S5",
+                "S6",
+                "S7",
+                "complete"
+              ]
+            }
+          }
+        },
+        "applicability_limits": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidence_dimension_correctness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "detail", "evidence_event_ids"],
+      "properties": {
+        "result": {"enum": ["correct", "partial", "incorrect", "unknown"]},
+        "detail": {"type": "string", "minLength": 1},
+        "evidence_event_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_dimension_reasoning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "detail", "evidence_event_ids"],
+      "properties": {
+        "result": {"enum": ["sound", "partial", "unsound", "unknown"]},
+        "detail": {"type": "string", "minLength": 1},
+        "evidence_event_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_dimension_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "detail", "evidence_event_ids"],
+      "properties": {
+        "level": {"enum": ["none", "low", "moderate", "high", "not_executed"]},
+        "detail": {"type": "string", "minLength": 1},
+        "evidence_event_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_dimension_transfer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "detail", "evidence_event_ids"],
+      "properties": {
+        "result": {"enum": ["pass", "partial", "fail", "not_executed", "unknown"]},
+        "detail": {"type": "string", "minLength": 1},
+        "evidence_event_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_dimension_confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "detail", "evidence_event_ids"],
+      "properties": {
+        "result": {"enum": ["calibrated", "undercalibrated", "uncalibrated", "unknown"]},
+        "detail": {"type": "string", "minLength": 1},
+        "evidence_event_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_dimension_delayed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "detail", "evidence_event_ids"],
+      "properties": {
+        "result": {"enum": ["pass", "partial", "fail", "not_executed"]},
+        "detail": {"type": "string", "minLength": 1},
+        "evidence_event_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

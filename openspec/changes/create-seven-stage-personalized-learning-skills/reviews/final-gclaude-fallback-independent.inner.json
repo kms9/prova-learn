@@ -1,0 +1,88 @@
+{
+  "audit_id": "final-gclaude-fallback-independent",
+  "route_role": "fallback_for=dclaude",
+  "verdict": "fail",
+  "confidence": 0.82,
+  "blocking_findings": [],
+  "major_findings": [
+    {
+      "id": "MAJ-01",
+      "artifact": "evidence/dclaude-benchmarks/{diagnose-learner-frontier,verify-mastery-and-replan}-workspace/iteration-1/benchmark.json vs case-*/with_skill/grading.json; grader_run_status.json",
+      "evidence": "The benchmark.json headline with_skill pass_rate=1.0 for two stages does not reconcile with the per-case grading.json that it claims to aggregate (tasks 8.2/9.2 require '42 graded runs aggregate to one benchmark per skill'). Triangulated by direct check + two independent sub-audits: 3 with_skill runs diverge — diagnose case-2 (benchmark 6/6=1.0 vs grading 5/6=0.833), diagnose case-3 (benchmark 6/6=1.0 vs grading 4/6=0.667), verify case-1 (benchmark 6/6=1.0 vs grading 5/6=0.833). Same model output is graded twice (case-* tree vs eval-* tree; response.txt byte-identical e.g. diagnose case-3 sha d65f2c80… in both) and the benchmark adopts the favorable eval-* grade. These are exactly the 2 workspaces whose grader_run_status.json shows exit_code:1/is_error:true (diagnose wall_seconds=14/outputTokens=187; verify wall_seconds=477), i.e. the grader did not complete cleanly yet a 1.0 benchmark was finalized. The masked grade hides real execution defects the per-case grader verified=True: diagnose case-3 emitted route_to=S1/verdict=return_upstream AND a RAW output-contract violation ('prose preamble and a markdown fence' instead of a pure JSON handoff envelope). Root cause is the dclaude grader 402 (see route_limitations) forcing a gclaude grader rescue that produced a more lenient verdict; the retained per-case grading is the stricter/honest one. (Nuance: S4 contract line 39 permits S4→S1 only when G1/G3 genuinely fail input validation, and the verify case-1 divergence appears partly a grader text-keying artifact (expectation passed=null), so the substantive defect centers on diagnose case-3; regardless, the benchmark-vs-42-grading reconciliation requirement is not met for 2/7 stages.)",
+      "required_change": "Reconcile benchmark.json to the canonical per-case grading.json for the 3 over-reported runs (or re-grade all 42 with one authoritative grader and document which tree is canonical); never finalize a benchmark while grader_run_status is is_error:true — regenerate after a clean grader run; and fix the S4 case-3 execution defects the optimistic grade masked (enforce clean JSON output with no prose/markdown fence, and confirm route_to=S1 is only emitted when G1/G3 input validation genuinely fails per contract §2, else revise_here→S4/blocked→S4)."
+    }
+  ],
+  "minor_findings": [
+    {
+      "id": "MIN-01",
+      "artifact": "evidence/dclaude-benchmarks/{create-domain-evidence-landscape,verify-mastery-and-replan}-workspace/iteration-1/grading.json (stray top-level aggregate files)",
+      "evidence": "Two workspaces contain an extra top-level iteration-1/grading.json ({skill_name,runs[]} schema) absent in the other 5; their skill_name values are wrong (create-domain-evidence copy = 'create-seven-stage-personalized-learning-skills' i.e. the change name; verify copy = 'seven-stage-personalized-learning'), and these aggregates themselves disagree with the per-case grading in spots.",
+      "required_change": "Remove the 2 stray aggregate grading.json files or normalize them to the canonical schema with correct stage skill_name."
+    },
+    {
+      "id": "MIN-02",
+      "artifact": "evidence/dclaude-benchmarks/*/iteration-1/grader-route.json (only 3/7 present); legacy-create-goal-success-contract-workspace/",
+      "evidence": "grader-route.json exists for only 3 of 7 workspaces (build-capability-concept-graph, create-domain-evidence-landscape, create-goal-success-contract); the 4 missing include both erroring workspaces — a route-provenance metadata gap. A leftover legacy-create-goal-success-contract-workspace/ dir (eval-only, no case-*/benchmark) sits alongside the canonical 7.",
+      "required_change": "Add grader-route.json to the 4 missing workspaces; remove or clearly mark the legacy-* workspace as out-of-scope."
+    },
+    {
+      "id": "MIN-03",
+      "artifact": ".agents/skills/*/references/handoff-envelope.schema.json (quality_evaluation.rubric_results; input_validation vs positive_artifact)",
+      "evidence": "The shared envelope does not mechanically enforce two contract invariants that S4 already enforces via if/then: (a) rubric_results entries allow failure_action=null and route_to=null even when passed=false (contract §0 requires both when failed); (b) input_validation.status=fail does not force positive_artifact=null (contract: no fabricated positive artifact on input-validation failure). These are contract-enforced in prose only.",
+      "required_change": "Add if/then conditionals (passed=false ⇒ failure_action/route_to non-null; input_validation.status=fail ⇒ positive_artifact null) to match the schema-enforcement standard S4 already sets."
+    },
+    {
+      "id": "MIN-04",
+      "artifact": ".agents/skills/verify-mastery-and-replan/references/mastery-and-replanning-bundle.schema.json (mastery_judgment.status; learner_model_update_and_replan.load.current_model_version)",
+      "evidence": "Asymmetry with S4: mastery_judgment.status='mastered' is not schema-enforced against weak multidimensional evidence (e.g. transfer=fail/delayed_retention=not_executed) — the mastery-threshold rule relies on the G7 rubric/contract only, whereas S4 enforces tested_mastered⇒hint level none|low at schema level. Also load.current_model_version has minimum:1, so the required load object cannot represent a cold-start 'no prior model' state (handled by routing to S4, but the field creates a modeling edge).",
+      "required_change": "Consider a schema-level link preventing mastered without supporting multidim evidence (or document why it must remain rubric-only); allow current_model_version=0 or a sentinel for cold-start in the load object."
+    }
+  ],
+  "confirmed_strengths": [
+    {
+      "strength": "Exactly seven self-contained stage skills; no 8th top-level/orchestrator/_shared skill. Each carries all 7 required files. The shared handoff schema is byte-identical across all seven skills; all schemas are Draft 2020-12 with stable identity and schema_version=1.0.0.",
+      "evidence": "Direct inventory and SHA-256 checks."
+    },
+    {
+      "strength": "S4 tested_mastered/hint_dependency is schema-enforced: tested_mastered implies hint dependency none or low.",
+      "evidence": "diagnose-learner-frontier/references/learner-snapshot.schema.json and stage contract."
+    },
+    {
+      "strength": "S7 attribution/version/history invariants are schema-enforced with honest version_conflict/not_executed states and nine deterministic attribution routes.",
+      "evidence": "verify-mastery-and-replan schema and stage contract."
+    },
+    {
+      "strength": "S1/S2 research evidence fails closed and eval expectations remain grader-held rather than injected into executor prompts.",
+      "evidence": "S1/S2 schemas/contracts and all seven evals.json files."
+    },
+    {
+      "strength": "The dclaude 402 is preserved with empty modelUsage and zero tokens, while the fallback is declared fallback_for=dclaude and is not mislabeled as dclaude.",
+      "evidence": "final-dclaude-closure.outer.json and final-route-fallback-approval.md."
+    },
+    {
+      "strength": "Two complete integration chains and one retained-history remediation loop exist, and the durable error ledger preserves failures before fixes.",
+      "evidence": "integration-audits.json and the durable error ledger."
+    }
+  ],
+  "route_limitations": [
+    {
+      "limitation": "dclaude final audit returned HTTP 402 before inference with empty modelUsage and no inner verdict. The user-authorized gclaude fallback fills that audit slot without claiming provider diversity.",
+      "evidence": "final-dclaude-closure.outer.json and final-route-fallback-approval.md."
+    },
+    {
+      "limitation": "The accepted final sessions are both gclaude sessions, so the final audit has session independence but not provider diversity.",
+      "evidence": "Actual outer modelUsage and fallback provenance."
+    },
+    {
+      "limitation": "The fallback independent pass intentionally did not read protected prior gclaude verdict files; mutual cross-check remains a subsequent task.",
+      "evidence": "Independent audit prompt."
+    }
+  ],
+  "required_changes": [
+    "Reconcile the three reported benchmark/grading differences or re-grade with one authoritative canonical tree and regenerate clean benchmark evidence.",
+    "Do not finalize S4/S7 benchmarks with failed grader status; preserve historical failures and add clean current grader evidence.",
+    "Fix any confirmed S4 negative-case output/route defects.",
+    "Remove or normalize two stray root grading aggregates, complete grader-route summaries, and clearly mark the legacy workspace out-of-scope.",
+    "Strengthen confirmed handoff schema invariants and adjudicate the S7 schema suggestions."
+  ]
+}
