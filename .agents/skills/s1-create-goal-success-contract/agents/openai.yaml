@@ -1,0 +1,4 @@
+interface:
+  display_name: "目标与成功契约"
+  short_description: "校准可验收目标，形成六源领域研究的范围与检索种子，并落盘为可检索的 run folder"
+  default_prompt: "使用 $create-goal-success-contract 把我的学习目标校准成可观察、可验收的成功契约，按本 Skill 内的 G1 明确定义验收并形成 S2 六源研究简报；在 workspace/<project-slug>/runs/<run-id>/ 下落盘一个 LLM Wiki run folder：sources.jsonl 记预检来源、coverage.md 记六类覆盖、evidence_table.md 记来源↔结论支撑、capabilities.jsonl 与 terminology.jsonl 记录、goal-contract.md / research-brief.md / confirmation.md / g1-evaluation.md / verification.md 与 INDEX.md 主索引；状态机带 guard 推进、稳定 ID 跨文件互引，不产出单体 JSON、HTML 或图片。"

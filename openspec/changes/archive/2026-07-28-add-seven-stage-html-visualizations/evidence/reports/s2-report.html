@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>七阶段学习工件可视化</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #526076;
+      --paper: #f6f8fc;
+      --surface: #ffffff;
+      --line: #cbd5e1;
+      --brand: #174ea6;
+      --brand-soft: #e8f0fe;
+      --good: #12643b;
+      --good-soft: #e7f6ed;
+      --warn: #8a4b08;
+      --warn-soft: #fff3d6;
+      --bad: #9f1d24;
+      --bad-soft: #fdebec;
+      --focus: #7c3aed;
+      --shadow: 0 12px 30px rgb(23 32 51 / 10%);
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    body { margin: 0; }
+    button, input, select, textarea { font: inherit; }
+    button, input, select, textarea, [tabindex="0"] { outline-offset: 3px; }
+    :focus-visible { outline: 3px solid var(--focus); }
+    button { cursor: pointer; }
+    a { color: var(--brand); }
+    .skip-link { position: absolute; left: 1rem; top: -5rem; background: var(--ink); color: white; padding: .75rem 1rem; z-index: 20; }
+    .skip-link:focus { top: 1rem; }
+    .app-header { color: white; background: linear-gradient(125deg, #15365e, #174ea6 62%, #3367d6); padding: 2rem max(1rem, calc((100% - 1180px) / 2)); }
+    .eyebrow { margin: 0 0 .35rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .82; }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { margin: 0; font-size: clamp(1.7rem, 4vw, 3rem); }
+    .subtitle { margin: .65rem 0 0; max-width: 75ch; }
+    .layout { width: min(1180px, calc(100% - 2rem)); margin: 1rem auto 3rem; }
+    .authority { display: flex; gap: .65rem; align-items: flex-start; border: 1px solid #e2b84b; background: var(--warn-soft); padding: .85rem 1rem; border-radius: .8rem; margin-bottom: 1rem; }
+    .authority strong { white-space: nowrap; }
+    .loader { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; padding: 1rem; box-shadow: var(--shadow); }
+    .drop-zone { border: 2px dashed #7b8aa4; border-radius: .75rem; padding: .8rem; }
+    .drop-zone.is-dragging { border-color: var(--brand); background: var(--brand-soft); }
+    .file-label { display: inline-block; color: white; background: var(--brand); border-radius: .55rem; padding: .65rem .9rem; font-weight: 700; cursor: pointer; }
+    #json-file { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; }
+    .status-line { min-height: 1.5rem; margin: .5rem 0 0; color: var(--muted); }
+    .identity { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .7rem; margin: 1rem 0; }
+    .identity-card, .metric, .card, .panel-box { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: .8rem; }
+    .identity-card { padding: .7rem .8rem; }
+    .identity-card span { display: block; color: var(--muted); font-size: .83rem; }
+    .identity-card strong { overflow-wrap: anywhere; }
+    .badge { display: inline-flex; gap: .35rem; align-items: center; border: 1px solid currentColor; border-radius: 999px; padding: .15rem .55rem; font-size: .82rem; font-weight: 700; }
+    .badge::before { content: "●"; }
+    .badge.good { color: var(--good); background: var(--good-soft); }
+    .badge.warn { color: var(--warn); background: var(--warn-soft); }
+    .badge.bad { color: var(--bad); background: var(--bad-soft); }
+    .tab-list { display: flex; gap: .35rem; overflow-x: auto; border-bottom: 2px solid var(--line); margin-top: 1.2rem; }
+    [role="tab"] { flex: 0 0 auto; color: var(--muted); background: transparent; border: 0; border-bottom: 4px solid transparent; padding: .8rem 1rem; font-weight: 700; }
+    [role="tab"][aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); background: var(--brand-soft); }
+    [role="tabpanel"] { padding-top: 1rem; }
+    [role="tabpanel"][hidden] { display: none; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(16rem, .6fr); gap: 1rem; }
+    .panel-box { padding: 1rem; box-shadow: 0 4px 12px rgb(23 32 51 / 5%); }
+    .panel-box > :first-child { margin-top: 0; }
+    .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+    .metric { padding: .8rem; }
+    .metric strong { display: block; font-size: 1.5rem; }
+    .metric span { color: var(--muted); font-size: .88rem; }
+    .toolbar { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(10rem, .35fr) auto; gap: .7rem; align-items: end; margin-bottom: 1rem; }
+    label > span, .field-label { display: block; color: var(--muted); font-weight: 700; font-size: .85rem; margin-bottom: .25rem; }
+    input[type="search"], select, textarea, input[type="text"] { width: 100%; border: 1px solid #8896aa; border-radius: .55rem; background: white; color: var(--ink); padding: .62rem .7rem; }
+    textarea { min-height: 7rem; resize: vertical; }
+    .button { border: 1px solid var(--brand); color: white; background: var(--brand); border-radius: .55rem; padding: .6rem .85rem; font-weight: 700; }
+    .button.secondary { color: var(--brand); background: white; }
+    .result-count { margin: .2rem 0 .8rem; color: var(--muted); }
+    .section-stack { display: grid; min-width: 0; gap: 1rem; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: .75rem; }
+    .card { padding: .85rem; overflow-wrap: anywhere; }
+    .card h3 { margin: 0 0 .45rem; font-size: 1rem; }
+    .card p { margin: .35rem 0; }
+    .card-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .7rem; }
+    .link-button { border: 0; padding: .25rem 0; color: var(--brand); background: transparent; font-weight: 700; text-decoration: underline; }
+    .selection { display: inline-flex; gap: .4rem; align-items: center; }
+    dl { display: grid; grid-template-columns: minmax(7rem, .28fr) minmax(0, 1fr); gap: .35rem .7rem; margin: .4rem 0; }
+    dt { color: var(--muted); font-weight: 700; }
+    dd { margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: .65rem; }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    caption { text-align: left; font-weight: 700; padding: .7rem; }
+    th, td { text-align: left; vertical-align: top; border-top: 1px solid var(--line); padding: .6rem; overflow-wrap: anywhere; }
+    th { background: #eef3fa; }
+    .timeline { border-left: 3px solid var(--brand); margin-left: .5rem; padding-left: 1rem; }
+    .timeline-item { position: relative; margin: 0 0 1rem; }
+    .timeline-item::before { content: ""; position: absolute; left: -1.42rem; top: .35rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--brand); border: 2px solid white; box-shadow: 0 0 0 1px var(--brand); }
+    .bar-row { display: grid; grid-template-columns: minmax(7rem, .4fr) 1fr auto; gap: .6rem; align-items: center; margin: .55rem 0; }
+    .bar-track { height: .85rem; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--brand); }
+    .graph-wrap { width: 100%; max-width: 100%; min-width: 0; overflow: auto; border: 1px solid var(--line); border-radius: .7rem; background: #fbfdff; }
+    .graph-wrap svg { min-width: 760px; width: 100%; height: auto; display: block; }
+    .graph-node rect { fill: white; stroke: var(--brand); stroke-width: 2; }
+    .graph-node text { fill: var(--ink); font-size: 13px; pointer-events: none; }
+    .graph-node:focus rect, .graph-node:hover rect { fill: var(--brand-soft); stroke: var(--focus); stroke-width: 3; }
+    .edge-hard { stroke: var(--bad); stroke-width: 2.5; }
+    .edge-soft { stroke: var(--brand); stroke-width: 2; stroke-dasharray: 7 5; }
+    .edge-other { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 2 4; }
+    .legend { display: flex; flex-wrap: wrap; gap: .8rem; color: var(--muted); margin: .6rem 0; }
+    .legend span::before { content: "━━"; margin-right: .35rem; }
+    .legend .hard::before { color: var(--bad); }
+    .legend .soft::before { color: var(--brand); content: "┄┄"; }
+    .legend .other::before { color: var(--muted); content: "···"; }
+    .detail-drawer { border-left: 5px solid var(--brand); }
+    .empty { color: var(--muted); font-style: italic; padding: .7rem 0; }
+    .raw { max-height: 70vh; overflow: auto; margin: 0; padding: 1rem; border-radius: .65rem; color: #e8edf8; background: #111827; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .draft-grid { display: grid; grid-template-columns: 1fr minmax(16rem, .4fr); gap: 1rem; }
+    .draft-warning { border-left: 4px solid var(--warn); background: var(--warn-soft); padding: .7rem; }
+    .hint { border: 1px solid var(--line); border-radius: .65rem; padding: .7rem; margin: .6rem 0; }
+    .hint [hidden] { display: none; }
+    .route-footer { margin-top: 1rem; border-top: 2px solid var(--line); padding-top: 1rem; color: var(--muted); }
+    @media (max-width: 760px) {
+      .loader, .hero-grid, .draft-grid, .toolbar { grid-template-columns: 1fr; }
+      .identity { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metrics { grid-template-columns: 1fr; }
+      dl { grid-template-columns: 1fr; }
+      dt { margin-top: .35rem; }
+    }
+    @media (max-width: 360px) {
+      .layout { width: min(100% - 1rem, 1180px); }
+      .identity { grid-template-columns: 1fr; }
+      [role="tab"] { padding-inline: .65rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+    @media print {
+      .loader, .tab-list, .toolbar, .card-actions, .draft-actions, .skip-link { display: none !important; }
+      body, html { background: white; }
+      [role="tabpanel"][hidden] { display: block; }
+      [role="tabpanel"] { break-inside: avoid; }
+      .panel-box, .card { box-shadow: none; }
+      .raw { color: black; background: white; max-height: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="app-header">
+    <p class="eyebrow">Derived learning artifact</p>
+    <h1 id="page-title">七阶段学习工件可视化</h1>
+    <p class="subtitle" id="page-subtitle">选择一个规范 JSON 移交信封，或查看已嵌入的阶段结果。</p>
+  </header>
+  <main class="layout" id="main">
+    <div class="authority" role="note">
+      <strong>真值源提示</strong>
+      <span>本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。</span>
+    </div>
+    <section class="loader" aria-labelledby="loader-title">
+      <div class="drop-zone" id="drop-zone">
+        <h2 id="loader-title">装载本地移交信封</h2>
+        <p>文件只在当前浏览器内读取，不会上传。也可以把 JSON 拖到此区域。</p>
+        <label class="file-label" for="json-file">选择 JSON 文件</label>
+        <input id="json-file" type="file" accept="application/json,.json">
+        <p class="status-line" id="load-status" role="status" aria-live="polite">正在检查嵌入数据…</p>
+      </div>
+      <button class="button secondary" id="reset-button" type="button">恢复嵌入数据</button>
+    </section>
+
+    <section class="identity" aria-label="工件身份">
+      <div class="identity-card"><span>阶段</span><strong id="identity-stage">未装载</strong></div>
+      <div class="identity-card"><span>运行</span><strong id="identity-run">—</strong></div>
+      <div class="identity-card"><span>状态</span><strong id="identity-status">—</strong></div>
+      <div class="identity-card"><span>信封版本</span><strong id="identity-schema">—</strong></div>
+      <div class="identity-card"><span>下一路由</span><strong id="identity-route">—</strong></div>
+    </section>
+
+    <nav class="tab-list" role="tablist" aria-label="报告区域">
+      <button id="tab-overview" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0">总览</button>
+      <button id="tab-details" role="tab" aria-selected="false" aria-controls="panel-details" tabindex="-1">阶段详情</button>
+      <button id="tab-evidence" role="tab" aria-selected="false" aria-controls="panel-evidence" tabindex="-1">证据与追溯</button>
+      <button id="tab-quality" role="tab" aria-selected="false" aria-controls="panel-quality" tabindex="-1">质量与门禁</button>
+      <button id="tab-raw" role="tab" aria-selected="false" aria-controls="panel-raw" tabindex="-1">原始 JSON</button>
+    </nav>
+
+    <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0"></section>
+    <section id="panel-details" role="tabpanel" aria-labelledby="tab-details" tabindex="0" hidden>
+      <div class="toolbar" aria-label="阶段数据筛选">
+        <label><span>搜索当前阶段实体</span><input id="search-input" type="search" placeholder="输入标识、名称或说明"></label>
+        <label><span>状态或类型</span><select id="status-filter"><option value="">全部</option></select></label>
+        <button class="button secondary" id="clear-filter" type="button">清除筛选</button>
+      </div>
+      <p class="result-count" id="result-count" role="status" aria-live="polite">0 / 0</p>
+      <div class="section-stack" id="stage-special"></div>
+      <div class="section-stack" id="stage-fields"></div>
+      <aside class="panel-box detail-drawer" id="detail-drawer" aria-labelledby="detail-title">
+        <h2 id="detail-title">按需详情</h2>
+        <p class="empty">选择一个实体查看完整字段。</p>
+      </aside>
+    </section>
+    <section id="panel-evidence" role="tabpanel" aria-labelledby="tab-evidence" tabindex="0" hidden></section>
+    <section id="panel-quality" role="tabpanel" aria-labelledby="tab-quality" tabindex="0" hidden></section>
+    <section id="panel-raw" role="tabpanel" aria-labelledby="tab-raw" tabindex="0" hidden>
+      <div class="panel-box">
+        <div class="card-actions">
+          <button class="button secondary" id="copy-raw" type="button">复制当前 JSON</button>
+          <span id="copy-status" role="status" aria-live="polite"></span>
+        </div>
+        <pre class="raw" id="raw-json"></pre>
+      </div>
+    </section>
+    <footer class="route-footer" id="route-footer">尚未装载路由信息。</footer>
+  </main>
+
+  <script id="stage-data" type="application/json">{"schema_version":"1.1.0","stage_id":"S2","run_id":"html-smoke-S2","learner_id":"learner-fixture","status":"completed","input_contract":{"artifact_refs":[],"expected_schema_versions":{}},"input_validation":{"status":"pass","missing_fields":[],"stale_inputs":[],"errors":[]},"assumptions":["这是浏览器验收夹具，不是真实学习者观察。"],"requirement_gaps":[],"confirmation":{"mode":"inform","trigger":null,"questions":[],"response":null,"status":"acknowledged","confirmed_at":"2026-07-27T02:00:00Z","assumptions_changed":[]},"evidence_collected":[{"evidence_id":"fixture-evidence","provenance":"model_hypothesis","source_ref":null,"summary":"仅用于验证页面的示例证据。","status":"not_executed"}],"processing_record":["构造最小浏览器验收信封。"],"positive_artifact":{"type":"domain_evidence_landscape","schema_version":"1.0.0","artifact_id":"fixture-S2","content":{"scope":"PostgreSQL 18 查询诊断","research_executed":true,"research_run_manifest":[{"run_id":"research-1","status":"completed","summary":"官方文档、实践、岗位和反方证据"}],"category_coverage":[{"category":"official_academic","status":"covered","sample_count":3},{"category":"adversarial_frontier","status":"gap","sample_count":0}],"source_ledger":[{"source_id":"src-pg","type":"official","summary":"PostgreSQL EXPLAIN 文档"}],"claims":[{"claim_id":"claim-cost","statement":"cost 不是运行毫秒","status":"supported","evidence_refs":["src-pg"]}],"consensus":["先测量再修改"],"disagreements":["是否应默认加索引"],"evidence_gaps":[{"id":"gap-distribution","criticality":"high","description":"缺少真实数据分布"}]}},"quality_evaluation":{"rubric_results":[],"evidence":["仅用于页面路由冒烟。"],"verdict":"pass","route_to":"S3"},"presentation_artifact":{"format":"html","status":"generated","path":"reports/s2-report.html","authority":"derived_non_authoritative","source":{"stage_id":"S2","run_id":"html-smoke-S2","envelope_schema_version":"1.1.0","artifact_id":"fixture-S2","artifact_schema_version":"1.0.0"},"interaction_mode":"draft_export_only","generated_at":"2026-07-27T02:01:00Z","validation":{"html_parse":"pass","accessibility_smoke":"not_run","interaction_smoke":"not_run"},"reason":null},"traceability":{"source_artifact_ids":[],"source_evidence_ids":["fixture-evidence"],"source_sections":["openspec fixture"],"fixture_type":"simulated_fixture"},"created_at":"2026-07-27T02:00:00Z"}</script>
+  <script>
+    "use strict";
+    const NS = "http://www.w3.org/2000/svg";
+    const STAGES = {
+      S1: {
+        title: "S1 目标成功契约",
+        subtitle: "把模糊愿望校准为可观察、可验收且经过确认的成功契约。",
+        action: "goal_contract_confirmation_draft",
+        fields: ["target_problem", "target_scene", "observable_capabilities", "final_assessment", "pass_rules", "scope", "exclusions", "constraints", "external_research_seed", "open_questions", "confirmed_items"]
+      },
+      S2: {
+        title: "S2 领域证据地形",
+        subtitle: "查看真实研究轮次、来源覆盖、主张、共识、分歧与证据缺口。",
+        action: "evidence_review_draft",
+        fields: ["scope", "terminology", "research_executed", "research_run_manifest", "category_coverage", "source_ledger", "core_questions_and_mental_models", "jd_capability_matrix", "interview_assessment_matrix", "claims", "consensus", "disagreements", "open_problems", "evidence_gaps"]
+      },
+      S3: {
+        title: "S3 能力—概念图谱",
+        subtitle: "在能力大纲、学习单元与原子知识点之间探索多对多关系和先修路径。",
+        action: "graph_review_draft",
+        fields: ["focus_question", "target_capabilities", "learning_units", "nodes", "unit_node_mappings", "edges", "assessment_items", "mastery_thresholds", "remediation_entries", "traceability"]
+      },
+      S4: {
+        title: "S4 学习者前沿诊断",
+        subtitle: "区分已掌握、学习中、受阻与待复测节点，并追到行为证据。",
+        action: "diagnosis_review_draft",
+        fields: ["learner_id", "model_version", "as_of", "node_states", "learning_frontier", "misconceptions", "capability_gaps", "transfer_performance", "diagnosis_evidence_mapping", "items_needing_retest_or_human_confirmation", "evidence_validity"]
+      },
+      S5: {
+        title: "S5 学习与会话计划",
+        subtitle: "把最近学习前沿到目标能力的最小连通子图编排为会话路线。",
+        action: "plan_confirmation_draft",
+        fields: ["stage_goals", "ordered_learning_nodes", "sessions", "assessment_schedule", "review_anchors", "risks", "alternative_routes", "exit_criteria"]
+      },
+      S6: {
+        title: "S6 教学交互",
+        subtitle: "沿当前节点查看教学内容、正反例、活动、提示和真实交互轨迹。",
+        action: "interaction_event_draft",
+        fields: ["session_goal", "success_conditions", "current_node", "explanations", "examples", "activities", "hint_ladder", "feedback_rules", "scaffolding_fade_strategy", "interaction_events", "candidate_mastery_evidence", "content_quality_status"]
+      },
+      S7: {
+        title: "S7 掌握验证与重规划",
+        subtitle: "用多维证据解释掌握判定、学习者模型更新与下一步路由。",
+        action: "mastery_review_draft",
+        fields: ["mastery_verification", "learner_model_update_and_replan", "route", "applicability_limits"]
+      }
+    };
+    const LABELS = {
+      target_problem: "目标问题", target_scene: "目标场景", observable_capabilities: "可观察能力",
+      final_assessment: "终局测评", pass_rules: "通过规则", scope: "范围", exclusions: "排除项",
+      constraints: "约束", external_research_seed: "外部预检种子", open_questions: "开放问题",
+      confirmed_items: "已确认项", terminology: "术语", research_executed: "研究执行事实",
+      research_run_manifest: "研究轮次", category_coverage: "来源类别覆盖", source_ledger: "来源台账",
+      core_questions_and_mental_models: "核心问题与心智模型", jd_capability_matrix: "岗位能力矩阵",
+      interview_assessment_matrix: "面试测评矩阵", claims: "主张", consensus: "共识",
+      disagreements: "分歧", open_problems: "开放问题", evidence_gaps: "证据缺口",
+      focus_question: "焦点问题", target_capabilities: "三层能力大纲", learning_units: "学习单元",
+      nodes: "原子知识点", unit_node_mappings: "单元—节点映射", edges: "关系边",
+      assessment_items: "测评题", mastery_thresholds: "掌握阈值", remediation_entries: "补救入口",
+      traceability: "追溯", learner_id: "学习者", model_version: "模型版本", as_of: "快照时间",
+      node_states: "节点状态", learning_frontier: "最近学习前沿", misconceptions: "误概念",
+      capability_gaps: "能力缺口", transfer_performance: "迁移表现",
+      diagnosis_evidence_mapping: "诊断证据映射", items_needing_retest_or_human_confirmation: "待复测或人工确认",
+      evidence_validity: "证据有效性", stage_goals: "阶段目标", ordered_learning_nodes: "有序学习节点",
+      sessions: "会话", assessment_schedule: "测评计划", review_anchors: "复习锚点", risks: "风险",
+      alternative_routes: "备选路线", exit_criteria: "退出标准", session_goal: "会话目标",
+      success_conditions: "成功条件", current_node: "当前节点", explanations: "解释",
+      examples: "正反例", activities: "活动", hint_ladder: "提示阶梯", feedback_rules: "反馈规则",
+      scaffolding_fade_strategy: "支架渐隐", interaction_events: "交互事件",
+      candidate_mastery_evidence: "候选掌握证据", content_quality_status: "内容质量",
+      mastery_verification: "掌握验证", learner_model_update_and_replan: "模型更新与重规划",
+      route: "路由", applicability_limits: "适用限制"
+    };
+    const state = {
+      embedded: null,
+      envelope: null,
+      selected: new Set()
+    };
+
+    function element(tag, attrs, ...children) {
+      const node = document.createElement(tag);
+      if (attrs) {
+        Object.entries(attrs).forEach(([key, val]) => {
+          if (val === null || val === undefined) return;
+          if (key === "class") node.className = val;
+          else if (key === "text") node.textContent = String(val);
+          else node.setAttribute(key, String(val));
+        });
+      }
+      children.flat().forEach(child => {
+        if (child === null || child === undefined) return;
+        node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+      });
+      return node;
+    }
+
+    function svgElement(tag, attrs) {
+      const node = document.createElementNS(NS, tag);
+      Object.entries(attrs || {}).forEach(([key, val]) => node.setAttribute(key, String(val)));
+      return node;
+    }
+
+    function hasValue(value) {
+      if (value === null || value === undefined || value === "") return false;
+      if (Array.isArray(value)) return value.length > 0;
+      if (typeof value === "object") return Object.keys(value).length > 0;
+      return true;
+    }
+
+    function displayValue(value) {
+      if (!hasValue(value)) return "未提供";
+      if (typeof value === "boolean") return value ? "是" : "否";
+      if (typeof value === "object") return JSON.stringify(value, null, 2);
+      return String(value);
+    }
+
+    function objectId(value, index) {
+      if (!value || typeof value !== "object") return `item-${index + 1}`;
+      const keys = ["id", "node_id", "unit_id", "capability_id", "session_id", "claim_id", "source_id", "evidence_id", "item_id", "event_id", "artifact_id", "question_id"];
+      const found = keys.find(key => hasValue(value[key]));
+      return found ? String(value[found]) : `item-${index + 1}`;
+    }
+
+    function objectTitle(value, index) {
+      if (typeof value !== "object" || value === null) return String(value);
+      const keys = ["title", "name", "label", "capability_statement", "description", "summary", "objective", "question", "node_id", "unit_id", "session_id", "claim_id", "source_id", "evidence_id"];
+      const found = keys.find(key => hasValue(value[key]));
+      return found ? String(value[found]) : objectId(value, index);
+    }
+
+    function statusTokens(value) {
+      if (!value || typeof value !== "object") return [];
+      const keys = ["status", "state", "verdict", "type", "node_type", "edge_type", "relationship_type", "prerequisite_strength", "provenance", "criticality", "evidence_validity"];
+      return keys.filter(key => hasValue(value[key])).map(key => String(value[key]));
+    }
+
+    function artifactContent(envelope) {
+      const artifact = envelope && envelope.positive_artifact;
+      return artifact && typeof artifact.content === "object" ? artifact.content : {};
+    }
+
+    function badge(status) {
+      const text = hasValue(status) ? String(status) : "unknown";
+      const lower = text.toLowerCase();
+      const tone = /pass|complete|mastered|valid|supported|generated|confirmed|applied/.test(lower)
+        ? "good" : /block|fail|reject|unsupported|conflict|not_mastered/.test(lower) ? "bad" : "warn";
+      return element("span", {class: `badge ${tone}`, text});
+    }
+
+    function renderDefinition(value) {
+      const dl = element("dl");
+      if (!value || typeof value !== "object" || Array.isArray(value)) {
+        dl.append(element("dt", {text: "值"}), element("dd", {text: displayValue(value)}));
+        return dl;
+      }
+      const entries = Object.entries(value);
+      if (!entries.length) {
+        dl.append(element("dt", {text: "状态"}), element("dd", {text: "未提供"}));
+        return dl;
+      }
+      entries.forEach(([key, val]) => {
+        dl.append(element("dt", {text: LABELS[key] || key}), element("dd", {text: displayValue(val)}));
+      });
+      return dl;
+    }
+
+    function openDetails(title, value) {
+      const drawer = document.getElementById("detail-drawer");
+      drawer.replaceChildren(
+        element("h2", {id: "detail-title", text: title}),
+        renderDefinition(value)
+      );
+      drawer.scrollIntoView({block: "nearest"});
+    }
+
+    function selectionControl(id) {
+      const input = element("input", {type: "checkbox"});
+      input.checked = state.selected.has(id);
+      input.addEventListener("change", () => {
+        if (input.checked) state.selected.add(id);
+        else state.selected.delete(id);
+      });
+      return element("label", {class: "selection"}, input, element("span", {text: "加入草稿"}));
+    }
+
+    function renderItem(value, index, label) {
+      const id = objectId(value, index);
+      const article = element("article", {
+        class: "card searchable",
+        "data-search": displayValue(value).toLowerCase(),
+        "data-statuses": statusTokens(value).join(" ").toLowerCase()
+      });
+      article.append(element("h3", {text: objectTitle(value, index)}));
+      if (value && typeof value === "object") {
+        const summaryKeys = Object.keys(value).slice(0, 4);
+        const summary = {};
+        summaryKeys.forEach(key => { summary[key] = value[key]; });
+        article.append(renderDefinition(summary));
+      } else {
+        article.append(element("p", {text: displayValue(value)}));
+      }
+      const detail = element("button", {class: "link-button", type: "button", text: "查看完整字段"});
+      detail.addEventListener("click", () => openDetails(`${label} · ${id}`, value));
+      article.append(element("div", {class: "card-actions"}, detail, selectionControl(id)));
+      return article;
+    }
+
+    function renderField(label, value) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: label}));
+      if (!hasValue(value)) {
+        box.append(element("p", {class: "empty", text: "未提供或为空。"}));
+      } else if (Array.isArray(value)) {
+        const grid = element("div", {class: "card-grid"});
+        value.forEach((item, index) => grid.append(renderItem(item, index, label)));
+        box.append(grid);
+      } else if (typeof value === "object") {
+        box.classList.add("searchable");
+        box.dataset.search = displayValue(value).toLowerCase();
+        box.dataset.statuses = statusTokens(value).join(" ").toLowerCase();
+        box.append(renderDefinition(value));
+      } else {
+        box.classList.add("searchable");
+        box.dataset.search = String(value).toLowerCase();
+        box.dataset.statuses = "";
+        box.append(element("p", {text: displayValue(value)}));
+      }
+      return box;
+    }
+
+    function firstSummary(content, config) {
+      for (const field of config.fields) {
+        const value = content[field];
+        if (typeof value === "string" && value.trim()) return value;
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          const key = ["summary", "description", "objective", "statement"].find(candidate => typeof value[candidate] === "string");
+          if (key) return value[key];
+        }
+      }
+      return "当前信封未提供可用的阶段摘要；请查看质量与门禁区域。";
+    }
+
+    function renderOverview(envelope, config, content) {
+      const panel = document.getElementById("panel-overview");
+      panel.replaceChildren();
+      const main = element("section", {class: "panel-box"});
+      main.append(element("h2", {text: config.title}), element("p", {text: firstSummary(content, config)}));
+      main.append(element("div", {class: "card-actions"}, badge(envelope.status), badge(envelope.quality_evaluation && envelope.quality_evaluation.verdict)));
+      const metrics = element("div", {class: "metrics"});
+      const metricFields = config.fields.filter(field => Array.isArray(content[field])).slice(0, 6);
+      if (!metricFields.length) {
+        metrics.append(metric("正向工件", envelope.positive_artifact ? "1" : "0"), metric("证据", (envelope.evidence_collected || []).length), metric("需求缺口", (envelope.requirement_gaps || []).length));
+      } else {
+        metricFields.forEach(field => metrics.append(metric(LABELS[field] || field, content[field].length)));
+      }
+      const side = element("section", {class: "panel-box"});
+      side.append(element("h2", {text: "当前门禁"}), renderDefinition({
+        输入校验: envelope.input_validation && envelope.input_validation.status,
+        确认状态: envelope.confirmation && envelope.confirmation.status,
+        质量判定: envelope.quality_evaluation && envelope.quality_evaluation.verdict,
+        下一路由: envelope.quality_evaluation && envelope.quality_evaluation.route_to,
+        HTML状态: envelope.presentation_artifact && envelope.presentation_artifact.status
+      }));
+      panel.append(element("div", {class: "hero-grid"}, main, side), metrics);
+      panel.append(renderDraftArea(envelope, config));
+    }
+
+    function metric(label, value) {
+      return element("div", {class: "metric"}, element("strong", {text: String(value)}), element("span", {text: label}));
+    }
+
+    function renderDraftArea(envelope, config) {
+      const wrap = element("section", {class: "panel-box"});
+      wrap.append(element("h2", {text: "交互草稿"}));
+      const warning = element("p", {class: "draft-warning", text: "这里只生成未提交草稿，不会改变规范 JSON，也不会自动成为学习证据。"});
+      const note = element("textarea", {id: "draft-note", placeholder: "记录确认意见、复核意见、回答或路线偏好"});
+      const answer = element("input", {id: "draft-answer", type: "text", placeholder: config.action === "interaction_event_draft" ? "输入本地回答草稿" : "可选：输入结构化选择或补充"});
+      const button = element("button", {class: "button", type: "button", text: "导出未提交草稿"});
+      button.addEventListener("click", () => exportDraft(envelope, config, note.value, answer.value));
+      const fields = element("div", null,
+        element("label", null, element("span", {text: "草稿备注"}), note),
+        element("label", null, element("span", {text: "显式输入"}), answer),
+        element("div", {class: "card-actions draft-actions"}, button)
+      );
+      const facts = element("div", null, renderDefinition({
+        动作类型: config.action,
+        已选择实体: "通过阶段详情中的“加入草稿”控制选择",
+        权威性: "unsubmitted_user_draft"
+      }));
+      wrap.append(warning, element("div", {class: "draft-grid"}, fields, facts));
+      return wrap;
+    }
+
+    function exportDraft(envelope, config, note, answer) {
+      const draft = {
+        draft_schema_version: "1.0.0",
+        authority: "unsubmitted_user_draft",
+        stage_id: envelope.stage_id,
+        run_id: envelope.run_id,
+        action_type: config.action,
+        created_at: new Date().toISOString(),
+        payload: {
+          selected_ids: Array.from(state.selected),
+          note: note || null,
+          explicit_input: answer || null
+        }
+      };
+      const blob = new Blob([JSON.stringify(draft, null, 2)], {type: "application/json"});
+      const objectUrl = URL.createObjectURL(blob);
+      const anchor = element("a", {href: objectUrl, download: `${envelope.run_id}-${envelope.stage_id}-draft.json`});
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(objectUrl);
+      announce("未提交草稿已下载；它尚未成为规范证据。");
+    }
+
+    function renderStageDetails(content, config, stageId) {
+      const fields = document.getElementById("stage-fields");
+      const special = document.getElementById("stage-special");
+      fields.replaceChildren();
+      special.replaceChildren();
+      renderSpecial(stageId, content, special);
+      config.fields.forEach(field => fields.append(renderField(LABELS[field] || field, content[field])));
+      rebuildStatusFilter();
+      applyFilters();
+    }
+
+    function renderSpecial(stageId, content, target) {
+      if (stageId === "S2") renderCoverage(content.category_coverage, target);
+      if (stageId === "S3") renderGraph(content.nodes || [], content.edges || [], target);
+      if (stageId === "S4") renderStateBars(content.node_states || [], target);
+      if (stageId === "S5") renderTimeline(content.sessions || [], "会话路线图", target);
+      if (stageId === "S6") renderHints(content.hint_ladder || [], target);
+      if (stageId === "S7") renderMastery(content.mastery_verification || {}, content.learner_model_update_and_replan || {}, target);
+      if (stageId === "S1") renderCapabilityLadder(content.observable_capabilities || [], target);
+    }
+
+    function renderCapabilityLadder(items, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: "能力—验收阶梯"}));
+      if (!items.length) box.append(element("p", {class: "empty", text: "没有可观察能力。"}));
+      else {
+        const timeline = element("div", {class: "timeline"});
+        items.forEach((item, index) => timeline.append(element("div", {class: "timeline-item searchable", "data-search": displayValue(item).toLowerCase(), "data-statuses": statusTokens(item).join(" ").toLowerCase()},
+          element("strong", {text: `${index + 1}. ${objectTitle(item, index)}`}),
+          element("p", {text: displayValue(item)})
+        )));
+        box.append(timeline);
+      }
+      target.append(box);
+    }
+
+    function renderCoverage(coverage, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: "来源类别覆盖矩阵"}));
+      if (!hasValue(coverage)) {
+        box.append(element("p", {class: "empty", text: "没有来源覆盖数据。"}));
+      } else {
+        const rows = Array.isArray(coverage) ? coverage : Object.entries(coverage).map(([category, value]) => ({category, value}));
+        box.append(renderTable("来源类别覆盖的结构化等价表", rows));
+      }
+      target.append(box);
+    }
+
+    function renderStateBars(items, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: "节点状态分布"}));
+      const counts = {};
+      items.forEach(item => {
+        const key = String((item && (item.state || item.status)) || "unknown");
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      const total = Math.max(items.length, 1);
+      Object.entries(counts).forEach(([key, count]) => box.append(barRow(key, count / total, `${count} / ${items.length}`)));
+      if (!items.length) box.append(element("p", {class: "empty", text: "没有节点状态数据。"}));
+      target.append(box);
+    }
+
+    function renderTimeline(items, title, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: title}));
+      const timeline = element("div", {class: "timeline"});
+      items.forEach((item, index) => {
+        const row = element("div", {class: "timeline-item searchable", "data-search": displayValue(item).toLowerCase(), "data-statuses": statusTokens(item).join(" ").toLowerCase()});
+        row.append(element("strong", {text: `${index + 1}. ${objectTitle(item, index)}`}), renderDefinition(item));
+        timeline.append(row);
+      });
+      box.append(items.length ? timeline : element("p", {class: "empty", text: "没有会话路线数据。"}));
+      target.append(box);
+    }
+
+    function renderHints(items, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: "渐进提示阶梯"}), element("p", {text: "提示默认隐藏；逐级揭示不会自动写入交互事件。"}));
+      items.forEach((item, index) => {
+        const text = element("p", {text: displayValue(item), hidden: "hidden"});
+        const button = element("button", {class: "button secondary", type: "button", text: `揭示第 ${index + 1} 级提示`, "aria-expanded": "false"});
+        button.addEventListener("click", () => {
+          const opening = text.hasAttribute("hidden");
+          if (opening) text.removeAttribute("hidden");
+          else text.setAttribute("hidden", "hidden");
+          button.setAttribute("aria-expanded", String(opening));
+          button.textContent = opening ? `收起第 ${index + 1} 级提示` : `揭示第 ${index + 1} 级提示`;
+        });
+        box.append(element("div", {class: "hint"}, button, text));
+      });
+      if (!items.length) box.append(element("p", {class: "empty", text: "没有提示阶梯。"}));
+      target.append(box);
+    }
+
+    function renderMastery(verification, update, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: "多维掌握证据"}));
+      const rows = verification.node_mastery_evidence || [];
+      rows.forEach((item, index) => {
+        const section = element("section", {class: "card searchable", "data-search": displayValue(item).toLowerCase(), "data-statuses": statusTokens(item).join(" ").toLowerCase()});
+        section.append(element("h3", {text: objectTitle(item, index)}));
+        ["correctness", "reasoning_quality", "hint_dependency", "transfer", "confidence", "delayed_retention"].forEach(key => {
+          const value = item[key];
+          const score = numericScore(value);
+          section.append(score === null ? renderDefinition({[key]: value}) : barRow(key, score, `${Math.round(score * 100)}%`));
+        });
+        box.append(section);
+      });
+      if (!rows.length) box.append(element("p", {class: "empty", text: "没有节点级掌握证据。"}));
+      const patch = update.model_patch || (update.update && [{before: update.update.before, after: update.update.after, rationale: update.update.reason}]) || [];
+      if (patch.length) box.append(renderTable("学习者模型变更对照", patch));
+      target.append(box);
+    }
+
+    function numericScore(value) {
+      if (typeof value === "number") return Math.max(0, Math.min(1, value > 1 ? value / 100 : value));
+      if (!value || typeof value !== "object") return null;
+      for (const key of ["score", "value", "rate", "confidence"]) {
+        if (typeof value[key] === "number") return Math.max(0, Math.min(1, value[key] > 1 ? value[key] / 100 : value[key]));
+      }
+      return null;
+    }
+
+    function barRow(label, ratio, text) {
+      const fill = element("div", {class: "bar-fill"});
+      fill.style.width = `${Math.round(Math.max(0, Math.min(1, ratio)) * 100)}%`;
+      const track = element("div", {class: "bar-track", role: "img", "aria-label": `${label}: ${text}`}, fill);
+      return element("div", {class: "bar-row"}, element("strong", {text: label}), track, element("span", {text}));
+    }
+
+    function renderGraph(nodes, edges, target) {
+      const box = element("section", {class: "panel-box"});
+      box.append(element("h2", {text: "关系图与邻接表"}), element("p", {text: "实线表示硬先修，虚线表示软先修，点线表示其他关系。图形用于探索，表格用于精确读取。"}));
+      const shown = nodes.slice(0, 24);
+      const positions = new Map();
+      shown.forEach((node, index) => {
+        positions.set(objectId(node, index), {x: 35 + (index % 4) * 190, y: 35 + Math.floor(index / 4) * 105});
+      });
+      const height = Math.max(220, 70 + Math.ceil(shown.length / 4) * 105);
+      const svg = svgElement("svg", {viewBox: `0 0 800 ${height}`, role: "img", "aria-labelledby": "graph-title graph-desc"});
+      const title = svgElement("title", {id: "graph-title"});
+      title.textContent = "知识点关系图";
+      const desc = svgElement("desc", {id: "graph-desc"});
+      desc.textContent = `显示 ${shown.length} 个节点和 ${edges.length} 条关系；完整关系见下方邻接表。`;
+      svg.append(title, desc);
+      edges.forEach(edge => {
+        const from = String(edge.from_node || edge.source_node_id || edge.source || edge.from || "");
+        const to = String(edge.to_node || edge.target_node_id || edge.target || edge.to || "");
+        const a = positions.get(from);
+        const b = positions.get(to);
+        if (!a || !b) return;
+        const strength = String(edge.prerequisite_strength || edge.relationship_type || edge.edge_type || "other");
+        const line = svgElement("line", {
+          x1: a.x + 70, y1: a.y + 22, x2: b.x + 70, y2: b.y + 22,
+          class: strength === "hard" ? "edge-hard" : strength === "soft" ? "edge-soft" : "edge-other"
+        });
+        svg.append(line);
+      });
+      shown.forEach((node, index) => {
+        const id = objectId(node, index);
+        const pos = positions.get(id);
+        const group = svgElement("g", {class: "graph-node", tabindex: "0", role: "button", "aria-label": `${id}: ${objectTitle(node, index)}`});
+        group.append(svgElement("rect", {x: pos.x, y: pos.y, width: 140, height: 46, rx: 8}));
+        const text = svgElement("text", {x: pos.x + 8, y: pos.y + 20});
+        const name = objectTitle(node, index);
+        text.textContent = name.length > 17 ? `${name.slice(0, 16)}…` : name;
+        group.append(text);
+        const activate = event => {
+          if (event.type === "click" || event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openDetails(`知识点 · ${id}`, node);
+          }
+        };
+        group.addEventListener("click", activate);
+        group.addEventListener("keydown", activate);
+        svg.append(group);
+      });
+      box.append(element("div", {class: "legend"},
+        element("span", {class: "hard", text: "硬先修"}),
+        element("span", {class: "soft", text: "软先修"}),
+        element("span", {class: "other", text: "其他关系"})
+      ));
+      box.append(element("div", {class: "graph-wrap"}, svg));
+      const adjacency = edges.map(edge => ({
+        from: edge.from_node || edge.source_node_id || edge.source || edge.from || "未提供",
+        relation: edge.prerequisite_strength || edge.relationship_type || edge.edge_type || "未提供",
+        to: edge.to_node || edge.target_node_id || edge.target || edge.to || "未提供",
+        rationale: edge.rationale || edge.description || "未提供"
+      }));
+      box.append(renderTable("知识点关系邻接表", adjacency));
+      target.append(box);
+    }
+
+    function renderTable(captionText, rows) {
+      const wrap = element("div", {class: "table-wrap"});
+      const table = element("table");
+      table.append(element("caption", {text: captionText}));
+      if (!rows.length) {
+        table.append(element("tbody", null, element("tr", null, element("td", {text: "没有数据。"}))));
+        wrap.append(table);
+        return wrap;
+      }
+      const keys = Array.from(new Set(rows.flatMap(row => row && typeof row === "object" ? Object.keys(row) : ["value"]))).slice(0, 12);
+      const head = element("thead", null, element("tr", null, keys.map(key => element("th", {scope: "col", text: LABELS[key] || key}))));
+      const body = element("tbody");
+      rows.forEach(row => {
+        const source = row && typeof row === "object" ? row : {value: row};
+        body.append(element("tr", null, keys.map(key => element("td", {text: displayValue(source[key])}))));
+      });
+      table.append(head, body);
+      wrap.append(table);
+      return wrap;
+    }
+
+    function renderEvidence(envelope, content, stageId) {
+      const panel = document.getElementById("panel-evidence");
+      panel.replaceChildren();
+      panel.append(renderField("信封证据", envelope.evidence_collected || []));
+      panel.append(renderField("信封追溯", envelope.traceability || {}));
+      const evidenceFields = {
+        S1: ["external_research_seed"],
+        S2: ["research_run_manifest", "source_ledger", "claims", "evidence_gaps"],
+        S3: ["unit_node_mappings", "assessment_items", "traceability"],
+        S4: ["diagnosis_evidence_mapping", "transfer_performance", "evidence_validity"],
+        S5: ["assessment_schedule", "review_anchors"],
+        S6: ["interaction_events", "candidate_mastery_evidence", "content_quality_status"],
+        S7: ["mastery_verification", "learner_model_update_and_replan", "applicability_limits"]
+      };
+      (evidenceFields[stageId] || []).forEach(field => panel.append(renderField(LABELS[field] || field, content[field])));
+    }
+
+    function renderQuality(envelope) {
+      const panel = document.getElementById("panel-quality");
+      panel.replaceChildren(
+        renderField("输入校验", envelope.input_validation),
+        renderField("需求缺口", envelope.requirement_gaps || []),
+        renderField("确认", envelope.confirmation),
+        renderField("质量评估", envelope.quality_evaluation),
+        renderField("HTML 派生事实", envelope.presentation_artifact)
+      );
+    }
+
+    function setIdentity(envelope, config) {
+      document.getElementById("page-title").textContent = config.title;
+      document.getElementById("page-subtitle").textContent = config.subtitle;
+      document.title = `${config.title} · 七阶段学习工件`;
+      document.getElementById("identity-stage").textContent = envelope.stage_id;
+      document.getElementById("identity-run").textContent = envelope.run_id || "未提供";
+      document.getElementById("identity-status").replaceChildren(badge(envelope.status));
+      document.getElementById("identity-schema").textContent = envelope.schema_version || "未提供";
+      const route = envelope.quality_evaluation && envelope.quality_evaluation.route_to;
+      document.getElementById("identity-route").textContent = route || "未提供";
+      document.getElementById("route-footer").textContent = route
+        ? `当前规范路由：${route}。这是信封中记录的决定，不代表页面已经执行该路由。`
+        : "信封没有提供下一路由；请查看输入缺口和质量评估。";
+    }
+
+    function render(envelope, sourceLabel) {
+      if (!envelope || typeof envelope !== "object" || !STAGES[envelope.stage_id]) {
+        throw new Error("文件不是支持的 S1—S7 移交信封：缺少有效 stage_id。");
+      }
+      state.envelope = envelope;
+      state.selected.clear();
+      const config = STAGES[envelope.stage_id];
+      const content = artifactContent(envelope);
+      setIdentity(envelope, config);
+      renderOverview(envelope, config, content);
+      renderStageDetails(content, config, envelope.stage_id);
+      renderEvidence(envelope, content, envelope.stage_id);
+      renderQuality(envelope);
+      document.getElementById("raw-json").textContent = JSON.stringify(envelope, null, 2);
+      announce(`已装载 ${config.title}，来源：${sourceLabel}。`);
+    }
+
+    function resetView(message) {
+      document.getElementById("page-title").textContent = "七阶段学习工件可视化";
+      document.getElementById("page-subtitle").textContent = "选择一个规范 JSON 移交信封，或查看已嵌入的阶段结果。";
+      ["stage", "run", "status", "schema", "route"].forEach(key => {
+        document.getElementById(`identity-${key}`).textContent = key === "stage" ? "未装载" : "—";
+      });
+      document.getElementById("panel-overview").replaceChildren(element("section", {class: "panel-box"}, element("h2", {text: "等待数据"}), element("p", {text: message})));
+      document.getElementById("stage-special").replaceChildren();
+      document.getElementById("stage-fields").replaceChildren();
+      document.getElementById("panel-evidence").replaceChildren();
+      document.getElementById("panel-quality").replaceChildren();
+      document.getElementById("raw-json").textContent = "";
+      document.getElementById("route-footer").textContent = "尚未装载路由信息。";
+      updateCount(0, 0);
+      announce(message);
+    }
+
+    function rebuildStatusFilter() {
+      const select = document.getElementById("status-filter");
+      select.replaceChildren(element("option", {value: "", text: "全部"}));
+      const tokens = new Set();
+      document.querySelectorAll("#panel-details .searchable").forEach(node => {
+        String(node.dataset.statuses || "").split(/\s+/).filter(Boolean).forEach(token => tokens.add(token));
+      });
+      Array.from(tokens).sort().forEach(token => select.append(element("option", {value: token, text: token})));
+    }
+
+    function applyFilters() {
+      const query = document.getElementById("search-input").value.trim().toLowerCase();
+      const status = document.getElementById("status-filter").value.toLowerCase();
+      const items = Array.from(document.querySelectorAll("#panel-details .searchable"));
+      let visible = 0;
+      items.forEach(item => {
+        const queryPass = !query || String(item.dataset.search || "").includes(query);
+        const statusPass = !status || String(item.dataset.statuses || "").split(/\s+/).includes(status);
+        const show = queryPass && statusPass;
+        item.hidden = !show;
+        if (show) visible += 1;
+      });
+      updateCount(visible, items.length);
+    }
+
+    function updateCount(visible, total) {
+      document.getElementById("result-count").textContent = `${visible} / ${total} 个可筛选实体`;
+    }
+
+    function activateTab(tab) {
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      tabs.forEach(current => {
+        const selected = current === tab;
+        current.setAttribute("aria-selected", String(selected));
+        current.tabIndex = selected ? 0 : -1;
+        document.getElementById(current.getAttribute("aria-controls")).hidden = !selected;
+      });
+    }
+
+    function setupTabs() {
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activateTab(tab));
+        tab.addEventListener("keydown", event => {
+          let next = null;
+          if (event.key === "ArrowRight") next = tabs[(index + 1) % tabs.length];
+          if (event.key === "ArrowLeft") next = tabs[(index - 1 + tabs.length) % tabs.length];
+          if (event.key === "Home") next = tabs[0];
+          if (event.key === "End") next = tabs[tabs.length - 1];
+          if (event.key === "Enter" || event.key === " ") next = tab;
+          if (next) {
+            event.preventDefault();
+            activateTab(next);
+            next.focus();
+          }
+        });
+      });
+    }
+
+    async function loadFile(file) {
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        render(parsed, file.name);
+      } catch (error) {
+        announce(`装载失败：${error.message}`, true);
+      }
+    }
+
+    function announce(message, isError) {
+      const node = document.getElementById("load-status");
+      node.textContent = message;
+      node.style.color = isError ? "var(--bad)" : "var(--muted)";
+    }
+
+    function setupLoading() {
+      const input = document.getElementById("json-file");
+      const drop = document.getElementById("drop-zone");
+      input.addEventListener("change", () => loadFile(input.files && input.files[0]));
+      ["dragenter", "dragover"].forEach(type => drop.addEventListener(type, event => {
+        event.preventDefault();
+        drop.classList.add("is-dragging");
+      }));
+      ["dragleave", "drop"].forEach(type => drop.addEventListener(type, event => {
+        event.preventDefault();
+        drop.classList.remove("is-dragging");
+      }));
+      drop.addEventListener("drop", event => loadFile(event.dataTransfer && event.dataTransfer.files[0]));
+      document.getElementById("reset-button").addEventListener("click", () => {
+        if (state.embedded && STAGES[state.embedded.stage_id]) render(state.embedded, "嵌入数据");
+        else resetView("模板没有嵌入有效移交信封，请选择本地 JSON。");
+      });
+    }
+
+    function setupControls() {
+      document.getElementById("search-input").addEventListener("input", applyFilters);
+      document.getElementById("status-filter").addEventListener("change", applyFilters);
+      document.getElementById("clear-filter").addEventListener("click", () => {
+        document.getElementById("search-input").value = "";
+        document.getElementById("status-filter").value = "";
+        applyFilters();
+      });
+      document.getElementById("copy-raw").addEventListener("click", async () => {
+        const status = document.getElementById("copy-status");
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error("当前上下文不支持剪贴板 API");
+          await navigator.clipboard.writeText(document.getElementById("raw-json").textContent);
+          status.textContent = "已复制。";
+        } catch (error) {
+          status.textContent = `复制失败：${error.message}`;
+        }
+      });
+    }
+
+    function init() {
+      setupTabs();
+      setupLoading();
+      setupControls();
+      try {
+        state.embedded = JSON.parse(document.getElementById("stage-data").textContent || "{}");
+        if (state.embedded && STAGES[state.embedded.stage_id]) render(state.embedded, "嵌入数据");
+        else resetView("模板没有嵌入有效移交信封，请选择本地 JSON。");
+      } catch (error) {
+        resetView(`嵌入数据无效：${error.message}`);
+      }
+    }
+    init();
+  </script>
+</body>
+</html>

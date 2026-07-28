@@ -1,0 +1,161 @@
+{
+  "chrome": "Chrome/150.0.7871.182",
+  "route_checks": [
+    {
+      "stage": "S1",
+      "pass": true,
+      "facts": {
+        "stage": "S1",
+        "status": "completed",
+        "heading": "S1 目标成功契约",
+        "special": [
+          "能力—验收阶梯"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s1-report.html"
+      }
+    },
+    {
+      "stage": "S2",
+      "pass": true,
+      "facts": {
+        "stage": "S2",
+        "status": "completed",
+        "heading": "S2 领域证据地形",
+        "special": [
+          "来源类别覆盖矩阵"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s2-report.html"
+      }
+    },
+    {
+      "stage": "S3",
+      "pass": true,
+      "facts": {
+        "stage": "S3",
+        "status": "completed",
+        "heading": "S3 能力—概念图谱",
+        "special": [
+          "关系图与邻接表"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s3-report.html"
+      }
+    },
+    {
+      "stage": "S4",
+      "pass": true,
+      "facts": {
+        "stage": "S4",
+        "status": "completed",
+        "heading": "S4 学习者前沿诊断",
+        "special": [
+          "节点状态分布"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s4-report.html"
+      }
+    },
+    {
+      "stage": "S5",
+      "pass": true,
+      "facts": {
+        "stage": "S5",
+        "status": "needs_confirmation",
+        "heading": "S5 学习与会话计划",
+        "special": [
+          "会话路线图"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s5-report.html"
+      }
+    },
+    {
+      "stage": "S6",
+      "pass": true,
+      "facts": {
+        "stage": "S6",
+        "status": "completed",
+        "heading": "S6 教学交互",
+        "special": [
+          "渐进提示阶梯"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s6-report.html"
+      }
+    },
+    {
+      "stage": "S7",
+      "pass": true,
+      "facts": {
+        "stage": "S7",
+        "status": "completed",
+        "heading": "S7 掌握验证与重规划",
+        "special": [
+          "多维掌握证据"
+        ],
+        "tabs": 5,
+        "panels": 5,
+        "authority": "\n      真值源提示\n      本页是 JSON 的非权威派生视图。筛选、选择和输入不会修改规范工件；导出的内容仍是未提交草稿。\n    ",
+        "presentationPath": "reports/s7-report.html"
+      }
+    }
+  ],
+  "keyboard_tab": {
+    "active": "tab-details",
+    "selected": "tab-details",
+    "detailsHidden": false
+  },
+  "filter_and_detail": {
+    "count": "6 / 13 个可筛选实体",
+    "visible": 6,
+    "detail": "原子知识点 · node-cardinality",
+    "cleared": "13 / 13 个可筛选实体"
+  },
+  "invalid_file": {
+    "status": "装载失败：文件不是支持的 S1—S7 移交信封：缺少有效 stage_id。",
+    "stage": "S3"
+  },
+  "valid_file": {
+    "status": "已装载 S3 能力—概念图谱，来源：browser-valid-s3.json。",
+    "stage": "S3"
+  },
+  "draft_download": {
+    "files": [
+      "html-smoke-S3-S3-draft.json"
+    ],
+    "authority": "unsubmitted_user_draft",
+    "action_type": "graph_review_draft",
+    "note": "浏览器验收草稿"
+  },
+  "mobile_320": {
+    "innerWidth": 320,
+    "clientWidth": 305,
+    "bodyWidth": 305,
+    "rootWidth": 305,
+    "pageHorizontalOverflow": false,
+    "graphOverflow": true,
+    "title": "S3 能力—概念图谱"
+  },
+  "blocked": {
+    "stage": "S7",
+    "status": "blocked",
+    "gate": "输入校验statuspassmissing_fields未提供stale_inputs未提供errors未提供需求缺口未提供或为空。确认modeinformtrigger未提供questions未提供response未提供statusacknowledgedconfirmed_at2026-07-27T02:00:00Zassumptions_changed未提供质量评估rubric_results未提供evidence[\n  \"仅用于页面路由冒烟。\"\n]verdictblockedroute_toS7HTML 派生事实formathtmlstatusgeneratedpathreports/blocked-report.htmlauthorityderived_non_authoritativesource{\n  \"stage_id\": \"S7\",\n  \"run_id\": \"html-smoke-blocked\",\n  \"envelope_schema_version\": \"1.1.0\",\n  \"artifact_id\": null,\n  \"artifact_schema_version\": null\n}interaction_modedraft_export_onlygenerated_at2026-07-27T02:01:00Zvalidation{\n  \"html_parse\": \"pass\",\n  \"accessibility_smoke\": \"not_run\",\n  \"interaction_smoke\": \"not_run\"\n}reason未提供",
+    "presentationPath": "reports/blocked-report.html"
+  },
+  "browser_errors": [],
+  "overall_pass": true
+}

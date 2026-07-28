@@ -1,0 +1,66 @@
+{
+  "skill_name": "run-instructional-interaction",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "G5 已通过，当前 PostgreSQL 节点是“依据谓词与可用前缀论证多列索引顺序”，来源可追溯。真实交互记录：学习者先答“选择性最高的列永远放第一”；计划提示阶梯的 step=1、level=light，修正事件明确记录 hints_used=[\"hint_ladder.step=1\"]；随后在一个未见等值+范围+排序查询上无提示给出正确顺序、理由和沙箱验证步骤，该独立事件明确记录 hints_used=[]。请执行个性化学习 S6，并输出结构化 JSON 移交结果（含 session_package_and_trace 与 G6 裁决）。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 正向例子1 and 七步个性化学习SOP贯穿案例-PostgreSQL查询优化.md §S6] A source-grounded, faded-scaffold session trace with real attempts and an independent transfer candidate, passing G6 and routing to S7, but asserting no mastery.",
+      "files": [],
+      "expectations": [
+        "The skill locally defines S6/G6 and its direct G2/G3/G4/G5 evidence, graph, snapshot and plan dependencies, verifies their compatible envelope pass signatures without requiring co-installed upstream skills, and states that G6 is an instructional-artifact gate rather than mastery.",
+        "The run first writes a complete stage-specific Markdown human-review document before JSON; it follows the required S6 heading structure, fully presents input audit, stage analysis, evidence, gaps, gate decision, route and output audit, and contains no TBD/TODO/empty-table/example placeholders.",
+        "The final handoff envelope uses schema 1.3.0 and contains document_artifact with generation_order=markdown_before_json, the correct stage document_profile, section_mappings covering every required stage section with real JSON Pointers, and passing markdown_parse/required_sections/json_correspondence/no_placeholders validation; JSON is a lossless structured counterpart, not a shortened summary.",
+        "The run also writes a pre-populated S6-specific read-only interactive HTML report derived from the final envelope; it contains no generic local-envelope loader, schema/template/Markdown-or-HTML-status instructions, or answer/event controls.",
+        "The HTML is the only visualization artifact: every view is rendered from embedded canonical JSON, and the run neither invokes image-generation tools nor creates, references, or requires separate image assets.",
+        "The artifact's content is correct and every layered explanation is traceable to audited source evidence rather than model common sense.",
+        "Evidence roles are respected: stable principles use official/book/research support, tasks use job evidence, application/failure boundaries use artifacts or benchmarks, and community signals are only contrasted hypotheses; dynamic practices are freshness-checked.",
+        "Activities include worked example, completion, contrast and independent transfer tasks that produce judgeable learner-behavior evidence rather than only reading or acknowledgment.",
+        "Task difficulty stays within the learner's learnable range and the independent transfer item is reachable after scaffolding fades.",
+        "Hint ladder steps point to query shape and official leading-column rules without substituting the learner's key indexing-order reasoning, and no answer is leaked before submission.",
+        "A full interaction trace records each learner response, the hint level used, and the correction trajectory.",
+        "The actual correction event resolves hint_ladder.step=1 to planned level light and hands it to S7 as low, while the later hints_used=[] event is handed off as none; the existence of unused stronger ladder steps does not change either result.",
+        "G6 is evaluated dimension by dimension, passes only because real candidate evidence exists, and deterministically routes to S7 without claiming mastery."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "G5 已通过，当前六年级分数节点是“解释并比较等值与大小不同的分数”。真实记录：学习者先用等长条形比较 1/2 与 1/5；自己画数轴并定位 2/3；撤掉图形后解释“整体相同时分成更多份每份为何更小”；半完成题需一级提示；最后无提示完成从 4 人到 6 人的未见配方缩放并解释每一步。请执行个性化学习 S6，输出结构化 JSON。",
+      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 正向例子2] A multi-representation concrete-to-abstract interaction trace with faded scaffolding and an independent transfer candidate, passing G6 and routing to S7, without asserting mastery.",
+      "files": [],
+      "expectations": [
+        "The run first writes a complete stage-specific Markdown human-review document before JSON; it follows the required S6 heading structure, fully presents input audit, stage analysis, evidence, gaps, gate decision, route and output audit, and contains no TBD/TODO/empty-table/example placeholders.",
+        "The final handoff envelope uses schema 1.3.0 and contains document_artifact with generation_order=markdown_before_json, the correct stage document_profile, section_mappings covering every required stage section with real JSON Pointers, and passing markdown_parse/required_sections/json_correspondence/no_placeholders validation; JSON is a lossless structured counterpart, not a shortened summary.",
+        "The run also writes a pre-populated S6-specific read-only interactive HTML report derived from the final envelope; it contains no generic local-envelope loader, schema/template/Markdown-or-HTML-status instructions, or answer/event controls.",
+        "The HTML is the only visualization artifact: every view is rendered from embedded canonical JSON, and the run neither invokes image-generation tools nor creates, references, or requires separate image assets.",
+        "Explanations use multiple connected representations (bar, number line, symbolic) and are traceable to audited sources such as the IES fractions guidance.",
+        "Stable teaching claims use authoritative book/course/research or official evidence, while community mnemonics remain bounded examples rather than truth; source freshness and applicability are visible.",
+        "Activities include retrieval, worked example, completion and an independent transfer task that elicit explainable learner evidence, not only mechanical common-denominator speed.",
+        "Difficulty progresses from concrete to abstract within the learner's reachable range and the final scaling task is independently solvable.",
+        "Feedback rules address task, process and self-regulation without leaking the answer or substituting the learner's unit-fraction reasoning.",
+        "The interaction trace preserves each response, hint level and correction step, including the moment scaffolding is withdrawn.",
+        "candidate_mastery_evidence is nonempty in every G6-positive artifact, and the schema rejects an otherwise complete artifact with an empty candidate array.",
+        "The planned S6 hint ladder is not treated as actual hint use; only interaction_events.hints_used is normalized for S7 as light→low, medium→moderate, strong→high, with none/not_executed reserved for no use/no record.",
+        "G6 is evaluated dimension by dimension, passes only with real candidate evidence, and deterministically routes to S7 while deferring mastery to G7."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "教学记录只有一篇 5000 字索引理论讲义；每道题后立刻显示标准答案；学习者最后只回复“懂了”，没有任何独立作答、提示层级、反馈轨迹或迁移证据。请执行个性化学习 S6，输出结构化 JSON。",
+      "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S6 反向例子] G6 must fail closed: no accepted positive artifact, no valid mastery candidate, route remains S6.",
+      "files": [],
+      "expectations": [
+        "The run first writes a complete stage-specific Markdown human-review document before JSON; it follows the required S6 heading structure, fully presents input audit, stage analysis, evidence, gaps, gate decision, route and output audit, and contains no TBD/TODO/empty-table/example placeholders.",
+        "The final handoff envelope uses schema 1.3.0 and contains document_artifact with generation_order=markdown_before_json, the correct stage document_profile, section_mappings covering every required stage section with real JSON Pointers, and passing markdown_parse/required_sections/json_correspondence/no_placeholders validation; JSON is a lossless structured counterpart, not a shortened summary.",
+        "The run also writes a pre-populated S6-specific read-only interactive HTML report derived from the final envelope; it contains no generic local-envelope loader, schema/template/Markdown-or-HTML-status instructions, or answer/event controls.",
+        "The HTML is the only visualization artifact: every view is rendered from embedded canonical JSON, and the run neither invokes image-generation tools nor creates, references, or requires separate image assets.",
+        "The output does not accept untraceable or unverified content as audited evidence and does not fabricate a passing content_quality_status.",
+        "A community claim, popular rule or stale dynamic practice alone cannot support a key explanation; missing authoritative or real-validation evidence routes to S2/S3 rather than being filled from model memory.",
+        "The output recognizes that the handout plus immediate answers produces no judgeable independent learning evidence, only acknowledgment.",
+        "The output identifies that difficulty and learner agency are unverified because no independent item was attempted.",
+        "Immediate answer exposure is flagged as answer leakage and the hint/feedback layer is absent, so hints cannot substitute for the learner's reasoning is moot and failing.",
+        "No learner response, hint level or correction trajectory is fabricated; absent interaction evidence is recorded as a gap rather than invented.",
+        "G6 does not pass, no valid mastery candidate is emitted, and the deterministic route is revise_here at S6 rather than S7."
+      ]
+    }
+  ]
+}

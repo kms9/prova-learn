@@ -1,0 +1,13 @@
+{
+  "draft_schema_version": "1.0.0",
+  "authority": "unsubmitted_user_draft",
+  "stage_id": "S3",
+  "run_id": "html-smoke-S3",
+  "action_type": "graph_review_draft",
+  "created_at": "2026-07-27T03:50:11.229Z",
+  "payload": {
+    "selected_ids": [],
+    "note": "浏览器验收草稿",
+    "explicit_input": null
+  }
+}

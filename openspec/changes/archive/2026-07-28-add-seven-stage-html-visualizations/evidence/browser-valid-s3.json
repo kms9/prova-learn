@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.1.0",
+  "stage_id": "S3",
+  "run_id": "html-smoke-S3",
+  "learner_id": "learner-fixture",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [],
+    "expected_schema_versions": {}
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "这是浏览器验收夹具，不是真实学习者观察。"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "inform",
+    "trigger": null,
+    "questions": [],
+    "response": null,
+    "status": "acknowledged",
+    "confirmed_at": "2026-07-27T02:00:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "fixture-evidence",
+      "provenance": "model_hypothesis",
+      "source_ref": null,
+      "summary": "仅用于验证页面的示例证据。",
+      "status": "not_executed"
+    }
+  ],
+  "processing_record": [
+    "构造最小浏览器验收信封。"
+  ],
+  "positive_artifact": {
+    "type": "capability_concept_graph",
+    "schema_version": "1.0.0",
+    "artifact_id": "fixture-S3",
+    "content": {
+      "focus_question": "如何从计划与数据分布解释慢查询并验证方案？",
+      "target_capabilities": [
+        {
+          "capability_id": "cap-diagnose",
+          "name": "诊断查询计划"
+        }
+      ],
+      "learning_units": [
+        {
+          "unit_id": "unit-plan",
+          "title": "从计划节点定位瓶颈"
+        }
+      ],
+      "nodes": [
+        {
+          "node_id": "node-plan",
+          "node_type": "representation",
+          "capability_statement": "读懂计划树"
+        },
+        {
+          "node_id": "node-cardinality",
+          "node_type": "concept",
+          "capability_statement": "解释估算与实际行数偏差"
+        },
+        {
+          "node_id": "node-index",
+          "node_type": "strategy",
+          "capability_statement": "论证索引候选"
+        }
+      ],
+      "unit_node_mappings": [
+        {
+          "unit_id": "unit-plan",
+          "node_id": "node-plan",
+          "role": "core"
+        },
+        {
+          "unit_id": "unit-plan",
+          "node_id": "node-cardinality",
+          "role": "supporting"
+        }
+      ],
+      "edges": [
+        {
+          "from_node": "node-plan",
+          "to_node": "node-cardinality",
+          "prerequisite_strength": "hard",
+          "rationale": "先识别节点才能解释估算偏差"
+        },
+        {
+          "from_node": "node-cardinality",
+          "to_node": "node-index",
+          "prerequisite_strength": "soft",
+          "rationale": "数据分布有助于论证索引"
+        }
+      ],
+      "assessment_items": [
+        {
+          "item_id": "item-1",
+          "node_id": "node-cardinality",
+          "item": "解释一处十倍估算偏差"
+        }
+      ],
+      "mastery_thresholds": [
+        {
+          "node_id": "node-cardinality",
+          "threshold": "独立解释并迁移"
+        }
+      ],
+      "traceability": {
+        "node-plan": [
+          "src-pg"
+        ]
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [],
+    "evidence": [
+      "仅用于页面路由冒烟。"
+    ],
+    "verdict": "pass",
+    "route_to": "S4"
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "reports/s3-report.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S3",
+      "run_id": "html-smoke-S3",
+      "envelope_schema_version": "1.1.0",
+      "artifact_id": "fixture-S3",
+      "artifact_schema_version": "1.0.0"
+    },
+    "interaction_mode": "draft_export_only",
+    "generated_at": "2026-07-27T02:01:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "not_run",
+      "interaction_smoke": "not_run"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [],
+    "source_evidence_ids": [
+      "fixture-evidence"
+    ],
+    "source_sections": [
+      "openspec fixture"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-07-27T02:00:00Z"
+}

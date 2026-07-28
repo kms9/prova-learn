@@ -1,0 +1,7 @@
+{"capability_id":"CAP-001","statement":"研发初中数学课程产品（讲义/课件/教案/习题册/测试卷）","observable_evidence":["独立产出一套初中数学标准化课程方案或讲义，可供主讲与辅导师授课/跟课使用","产出配套课件、分层习题与例题讲解，而非只给大纲"],"bloom_level":"create","source_ids":["S016","S017","S019","S020","S021"]}
+{"capability_id":"CAP-002","statement":"设计初中数学分层课程体系并覆盖中考考点（代数/几何/函数/统计概率）","observable_evidence":["产出分层教学体系图 + 中考数学考点覆盖矩阵（如覆盖90%以上考点）","说明代数/几何/函数/统计概率到课程模块的映射"],"bloom_level":"create","source_ids":["S018","S019"]}
+{"capability_id":"CAP-003","statement":"搭建双师教研体系并驱动周迭代闭环（主讲课程教研 + 辅导师执行标准化）","observable_evidence":["产出双师教研流程SOP（主讲端课程+辅导师端跟课/答疑标准化）与一周迭代记录","区分主讲内容教研与辅导师执行教研"],"bloom_level":"create","source_ids":["S021"]}
+{"capability_id":"CAP-004","statement":"培训辅导师并推进教学标准化（双师重点）","observable_evidence":["产出辅导师培训计划 + 跟课/答疑标准化检查表","记录培训后辅导师执行一致性提升"],"bloom_level":"apply","source_ids":["S019"]}
+{"capability_id":"CAP-005","statement":"用数据评估并迭代初中数学教学效果（续班率/数学成绩/学情）","observable_evidence":["产出教学效果数据看板 + 基于数据的迭代决策记录","区分相关与因果，不以单一续班率下定论"],"bloom_level":"analyze","source_ids":["S022","S023","S024"]}
+{"capability_id":"CAP-006","statement":"研究中考数学考点并命题/组卷","observable_evidence":["产出中考数学考点双向细目表 + 一套测试卷及评分说明","基于真题与课标分析，而非凭印象命题"],"bloom_level":"analyze","source_ids":["S019","S020"]}
+{"capability_id":"CAP-007","statement":"制定初中数学教研战略与体系规划（资深/负责人级）","observable_evidence":["产出数学教研发展规划或年度执行计划","结合中考改革趋势与数学核心素养定位方向"],"bloom_level":"create","source_ids":["S018"]}

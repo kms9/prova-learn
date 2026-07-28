@@ -1,4 +1,0 @@
-interface:
-  display_name: "能力—概念图建模"
-  short_description: "把目标与证据建模为含能力大纲、知识点关联、先修和评估的可诊断图谱"
-  default_prompt: "使用 $build-capability-concept-graph 把已通过 G1/G2 的目标与证据建模为含大纲—知识点关联的可诊断能力图谱。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "路径与会话规划"
+  short_description: "按证据层级与时效，从已证实前沿规划最小路径、会话和测评"
+  default_prompt: "使用 $plan-learning-sessions 按本 Skill 的独立依赖定义校验 G1/G3/G4 门证据，再按知识证据层级与时效规划最小可行路径和第一个会话契约；先写完整 S5 Markdown 人审文档，再无损结构化为规范 JSON，最后生成 JSON 驱动的 S5 只读交互 HTML。"

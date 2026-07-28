@@ -1,0 +1,4 @@
+interface:
+  display_name: "能力—概念图建模"
+  short_description: "把六源原子证据建模为三层能力大纲、知识状态、先修和可诊断图谱"
+  default_prompt: "使用 $build-capability-concept-graph 从根 INDEX.md 校验同一 LLM Wiki run 的 G1 七项和 S2 G2 九项，读取 S2 逐题回答、八维校验、原子、覆盖与来源，再建模三层能力大纲、知识状态、职级深度与可诊断图谱；先写完整 S3 Markdown 人审文档，再无损结构化为规范 JSON，最后生成 JSON 驱动的 S3 只读交互 HTML。"

@@ -1155,3 +1155,277 @@
   归一化为七行 `.agentsSKILL.md`。改用锚定 `.agents/skills/<name>/SKILL.md` 的捕获表达式后，整组命令
   exit=0：七个规范 Skill 名称完全匹配、`skill_count=7`、`eval_total=21`、`s3_eval_count=3`，S3 1.1.0
   示例 Schema 与跨引用/核心覆盖检查通过。既有非 Skill workspace 保留未改。
+
+### ERR-092 浏览器验收驱动在 Node 24 中触发模块格式歧义
+
+- 日期：2026-07-27
+- 阶段：`add-seven-stage-html-visualizations` 无头 Chrome 交互验收
+- 现象：通过标准输入运行的 Node 驱动同时使用 CommonJS `require` 与顶层 `await`，Node 24 无法判定
+  CommonJS 或 ESM，返回 `ERR_AMBIGUOUS_MODULE_SYNTAX`、exit=1。
+- 影响：该次浏览器驱动在连接 Chrome 和装载 HTML 前即终止，不能作为页面验收证据；HTML、Skill 与
+  OpenSpec 文件未被该命令修改。
+- 诊断：验收驱动入口格式错误，不是页面 JavaScript、CSP 或阶段数据缺陷。
+- 处置：把同一驱动包入显式异步 CommonJS 函数，保留全部阶段路由、文件装载、键盘、筛选、详情、
+  草稿下载、阻断和 320 px 验收条件后重跑。
+- 状态：`RESOLVED`
+- 验证证据：把同一驱动包入显式异步 CommonJS 函数后 exit=0；Chrome 150 完成 S1—S7 专属区域、
+  S5 `needs_confirmation`、S7 blocked、键盘标签、本地文件成功/失败、筛选、按需详情和草稿下载检查，
+  `browser_errors=[]`。随后独立发现的 320 px 横向溢出与验收条件遗漏记为 ERR-093，不与本入口错误合并。
+
+### ERR-093 S3 图谱在 320 px 下撑宽页面且首轮通过条件未覆盖该指标
+
+- 日期：2026-07-27
+- 阶段：`add-seven-stage-html-visualizations` 响应式浏览器验收
+- 现象：Chrome 设备度量下 `documentElement.clientWidth=320`，但 `body.scrollWidth=804`、
+  `pageHorizontalOverflow=true`；二维图谱宽度穿透了局部滚动容器。同时首轮 `overall_pass` 只断言
+  `viewportWidth=320` 与权威提示可见，没有要求根页面无横向溢出，因此错误返回 true。
+- 影响：七阶段路由和其他交互证据有效，但该次 320 px 验收不能作为响应式通过证据。
+- 诊断：CSS Grid 项目的默认最小内容宽度允许图谱的 `min-width:760px` 向上传播；验收条件也漏掉已采集的
+  `pageHorizontalOverflow`。
+- 处置：为阶段栈、面板和图谱容器增加 `min-width:0`/`max-width:100%`，同步七份模板；把
+  `pageHorizontalOverflow === false` 加入强制通过条件后重跑全部浏览器测试。
+- 状态：`RESOLVED`
+- 验证证据：七份同步模板加入面板/阶段栈 `min-width:0` 与图谱容器
+  `width/max-width:100%` 后，Chrome 150 返回 `window.innerWidth=320`、根内容宽 305、
+  `pageHorizontalOverflow=false`，同时 `graphOverflow=true`，证明二维滚动只保留在图谱容器；完整浏览器
+  复验 `overall_pass=true`、`browser_errors=[]`。
+
+### ERR-094 收紧后的 320 px 断言误用根元素内容宽度
+
+- 日期：2026-07-27
+- 阶段：`add-seven-stage-html-visualizations` 响应式浏览器复验
+- 现象：CSS 修复后 `window.innerWidth=320`、`documentElement.clientWidth=305`、根与 body
+  `scrollWidth=305`、`pageHorizontalOverflow=false`、`graphOverflow=true`；验收器仍要求
+  `clientWidth===320`，因此整体 exit=1。
+- 影响：这次不能作为最终通过证据，但现场已经证明页面根部无横向溢出且二维图谱被限制在局部容器。
+- 诊断：Chrome 为垂直滚动条保留约 15 px，`clientWidth` 是内容区宽度；完整 CSS 视口应以
+  `window.innerWidth` 校验。
+- 处置：把断言改为 `window.innerWidth===320`，继续强制
+  `pageHorizontalOverflow=false` 与 `graphOverflow=true`，其余七阶段和交互条件不变。
+- 状态：`RESOLVED`
+- 验证证据：改为断言 `window.innerWidth===320` 后，全套浏览器命令 exit=0；仍同时强制
+  `pageHorizontalOverflow=false`、`graphOverflow=true`。七阶段专属区域、S5 待确认、阻断页、键盘标签、
+  文件装载恢复、筛选、详情与未提交草稿下载全部保持通过。
+
+### ERR-095 六源流程多文件补丁因单个旧锚点不匹配而整体拒绝
+
+- 日期：2026-07-27
+- 阶段：按《信息收集建议》优化七阶段 Skill
+- 现象：两次批量 `apply_patch` 分别在 S7 stage-contract 的字段摘要、S4 eval 的 HTML 断言处找不到
+  预期旧文本；工具原子拒绝整次多文件补丁。
+- 影响：失败调用没有部分写入；六源阶段契约和 eval 断言尚未在该调用中落盘，不能把失败调用作为实施证据。
+- 诊断：批量补丁混合多个文件，其中少量锚点与当前现场已有文本不完全相同；并非 Schema 或 Skill 逻辑错误。
+- 处置：先读取 S4/S7 现场片段，再按文件拆分为小补丁；逐个核对新增字段与 JSON 逗号位置。
+- 状态：`RESOLVED`
+- 验证证据：S1–S7 stage-contract 与 eval 文件均已出现对应六源边界/消费/反馈断言；七份 eval JSON
+  后续通过 `jq` 解析，新增或升级的正向示例通过各自 Draft 2020-12 Schema 校验。
+
+### ERR-096 dclaude 六源 Skill Eval 发现五项跨阶段小型契约漂移
+
+- 日期：2026-07-27
+- 阶段：七阶段六源信息收集优化外部 Skill Eval
+- 现象：`dclaude` 外层成功且内部 `verdict=pass_with_minor`、无 blocking/major，但报告：
+  S4 `model_version` 允许 0 而 S7 只接受 ≥1；S6 `candidate_mastery_evidence` 未在 Schema 强制非空；
+  S4/S6/S7 提示等级没有显式映射；S1 预检 `category_coverage.category` 为自由字符串；
+  S2 路由表未显式列出 S7 `evidence_feedback` 的局部补证入口。
+- 影响：当前六源主责、Schema 版本、饱和/成熟/时效门与 S7 SOURCE_ERROR 主闭环已通过外部评审，
+  但上述小问题会增加跨阶段消费歧义或让机械校验比语义门更宽松。
+- 诊断：前三项为既有阶段工件的约束粒度不一致；第四、第五项是本次新增六源种子与来源反馈尚未完全
+  机读化/显式化。
+- 处置：已完成 S4 版本下界、S6 非空约束、提示映射、S1 预检枚举/映射和 S2 入口补充；并根据
+  后续 gclaude 复评追加 S7 真冷启动 eval、S7→S2 具体反馈夹具、提示事件映射夹具和 S4/S7
+  持久化职责澄清。
+- 状态：`RESOLVED`
+- 验证证据：七个 Skill 均通过 Skill Creator `quick_validate.py`；14 份 Schema 通过 Draft 2020-12
+  自检；7 个正向示例通过各自 Schema；新增 S1 非法/缺失预检类别、S4 版本 0、S6 空候选证据、
+  S7 SOURCE_ERROR 空反馈五个负向守卫均被拒绝；23 个 eval ID 唯一且 JSON 可解析；7 个 HTML
+  脚本通过语法检查；`openspec validate --all --strict` 为 4/4。最终当前态 dclaude 内层
+  `verdict=pass`，`current_blocking_findings/current_major_findings/current_minor_findings` 均为空，
+  外层 `modelUsage` 为 `deepseek-v4-pro[1m]`。
+
+### ERR-097 dclaude 收口复验丢失要求的内部 JSON 证据
+
+- 日期：2026-07-27
+- 阶段：ERR-096 修复后的外部 Skill Eval 收口
+- 现象：`dclaude` 以退出码 0 完成，外层 `modelUsage` 显示实际使用
+  `deepseek-v4-pro[1m]`，但外层 `result` 仅返回 “All agents complete…verdict: pass” 摘要，并声称完整
+  JSON “delivered above”；非交互 CLI 输出中实际不存在该逐项 JSON。
+- 影响：可以确认 dclaude 路由完成并给出 pass 摘要，但无法审计五项 finding 的逐项证据与两个 minor
+  observation，故不能把这次输出单独作为最终通过依据。
+- 诊断：外部模型在内部并行评审后只向 CLI 汇总了任务通知，没有把要求的最终 JSON 转发进 `result`；
+  不是本地 Skill/Schema 校验失败。
+- 处置：保留首次 dclaude session/modelUsage 作为路由证据；按用户允许的降级策略用 `gclaude`
+  重试并取得完整逐项 JSON，修复其四项 minor 后，再用 dclaude 只审当前 `.agents/skills`。
+- 状态：`RESOLVED`
+- 验证证据：gclaude 返回五项原 finding 全部 resolved、0 blocking、0 major，并给出四项 minor 的
+  文件级证据；四项修复完成后，最终 dclaude 返回完整可解析内层 JSON，`verdict=pass` 且当前
+  blocking/major/minor 均为 0。最终 dclaude session=`f61f6c87-5b61-49da-a393-ab08ec12de11`，
+  外层实际模型 `deepseek-v4-pro[1m]`，退出码 0。
+
+### ERR-098 自包含 Gx 定义批量补丁使用了过期的两工件锚点
+
+- 日期：2026-07-27
+- 阶段：七阶段 Skill 独立依赖语义补强
+- 现象：准备向七份 `stage-contract.md` 同步插入 `Sx/Gx` 定义时，首批补丁仍以旧版“JSON + HTML”
+  两工件文本为定位锚点；当前现场已经升级为“Markdown + JSON + HTML”三工件，首个锚点不匹配。
+  随后的七份 `SKILL.md` 批量补丁又因 S5 当前标题为“路径与会话规划”，与旧锚点“学习路径与会话规划”
+  不一致而被拒绝。两次 `apply_patch` 都原子拒绝整批写入。
+- 影响：失败调用没有产生部分修改；Gx 自包含定义在该调用中尚未落盘。
+- 诊断：补丁基于前一轮上下文摘要中的旧文本，未先以当前三工件契约作为精确锚点；不是 Skill
+  设计或 Schema 错误。
+- 处置：重新读取七份文件顶部，以稳定的 `## 0` 标题后插入定义，并按文件拆分写入七份 SKILL
+  专属依赖段；再给每个 Skill 的首个 eval 增加自包含依赖回归断言。
+- 状态：`RESOLVED`
+- 验证证据：七份 `SKILL.md` 均存在 `独立运行时的阶段、门与依赖`，七份 `stage-contract.md` 均存在
+  `编号定义` 与 `已通过 Gx 的机读含义`；Skill Creator 7/7 通过，23 个 eval JSON 可解析且 ID 唯一，
+  七份 `agents/openai.yaml` 可解析，OpenSpec strict 4/4，目标范围 `git diff --check` 通过。
+
+### ERR-099 S1 页面交互复验缺少 Playwright 自带 Chromium
+
+- 日期：2026-07-27
+- 阶段：`al-01-create-goal-success-contract` 初中资深教研老师 S1 三工件验证
+- 现象：Node REPL 可加载 `playwright`，但首次
+  `chromium.launch({headless:true})` 找不到
+  `/Users/logo/Library/Caches/ms-playwright/chromium_headless_shell-1200/.../chrome-headless-shell`，
+  Playwright 提示另行执行浏览器下载。
+- 影响：JSON Schema 和静态 HTML 生成未受影响，但该次调用没有产生真实页面解析、键盘标签、筛选、
+  详情抽屉或 320 px 响应式通过证据，因此不能把页面三项验证仅凭文件存在标为完成。
+- 诊断：Playwright JavaScript 包已安装，配套缓存浏览器未安装；本机已有可执行的 Google Chrome。
+- 处置：不下载新的浏览器，改为向 Playwright 明确传入本机 Chrome
+  `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`，执行相同的只读页面检查。
+- 状态：`RESOLVED`
+- 验证证据：Playwright 使用本机 Google Chrome 后成功打开最终 S1 HTML；页面显示
+  `status=等待确认`、`verdict=本阶段补充`、`route=S1`，3 个阶段标签可用；键盘方向键切换到
+  “确认与开放问题”，搜索产生 6 个隐藏卡片，详情抽屉能打开和关闭。页面无 console/page error、
+  无远程请求、无 `img/picture/svg`、无文件输入，语言、跳转链接和搜索标签均存在；320 px 下
+  `innerWidth=scrollWidth=clientWidth=320`、横向溢出为 0。
+
+### ERR-100 S1 收口校验误用质量维度字段名
+
+- 日期：2026-07-27
+- 阶段：`al-01-create-goal-success-contract` 初中资深教研老师 S1 三工件最终校验
+- 现象：收口校验脚本读取 `quality_evaluation.dimensions` 时触发 `KeyError: 'dimensions'`；
+  当前信封契约中的实际字段为 `quality_evaluation.rubric_results`。
+- 影响：该次 Python 校验在质量维度计数处提前退出，不能作为完整收口证据；随后独立执行的 HTML
+  JavaScript 语法检查通过，但不替代未完成的整套校验。
+- 诊断：校验命令使用了旧的临时字段假设，产物本身及其 Schema 未因此发生变化。
+- 处置：按当前 `handoff-envelope.schema.json` 和现场 JSON 改读 `rubric_results`，保持其余检查
+  条件不变后重跑全套静态、Schema、对应关系和浏览器检查。
+- 状态：`RESOLVED`
+- 验证证据：改用 `quality_evaluation.rubric_results` 后，公共信封与 S1 正向工件 Schema、
+  11 个 Markdown 章节、8 项能力的无损字段、7 个确认问题、两组六类来源、9 个质量维度、
+  `needs_confirmation → revise_here → S1` 路由、模板派生关系与嵌入 JSON 一致性均通过。
+
+### ERR-101 S1 浏览器验收误判包裹式搜索标签
+
+- 日期：2026-07-27
+- 阶段：`al-01-create-goal-success-contract` 初中资深教研老师 S1 最终浏览器复验
+- 现象：首次最终版 Chrome 复验使用 `label[for="search"]` 查询搜索框标签，返回 0；页面实际采用
+  `<label><span class="visually-hidden">…</span><input id="search">…</label>` 的包裹式关联。
+- 影响：这一个错误选择器不能作为搜索框无可访问名称的证据；其余页面加载、键盘标签、筛选、详情抽屉、
+  无远程请求和 320 px 检查均正常。
+- 诊断：验收器只覆盖显式 `for`/`id` 关联，没有覆盖 HTML 标准允许的标签包裹关联；官方模板无需修改。
+- 处置：改为检查 `label:has(#search)`、标签文本和搜索框可访问名称，并保留其他浏览器断言复跑。
+- 状态：`RESOLVED`
+- 验证证据：本机 Chrome 最终复验确认包裹标签数量为 1、文本为“筛选当前内容”，搜索框可访问名称同为
+  “筛选当前内容”；三标签键盘切换、6/6 卡片筛选、详情抽屉开关、零控制台或页面错误、零远程请求和
+  320 px 零横向溢出均通过。
+
+### ERR-102 北京新教师培训与精品课官方附件无法由网页检索器展开
+
+- 日期：2026-07-27
+- 阶段：`al-01-create-goal-success-contract` 北京公办初中课程产品研发 S1 修订取证
+- 现象：北京市教委页面正文可访问，但点击《北京市中小学新教师规范化培训指导意见》的 `.doc` 附件
+  返回 `Failed to fetch ... (400) OK`；点击 2025 年“基础教育精品课”申报细则的 `.wps` 附件返回
+  `Cache miss`。
+- 影响：官网正文可证明文件现行有效和活动存在，但该次网页工具不能精确提取培训周期、学时及精品课
+  材料清单，不能用模型记忆代替附件内容。
+- 诊断：附件是网页解析器不支持或未缓存的办公文档格式，不是官方来源失效。
+- 处置：保留官方页面 URL 和附件 URL，改用本地只读下载与系统文档转换工具解析；如仍不可读，则只采用
+  官网正文中可直接核验的字段并把细项保持为证据缺口。
+- 状态：`RESOLVED`
+- 验证证据：从两条官方附件 URL 成功下载 36,352 字节 Word 复合文档和 39,424 字节 WPS 复合文档，
+  并由 macOS `textutil` 只读转换。新教师文件确认适用任教三年以内教师、培训周期三年，第一年
+  120 学时，其中教学基本功与教学实践 40 学时、教育研究与生涯发展 25 学时；精品课附件成功提取
+  各区五类课程推荐名额。解析产物仅位于系统临时目录，未写入阶段工件目录。
+
+### ERR-103 S1 用户事实绑定检查未归一化中文排版空格
+
+- 日期：2026-07-27
+- 阶段：`al-01-create-goal-success-contract` 北京公办初中课程产品研发 S1 三工件校验
+- 现象：`user_facts_bound` 要求“北京市公办初中、课程产品研发、教龄1年、无职称、七年级”五个
+  字面串同时原样出现在 Markdown 和 JSON；Markdown 使用“教龄 1 年”的人审排版，导致该项失败。
+- 影响：该次整套静态校验不能作为全绿收口证据；其他公共/正向 Schema、成果链、材料清单、时间数学、
+  模板派生和嵌入 JSON 一致性均已通过。
+- 诊断：Markdown 与 JSON 的事实值一致，失败来自检查器没有忽略自然语言中的空格，不是用户事实丢失。
+- 处置：不为迎合验收器修改人审排版；分别对 Markdown 和 JSON 去除 Unicode 空白后检查五个事实键，
+  并保留其余断言重新执行。
+- 状态：`RESOLVED`
+- 验证证据：对 Markdown 与 JSON 分别去除 Unicode 空白后，“北京市公办初中、课程产品研发、
+  教龄1年、无职称、七年级”五项事实均在两份工件中命中；同次复验的双 Schema、11 个章节、8 项能力、
+  5 类成果链、两组各 8 项材料、1306 小时时间数学、120 学时单位边界、六源/六类覆盖、待确认路由、
+  HTML 模板派生及嵌入 JSON 一致性全部通过。
+
+### ERR-104 S2 LLM Wiki 迁移的全量 OpenSpec 门被既有 S1 change 阻断
+
+- 日期：2026-07-28
+- 阶段：`migrate-s2-to-llm-wiki-research-answer` 严格验证
+- 现象：`openspec validate --all --strict --no-interactive` 返回退出码 1；本次新增 change 和 11 份基础
+  spec 均通过，唯一失败项为既有 `migrate-s1-to-llm-wiki-delivery`。
+- 影响：可以证明本次 S2 change 的严格规格有效，但不能把全仓 `--all` 门报告为通过。
+- 诊断：既有 S1 change 的 OpenSpec 状态中 proposal/tasks 已存在，而 design/specs 仍为 ready/缺失；
+  该状态早于本次 S2 change，且不属于本次用户要求的 S2 输出迁移范围。
+- 处置：不擅自补写或改勾 S1 change；单独运行本次 change 的 strict validation，并把全仓门保留为未通过。
+- 状态：`OPEN`
+- 验证证据：同一次输出中 `change/migrate-s2-to-llm-wiki-research-answer`、受影响基础 specs 及其余
+  规格均为 `✓`；总计 12 passed、1 failed，失败详情指向
+  `openspec validate migrate-s1-to-llm-wiki-delivery --type change`。
+
+### ERR-105 S2 相对链接检查误把运行时索引示例当成仓库静态文件
+
+- 日期：2026-07-28
+- 阶段：S2/S3 Skill 相对链接验证
+- 现象：临时 Node 链接检查器报告 `references/example.md` 和 `run-folder-contract.md` 中示例根索引行的
+  `s2/INDEX.md` 不存在；该文件只会在实际 S2 run 内生成，不应存在于 Skill references 目录。
+  同一个多命令 shell 调用又因未启用 fail-fast，由后续只读冒烟成功掩盖了 Node 的非零退出。
+- 影响：该次组合命令不能作为“相对链接全通过”的证据，但不影响已独立通过的 Skill、JSON、OpenSpec
+  与 S1→S2 输入冒烟。
+- 诊断：合同为了展示运行时根索引语法，使用了 Markdown 链接；通用静态检查器无法区分运行时链接和
+  仓库内合同链接。组合命令也不应依赖最终退出码代表所有子命令。
+- 处置：示例表改为代码路径表达，合同正文继续明确实际根索引必须生成可解析链接；重跑时把各验证项
+  独立执行或显式聚合失败。
+- 状态：`RESOLVED`
+- 验证证据：误报仅两处，均为示例 S2 阶段行；当前
+  `workspace/senior-teaching-researcher/runs/run-20260727-234421/s2/` 确认尚不存在，符合“未执行真实
+  S2，不伪造阶段输出”的预期。两处示例改为代码路径表达后，使用 fail-fast 的独立复验返回
+  `relative-links: pass`；同次 S2/S3 quick validation、目标 JSON 解析、diff check、本 change 与三份
+  受影响基础 spec strict validation、S1→S2 只读冒烟全部通过。
+
+### ERR-106 S2 取证时网页展开器无法直接展开部分官方长页与 PDF
+
+- 日期：2026-07-28
+- 阶段：`al-02-create-domain-evidence-landscape` 资深教研老师真实联网取证
+- 现象：批量展开教育部 PDF、教育部正文页和 SEC 20-F 时，网页工具分别返回 `Redirect loop detected`
+  与 `Content length is too large`；同批其他页面可正常展开。
+- 影响：失败的展开调用不能作为逐行核验凭据；不得把搜索摘要或模型记忆冒充已展开全文。
+- 诊断：教育部链接存在重定向环，SEC 20-F 超过网页展开器单页体积限制，来源本身并未被证明失效。
+- 处置：保留失败记录；对可由检索结果直接核验的元数据和有限摘要降低适用范围，关键结论改由可展开的
+  官方正文、机构官网、年度报告 PDF 可定位段落及其他独立来源交叉支持。
+- 状态：`RESOLVED_WITH_LIMITATION`
+- 验证证据：同轮成功展开新东方 2025 20-F、好未来官网课程生产说明、上海教育考试院 2025 中考数学
+  评析、IES 形成性评价综述、EEF 一对一辅导证据、出版社图书页以及三条招聘样本；未成功展开的来源在
+  S2 `sources.jsonl` 中不承担超出检索摘要可支持范围的独立关键结论。
+
+### ERR-107 S2 最终状态检索的双引号模式触发 zsh 反引号命令替换
+
+- 日期：2026-07-28
+- 阶段：`al-02-create-domain-evidence-landscape` 最终静态复验
+- 现象：`rg` 的双引号搜索模式包含 Markdown 反引号，zsh 尝试执行 `revise_here`、`S2`、`pending`
+  并输出 `command not found`；由于错误发生在命令替换中，外层组合命令仍继续执行。
+- 影响：该次 `rg` 调用不能作为门状态检索证据；同次独立的 JSONL 解析、九文件数量和
+  `git diff --check` 未受影响。
+- 诊断：shell 引用错误，不是 S2 工件内容或状态错误。
+- 处置：把 `rg` 模式改为单引号字面量并单独重跑，同时保持 fail-fast。
+- 状态：`RESOLVED`
+- 验证证据：安全引用重跑后，`state=verified`、`verdict=revise_here`、`route_to=S2`、
+  `answer_status: partial` 和 `mandatory_confirmation=pending` 均从预期文件命中，命令退出码为 0。
