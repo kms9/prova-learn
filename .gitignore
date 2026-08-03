@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# 本地 agent 运行临时产物
+# 注：workspace/**/runs/ 下为真实学习 run，默认纳入版本控制作为示例；
+# 若你不希望提交本地新 run，取消下面一行注释。
+# workspace/**/runs/run-*
+
+# 外部模型/编辑器本地缓存
+.cache/
