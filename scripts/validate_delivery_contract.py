@@ -39,6 +39,20 @@ def require(condition: bool, message: str, errors: list[str]) -> None:
         errors.append(message)
 
 
+def eval_name_aliases(stage_id: str, cfg: dict[str, Any]) -> set[str]:
+    """Return accepted eval metadata names during the naming migration.
+
+    The canonical callable name remains cfg.skill_name. Existing eval files use
+    the historical short action name, so the validator accepts it explicitly
+    while still rejecting unrelated or silently drifting names.
+    """
+    directory_name = Path(cfg["skill_dir"]).name
+    short_name = re.sub(rf"^s{stage_id[1:]}-", "", directory_name)
+    callable_name = cfg["skill_name"]
+    callable_short = re.sub(rf"^al-s{stage_id[1:]}-", "", callable_name)
+    return {directory_name, short_name, callable_name, callable_short}
+
+
 def validate_manifest() -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     manifest = load_json(MANIFEST_PATH)
@@ -70,7 +84,7 @@ def validate_manifest() -> tuple[dict[str, Any], list[str]]:
         require(eval_path.is_file(), f"{prefix} missing evals/evals.json", errors)
         if eval_path.is_file():
             evals = load_json(eval_path)
-            accepted_names = {cfg.get("skill_name"), Path(cfg.get("skill_dir", "")).name}
+            accepted_names = eval_name_aliases(stage_id, cfg)
             require(
                 evals.get("skill_name") in accepted_names,
                 f"{prefix} eval skill_name={evals.get('skill_name')!r} does not match {sorted(accepted_names)}",
