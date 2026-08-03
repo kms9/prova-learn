@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": "1.0.0",
+  "description": "Canonical delivery contract for Prova Learn stages. Consumers and validators must use this manifest instead of inferring delivery shape from historical examples.",
+  "stages": {
+    "S1": {
+      "skill_name": "al-s1-create-goal-success-contract",
+      "skill_dir": ".agents/skills/s1-create-goal-success-contract",
+      "gate": "G1",
+      "delivery_type": "run_folder",
+      "entrypoint": "INDEX.md",
+      "required_files": [
+        "INDEX.md",
+        "sources.jsonl",
+        "evidence_table.md",
+        "coverage.md",
+        "capabilities.jsonl",
+        "terminology.jsonl",
+        "goal-contract.md",
+        "research-brief.md",
+        "confirmation.md",
+        "g1-evaluation.md",
+        "verification.md"
+      ],
+      "normal_route": "S2"
+    },
+    "S2": {
+      "skill_name": "al-s2-create-domain-evidence-landscape",
+      "skill_dir": ".agents/skills/s2-create-domain-evidence-landscape",
+      "gate": "G2",
+      "delivery_type": "nested_run_folder",
+      "entrypoint": "s2/INDEX.md",
+      "required_files": [
+        "s2/INDEX.md",
+        "s2/research-log.md",
+        "s2/sources.jsonl",
+        "s2/coverage.md",
+        "s2/evidence-items.jsonl",
+        "s2/research-answers.md",
+        "s2/answer-validation.md",
+        "s2/g2-evaluation.md",
+        "s2/verification.md"
+      ],
+      "normal_route": "S3"
+    },
+    "S3": {
+      "skill_name": "al-s3-build-capability-concept-graph",
+      "skill_dir": ".agents/skills/s3-build-capability-concept-graph",
+      "gate": "G3",
+      "delivery_type": "three_artifacts",
+      "artifact_type": "capability_concept_graph",
+      "required_artifacts": ["markdown", "json_envelope", "html_projection"],
+      "normal_route": "S4"
+    },
+    "S4": {
+      "skill_name": "al-s4-diagnose-learner-frontier",
+      "skill_dir": ".agents/skills/s4-diagnose-learner-frontier",
+      "gate": "G4",
+      "delivery_type": "three_artifacts",
+      "artifact_type": "learner_snapshot",
+      "required_artifacts": ["markdown", "json_envelope", "html_projection"],
+      "normal_route": "S5"
+    },
+    "S5": {
+      "skill_name": "al-s5-plan-learning-sessions",
+      "skill_dir": ".agents/skills/s5-plan-learning-sessions",
+      "gate": "G5",
+      "delivery_type": "three_artifacts",
+      "artifact_type": "learning_and_session_plan",
+      "required_artifacts": ["markdown", "json_envelope", "html_projection"],
+      "normal_route": "S6"
+    },
+    "S6": {
+      "skill_name": "al-s6-run-instructional-interaction",
+      "skill_dir": ".agents/skills/s6-run-instructional-interaction",
+      "gate": "G6",
+      "delivery_type": "three_artifacts",
+      "artifact_type": "session_package_and_trace",
+      "required_artifacts": ["markdown", "json_envelope", "html_projection"],
+      "normal_route": "S7"
+    },
+    "S7": {
+      "skill_name": "al-s7-verify-mastery-and-replan",
+      "skill_dir": ".agents/skills/s7-verify-mastery-and-replan",
+      "gate": "G7",
+      "delivery_type": "three_artifacts",
+      "artifact_type": "mastery_and_replanning_bundle",
+      "required_artifacts": ["markdown", "json_envelope", "html_projection"],
+      "normal_routes": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "complete"]
+    }
+  }
+}
