@@ -1,5 +1,5 @@
 ---
-name: al-06-run-instructional-interaction
+name: al-s6-run-instructional-interaction
 description: 为已确认路径上的当前学习节点生产可追溯、分层、含正反例与渐隐支架的教学内容，并按“完整 Markdown 人审文档→无损结构化 session_package_and_trace JSON→JSON 驱动的 S6 交互 HTML”交付三份工件，全程不生成独立图片。只要用户要进入个性化学习 S6、开展学习会话、调整教学形式或修复内容质量，就使用本 skill。
 ---
 

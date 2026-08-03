@@ -1,6 +1,8 @@
 ---
-name: al-01-create-goal-success-contract
+name: al-s1-create-goal-success-contract
 description: 将模糊学习诉求、职业目标或能力愿望校准为经过外部预检、可观察、可验收并由用户确认的 goal_success_contract。交付物为运行目录下的 LLM Wiki run folder（workspace/<project-slug>/runs/<run-id>/），内含固定命名文件（sources.jsonl 记录预检来源、evidence_table.md / coverage.md 汇总表、capabilities.jsonl / terminology.jsonl 记录、goal-contract.md / research-brief.md / confirmation.md / g1-evaluation.md / verification.md / INDEX.md 主索引），由状态机带 guard 控制写入、稳定 ID 跨文件互引。不再产出单体 JSON 移交信封、Markdown 单文件或 HTML 页面，也不生成独立图片。只要用户要开始新的个性化学习目标、改变既有目标、定义"学会"的证据，或需要校正岗位/领域名称，就使用本 skill。
+metadata:
+  author: kms9
 ---
 
 # al-s1-目标校准

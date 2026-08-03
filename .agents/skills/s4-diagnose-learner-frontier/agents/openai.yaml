@@ -1,4 +1,0 @@
-interface:
-  display_name: "学习者诊断与学习前沿"
-  short_description: "用多项行为证据诊断节点状态、误概念、提示依赖与最近学习前沿"
-  default_prompt: "使用 $diagnose-learner-frontier 按本 Skill 的独立依赖定义校验 G1 目标门与 G3 图谱门，再根据可追溯真实任务与行为证据诊断我的学习前沿；先写完整 S4 Markdown 人审文档，再无损结构化为规范 JSON，最后生成 JSON 驱动的 S4 只读交互 HTML。"

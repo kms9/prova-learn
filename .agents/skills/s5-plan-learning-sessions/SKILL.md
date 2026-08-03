@@ -1,5 +1,5 @@
 ---
-name: al-05-plan-learning-sessions
+name: al-s5-plan-learning-sessions
 description: 从已证实的学习前沿选择最小连通子图并编排学习会话，并按“完整 Markdown 人审文档→无损结构化 learning_and_session_plan JSON→JSON 驱动的 S5 交互 HTML”交付三份工件，全程不生成独立图片。只要用户要进入个性化学习 S5、制定或修订学习路径与会话、调整时间投入或第一个会话契约，就使用本 skill。
 ---
 

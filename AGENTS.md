@@ -1,4 +1,4 @@
-# Auto Learn 代理协作 Wiki
+# Prova Learn 代理协作 Wiki
 
 > 页面类型：仓库级运行协议与导航页  
 > 适用范围：本文件所在目录及全部子目录；更深层的 `AGENTS.md` 可补充或覆盖局部规则  

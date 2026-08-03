@@ -1,5 +1,5 @@
 ---
-name: al-04-diagnose-learner-frontier
+name: al-s4-diagnose-learner-frontier
 description: 用对齐目标与先修链的多项行为证据诊断学习者节点状态、误概念、提示依赖、迁移表现和置信度校准，并按“完整 Markdown 人审文档→无损结构化 learner_snapshot JSON→JSON 驱动的 S4 交互 HTML”交付三份工件，全程不生成独立图片。只要用户要进入个性化学习 S4、确定从哪里开始学、复测争议节点、修正既有诊断或排查“会做但讲不清”，就使用本 skill。
 ---
 

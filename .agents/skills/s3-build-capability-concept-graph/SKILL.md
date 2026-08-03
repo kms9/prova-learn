@@ -1,5 +1,5 @@
 ---
-name: al-03-build-capability-concept-graph
+name: al-s3-build-capability-concept-graph
 description: 读取同一 LLM Wiki run 中已通过 G1 的 S1 目标契约与已通过 G2 的 S2 逐题研究回答/多维校验，将其建模为可诊断的 capability_concept_graph，并按“完整 Markdown 人审文档→无损结构化 JSON→JSON 驱动的 S3 交互 HTML”交付三份工件，全程不生成独立图片。只要用户要进入个性化学习 S3、把目标与证据转成三层能力大纲、学习单元、原子知识点、映射、先修、评估与追溯，或修正既有图谱，就使用本 skill。
 ---
 

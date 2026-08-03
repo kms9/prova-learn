@@ -1,4 +1,0 @@
-interface:
-  display_name: "内容生产与教学交互"
-  short_description: "为当前节点生成可追溯教学内容，通过渐隐支架、独立作答与反馈形成行为证据"
-  default_prompt: "使用 $run-instructional-interaction 按本 Skill 的独立依赖定义校验 G2/G3/G4/G5 门证据，再按六源证据角色为当前节点开展可追溯教学与渐隐交互；先写完整 S6 Markdown 人审文档，再无损结构化为规范 JSON，最后生成 JSON 驱动的 S6 只读交互 HTML。"

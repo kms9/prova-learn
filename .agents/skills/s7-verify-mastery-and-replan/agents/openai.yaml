@@ -1,4 +1,0 @@
-interface:
-  display_name: "掌握验证与重规划"
-  short_description: "验证节点掌握、原子更新模型，并把来源错误或过期反馈到上游"
-  default_prompt: "使用 $verify-mastery-and-replan 按本 Skill 的独立依赖定义校验 G3/G4/G5/G6 门证据，再验证当前节点掌握、版本化更新学习者模型、记录来源反馈并决定下一路由；先写完整 S7 Markdown 人审文档，再无损结构化为规范 JSON，最后生成 JSON 驱动的 S7 只读交互 HTML。"

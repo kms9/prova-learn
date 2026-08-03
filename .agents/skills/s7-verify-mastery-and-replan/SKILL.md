@@ -1,5 +1,5 @@
 ---
-name: al-07-verify-mastery-and-replan
+name: al-s7-verify-mastery-and-replan
 description: 用预先确定的掌握规则综合节点级掌握证据，以版本检查更新学习者模型并决定路由，并按“完整 Markdown 人审文档→无损结构化 mastery_and_replanning_bundle JSON→JSON 驱动的 S7 交互 HTML”交付三份工件，全程不生成独立图片。只要用户要进入个性化学习 S7、判断是否学会、更新学习者状态、安排复测或重规划路径，就使用本 skill。
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: al-02-create-domain-evidence-landscape
+name: al-s2-create-domain-evidence-landscape
 description: 读取已通过 G1 的 S1 LLM Wiki run folder，对 research-brief.md 中的问题执行真实联网、STORM 式多视角、多轮六源取证，以逐题明确回答和八维校验写入同一 run 的 s2/ 阶段区，并更新根 INDEX.md；不产出独立 JSON 信封、单体 Markdown、HTML 或图片。只要用户要进入个性化学习 S2、核验并回答 S1 研究问题、研究领域依据，或补充 S3 暴露的来源空白，就使用本 skill。
 ---
 

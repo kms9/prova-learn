@@ -1,4 +1,0 @@
-interface:
-  display_name: "S1 问题的领域研究回答"
-  short_description: "读取 S1 LLM Wiki，以多轮六源研究逐题回答并执行八维校验"
-  default_prompt: "使用 $create-domain-evidence-landscape 校验最新 S1 LLM Wiki run folder 的 G1 七项条件，读取 research-brief.md 的 priority questions，执行真实联网 STORM 式多视角、多轮六源研究；在同一 run 的 s2/ 写九文件阶段区，以 research-answers.md 逐题明确回答、answer-validation.md 执行八维校验，并更新根 INDEX.md 的 S2 阶段入口。不要生成独立 JSON 信封、单体 S2 Markdown、HTML 或图片。"
