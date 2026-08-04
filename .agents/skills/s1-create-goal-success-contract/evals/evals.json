@@ -3,57 +3,66 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "学习者说：我会写 SQL，但遇到 PostgreSQL 慢查询只会试着加索引。希望四周内、每周约 6 小时，能自己看执行计划并做优化。已确认使用 PostgreSQL 18 沙箱，不允许生产变更，最终可接受三个未见查询的实操验收。请完成个性化学习 S1，并在 workspace 下落盘可被下游检索的 run folder。",
-      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S1 正向例子1 and PostgreSQL end-to-end §S1] A confirmed, observable goal_success_contract run folder backed by executed live pre-research and a passing G1 route.",
+      "prompt": "学习者说：我会写 SQL，但遇到 PostgreSQL 慢查询只会试着加索引。希望四周内、每周约 6 小时，能自己看执行计划并做优化。已确认使用 PostgreSQL 18 沙箱，不允许生产变更，最终接受三个未见查询的实操验收。请完成 S1：创建或更新项目级 LLM Wiki，记录本次 conversation、外部预检、目标契约、G1 和项目状态。",
+      "expected_output": "A project-level Wiki transaction for workspace/postgresql-query-optimization: conversation recorded, S1 pages and JSONL updated, G1 passed, project revision advanced, route S2.",
       "files": [],
       "expectations": [
-        "The skill is self-contained about its notation: it explicitly defines S1 as the goal-contract stage, G1 as that stage's quality gate (not a theory or another skill), states S1 has no upstream gate dependency, and states the concrete conditions for G1 pass under the run-folder model.",
-        "The run writes a complete run folder at workspace/<project-slug>/runs/<run-id>/ containing all 11 fixed-name files (INDEX.md, sources.jsonl, evidence_table.md, coverage.md, capabilities.jsonl, terminology.jsonl, goal-contract.md, research-brief.md, confirmation.md, g1-evaluation.md, verification.md); no standalone JSON envelope, HTML page, or image asset is produced.",
-        "sources.jsonl is valid JSONL with one source per line, each carrying a stable source_id (S001...), a storm-evidence type (web/local/vector/agent_trace/expert_note), and an S1 provenance class (external_evidence/market_signal/model_hypothesis/...); model knowledge is marked model_hypothesis/trace_only and only actually-retrieved accessible sources are external_evidence/accepted.",
-        "coverage.md records exactly the six fixed S1 preflight categories (wikipedia_encyclopedia, official_academic, practice_case, recruiting_jd, interview_selection, adversarial_frontier), each once, with covered/not_applicable/gap status, reason, gate_effect, and source_ids; and it states the mapping-by-actual-provenance into the separate S2 six-source channels rather than treating the two taxonomies as identical.",
-        "evidence_table.md binds S1 conclusions (capabilities/terminology/goal-boundary claims with CAP-/TERM-/CL- IDs) to accepted Source IDs with support/confidence; unsupported/trace_only claims do not enter the main table.",
-        "capabilities.jsonl gives every target capability at least one observable evidence and distinguishes cognitive levels; the final assessment requires an unseen/transfer task rather than only recall.",
-        "research-brief.md contains a domain_research_brief fixing role family/target level, region/languages, time window, decision risk, priority questions, source constraints, and one query seed for each of job_career, books_courses, papers_research, community_web, standards_official, artifacts_validation; it does not claim S1 completed the six-source landscape.",
-        "goal-contract.md records sandbox constraints and at least one explicit exclusion.",
-        "confirmation.md records mandatory confirmation as resolved (status=confirmed).",
-        "g1-evaluation.md evaluates G1 dimension by dimension and passes only if all required dimensions pass; the deterministic route is S2 when G1 passes.",
-        "verification.md records terminal state=verified, accepted_external_evidence count > 0, no unresolved high-severity risks, and the files_created list.",
-        "No file contains TBD/TODO/empty-heading/empty-table/example placeholders, and every cross-file source_id/capability_id/term_id/claim reference resolves.",
-        "INDEX.md is conclusion-first, lists each file's purpose, and points to run history under the same project."
+        "The skill reads the project workspace contract and uses workspace/<project-slug>/ as the delivery boundary; it does not create a new runs/<run-id> folder or treat a single JSON envelope as the primary output.",
+        "A project root exists with INDEX.md, PROJECT.md, project-state.json, timeline.md and the required project directories.",
+        "The substantive S1 interaction creates a conversation with INDEX.md, transcript.md, events.jsonl and summary.md; the learner's original wording, tool results and confirmation are traceable.",
+        "stages/s1-goal-contract contains all common and S1-specific files from stage-delivery-manifest.json.",
+        "sources.jsonl contains actual retrieved sources with SRC- IDs and separates external_evidence, market_signal, model_hypothesis and user_provided_unverified.",
+        "coverage.md audits the six fixed preflight categories and does not disguise missing evidence as not_applicable.",
+        "capabilities.jsonl contains observable capabilities and at least one unseen or transfer evidence requirement.",
+        "goal-contract.md records the PostgreSQL 18 sandbox constraint and excludes production changes.",
+        "confirmation.md records mandatory confirmation and links to the source conversation and user_confirmation event.",
+        "gate.md evaluates G1 dimension by dimension, including conversation traceability and project revision consistency.",
+        "verification.md verifies project files, conversation files, JSONL, stable IDs, indexes and accepted external evidence.",
+        "project-state.json advances exactly one revision for the S1 transaction, marks S1 completed, and routes to S2.",
+        "The root INDEX.md and timeline.md are synchronized with the new revision, latest conversation, G1 and route."
       ]
     },
     {
       "id": 2,
-      "prompt": "监护人与六年级学习者共同提出：三周内每天 25 分钟，真正理解分数；要会比较分数、解释等值分数并解决简单情境题，机械通分速度不是唯一目标。双方已经确认这些范围和一种包含数轴解释、配方缩放与未见迁移题的验收方式。请完成个性化学习 S1，并在 workspace 下落盘 run folder。",
-      "expected_output": "[positive fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S1 正向例子2] A guardian-and-learner-confirmed run folder spanning representation, explanation, application and transfer, with real pre-research and a passing G1 route.",
+      "prompt": "监护人与六年级学习者提出：三周内每天 25 分钟，真正理解分数；会比较分数、解释等值分数并解决简单情境题，机械通分速度不是唯一目标。双方确认数轴解释、配方缩放和未见迁移题。请在一个项目级 LLM Wiki 中完成 S1，并记录监护人与学习者的确认。",
+      "expected_output": "A guardian-and-learner-confirmed project Wiki S1 transaction with observable fraction capabilities, multi-representation evidence, a transfer assessment, conversation history and G1 route S2.",
       "files": [],
       "expectations": [
-        "The run writes the complete 11-file run folder at workspace/<project-slug>/runs/<run-id>/; no standalone JSON envelope, HTML page, or image asset.",
-        "capabilities.jsonl defines observable fraction capabilities across multiple cognitive levels and representations.",
-        "goal-contract.md contains a pass rule with an independently required transfer task rather than only mechanical speed or recall.",
-        "sources.jsonl and coverage.md record executed external pre-research and auditable six-category coverage.",
-        "evidence_table.md binds the capability/terminology claims to accepted source IDs.",
-        "research-brief.md defines the learner/guardian scope and all six downstream source-channel seeds while keeping full landscape collection owned by S2.",
-        "confirmation.md represents both guardian and learner confirmation as resolved.",
-        "goal-contract.md records explicit constraints and exclusions.",
-        "g1-evaluation.md passes all required dimensions and routes to S2; verification.md state=verified with accepted_external_evidence > 0.",
-        "No placeholders and all cross-file references resolve."
+        "The project workspace, not a run folder, is the primary delivery.",
+        "The conversation preserves both learner and guardian confirmation and produces structured user_confirmation events.",
+        "The goal contract excludes speed-only success criteria and requires explanation, application and unseen contextual transfer.",
+        "Capabilities cover representation, explanation, comparison and contextual application with observable evidence.",
+        "External preflight evidence is recorded and traceable to current claims.",
+        "G1 passes only after mandatory confirmation, verification and project revision commit.",
+        "project-state routes to S2 and the project root links to the current S1 pages and latest conversation."
       ]
     },
     {
       "id": 3,
-      "prompt": "学习者只说“七天成为 AI 专家”，拒绝补充使用场景、范围或验收方式，并要求不要联网，只凭模型知识给出目标；验收只想做 100 道选择题，80 分算通过。请执行个性化学习 S1 并在 workspace 下落盘 run folder。",
-      "expected_output": "[negative/blocked fixture; source: docs/chat_log/七步个性化学习SOP正反例与研究依据.md §S1 反向例子] S1 must fail closed: a diagnostic run folder with no accepted positive goal, no G1 pass, research_blocked/blocked terminal state, route remaining S1.",
+      "prompt": "学习者只说‘七天成为 AI 专家’，拒绝补充使用场景、范围或验收方式，并要求不要联网，只凭模型知识给出目标；验收只想做 100 道选择题，80 分算通过。请执行项目级 S1。",
+      "expected_output": "A fail-closed project Wiki transaction: the conversation and diagnostic S1 pages exist, but no accepted goal or external evidence is fabricated; G1 remains blocked and route stays S1.",
       "files": [],
       "expectations": [
-        "The run still writes the complete 11-file diagnostic run folder (no missing files), showing real gaps, current conclusions, and recovery conditions; no placeholders.",
-        "No standalone JSON envelope, HTML page, or image asset is produced.",
-        "sources.jsonl has zero accepted external_evidence sources because no live pre-research was executed; model knowledge is not relabeled as external evidence.",
-        "verification.md records terminal state=blocked (or research_blocked) and at least one high-severity unresolved risk.",
-        "g1-evaluation.md does not claim G1 pass; it identifies the target as non-observable and the recall-only assessment as insufficient for transfer.",
-        "coverage.md does not fabricate six-source coverage from the missing pre-research (records gap/blocked).",
-        "confirmation.md keeps mandatory confirmation unresolved (status=pending).",
-        "The route stays at S1 and no fabricated positive run folder is accepted as passing."
+        "The project and conversation are still recorded; the skill does not respond only with prose or JSON.",
+        "No accepted external_evidence is fabricated and model knowledge remains model_hypothesis.",
+        "The recall-only score is rejected as sufficient evidence for expert capability.",
+        "confirmation remains pending and the missing scene, scope and assessment are explicit.",
+        "gate.md does not pass G1 and verification records research_blocked or blocked.",
+        "project-state advances the conversation revision but keeps current_stage and route_to at S1.",
+        "No runs/<run-id>, standalone HTML or primary JSON envelope is created."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "当前只有旧路径 workspace/senior-teaching-researcher/runs/run-20260727-234421。请继续目标校准，但不要修改旧 run。",
+      "expected_output": "The skill first invokes the legacy migration path, creates a project-level Wiki with artifact_migrated events and hashes, then continues S1 only in the new workspace.",
+      "files": [],
+      "expectations": [
+        "The old run remains read-only and is not used as the new write target.",
+        "scripts/migrate_legacy_run.py or an equivalent contract-compliant migration is used before new S1 writes.",
+        "The new project contains _machine/migration-map.json with source and destination hashes.",
+        "The migration conversation contains artifact_migrated events and project revision history.",
+        "Subsequent S1 changes write only to stages/s1-goal-contract and a new substantive conversation."
       ]
     }
   ]
