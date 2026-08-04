@@ -1,15 +1,15 @@
 ---
 name: al-pls
-description: 作为 Prova Learn 七阶段个性化学习流程的统一主控入口，理解用户的自然语言学习意图，定位项目状态，分发并执行对应的 `.agents/skills` S1–S7 Skill，核验落盘 Gate 与 route，并提示下一步行动。用户开始或改变学习目标、要求研究领域、构建能力图谱、诊断水平、制定计划、开始教学、验证掌握，或只说“继续”“下一步”“现在该做什么”且不想自己选择阶段时，使用本 Skill。
+description: 作为 Prova Learn 七阶段个性化学习流程的统一主控入口，理解自然语言学习意图，定位项目状态，选择并执行 S1–S7，复核 Gate、route、conversation、revision 和真实学习证据。用户开始或改变目标、继续项目、要求诊断、规划、教学、掌握验证或完整流程时使用。
 ---
 
 # 个性化学习主控
 
-把本 Skill 当作 S1–S7 之上的薄控制面。只负责理解、选择、委托、核验和提示；不要创建 S0/G0，不要代替阶段业务，不要替阶段宣布 Gate 通过。
+本 Skill 是 S1–S7 之上的薄控制面，只负责理解、选择、委托、复核和向用户交付下一动作。它不是 S0/G0，不拥有阶段业务工件，也不得替阶段宣布通过。
 
-## 1. 每次开始前读取
+## 1. 权威输入
 
-按顺序完整读取：
+每次按顺序读取：
 
 1. `../../AGENTS.md`
 2. `../../project-workspace-contract.md`
@@ -17,13 +17,12 @@ description: 作为 Prova Learn 七阶段个性化学习流程的统一主控入
 4. `../../stage-runtime-contract.md`
 5. `../../stage-delivery-manifest.json`
 6. `../../stage-profiles.json`
-7. [orchestration-contract.md](references/orchestration-contract.md)
+7. `references/orchestration-contract.md`
+8. 项目根、当前阶段入口和最近 conversation
 
-manifest/profile 是阶段名称、路径、前置和允许路由的当前权威。参考文件与其冲突时，以 manifest/profile 为准。
+manifest/profile 与阶段 `SKILL.md` 共同构成当前合同；任一处要求更严格时采用更严格规则。
 
-## 2. 建立本次编排上下文
-
-记录以下工作变量，不要先写入业务文件：
+## 2. 编排上下文
 
 ```text
 request_kind = status | stage_work | continue | full_flow
@@ -32,120 +31,130 @@ project = resolved | legacy | missing | ambiguous
 requested_stage = S1..S7 | none
 selected_stage = S1..S7 | none
 expected_project_revision = integer | none
+real_learner_input = present | absent
 ```
 
-执行以下规则：
+- 查询状态使用 `read_only`，不制造 conversation 或阶段工件。
+- 默认 `single_stage`，一次只执行一个阶段。
+- 只有用户明确要求从头完成、补齐前置或完整推进时使用 `guided_flow`。
+- 新目标、目标实质变化或成功证据变化优先回 S1。
 
-- 纯“查进度/下一步是什么”使用 `read_only`，不创建 conversation，不运行阶段。
-- 默认使用 `single_stage`，一次只执行一个阶段。
-- 只有用户明确要求“从头完成”“补齐前置”“按完整流程推进”时使用 `guided_flow`。
-- 目标实质变化、新项目或新的成功证据定义优先选择 S1，即使项目当前处于后续阶段。
+## 3. 项目定位与版本
 
-## 3. 定位项目
+解析顺序：用户显式项目路径 → 当前目录唯一项目 → 旧 run → 未找到。
 
-严格使用独立调用合同的解析顺序：用户显式路径 → 当前目录唯一项目 → 旧 run → 未找到。
+- 只有 S1 可创建项目。
+- S2–S7 无项目时保留 `project_missing → S1`，不得创建孤立阶段。
+- 多项目且写入目标不唯一时，先做最小选择，不按修改时间猜。
+- 旧 run 先迁移，随后重新读取项目状态。
+- 写入前保存 `expected_project_revision`；写后必须重新读取，冲突时报告 `version_conflict`。
 
-- 若用户要新建或校准目标，允许选择 S1，由 S1 创建或更新项目。
-- 若 S2–S7 的 `single_stage` 请求没有项目，仍执行该阶段的独立调用语义，保留 `project_missing → S1`，不要替它创建孤立工件。
-- 若 `guided_flow` 没有项目，从 S1 开始。
-- 若多个项目可能匹配且下一步会写入，先让用户选择；不要按修改时间猜测。
-- 若存在旧 run，按合同先迁移并复核，不要继续写旧 run。
+## 4. 阶段选择
 
-项目存在时读取根 `INDEX.md`、`PROJECT.md`、`project-state.json`、`last_conversation_id` 指向的会话和目标阶段入口；保存写前 `project_revision`。
+优先级：
 
-## 4. 选择阶段
+1. 新目标或目标实质变化 → S1；
+2. 用户显式指定阶段；
+3. “继续/下一步”使用已核验 `project-state.json.route_to`；
+4. 研究事实归 S2，结构归 S3，诊断归 S4，路径归 S5，教学归 S6，掌握与重规划归 S7；
+5. 多阶段冲突时选择最早事实所有者。
 
-使用参考合同的优先级和语义表：
+`route_to=complete` 时不再调用阶段，只展示最终证据、保持状态和可选的新目标。
 
-1. 先识别新项目或目标实质变化；命中即 S1。
-2. 再识别用户显式指定的 S1–S7。
-3. `continue` 从已核验的 `project-state.json.route_to` 选择，不按对话印象猜测。
-4. 其他阶段工作按事实所有者映射为研究 S2、结构 S3、诊断 S4、规划 S5、教学 S6、验证/重规划 S7。
-5. 同时命中多个阶段时选择最早事实所有者；若不同选择会产生实质不同写入且无法从项目证据消歧，先请求一个最小澄清。
+## 5. 确认语义
 
-`route_to=complete` 时不要调用阶段；展示完成证据和复习/新目标选项。
+不得把普通的“继续”“下一步”“跑完流程”自动解释为对多个高影响默认值的确认。
 
-## 5. 委托阶段
+只有同时满足以下条件，才能把简短回复解释为接受默认方案：
 
-选择阶段后：
+1. 上一轮向用户展示了一个明确的“接受全部默认值”选项；
+2. 已逐项列出将被确认的字段；
+3. 本轮原话与该选项直接相邻且无歧义；
+4. conversation 和 `confirmation.md` 记录 `confirmed_fields`、`unconfirmed_fields` 与用户原话；
+5. 用户可见回执再次列出实际确认的字段。
 
-1. 从 manifest 取得 `skill_name` 与 `skill_dir`。
-2. 完整读取目标 `SKILL.md` 及其明确要求的共享合同和阶段 references。
-3. 把用户原始意图、已解析项目路径、`expected_project_revision`、执行模式和前置检查结果交给目标阶段。
-4. 严格按目标 Skill 执行业务与写入事务，如同用户直接调用它。
-5. 不在主控中重写阶段工件，不用聊天摘要填补目标 Skill 未执行的步骤。
+否则保持 `pending`，只询问产生实质差异的最少问题。不得重复询问用户已经明确提供的信息。
 
-只有实际读取并执行了目标 Skill，才能说“已调用/已执行该阶段”。只完成选择但没有执行业务时，报告 `selected_not_executed`。
+## 6. 委托阶段
 
-### single_stage
+1. 从 manifest 读取目标阶段的 `skill_name`、目录和前置。
+2. 完整读取目标 `SKILL.md` 及其 references。
+3. 传递用户原始意图、项目路径、revision、执行模式和前置结果。
+4. 严格按目标 Skill 执行业务事务。
+5. 主控不得用聊天摘要补造阶段遗漏的研究、回答、确认或学习行为。
 
-执行选定阶段一次。前置失败时保留阶段的 blocked/project_missing 结果和最早恢复路由，不静默补跑上游。
+只有真正执行了阶段业务，才能报告“已执行”；只选择阶段时报告 `selected_not_executed`。
 
-### guided_flow
+## 7. 真实学习证据边界
 
-若目标阶段的前置缺失或失效，从最早缺失阶段开始。每执行一个阶段，都先完成第 6 节复核；只有阶段 `completed`、Gate 通过、verification 通过且 `route_to` 允许继续时，才考虑下一阶段。
+- S4、S6、S7 只接受真实学习者原话和实际交互作为真实 `learner_behavior`。
+- `simulations/**`、fixture、系统构造答案必须标记 `synthetic_learner_behavior` 或明确的 fixture 元数据，且不得进入真实项目的 learner snapshot、mastery event、active model 或 `project-state.json`。
+- 不得把“未作答”编译为“未掌握”。
+- 不得把单个复合题覆盖多个节点，直接推导多个 `tested_mastered`。
+- 关键节点达到 `tested_mastered`，必须满足阶段预设的多证据规则：至少两项相互独立的观察，或一项完整表现任务再加一项无提示迁移/延迟复测。否则使用 `candidate_mastery`、`partial`、`unknown` 或 `insufficient_evidence`。
 
-## 6. 复核落盘事实
+## 8. guided flow 停止条件
 
-阶段执行后重新读取，不使用写前缓存：
+每个阶段执行后必须复核，再决定是否继续。遇到以下任一条件立即停止：
 
-- 项目根 `INDEX.md` 与 `project-state.json`；
-- 目标阶段 `INDEX.md`、`gate.md`、`verification.md`；
-- `last_conversation_id` 对应的 conversation；
-- manifest 要求的阶段入口与必需文件。
+- mandatory 或升级确认未完成；
+- 等待真实学习者回答、练习、迁移或延迟保持；
+- 需要用户在有实质后果的方案间选择；
+- `pending`、`blocked`、`research_blocked`、`version_conflict`、`evidence_gap`；
+- route 回到当前或上游阶段；
+- 下一阶段前置不能由落盘事实证明；
+- S7 尚未达到 `complete`。
+
+没有新输入或新证据时，不得在同一次调用里重复跑同一阶段。
+
+## 9. 落盘复核
+
+阶段执行后重新读取：
+
+- 根 `INDEX.md`、`project-state.json`、timeline；
+- 阶段 `INDEX.md`、`gate.md`、`verification.md`；
+- `last_conversation_id` 对应 conversation；
+- manifest 必需文件；
+- 学习阶段还要检查 observation/session/mastery 与真实来源边界。
 
 至少核对：
 
 ```text
-project_revision 是否符合本次事务
-conversation 是否存在且与本次请求关联
-stage state = completed | pending | blocked
-Gate verdict/status 与 route_to 是否一致
-verification 是否通过
-project-state、根 INDEX、阶段 INDEX 与 timeline 是否同步
+revision 事务一致
+conversation 与本次请求关联
+stage state / gate / route 一致
+verification 通过
+根索引、阶段索引、timeline 同步
+真实与模拟证据未混用
+掌握结论满足最小证据数和独立性
 ```
 
-无法核验时如实报告 `not_executed`、`pending`、`blocked`、`version_conflict` 或 `evidence_gap`。不要把子 Skill 自述、文件存在或裸 `route_to` 当成完成证明。
+无法核验时如实报告 `not_executed`、`pending`、`blocked`、`version_conflict` 或 `evidence_gap`。
 
-## 7. 决定是否继续
-
-默认在一个阶段后停止。仅 `guided_flow` 可继续，并且遇到下列任一条件必须停：
-
-- mandatory 或升级后的确认尚未完成；
-- 等待真实学习者回答、练习、迁移或延迟保持；
-- 需要用户在有实质后果的方案间选择；
-- `pending`、`blocked`、`research_blocked`、`version_conflict` 或验证缺口；
-- `route_to` 回到当前阶段或任何上游阶段；
-- S7 未到 `complete`；
-- 下一阶段无法由已落盘证据证明前置通过。
-
-没有新用户输入或新证据时，不要在同一次调用中重复执行同一阶段。
-
-## 8. 给用户下一步回执
-
-每次结论先行，包含：
+## 10. 用户回执
 
 ```markdown
 当前结果：<已完成 / 待确认 / 待作答 / 被阻断 / 仅查询>
-项目：<路径与 revision，未知则说明>
+项目：<路径与 revision>
 理解的意图：<一句话>
 本次路由：<未调用 | Sx -> $skill-name>
-依据：<项目 route / 显式请求 / 语义所有者 / 最早缺失前置>
+依据：<route / 显式请求 / 事实所有者 / 最早缺失前置>
 阶段与 Gate：<state、Gx、route_to>
-证据入口：<可点击或可定位的 INDEX/conversation/gate/verification>
-停止原因：<为何现在不继续>
-需要你提供：<具体确认、回答、材料或“无”>
-下一步：<一条可立即执行的动作>
+证据入口：<INDEX / conversation / gate / verification>
+停止原因：<为何不能继续>
+需要你提供：<具体问题、作答或“无”>
+下一步：<一条可立即执行动作>
 ```
 
-下一步始终继续指向 `$al-orchestrate-personalized-learning`，不要要求用户改为记忆或直接调用子 Skill。若需要回答问题，直接展示问题或活动；不得只说“请补充信息”。
+下一步继续指向 `$al-pls`；需要回答时直接展示题目或活动，不只说“请补充信息”。
 
-## 9. 不可越过的边界
+## 11. 不可越过的边界
 
-- 不把主控选择当成阶段调用成功。
-- 不把模型知识当成 S1/S2 真实联网证据。
-- 不替用户确认 S1/S5，不模拟 S4/S6 学习者回答。
-- 不因 S7 工件通过就声称学习目标已达成；只有 `GOAL_ACHIEVED` 且最终验收与保持通过才 `complete`。
-- 不在 revision 冲突时覆盖项目。
-- 不调用图像生成工具，不创建独立图片或 HTML 业务交付。
-- 不把 Skill 软编排描述成严格跨进程状态机；严格重试、并发锁和外部持久化需要独立 runtime/harness。
+- 不把阶段选择当成执行完成。
+- 不把模型知识当 S1/S2 联网证据。
+- 不替用户确认 S1/S5。
+- 不模拟 S4/S6 的学习者回答。
+- 不把 G6 或 G7 工件质量等同掌握。
+- 只有最终验收、迁移与要求的保持证据均通过，才允许 `GOAL_ACHIEVED` 和 `complete`。
+- 不在 revision 或 learner model version 冲突时覆盖。
+- 不把软编排描述为具备外部 runtime 才能提供的强锁、严格重试或后台执行能力。
