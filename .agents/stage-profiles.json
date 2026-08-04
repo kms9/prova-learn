@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0.0",
+  "stages": {
+    "S1": {
+      "stage_id": "S1",
+      "name": "目标校准",
+      "purpose": "把学习诉求、真实使用场景、外部预检、可观察能力、验收方式和用户确认编译为项目级目标契约。",
+      "gate": "G1",
+      "stage_dir": "stages/s1-goal-contract",
+      "prerequisites": [],
+      "normal_route": "S2",
+      "required_stage_files": ["goal-contract.md","research-brief.md","sources.jsonl","evidence-table.md","coverage.md","capabilities.jsonl","terminology.jsonl","confirmation.md"],
+      "business_rules": ["创建或定位项目，记录 conversation。","执行真实外部预检并区分证据角色。","形成可观察能力、未见验收、范围、约束与排除项。","mandatory 确认后执行 G1、verification 和项目 revision 事务。"],
+      "fail_closed": ["无项目时只有 S1 可以创建。","无联网或确认未完成时保持 S1。","模型假设、市场信号和裸材料不得冒充已验证事实。"]
+    },
+    "S2": {
+      "stage_id": "S2",
+      "name": "领域取证与逐题回答",
+      "purpose": "读取已通过 G1 的目标契约与研究简报，执行真实联网、多视角、多轮六源研究，形成可追溯的逐题回答、争议、缺口与刷新策略。",
+      "gate": "G2",
+      "stage_dir": "stages/s2-domain-evidence",
+      "prerequisites": [{"stage":"S1","gate":"G1","state":"completed"}],
+      "normal_route": "S3",
+      "required_stage_files": ["research-log.md","sources.jsonl","coverage.md","evidence-items.jsonl","research-answers.md","answer-validation.md","refresh-policy.md","prerequisite-check.md"],
+      "business_rules": ["从 S1 research-brief 编译稳定 RQ/ANS，问题顺序和边界不可静默改变。","建立至少六个研究视角和六源通道，执行至少两轮真实联网；冲突、新发现和关键缺口触发追问。","来源、独立转载组、时效、地区和证据角色写入 sources.jsonl；原子证据写入 evidence-items.jsonl。","research-answers.md 逐题记录回答、反证、边界、置信度、缺口和给 S3 的输入。","answer-validation.md 执行八维校验并更新 refresh-policy、G2、verification 和项目状态。"],
+      "fail_closed": ["无真实联网或只有模型常识：research_blocked → S2。","S1 未通过、目标版本不一致或 research brief 不可解析：路由 S1。","关键答案 partial/unanswered 或关键八维失败：保持 S2。"]
+    },
+    "S3": {
+      "stage_id": "S3","name": "能力—概念图建模","purpose": "把已通过 G1/G2 的目标和证据建模为可诊断的能力层级、学习单元、原子节点、先修边、测评与全链路追溯。","gate": "G3","stage_dir": "stages/s3-capability-graph",
+      "prerequisites": [{"stage":"S1","gate":"G1","state":"completed"},{"stage":"S2","gate":"G2","state":"completed"}],
+      "normal_route": "S4",
+      "required_stage_files": ["capability-map.md","learning-units.md","nodes.jsonl","edges.jsonl","assessments.jsonl","traceability.md","prerequisite-check.md"],
+      "business_rules": ["从目标能力与 S2 证据建立 capability → sub-capability → learning unit。","学习单元拆成唯一原子节点，节点类型为 concept/procedure/strategy/representation/metacognition。","层级、覆盖和先修分开记录；硬先修无环，每条边有理由。","关键节点绑定状态、时效、来源、误概念、评估和阈值。","保持 goal→capability→unit→node→assessment→evidence/source 追溯。"],
+      "fail_closed": ["缺 G1/G2 或证据不足：路由最早缺失阶段，不补造事实。","只有主题目录、章节或工具词：revise_here → S3。","硬先修有环、引用断裂、核心节点孤儿：G3 不通过。"]
+    },
+    "S4": {
+      "stage_id": "S4","name": "学习者诊断与学习前沿","purpose": "基于目标、图谱和真实学习者行为，诊断节点状态、误概念、提示依赖、置信度、迁移表现与最近学习前沿。","gate": "G4","stage_dir": "stages/s4-learner-diagnosis",
+      "prerequisites": [{"stage":"S1","gate":"G1","state":"completed"},{"stage":"S3","gate":"G3","state":"completed"}],
+      "normal_route": "S5",
+      "required_stage_files": ["diagnostic-plan.md","observations.jsonl","learner-snapshot.md","model-events.jsonl","misconceptions.md","retests.md","prerequisite-check.md"],
+      "business_rules": ["声明推断节点和事前规则，设计解释、预测、反例、诊断、比较、应用和迁移任务。","原样记录回答、正确性、推理、提示、耗时、置信度和错误类型。","关键结论由多项观察支持，区分答对、独立、迁移和证据不足。","当前解释写 learner-snapshot，模型变化追加 model-events，争议进入 retests。"],
+      "fail_closed": ["无真实回答可生成诊断计划，但 pending → S4，不模拟回答。","图谱/测评问题路由 S3；领域事实缺失路由 S2。","单题、自评、年限或偏好问卷不得决定掌握。"]
+    },
+    "S5": {
+      "stage_id": "S5","name": "路径、策略与会话规划","purpose": "从已证实的学习前沿选择最小连通学习路径，并把教学方法、练习、保持、测评、切换规则和会话安排写成可执行策略政策。","gate": "G5","stage_dir": "stages/s5-learning-plan",
+      "prerequisites": [{"stage":"S1","gate":"G1","state":"completed"},{"stage":"S3","gate":"G3","state":"completed"},{"stage":"S4","gate":"G4","state":"completed"}],
+      "normal_route": "S6",
+      "required_stage_files": ["learning-path.md","strategy-policy.md","sessions.md","schedule.jsonl","confirmation.md","review-plan.md","prerequisite-check.md"],
+      "business_rules": ["校验目标、图谱和快照版本，关键前沿须有行为证据。","从前沿到目标选择最小连通子图，遵守硬先修。","strategy-policy 分层记录获得、练习、保持、验收策略及适用/禁用条件和切换规则。","sessions 定义目标、活动、材料、输出、支架、撤架和退出；schedule 保存安排。","mandatory 确认后更新 G5、verification 和项目状态。"],
+      "fail_closed": ["学习前沿不足或冲突：路由 S4。","图谱问题路由 S3；目标变化路由 S1。","确认未完成：pending → S5。"]
+    },
+    "S6": {
+      "stage_id": "S6","name": "教学内容与真实交互","purpose": "按照已确认策略政策开展真实教学会话，分离材料、交互原文、提示反馈、行为事件与候选掌握证据。","gate": "G6","stage_dir": "stages/s6-instruction",
+      "prerequisites": [{"stage":"S2","gate":"G2","state":"completed"},{"stage":"S3","gate":"G3","state":"completed"},{"stage":"S4","gate":"G4","state":"completed"},{"stage":"S5","gate":"G5","state":"completed"}],
+      "normal_route": "S7",
+      "required_stage_files": ["session-index.md","session-links.jsonl","interaction-events.jsonl","candidate-evidence.jsonl","content-decisions.md","prerequisite-check.md"],
+      "business_rules": ["校验节点、先修、策略政策、快照和来源时效，创建 sessions/<session-id>。","材料与内容决策可追溯并标边界。","按策略执行解释、示范、对比、练习、提示、撤架、反馈和独立迁移。","原始回答写 conversation/session；提示、修正和适配写事件。","只有真实行为进入候选证据；G6 不宣布掌握。"],
+      "fail_closed": ["缺 G5 或确认：路由 S5；快照无效路由 S4。","学习者未作答：pending → S6，不代写行为。","答案泄露、无独立任务、关键内容无来源：G6 不通过。"]
+    },
+    "S7": {
+      "stage_id": "S7","name": "掌握验证、模型更新与重规划","purpose": "用预先确定的多维掌握规则验证节点，执行版本化学习者模型事务，归因教学效果并决定继续、补救、复测、上游返工或完成。","gate": "G7","stage_dir": "stages/s7-mastery-replan",
+      "prerequisites": [{"stage":"S3","gate":"G3","state":"completed"},{"stage":"S4","gate":"G4","state":"completed"},{"stage":"S5","gate":"G5","state":"completed"},{"stage":"S6","gate":"G6","state":"completed"}],
+      "normal_route": "complete",
+      "required_stage_files": ["mastery-evidence.md","mastery-events.jsonl","model-updates.jsonl","strategy-attribution.md","replan.md","review-schedule.md","route.md","prerequisite-check.md"],
+      "business_rules": ["读取图谱、历史模型版本、计划、session 和预设规则。","综合正确性、推理、提示、迁移、置信度和延迟保持；单题不得判掌握。","掌握证据和判断追加到 mastery events/evidence。","仅版本匹配时应用模型更新；冲突不补丁。","区分来源、图谱、诊断、路径、方法选择/执行、内容和证据问题。","写重规划、复测和 route，更新 G7 与项目状态。"],
+      "fail_closed": ["无历史快照或 model_version<1：路由 S4，禁止版本 0。","证据不足：保持 S7 复测；未掌握不等于 G7 工件失败。","仅 GOAL_ACHIEVED 且最终验收与保持通过，才能 complete。"]
+    }
+  }
+}

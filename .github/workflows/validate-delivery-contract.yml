@@ -24,6 +24,7 @@ jobs:
           scripts/init_project_workspace.py
           scripts/migrate_legacy_run.py
           scripts/validate_legacy_migration.py
+          scripts/record_prerequisite_block.py
 
       - name: Validate canonical project Wiki contract
         run: python3 scripts/validate_delivery_contract.py
@@ -37,6 +38,47 @@ jobs:
           python3 scripts/validate_delivery_contract.py \
             --project-dir "$tmp_root/ci-learning-project"
 
+      - name: Reject blocked-stage recording without a project
+        run: |
+          tmp_root="$(mktemp -d)"
+          if python3 scripts/record_prerequisite_block.py \
+            --project-dir "$tmp_root/missing-project" \
+            --stage S2; then
+            echo "unexpectedly accepted a missing project"
+            exit 1
+          fi
+          test ! -e "$tmp_root/missing-project"
+
+      - name: Validate independent S2-S7 prerequisite recovery
+        run: |
+          for stage in S2 S3 S4 S5 S6 S7; do
+            tmp_root="$(mktemp -d)"
+            slug="ci-${stage,,}-prerequisite"
+            python3 scripts/init_project_workspace.py "$slug" \
+              --title "CI $stage Prerequisite Project" \
+              --workspace-root "$tmp_root"
+            python3 scripts/record_prerequisite_block.py \
+              --project-dir "$tmp_root/$slug" \
+              --stage "$stage" \
+              --reason "CI independent invocation"
+            python3 scripts/validate_delivery_contract.py \
+              --project-dir "$tmp_root/$slug"
+            python3 - "$tmp_root/$slug" "$stage" <<'PY'
+          import json, sys
+          from pathlib import Path
+          project = Path(sys.argv[1])
+          stage = sys.argv[2]
+          state = json.loads((project / "project-state.json").read_text())
+          assert state["project_revision"] == 2, state
+          assert state["route_to"] == "S1", state
+          assert state["stage_status"][stage]["state"] == "blocked", state
+          assert state["stage_status"][stage]["gate"] == "blocked", state
+          entry = project / state["stage_status"][stage]["entrypoint"]
+          assert entry.is_file(), entry
+          assert (entry.parent / "prerequisite-check.md").is_file()
+          PY
+          done
+
       - name: Migrate legacy run without modifying source
         run: |
           legacy="workspace/senior-teaching-researcher/runs/run-20260727-234421"
@@ -46,28 +88,23 @@ jobs:
           from pathlib import Path
           root = Path(sys.argv[1])
           for path in sorted(p for p in root.rglob('*') if p.is_file()):
-              digest = hashlib.sha256(path.read_bytes()).hexdigest()
-              print(digest, path.relative_to(root))
+              print(hashlib.sha256(path.read_bytes()).hexdigest(), path.relative_to(root))
           PY
-
           python3 scripts/migrate_legacy_run.py "$legacy" \
             --project-slug ci-migrated-project \
             --title "CI Migrated Project" \
             --workspace-root "$tmp_root"
-
           python3 scripts/validate_delivery_contract.py \
             --project-dir "$tmp_root/ci-migrated-project"
           python3 scripts/validate_legacy_migration.py \
             --project-dir "$tmp_root/ci-migrated-project" \
             --legacy-run-dir "$legacy"
-
           python3 - "$legacy" > "$tmp_root/source-after.sha256" <<'PY'
           import hashlib, sys
           from pathlib import Path
           root = Path(sys.argv[1])
           for path in sorted(p for p in root.rglob('*') if p.is_file()):
-              digest = hashlib.sha256(path.read_bytes()).hexdigest()
-              print(digest, path.relative_to(root))
+              print(hashlib.sha256(path.read_bytes()).hexdigest(), path.relative_to(root))
           PY
           diff -u "$tmp_root/source-before.sha256" "$tmp_root/source-after.sha256"
 
