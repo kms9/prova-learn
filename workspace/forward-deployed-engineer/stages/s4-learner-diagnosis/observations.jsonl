@@ -1,0 +1,1 @@
+{"observation_id":"OBS-S4-0000","record_type":"collection_status","status":"not_executed","provenance":"system_state","learner_behavior_ref":null,"task_refs":["D1","D2","D3","D4"],"reason":"尚未收到学习者真实作答；本记录不是行为证据，不能支撑节点状态或学习前沿。","created_by_event_id":"EVT-20260804T122400Z-s4-004"}

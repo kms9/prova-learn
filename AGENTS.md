@@ -3,12 +3,12 @@
 > 页面类型：仓库级运行协议与导航页  
 > 适用范围：本文件所在目录及全部子目录；更深层的 `AGENTS.md` 可补充或覆盖局部规则  
 > 维护语言：中文优先；路径、Schema 字段、枚举、命令和外部标识保留原文  
-> 最近核对：2026-07-27  
-> 当前主线：七阶段个性化学习 Skill、阶段质量门、S1/S2 LLM Wiki、S3–S7 三工件、证据驱动回路
+> 最近全面核对：2026-07-27；主控入口补充核对：2026-08-04
+> 当前主线：统一主控入口、七阶段个性化学习 Skill、阶段质量门、项目级 LLM Wiki、证据驱动回路
 
 ## 1. 项目定位
 
-本仓库把个性化学习过程实现为七个可独立调用、可串联、可返工的本地 Skill。系统不是一次性生成课程，而是持续执行：
+本仓库把个性化学习过程实现为一个统一主控入口和七个可独立调用、可串联、可返工的阶段 Skill。主控只负责意图分发、调用、落盘复核与下一步提示，不是第八个业务阶段。系统不是一次性生成课程，而是持续执行：
 
 ```text
 目标校准 → 领域取证 → 结构建模 → 学习者诊断
@@ -25,7 +25,7 @@
 
 1. 用户当前明确指令。
 2. 当前路径适用的 `AGENTS.md`。
-3. 当前七个 `.agents/skills/sN-*/SKILL.md`，以及同目录 `references/stage-contract.md`、输出合同和 JSON Schema。
+3. 当前主控 `.agents/skills/al-orchestrate-personalized-learning/SKILL.md`、七个 `.agents/skills/sN-*/SKILL.md`，以及它们明确引用的合同。
 4. 当前 OpenSpec change 的 proposal、design、specs、tasks；它描述需求和变更边界，但任务勾选不等于实现或发布证明。
 5. `docs/chat_log/` 中标为已实施的结论文档和研究记录。
 6. `example/`、eval、benchmark、review、外部模型 JSON 等点时证据。
@@ -34,6 +34,7 @@
 特别规则：
 
 - 用户已明确要求以后以当前 Skill 定义和命令为准。历史 OpenSpec、文档和会话中没有 `s1-`～`s7-` 前缀的旧目录名，只能作为历史引用，不得据此回退当前命名。
+- `.agents/AGENTS.md`、`.agents/project-workspace-contract.md` 与 manifest/profile 已把 S1–S7 迁移到统一项目级 Wiki；本页 §7、§13 中旧 run-folder/三工件细节只作迁移背景，不得覆盖 `.agents` 下的现行合同。
 - `.specstory/history/` 用于回答“为什么这样设计”和恢复决策过程，不是当前实现的直接真相。引用历史结论前必须再检查现有文件。
 - `docs/chat_log/个性化学习理论与七阶段策略归属排查.md` 与 `docs/chat_log/S5基于学习者输出的学习策略检查与适配场景设计.md` 当前是“尚未实施”的设计输入；其中建议字段、策略分类或映射规则不能冒充现行 Schema 能力。
 - 示例只是夹具或点时执行结果。文件存在不证明上游门已通过，也不证明整条 S1→S7 链完整。
@@ -42,8 +43,9 @@
 
 | 路径 | 角色 | 使用方式 |
 |---|---|---|
-| `.agents/skills/s1-...`～`s7-...` | 七阶段现行 Skill | 执行阶段任务时的第一入口 |
-| `.agents/skills/*/references/` | 阶段契约、输出合同、JSON Schema、示例 | 生成工件前按 `SKILL.md` 指示读取（S1/S2 为各自 `run-folder-contract.md`；S3–S7 含 Markdown/HTML 合同） |
+| `.agents/skills/al-orchestrate-personalized-learning/` | 统一主控 Skill | 用户不想自行选择阶段，或说“继续/下一步/完整流程”时的默认入口 |
+| `.agents/skills/s1-...`～`s7-...` | 七阶段现行 Skill | 由主控分发，或在明确阶段任务时直接调用 |
+| `.agents/skills/*/references/` | 阶段契约、兼容合同、Schema、示例 | 按目标 `SKILL.md` 指示读取；当前主要交付以 `.agents` 项目工作区合同与 manifest/profile 为准 |
 | `.agents/skills/*/assets/stage-report.html` | S3–S7 阶段专用 HTML 模板 | 由最终 JSON 填充，不作为事实来源（S1/S2 已改 run-folder 交付） |
 | `.agents/skills/*/evals/evals.json` | 每阶段正向和反向/阻断 eval | Skill 变更后的行为校验输入 |
 | `.codex/skills/openspec-*` | 本仓库 OpenSpec 工作流 | proposal、explore、apply、archive |
@@ -88,17 +90,7 @@ stage_id=Sx
 
 ### 4.2 交付模型
 
-S3–S7 当前严格按以下顺序交付：
-
-1. 完整的阶段专属 Markdown 人审文档；
-2. 对 Markdown 实质内容无损结构化的 JSON 移交信封；
-3. 由最终 JSON 驱动并填充的阶段专用只读交互 HTML。
-
-共同移交信封当前版本为 `1.3.0`。Markdown 是首要人审文档，JSON 是规范机器移交表示，HTML 是 JSON 派生视图。三者语义必须一致；JSON 不能只是摘要，HTML 不能另造业务事实。
-
-Markdown、JSON、HTML 任一缺失或派生验证失败，都不能报告“本阶段交付完整完成”；但文档或页面生成失败也不能反向篡改领域质量门本身。
-
-> **S1/S2 已迁移到同一 LLM Wiki / run-folder**（见 §7、§13）：S1 在 run 根写 11 文件；S2 读取 S1 `research-brief.md` 的问题，在同一 run 的 `s2/` 写九文件逐题回答与八维校验，并更新根 `INDEX.md` 的阶段入口。S1/S2 不再产出独立 JSON 信封或 HTML。S3–S7 暂保留三工件模型。
+S1–S7 当前共享 `workspace/<project-slug>/` 项目级 LLM Wiki：Markdown 表达当前接受含义，JSONL 保存不可变事件与原子记录，`project-state.json` 保存派生状态和版本指针。各阶段在 `stages/sN-*/` 维护入口、业务页面、Gate 与 verification；旧 run、单体 JSON envelope 和 HTML 只作迁移输入或兼容导出，不是主要真相源。完整合同以 `.agents/project-workspace-contract.md`、`.agents/stage-delivery-manifest.json` 和目标 Skill 为准。
 
 ### 4.3 证据与安全态
 
@@ -114,20 +106,22 @@ Markdown、JSON、HTML 任一缺失或派生验证失败，都不能报告“本
 
 `pending`、`blocked`、`unknown`、`evidence_insufficient`、`research_blocked`、`not_executed`、`version_conflict`。
 
-## 5. 七阶段导航与调用
+## 5. 统一主控与七阶段导航
 
 | 阶段 / Skill | 主输入 | 具名正向工件 | 正常路由 |
 |---|---|---|---|
-| S1 `$al-01-create-goal-success-contract` | 学习诉求、场景、约束、外部预检 | `goal_success_contract`（S1 run-folder，入口 `workspace/<project-slug>/runs/<最新 run>/INDEX.md`） | G1 → S2 |
-| S2 `$al-02-create-domain-evidence-landscape` | 已过 G1 的 S1 LLM Wiki 与 priority questions | S2 run-folder 阶段区（入口 `<run>/s2/INDEX.md`，首要回答 `research-answers.md`） | G2 → S3 |
-| S3 `$al-03-build-capability-concept-graph` | 已过 G1/G2 的目标与证据 | `capability_concept_graph` | G3 → S4 |
-| S4 `$al-04-diagnose-learner-frontier` | 已过 G1/G3 的目标与图谱、真实行为证据 | `learner_snapshot` | G4 → S5 |
-| S5 `$al-05-plan-learning-sessions` | 已过 G1/G3/G4 的目标、图谱、学习前沿 | `learning_and_session_plan` | G5 → S6 |
-| S6 `$al-06-run-instructional-interaction` | 已过 G2/G3/G4/G5 的证据、图谱、快照、计划 | `session_package_and_trace` | G6 → S7 |
-| S7 `$al-07-verify-mastery-and-replan` | 已过 G3/G4/G5/G6 的图谱、历史快照、计划、真实交互 | `mastery_and_replanning_bundle` | G7 → S1～S7 或 complete |
+| 主控 `$al-orchestrate-personalized-learning` | 用户自然语言意图、项目状态与 `route_to` | 阶段选择/执行复核与下一步回执；无独立业务工件 | 分发到 S1–S7 或只读状态 |
+| S1 `$al-s1-create-goal-success-contract` | 学习诉求、场景、约束、外部预检 | `stages/s1-goal-contract/` 目标契约阶段区 | G1 → S2 |
+| S2 `$al-s2-create-domain-evidence-landscape` | 已过 G1 的项目 Wiki 与研究简报 | `stages/s2-domain-evidence/` 研究回答阶段区 | G2 → S3 |
+| S3 `$al-s3-build-capability-concept-graph` | 已过 G1/G2 的目标与证据 | `stages/s3-capability-graph/` | G3 → S4 |
+| S4 `$al-s4-diagnose-learner-frontier` | 已过 G1/G3 的目标与图谱、真实行为证据 | `stages/s4-learner-diagnosis/` | G4 → S5 |
+| S5 `$al-s5-plan-learning-sessions` | 已过 G1/G3/G4 的目标、图谱、学习前沿 | `stages/s5-learning-plan/` | G5 → S6 |
+| S6 `$al-s6-run-instructional-interaction` | 已过 G2/G3/G4/G5 的证据、图谱、快照、计划 | `stages/s6-instruction/` 与 `sessions/<session-id>/` | G6 → S7 |
+| S7 `$al-s7-verify-mastery-and-replan` | 已过 G3/G4/G5/G6 的图谱、历史快照、计划、真实交互 | `stages/s7-mastery-replan/` | G7 → S1～S7 或 complete |
 
 ### 5.1 Skill 路由触发
 
+- 用户不确定阶段、只想调用一个入口、要求继续/下一步/完整流程：主控；主控读取项目状态并委托 S1–S7。
 - 新学习目标、目标实质变化、成功证据或岗位/领域名称校准：S1。
 - 领域全景、真实联网、STORM 式研究、六源取证或 S3 暴露来源空白：S2。
 - 能力大纲、学习单元、原子知识点、映射、先修关系和测评图谱：S3。
@@ -136,7 +130,9 @@ Markdown、JSON、HTML 任一缺失或派生验证失败，都不能报告“本
 - 真实教学会话、解释、正反例、支架、练习、反馈和交互轨迹：S6。
 - 是否掌握、版本化更新学习者模型、延迟复测、归因和重规划：S7。
 
-Skill 均须能独立理解自己的直接依赖，不要求七个 Skill 目录共同安装。独立调用时，调用方必须提供来源阶段当前交付模型：S1/S2 使用 LLM Wiki run folder，S3–S7 使用兼容移交信封；缺失依赖时 fail closed 并路由到最早失效阶段。
+主控默认一次只执行一个阶段。只有用户明确要求补齐前置或完整流程时才按已验证 `route_to` 逐阶段推进；遇到 mandatory/升级确认、真实学习者回答、`pending`、`blocked`、版本冲突或上游返工 route 必须停止并给出具体下一步。
+
+阶段 Skill 均须能独立理解自己的直接依赖。独立调用时以项目根、`project-state.json`、manifest 前置、阶段入口、Gate 与 verification 校验上游；缺失依赖时 fail closed 并路由到最早失效阶段。
 
 ### 5.2 确认策略
 
@@ -330,12 +326,14 @@ find .agents/skills -type f -name '*.json' -exec jq empty {} +
 openspec validate --all --strict --no-interactive
 ```
 
-### 12.2 七个 Skill 结构
+### 12.2 主控与七个阶段 Skill 结构
 
 ```bash
 for skill_dir in .agents/skills/s{1,2,3,4,5,6,7}-*; do
   python3 /Users/logo/.codex/skills/.system/skill-creator/scripts/quick_validate.py "$skill_dir"
 done
+python3 /Users/logo/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
+  .agents/skills/al-orchestrate-personalized-learning
 ```
 
 `quick_validate.py` 只证明结构和 frontmatter 基本有效，不证明阶段语义、Schema 实例、HTML 视觉或真实学习效果。
@@ -352,12 +350,12 @@ python3 scripts/run_skill_evals.py --all --route dclaude
 
 ### 12.4 声明完成前
 
-- 七个目录数量和 Skill 名称与本页一致。
-- 共同 handoff Schema 的版本和内容在仍使用它的 S3–S7 中一致；S1/S2 分别按 run-folder 合同验证。
+- 一个主控目录和七个阶段目录的数量、角色与 Skill 名称与本页一致；主控未被当成 S0/G0。
+- 项目工作区合同、manifest/profile、project-state/event Schema 与 S1–S7 阶段入口一致；兼容导出不冒充主要交付。
 - 所有相对链接存在，JSON/YAML 可解析，Schema 自检与代表性实例验证通过。
 - 阶段正向、反向/阻断 eval 都存在，executor prompt 未泄露 grader-only 期望。
-- S3–S7 的 Markdown→JSON→HTML 顺序、对应关系和页面派生检查通过。
-- S1 检查 run-folder 11 文件、状态机、跨文件 ID 与 G1 七项；S2 检查 `s2/` 九文件、S1 问题全映射、逐题八维、根索引、跨文件 ID 与 G2 九项（见 §7、§13.1–13.2）。
+- S1–S7 的项目根、conversation、阶段 Wiki/JSONL、Gate、verification、revision、根索引与 timeline 一致。
+- S1/S2 的研究与逐题回答规则、S3–S7 的阶段专属页面/记录和所有跨文件稳定 ID 均按现行 manifest/profile 验证。
 - 所有实际失败已先登记，修复后有复验证据。
 - 明确列出尚未执行的浏览器视觉验收、真实账户、真实学习者、长期保持或生产级门。
 

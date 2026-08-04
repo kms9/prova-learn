@@ -1,0 +1,1 @@
+{"model_event_id":"MODEL-EVT-S4-0001","event_type":"diagnostic_plan_created","learner_id":"local-learner","expected_model_version":null,"resulting_model_version":null,"update_status":"not_executed","evidence_refs":[],"reason":"无真实行为证据，不创建或修改 learner snapshot。","project_event_ref":"EVT-20260804T122400Z-s4-004"}

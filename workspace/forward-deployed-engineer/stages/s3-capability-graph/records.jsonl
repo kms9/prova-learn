@@ -1,0 +1,7 @@
+{"record_id":"REC-S3-0001","record_type":"input_validated","object_ref":"G1,G2","event_ref":"EVT-20260804T120500Z-s3-003","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}
+{"record_id":"REC-S3-0002","record_type":"capability_graph_created","object_ref":"CCG-forward-deployed-engineer-v1","event_ref":"EVT-20260804T120500Z-s3-004","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}
+{"record_id":"REC-S3-0003","record_type":"artifact_created","object_ref":"RUN-20260804T120500Z-S3-review.md","event_ref":"EVT-20260804T120500Z-s3-005","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}
+{"record_id":"REC-S3-0004","record_type":"artifact_created","object_ref":"capability_concept_graph.json","event_ref":"EVT-20260804T120500Z-s3-006","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}
+{"record_id":"REC-S3-0005","record_type":"artifact_created","object_ref":"capability-graph.html","event_ref":"EVT-20260804T120500Z-s3-007","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}
+{"record_id":"REC-S3-0006","record_type":"gate_evaluated","object_ref":"G3","event_ref":"EVT-20260804T120500Z-s3-008","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}
+{"record_id":"REC-S3-0007","record_type":"route_decided","object_ref":"S4","event_ref":"EVT-20260804T120500Z-s3-009","conversation_ref":"CONV-20260804T120500Z-s3-graph","project_revision":5}

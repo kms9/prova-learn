@@ -1,0 +1,2050 @@
+{
+  "schema_version": "1.3.0",
+  "stage_id": "S3",
+  "run_id": "RUN-20260804T120500Z-S3",
+  "learner_id": null,
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "stages/s1-goal-contract/INDEX.md",
+      "stages/s2-domain-evidence/INDEX.md"
+    ],
+    "expected_schema_versions": {
+      "project_state": "1.0.0",
+      "handoff_envelope": "1.3.0",
+      "capability_concept_graph": "1.2.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "当前练习保持全球通用的模拟企业 AI 场景；具体行业或司法辖区变化触发 S2 刷新。",
+    "S3 只建稳定结构；学习者掌握、提示依赖和个性化顺序留给 S4–S7。",
+    "2–6 周只作为课程练习启发，不是跨行业固定标准。"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "GAP-S3-001",
+      "description": "具体强监管行业和司法辖区尚未指定。",
+      "criticality": "medium",
+      "gate_effect": "none"
+    },
+    {
+      "id": "GAP-S3-002",
+      "description": "真实客户数据和组织责任不在模拟学习范围。",
+      "criticality": "low",
+      "gate_effect": "none"
+    },
+    {
+      "id": "GAP-S3-003",
+      "description": "学习者当前能力未知，需由 S4 真实行为诊断。",
+      "criticality": "medium",
+      "gate_effect": "none"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": null,
+    "questions": [],
+    "response": {
+      "status": "single_evidence_backed_structure",
+      "disputed_nodes": [
+        "N-008",
+        "N-010"
+      ],
+      "user_confirmation_claimed": false
+    },
+    "status": "acknowledged",
+    "confirmed_at": "2026-08-04T12:05:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "EVID-201",
+      "provenance": "market_signal",
+      "source_ref": "SRC-101,SRC-102",
+      "summary": "FDE 当前核心包含 discovery、technical scoping、system design、build 与 production rollout。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-202",
+      "provenance": "market_signal",
+      "source_ref": "SRC-101,SRC-102",
+      "summary": "FDE 需要直接与客户工程、领域、技术和管理干系人协作。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-203",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-101,SRC-108,SRC-114",
+      "summary": "部署成功信号包括生产采用、工作流影响和评估驱动的产品/模型反馈。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-204",
+      "provenance": "market_signal",
+      "source_ref": "SRC-101,SRC-102,SRC-103",
+      "summary": "FDE 周边存在 Deployment Strategist、Technical Deployment Lead、Applied AI Architect 等角色，组织分工不统一。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-205",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-101,SRC-104,SRC-110",
+      "summary": "现场产品发现和把重复模式回流平台是 FDE 模式的可扩展性核心。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-206",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-105,SRC-106",
+      "summary": "部署前必须定义具体任务、知识限制、人员监督和使用上下文。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-207",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-105,SRC-106",
+      "summary": "客观可重复 TEVV、go/no-go、生产监控、申诉/覆盖、事件响应、恢复和变更管理属于部署闭环。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-208",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-108,SRC-113,SRC-114",
+      "summary": "可执行部署工件至少包括权限/政策、评估集、grader、升级规则、监控与受控变更。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-209",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-108,SRC-114,SRC-105",
+      "summary": "上下文 eval 应按 Specify→Measure→Improve 循环，并从真实输入、输出、结果和专家反馈持续更新。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-210",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-107",
+      "summary": "具名农业案例显示部署需要把模型能力翻译为非技术用户可采用的工作方式。",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "EVID-211",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-109",
+      "summary": "NANDA preliminary report 报告大量企业 GenAI 试点未产生可衡量 P&L 影响，并把工作流集成和学习差距列为关键原因。",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "EVID-212",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-110,SRC-104",
+      "summary": "若每个客户的定制工作不下降，FDE 可能在掩盖产品问题并积累组织复杂度。",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "EVID-213",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-112,SRC-101,SRC-102",
+      "summary": "公开申请任务要求候选人展示实际构建物及其动机和过程，支持用真实产物而非术语背诵评估。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-214",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-115,SRC-105",
+      "summary": "评估应接近部署分布，同时保留针对低频高严重度风险的专项测试。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-215",
+      "provenance": "external_evidence",
+      "source_ref": "SRC-116,SRC-105",
+      "summary": "基础模型部署是社会技术问题，风险和能力评估需要跨学科参与。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "EVID-216",
+      "provenance": "user_provided_unverified",
+      "source_ref": "SRC-111",
+      "summary": "课程覆盖角色、问题、获客、激活、续约、扩收和复制，但案例/统计证据角色混合。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "重读 project revision 4、S1/G1 和 S2/G2 入口并通过前置校验。",
+    "从 6 项目标能力与 16 个 S2 原子项聚类 12 个子能力和 12 个学习单元。",
+    "建立 12 个唯一原子节点；横切证据能力通过 supporting mapping 复用。",
+    "分离组成层级、单元覆盖与先修；8 条硬边拓扑无环，5 条软边保留影响关系。",
+    "为 12 个节点预先绑定迁移题、阈值与补救入口。",
+    "条件确认未升级：唯一稳定主干与已确认目标一致，争议阈值保留条件。",
+    "先写完整 Markdown，再结构化 JSON；HTML 由最终信封派生。"
+  ],
+  "positive_artifact": {
+    "type": "capability_concept_graph",
+    "schema_version": "1.2.0",
+    "artifact_id": "CCG-forward-deployed-engineer-v1",
+    "content": {
+      "focus_question": "怎样把 FDE 课程和已审计证据转成可诊断、可迁移的工作应用能力，使学习者能在陌生企业 AI 场景作出可辩护的部署判断？",
+      "goal_contract_ref": "stages/s1-goal-contract/goal-contract.md#GOAL-forward-deployed-engineer-v1",
+      "evidence_landscape_ref": "stages/s2-domain-evidence/INDEX.md#G2-pass",
+      "source_atom_mappings": [
+        {
+          "item_id": "EVID-201",
+          "object_type": "capability",
+          "target_refs": [
+            "CAP-001",
+            "CAP-003",
+            "N-001",
+            "N-005"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102"
+          ]
+        },
+        {
+          "item_id": "EVID-202",
+          "object_type": "skill",
+          "target_refs": [
+            "CAP-001",
+            "CAP-002",
+            "N-001",
+            "N-003"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102"
+          ]
+        },
+        {
+          "item_id": "EVID-203",
+          "object_type": "capability",
+          "target_refs": [
+            "CAP-004",
+            "CAP-005",
+            "N-007",
+            "N-008",
+            "N-009"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-108",
+            "SRC-114"
+          ]
+        },
+        {
+          "item_id": "EVID-204",
+          "object_type": "knowledge",
+          "target_refs": [
+            "CAP-001",
+            "CAP-006",
+            "N-001",
+            "N-011"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-103"
+          ]
+        },
+        {
+          "item_id": "EVID-205",
+          "object_type": "practice",
+          "target_refs": [
+            "CAP-002",
+            "CAP-005",
+            "N-002",
+            "N-004",
+            "N-009",
+            "N-010"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-104",
+            "SRC-110"
+          ]
+        },
+        {
+          "item_id": "EVID-206",
+          "object_type": "practice",
+          "target_refs": [
+            "CAP-002",
+            "CAP-003",
+            "N-003",
+            "N-006"
+          ],
+          "source_refs": [
+            "SRC-105",
+            "SRC-106"
+          ]
+        },
+        {
+          "item_id": "EVID-207",
+          "object_type": "practice",
+          "target_refs": [
+            "CAP-003",
+            "CAP-004",
+            "CAP-005",
+            "N-006",
+            "N-007",
+            "N-010"
+          ],
+          "source_refs": [
+            "SRC-105",
+            "SRC-106"
+          ]
+        },
+        {
+          "item_id": "EVID-208",
+          "object_type": "evidence",
+          "target_refs": [
+            "CAP-003",
+            "N-005",
+            "N-006"
+          ],
+          "source_refs": [
+            "SRC-108",
+            "SRC-113",
+            "SRC-114"
+          ]
+        },
+        {
+          "item_id": "EVID-209",
+          "object_type": "practice",
+          "target_refs": [
+            "CAP-003",
+            "CAP-004",
+            "CAP-005",
+            "N-006",
+            "N-007",
+            "N-009"
+          ],
+          "source_refs": [
+            "SRC-108",
+            "SRC-114",
+            "SRC-105"
+          ]
+        },
+        {
+          "item_id": "EVID-210",
+          "object_type": "evidence",
+          "target_refs": [
+            "CAP-003",
+            "CAP-004",
+            "N-005",
+            "N-008"
+          ],
+          "source_refs": [
+            "SRC-107"
+          ]
+        },
+        {
+          "item_id": "EVID-211",
+          "object_type": "evidence",
+          "target_refs": [
+            "CAP-002",
+            "CAP-004",
+            "CAP-006",
+            "N-004",
+            "N-008",
+            "N-011",
+            "N-012"
+          ],
+          "source_refs": [
+            "SRC-109"
+          ]
+        },
+        {
+          "item_id": "EVID-212",
+          "object_type": "failure",
+          "target_refs": [
+            "CAP-001",
+            "CAP-005",
+            "N-002",
+            "N-010"
+          ],
+          "source_refs": [
+            "SRC-110",
+            "SRC-104"
+          ]
+        },
+        {
+          "item_id": "EVID-213",
+          "object_type": "evidence",
+          "target_refs": [
+            "CAP-006",
+            "N-012"
+          ],
+          "source_refs": [
+            "SRC-112",
+            "SRC-101",
+            "SRC-102"
+          ]
+        },
+        {
+          "item_id": "EVID-214",
+          "object_type": "practice",
+          "target_refs": [
+            "CAP-003",
+            "N-006"
+          ],
+          "source_refs": [
+            "SRC-115",
+            "SRC-105"
+          ]
+        },
+        {
+          "item_id": "EVID-215",
+          "object_type": "knowledge",
+          "target_refs": [
+            "CAP-003",
+            "CAP-005",
+            "N-006",
+            "N-010"
+          ],
+          "source_refs": [
+            "SRC-116",
+            "SRC-105"
+          ]
+        },
+        {
+          "item_id": "EVID-216",
+          "object_type": "source",
+          "target_refs": [
+            "CAP-006",
+            "N-011",
+            "N-012"
+          ],
+          "source_refs": [
+            "SRC-111"
+          ]
+        }
+      ],
+      "knowledge_status_summary": [
+        {
+          "node_id": "N-001",
+          "knowledge_tier": "core_stable",
+          "knowledge_status": "consensus",
+          "freshness": "dynamic",
+          "source_categories": [
+            "job_career",
+            "community_web"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-002",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "consensus",
+          "freshness": "dynamic",
+          "source_categories": [
+            "job_career",
+            "community_web",
+            "standards_official"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-003",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "consensus",
+          "freshness": "stable",
+          "source_categories": [
+            "job_career",
+            "standards_official",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-004",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "consensus",
+          "freshness": "stable",
+          "source_categories": [
+            "job_career",
+            "papers_research",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-005",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "consensus",
+          "freshness": "dynamic",
+          "source_categories": [
+            "job_career",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-006",
+          "knowledge_tier": "core_stable",
+          "knowledge_status": "consensus",
+          "freshness": "dynamic",
+          "source_categories": [
+            "standards_official",
+            "papers_research",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-007",
+          "knowledge_tier": "core_stable",
+          "knowledge_status": "consensus",
+          "freshness": "stable",
+          "source_categories": [
+            "job_career",
+            "standards_official",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-008",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "disputed",
+          "freshness": "dynamic",
+          "source_categories": [
+            "job_career",
+            "papers_research",
+            "artifacts_validation"
+          ],
+          "applicability": "保留情境阈值与竞争条件，不作为跨行业统一规则。"
+        },
+        {
+          "node_id": "N-009",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "consensus",
+          "freshness": "dynamic",
+          "source_categories": [
+            "job_career",
+            "community_web",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-010",
+          "knowledge_tier": "core_practice",
+          "knowledge_status": "disputed",
+          "freshness": "dynamic",
+          "source_categories": [
+            "community_web",
+            "standards_official",
+            "artifacts_validation"
+          ],
+          "applicability": "保留情境阈值与竞争条件，不作为跨行业统一规则。"
+        },
+        {
+          "node_id": "N-011",
+          "knowledge_tier": "core_stable",
+          "knowledge_status": "consensus",
+          "freshness": "stable",
+          "source_categories": [
+            "job_career",
+            "books_courses",
+            "papers_research",
+            "community_web",
+            "standards_official",
+            "artifacts_validation"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        },
+        {
+          "node_id": "N-012",
+          "knowledge_tier": "core_stable",
+          "knowledge_status": "consensus",
+          "freshness": "dynamic",
+          "source_categories": [
+            "books_courses",
+            "papers_research",
+            "standards_official"
+          ],
+          "applicability": "适用于当前全球通用模拟企业 AI 场景；地区或行业变化按刷新策略复核。"
+        }
+      ],
+      "role_capability_ladder": [
+        {
+          "role_or_level": "guided contributor",
+          "capability_id": "CAP-003",
+          "autonomy": "在给定问题和边界下完成 MVD 子任务。",
+          "complexity": "单工作流、已知系统边界。",
+          "influence": "项目小组。",
+          "accountability": "对分配工件和风险检查负责。",
+          "mastery_depth": "解释并应用既定评估与回滚规则。",
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-105"
+          ]
+        },
+        {
+          "role_or_level": "independent FDE",
+          "capability_id": "CAP-002",
+          "autonomy": "独立从模糊工作流定义问题与停止条件。",
+          "complexity": "跨系统、跨干系人且需求不确定。",
+          "influence": "客户工作流和项目路线。",
+          "accountability": "对范围、价值和生产闭环负责。",
+          "mastery_depth": "诊断伪需求并迁移到新场景。",
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-104"
+          ]
+        },
+        {
+          "role_or_level": "lead/productizing FDE",
+          "capability_id": "CAP-005",
+          "autonomy": "定义跨客户标准、产品回流和退出规则。",
+          "complexity": "跨客户共性、治理冲突和商业约束。",
+          "influence": "产品路线、团队方法和组织风险。",
+          "accountability": "对复用、团队续航、交接和产品反馈负责。",
+          "mastery_depth": "建立标准并判断何时停止高强度定制。",
+          "source_refs": [
+            "SRC-101",
+            "SRC-104",
+            "SRC-110"
+          ]
+        }
+      ],
+      "coverage_and_gap_report": {
+        "covered_core_node_ids": [
+          "N-001",
+          "N-002",
+          "N-003",
+          "N-004",
+          "N-005",
+          "N-006",
+          "N-007",
+          "N-008",
+          "N-009",
+          "N-010",
+          "N-011",
+          "N-012"
+        ],
+        "gaps": [
+          "具体强监管行业和司法辖区尚未指定，场景变化时返回 S2 刷新。",
+          "真实客户数据与组织责任不在模拟学习范围内。",
+          "学习者当前能力未知，必须由 S4 真实行为诊断。"
+        ],
+        "upstream_return_required": false
+      },
+      "target_capabilities": [
+        {
+          "capability_id": "CAP-001",
+          "statement": "在陌生场景中用生产所有权、客户协作、结果责任和产品回流区分 FDE 与相邻角色，并判断模式适用性。",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "SC-001A",
+              "statement": "建立角色责任与工件矩阵"
+            },
+            {
+              "sub_capability_id": "SC-001B",
+              "statement": "判断何时采用、拒绝或转型 FDE 模式"
+            }
+          ],
+          "typical_tasks": [
+            "分析混合岗位职责",
+            "为边界场景选择交付模式"
+          ]
+        },
+        {
+          "capability_id": "CAP-002",
+          "statement": "把模糊客户诉求转化为可验证的高价值问题，定义工作流、基线、干系人、价值假设和停止条件。",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "SC-002A",
+              "statement": "观察工作流、基线、干系人与决策权"
+            },
+            {
+              "sub_capability_id": "SC-002B",
+              "statement": "写价值假设、选择问题与停止条件"
+            }
+          ],
+          "typical_tasks": [
+            "绘制当前工作流与基线",
+            "排除伪需求并定义停止条件"
+          ]
+        },
+        {
+          "capability_id": "CAP-003",
+          "statement": "设计真实企业约束下的最小可行部署，并处理数据、集成、权限、评估、治理、速度和质量取舍。",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "SC-003A",
+              "statement": "收敛 MVD 架构、数据、集成和权限边界"
+            },
+            {
+              "sub_capability_id": "SC-003B",
+              "statement": "设计上下文评估、go/no-go、监控与回滚"
+            }
+          ],
+          "typical_tasks": [
+            "提交 MVD 边界图",
+            "构造代表性与高严重度评估"
+          ]
+        },
+        {
+          "capability_id": "CAP-004",
+          "statement": "规划从生产上线到激活、健康、续约和扩展的闭环，并选择少量可审计指标。",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "SC-004A",
+              "statement": "区分技术、采用、业务和复用四层证据"
+            },
+            {
+              "sub_capability_id": "SC-004B",
+              "statement": "根据健康信号决定续约、扩展、收缩或停止"
+            }
+          ],
+          "typical_tasks": [
+            "选择四层核心指标",
+            "对矛盾健康信号作商业与技术决策"
+          ]
+        },
+        {
+          "capability_id": "CAP-005",
+          "statement": "把现场学习回流产品，并识别定制、锁定、治理、成本、团队续航和交接风险。",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "SC-005A",
+              "statement": "把重复现场模式回流产品或平台"
+            },
+            {
+              "sub_capability_id": "SC-005B",
+              "statement": "监测定制趋势，决定退出、交接或转平台"
+            }
+          ],
+          "typical_tasks": [
+            "归并现场反馈",
+            "作出 stop/transition/handoff 决策"
+          ]
+        },
+        {
+          "capability_id": "CAP-006",
+          "statement": "对课程案例和统计进行来源分级，判断独立性、置信度、适用边界和决策用途。",
+          "sub_capabilities": [
+            {
+              "sub_capability_id": "SC-006A",
+              "statement": "区分 provenance、独立来源组和证据角色"
+            },
+            {
+              "sub_capability_id": "SC-006B",
+              "statement": "审计主张、限制、刷新条件与可用范围"
+            }
+          ],
+          "typical_tasks": [
+            "构造来源台账",
+            "审计高影响统计和厂商案例"
+          ]
+        }
+      ],
+      "learning_units": [
+        {
+          "unit_id": "LU-001",
+          "title": "角色责任与工件矩阵",
+          "parent_ref": "SC-001A",
+          "parent_level": "sub_capability",
+          "outcome": "对混合岗位按生产所有权、客户协作、结果责任和回流归类",
+          "goal_refs": [
+            "CAP-001",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-103",
+            "SRC-104"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-002",
+          "title": "FDE 适用性判断",
+          "parent_ref": "SC-001B",
+          "parent_level": "sub_capability",
+          "outcome": "为边界案例作出采用、拒绝或转型 FDE 的可辩护判断",
+          "goal_refs": [
+            "CAP-001",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-104",
+            "SRC-110"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-003",
+          "title": "工作流、基线与干系人",
+          "parent_ref": "SC-002A",
+          "parent_level": "sub_capability",
+          "outcome": "形成现状流程、基线、owner、决策权与失败成本地图",
+          "goal_refs": [
+            "CAP-002",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-105"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-004",
+          "title": "价值假设与停止条件",
+          "parent_ref": "SC-002B",
+          "parent_level": "sub_capability",
+          "outcome": "选择问题、排除伪需求并定义成功、失败和停止规则",
+          "goal_refs": [
+            "CAP-002",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-109"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-005",
+          "title": "最小可行部署架构",
+          "parent_ref": "SC-003A",
+          "parent_level": "sub_capability",
+          "outcome": "设计含真实数据、系统、权限、人工与 handoff 的最小闭环",
+          "goal_refs": [
+            "CAP-003",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-107",
+            "SRC-113"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-006",
+          "title": "上下文评估与生产控制",
+          "parent_ref": "SC-003B",
+          "parent_level": "sub_capability",
+          "outcome": "建立 eval、人工覆盖、go/no-go、监控、事件和回滚",
+          "goal_refs": [
+            "CAP-003",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-105",
+            "SRC-106",
+            "SRC-108",
+            "SRC-114",
+            "SRC-115"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-007",
+          "title": "四层成功证据",
+          "parent_ref": "SC-004A",
+          "parent_level": "sub_capability",
+          "outcome": "区分技术、采用、业务、复用并选 3–5 个可审计指标",
+          "goal_refs": [
+            "CAP-004",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-105",
+            "SRC-108",
+            "SRC-114"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-008",
+          "title": "激活、续约与扩展决策",
+          "parent_ref": "SC-004B",
+          "parent_level": "sub_capability",
+          "outcome": "根据健康信号决定激活、续约、扩展、收缩或停止",
+          "goal_refs": [
+            "CAP-004",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-107",
+            "SRC-109",
+            "SRC-114"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-009",
+          "title": "现场到产品的反馈回路",
+          "parent_ref": "SC-005A",
+          "parent_level": "sub_capability",
+          "outcome": "把重复问题转成 eval、组件、手册或产品输入",
+          "goal_refs": [
+            "CAP-005",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-104",
+            "SRC-108",
+            "SRC-114"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-010",
+          "title": "定制趋势、退出与交接",
+          "parent_ref": "SC-005B",
+          "parent_level": "sub_capability",
+          "outcome": "用复用趋势、治理、成本和 handoff readiness 决定转型",
+          "goal_refs": [
+            "CAP-005",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-104",
+            "SRC-105",
+            "SRC-110",
+            "SRC-113"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-011",
+          "title": "证据角色与独立来源",
+          "parent_ref": "SC-006A",
+          "parent_level": "sub_capability",
+          "outcome": "区分课程、市场、外证、组织来源组和时效",
+          "goal_refs": [
+            "CAP-006",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-101",
+            "SRC-105",
+            "SRC-109",
+            "SRC-110",
+            "SRC-111"
+          ],
+          "scope_role": "required"
+        },
+        {
+          "unit_id": "LU-012",
+          "title": "主张审计与证据边界",
+          "parent_ref": "SC-006B",
+          "parent_level": "sub_capability",
+          "outcome": "审计统计与案例并给出置信度、限制、刷新和可用范围",
+          "goal_refs": [
+            "CAP-006",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "source_refs": [
+            "SRC-105",
+            "SRC-109",
+            "SRC-111"
+          ],
+          "scope_role": "required"
+        }
+      ],
+      "nodes": [
+        {
+          "node_id": "N-001",
+          "node_type": "representation",
+          "capability_statement": "能用生产代码所有权、客户协作、端到端结果责任和产品回流四列矩阵解释 FDE 与相邻角色边界。",
+          "common_misconceptions": [
+            "把驻场地点当作 FDE 的充分条件",
+            "只要与客户沟通就是 FDE"
+          ]
+        },
+        {
+          "node_id": "N-002",
+          "node_type": "strategy",
+          "capability_statement": "能依据不确定性、技术整合、产品学习、成本和治理条件决定采用、拒绝或转型 FDE 模式。",
+          "common_misconceptions": [
+            "FDE 是所有企业 AI 项目的默认模式",
+            "只要客户价值高就应无限定制"
+          ]
+        },
+        {
+          "node_id": "N-003",
+          "node_type": "representation",
+          "capability_statement": "能画出具体工作流、使用者、当前基线、业务 owner、决策权和失败成本，并指出证据缺口。",
+          "common_misconceptions": [
+            "客户提出的功能就是问题定义",
+            "没有基线也能靠上线后感觉判断价值"
+          ]
+        },
+        {
+          "node_id": "N-004",
+          "node_type": "procedure",
+          "capability_statement": "能比较候选问题，写出价值假设、成功/失败信号和预先承诺的停止条件，并排除至少一个伪需求。",
+          "common_misconceptions": [
+            "ROI 数字越大问题越值得做",
+            "停止条件可以等试点失败后再定义"
+          ]
+        },
+        {
+          "node_id": "N-005",
+          "node_type": "procedure",
+          "capability_statement": "能把已选问题收敛为含真实数据、系统集成、权限、人工流程和 handoff 边界的最小可行部署。",
+          "common_misconceptions": [
+            "MVD 就是功能更少的 demo",
+            "2–6 周是所有行业的固定标准"
+          ]
+        },
+        {
+          "node_id": "N-006",
+          "node_type": "strategy",
+          "capability_statement": "能为 MVD 设计代表性与高严重度测试、grader、人工覆盖、go/no-go、监控、事件响应、变更和回滚闭环。",
+          "common_misconceptions": [
+            "离线准确率高即可上线",
+            "追求速度意味着可以跳过治理"
+          ]
+        },
+        {
+          "node_id": "N-007",
+          "node_type": "representation",
+          "capability_statement": "能把成功证据分成技术可靠、真实采用、业务结果和产品化/复用四层，并选择 3–5 个可审计指标。",
+          "common_misconceptions": [
+            "上线等于采用",
+            "一次模型指标提升等于商业结果"
+          ]
+        },
+        {
+          "node_id": "N-008",
+          "node_type": "strategy",
+          "capability_statement": "能根据激活、健康、行为改变、价值和风险信号决定续约、扩展、收缩或停止，并说明非技术影响。",
+          "common_misconceptions": [
+            "使用次数增加必然代表价值",
+            "续约是销售问题，与技术部署无关"
+          ]
+        },
+        {
+          "node_id": "N-009",
+          "node_type": "procedure",
+          "capability_statement": "能把重复现场信号归并为 eval、组件、手册或产品路线输入，并说明其证据和受益范围。",
+          "common_misconceptions": [
+            "每个客户需求都应进入产品路线",
+            "把代码复制到多个客户就算产品化"
+          ]
+        },
+        {
+          "node_id": "N-010",
+          "node_type": "metacognition",
+          "capability_statement": "能监测单客户定制趋势、治理旁路、锁定、成本、团队续航和交接成熟度，并决定退出或转平台。",
+          "common_misconceptions": [
+            "客户满意即可忽略团队和平台成本",
+            "退出代表部署失败"
+          ]
+        },
+        {
+          "node_id": "N-011",
+          "node_type": "concept",
+          "capability_statement": "能区分 market_signal、external_evidence、user_provided_unverified、组织来源组、权威性、时效和地区适用性。",
+          "common_misconceptions": [
+            "同一公司的多篇文章等于多个独立证据",
+            "课程引用过的数字天然已验证"
+          ]
+        },
+        {
+          "node_id": "N-012",
+          "node_type": "metacognition",
+          "capability_statement": "能对统计、案例和实践主张给出来源链、置信度、矛盾、适用边界、刷新条件和是否可用于决策的结论。",
+          "common_misconceptions": [
+            "找到一份 PDF 就能普遍外推",
+            "透明写出不确定性等同于没有回答"
+          ]
+        }
+      ],
+      "unit_node_mappings": [
+        {
+          "unit_id": "LU-001",
+          "node_id": "N-001",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-002",
+          "node_id": "N-002",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-003",
+          "node_id": "N-003",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-004",
+          "node_id": "N-004",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-005",
+          "node_id": "N-005",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-006",
+          "node_id": "N-006",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-007",
+          "node_id": "N-007",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-008",
+          "node_id": "N-008",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-009",
+          "node_id": "N-009",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-010",
+          "node_id": "N-010",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-011",
+          "node_id": "N-011",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-012",
+          "node_id": "N-012",
+          "coverage_role": "core",
+          "rationale": "该节点直接定义本学习单元的最小可观察产出。"
+        },
+        {
+          "unit_id": "LU-002",
+          "node_id": "N-011",
+          "coverage_role": "supporting",
+          "rationale": "角色适用性需要区分岗位信号与外部证据。"
+        },
+        {
+          "unit_id": "LU-004",
+          "node_id": "N-011",
+          "coverage_role": "supporting",
+          "rationale": "价值主张需要先区分证据角色和独立来源。"
+        },
+        {
+          "unit_id": "LU-006",
+          "node_id": "N-011",
+          "coverage_role": "supporting",
+          "rationale": "评估与治理依据必须保留权威、时效和适用范围。"
+        },
+        {
+          "unit_id": "LU-008",
+          "node_id": "N-011",
+          "coverage_role": "supporting",
+          "rationale": "商业健康信号需要审查来源和外推边界。"
+        },
+        {
+          "unit_id": "LU-004",
+          "node_id": "N-007",
+          "coverage_role": "supporting",
+          "rationale": "问题选择需要提前定义技术、采用、业务与复用证据。"
+        },
+        {
+          "unit_id": "LU-010",
+          "node_id": "N-007",
+          "coverage_role": "supporting",
+          "rationale": "退出判断需要同时观察四层结果。"
+        },
+        {
+          "unit_id": "LU-008",
+          "node_id": "N-006",
+          "coverage_role": "supporting",
+          "rationale": "续约或扩展不能绕过生产风险与控制状态。"
+        },
+        {
+          "unit_id": "LU-008",
+          "node_id": "N-009",
+          "coverage_role": "supporting",
+          "rationale": "扩展前需确认现场学习能回流而非复制分叉。"
+        }
+      ],
+      "edges": [
+        {
+          "from_node": "N-001",
+          "to_node": "N-002",
+          "prerequisite_strength": "hard",
+          "rationale": "先能按责任和工件辨认角色，才能判断具体场景是否需要 FDE 模式。"
+        },
+        {
+          "from_node": "N-003",
+          "to_node": "N-004",
+          "prerequisite_strength": "hard",
+          "rationale": "没有工作流、基线、owner 和失败成本，价值假设与停止条件无法审查。"
+        },
+        {
+          "from_node": "N-004",
+          "to_node": "N-005",
+          "prerequisite_strength": "hard",
+          "rationale": "MVD 必须服务已选择且可证伪的问题，不能从技术方案反推虚构价值。"
+        },
+        {
+          "from_node": "N-005",
+          "to_node": "N-006",
+          "prerequisite_strength": "hard",
+          "rationale": "只有先定义真实数据、集成、权限和人工边界，才能构造上下文评估与回滚。"
+        },
+        {
+          "from_node": "N-003",
+          "to_node": "N-007",
+          "prerequisite_strength": "hard",
+          "rationale": "四层成功证据需要以现状基线和真实工作流作为比较起点。"
+        },
+        {
+          "from_node": "N-007",
+          "to_node": "N-008",
+          "prerequisite_strength": "hard",
+          "rationale": "续约、扩展、收缩或停止必须基于分层指标，而非单一使用量或直觉。"
+        },
+        {
+          "from_node": "N-009",
+          "to_node": "N-010",
+          "prerequisite_strength": "hard",
+          "rationale": "先识别哪些现场模式可回流产品，才能判断剩余定制是否应退出、交接或转平台。"
+        },
+        {
+          "from_node": "N-011",
+          "to_node": "N-012",
+          "prerequisite_strength": "hard",
+          "rationale": "主张审计以前必须能区分证据角色、独立来源、权威性与时效。"
+        },
+        {
+          "from_node": "N-002",
+          "to_node": "N-004",
+          "prerequisite_strength": "soft",
+          "rationale": "FDE 适用性判断会影响问题选择，但工作流取证仍可先行。"
+        },
+        {
+          "from_node": "N-006",
+          "to_node": "N-007",
+          "prerequisite_strength": "soft",
+          "rationale": "生产控制状态为技术和风险指标提供上下文，但四层指标模型可先独立解释。"
+        },
+        {
+          "from_node": "N-008",
+          "to_node": "N-009",
+          "prerequisite_strength": "soft",
+          "rationale": "采用和价值反馈帮助识别可复用模式，但早期字段信号也可先进入产品回流。"
+        },
+        {
+          "from_node": "N-012",
+          "to_node": "N-002",
+          "prerequisite_strength": "soft",
+          "rationale": "证据审计能提高角色适用性判断的可辩护程度，但不是理解角色边界的硬前置。"
+        },
+        {
+          "from_node": "N-012",
+          "to_node": "N-004",
+          "prerequisite_strength": "soft",
+          "rationale": "价值假设需要审查数据来源和外推边界，但问题观察可以先于完整审计。"
+        }
+      ],
+      "assessment_items": [
+        {
+          "node_id": "N-001",
+          "item": "ASM-001：给出一个同时做演示、写生产代码并参与续约的混合岗位，用四列矩阵解释其 FDE 成分与非 FDE 成分。",
+          "cognitive_level": "diagnose"
+        },
+        {
+          "node_id": "N-002",
+          "item": "ASM-002：比较一个高不确定 AI 工作流和一个稳定可配置流程，决定各自是否采用 FDE，并给出停止/转型条件。",
+          "cognitive_level": "transfer"
+        },
+        {
+          "node_id": "N-003",
+          "item": "ASM-003：从陌生客服升级流程中画出用户、步骤、基线、owner、决策权、失败成本和未知项。",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "N-004",
+          "item": "ASM-004：在三个候选 AI 诉求中选一个，排除一个伪需求，写价值假设、成功/失败信号和停止条件。",
+          "cognitive_level": "evaluate"
+        },
+        {
+          "node_id": "N-005",
+          "item": "ASM-005：为已选问题提交 MVD 边界图，包含数据、系统、权限、人工流程、最小闭环和交接边界。",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "N-006",
+          "item": "ASM-006：为 MVD 设计代表性样本、高严重度样本、grader、人工覆盖、go/no-go、监控、事件和回滚。",
+          "cognitive_level": "transfer"
+        },
+        {
+          "node_id": "N-007",
+          "item": "ASM-007：从十个候选指标中选择 3–5 个，覆盖技术、采用、业务和复用，并说明基线和审计方法。",
+          "cognitive_level": "evaluate"
+        },
+        {
+          "node_id": "N-008",
+          "item": "ASM-008：面对使用量上升但业务质量下降的部署，决定续约、扩展、收缩或停止，并解释组织因素。",
+          "cognitive_level": "diagnose"
+        },
+        {
+          "node_id": "N-009",
+          "item": "ASM-009：把三条客户反馈归并为 eval、组件、手册或产品路线输入，说明受益范围与不纳入项。",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "N-010",
+          "item": "ASM-010：根据定制量、治理旁路、成本、团队负荷和交接成熟度，决定继续、转平台、交接或退出。",
+          "cognitive_level": "evaluate"
+        },
+        {
+          "node_id": "N-011",
+          "item": "ASM-011：把岗位页、同公司三篇案例、NIST、课程和 preliminary 报告分成证据角色与独立来源组。",
+          "cognitive_level": "apply"
+        },
+        {
+          "node_id": "N-012",
+          "item": "ASM-012：审计课程中的 95%、800% 和一个厂商案例，给出来源链、置信度、限制、刷新条件和可用范围。",
+          "cognitive_level": "transfer"
+        }
+      ],
+      "mastery_thresholds": [
+        {
+          "node_id": "N-001",
+          "threshold": "四个判据均使用；至少指出一个混合边界；不以头衔或驻场单独定论。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-002",
+          "threshold": "同时考虑不确定性、整合、产品学习、治理和成本；两个结论均有反方条件。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-003",
+          "threshold": "七类信息齐全；未知项显式标记；不把功能需求当问题定义。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-004",
+          "threshold": "选择与排除均引用基线/owner；停止条件事前可判定；不使用不可核验 ROI。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-005",
+          "threshold": "六类边界齐全；范围能在练习周期验证；说明 2–6 周只是情境启发。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-006",
+          "threshold": "八项控制齐全；风险与测试对应；上线/停止可执行。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-007",
+          "threshold": "四层都有证据；指标不重复；每项含基线、频率和 owner。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-008",
+          "threshold": "不把使用量等同价值；引用四层证据和风险；给出可逆下一步。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-009",
+          "threshold": "分类有重复性证据；至少拒绝一个单客户特例；保留来源与验证方式。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-010",
+          "threshold": "五类信号均评估；结论含责任人、迁移条件和风险；不把退出等同失败。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-011",
+          "threshold": "provenance、独立组、权威、时效和地区五项正确；不重复计算同组织页面。",
+          "requires_transfer": true
+        },
+        {
+          "node_id": "N-012",
+          "threshold": "三条主张逐条回答；800% 保持 trace_only，95% 保留 preliminary 边界；不把透明缺口当未回答。",
+          "requires_transfer": true
+        }
+      ],
+      "remediation_entries": [
+        {
+          "node_id": "N-001",
+          "trigger": "ASM-001 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-001，对照两个相邻角色的工件和责任重画矩阵。"
+        },
+        {
+          "node_id": "N-002",
+          "trigger": "ASM-002 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-002，使用适用/不适用条件清单重新判断。"
+        },
+        {
+          "node_id": "N-003",
+          "trigger": "ASM-003 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-003，先做现状工作流观察表再补 owner 与基线。"
+        },
+        {
+          "node_id": "N-004",
+          "trigger": "ASM-004 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-004，用可证伪假设模板重写选择理由。"
+        },
+        {
+          "node_id": "N-005",
+          "trigger": "ASM-005 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-005，从真实工作流最短闭环反推系统边界。"
+        },
+        {
+          "node_id": "N-006",
+          "trigger": "ASM-006 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-006，按 NIST Map/Measure/Manage 与生产反馈逐项补齐。"
+        },
+        {
+          "node_id": "N-007",
+          "trigger": "ASM-007 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-007，把上线、使用、行为改变、业务结果和复用重新分层。"
+        },
+        {
+          "node_id": "N-008",
+          "trigger": "ASM-008 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-008，用健康信号—决策矩阵重做判断。"
+        },
+        {
+          "node_id": "N-009",
+          "trigger": "ASM-009 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-009，区分重复模式、局部配置和一次性定制。"
+        },
+        {
+          "node_id": "N-010",
+          "trigger": "ASM-010 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-010，建立 stop/transition/handoff 决策表。"
+        },
+        {
+          "node_id": "N-011",
+          "trigger": "ASM-011 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-011，用来源台账逐列重分。"
+        },
+        {
+          "node_id": "N-012",
+          "trigger": "ASM-012 未达到事前阈值或暴露对应误概念。",
+          "entry": "返回 LU-012，按 claim→source→independence→boundary→decision-use 重做。"
+        }
+      ],
+      "traceability": [
+        {
+          "node_id": "N-001",
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-103",
+            "SRC-104"
+          ],
+          "goal_refs": [
+            "CAP-001",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-001"
+          ]
+        },
+        {
+          "node_id": "N-002",
+          "source_refs": [
+            "SRC-101",
+            "SRC-104",
+            "SRC-105",
+            "SRC-110"
+          ],
+          "goal_refs": [
+            "CAP-001",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-002"
+          ]
+        },
+        {
+          "node_id": "N-003",
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-105",
+            "SRC-108"
+          ],
+          "goal_refs": [
+            "CAP-002",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-003"
+          ]
+        },
+        {
+          "node_id": "N-004",
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-108",
+            "SRC-109"
+          ],
+          "goal_refs": [
+            "CAP-002",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-004"
+          ]
+        },
+        {
+          "node_id": "N-005",
+          "source_refs": [
+            "SRC-101",
+            "SRC-102",
+            "SRC-107",
+            "SRC-113"
+          ],
+          "goal_refs": [
+            "CAP-003",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-005"
+          ]
+        },
+        {
+          "node_id": "N-006",
+          "source_refs": [
+            "SRC-105",
+            "SRC-106",
+            "SRC-108",
+            "SRC-114",
+            "SRC-115"
+          ],
+          "goal_refs": [
+            "CAP-003",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-006"
+          ]
+        },
+        {
+          "node_id": "N-007",
+          "source_refs": [
+            "SRC-101",
+            "SRC-105",
+            "SRC-108",
+            "SRC-114"
+          ],
+          "goal_refs": [
+            "CAP-004",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-007"
+          ]
+        },
+        {
+          "node_id": "N-008",
+          "source_refs": [
+            "SRC-101",
+            "SRC-107",
+            "SRC-109",
+            "SRC-114"
+          ],
+          "goal_refs": [
+            "CAP-004",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-008"
+          ]
+        },
+        {
+          "node_id": "N-009",
+          "source_refs": [
+            "SRC-101",
+            "SRC-104",
+            "SRC-108",
+            "SRC-114"
+          ],
+          "goal_refs": [
+            "CAP-005",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-009"
+          ]
+        },
+        {
+          "node_id": "N-010",
+          "source_refs": [
+            "SRC-104",
+            "SRC-105",
+            "SRC-110",
+            "SRC-113"
+          ],
+          "goal_refs": [
+            "CAP-005",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-010"
+          ]
+        },
+        {
+          "node_id": "N-011",
+          "source_refs": [
+            "SRC-101",
+            "SRC-105",
+            "SRC-109",
+            "SRC-110",
+            "SRC-111"
+          ],
+          "goal_refs": [
+            "CAP-006",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-011"
+          ]
+        },
+        {
+          "node_id": "N-012",
+          "source_refs": [
+            "SRC-105",
+            "SRC-109",
+            "SRC-111"
+          ],
+          "goal_refs": [
+            "CAP-006",
+            "GOAL-forward-deployed-engineer-v1"
+          ],
+          "assessment_refs": [
+            "ASM-012"
+          ]
+        }
+      ]
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "结构无环性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "层级与引用完整性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "学习单元核心覆盖",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "必需节点无孤儿",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "原子节点唯一性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "先修边可解释性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "目标覆盖率",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "节点粒度一致性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "能力与概念区分度",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "评估题有效性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "全链路可追溯性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "六源归一化完整性",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "核心进入规则",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "岗位深度建模",
+        "evidence": [
+          "RUN-20260804T120500Z-S3-review.md",
+          "verification.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "prerequisite-check.md",
+      "capability-map.md",
+      "learning-units.md",
+      "nodes.jsonl",
+      "edges.jsonl",
+      "assessments.jsonl",
+      "traceability.md"
+    ],
+    "verdict": "pass",
+    "route_to": "S4"
+  },
+  "document_artifact": {
+    "format": "markdown",
+    "status": "generated",
+    "path": "RUN-20260804T120500Z-S3-review.md",
+    "authority": "human_review_primary",
+    "source": {
+      "stage_id": "S3",
+      "run_id": "RUN-20260804T120500Z-S3",
+      "artifact_id": "CCG-forward-deployed-engineer-v1",
+      "artifact_schema_version": "1.2.0"
+    },
+    "document_profile": "s3_capability_graph_review",
+    "generation_order": "markdown_before_json",
+    "content_binding": "lossless_semantic_correspondence",
+    "section_mappings": [
+      {
+        "section_id": "S3-SEC-01",
+        "heading": "1. 文档与运行信息",
+        "json_pointers": [
+          "/run_id",
+          "/status",
+          "/document_artifact"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-02",
+        "heading": "2. G1/G2 输入与建模边界审计",
+        "json_pointers": [
+          "/input_contract",
+          "/input_validation",
+          "/requirement_gaps"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-03",
+        "heading": "3. 建模焦点与设计原则",
+        "json_pointers": [
+          "/positive_artifact/content/focus_question",
+          "/processing_record"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-04",
+        "heading": "4. 三层能力大纲",
+        "json_pointers": [
+          "/positive_artifact/content/target_capabilities",
+          "/positive_artifact/content/learning_units"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-05",
+        "heading": "5. 学习单元详解",
+        "json_pointers": [
+          "/positive_artifact/content/learning_units"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-06",
+        "heading": "6. 原子知识与能力节点",
+        "json_pointers": [
+          "/positive_artifact/content/nodes",
+          "/positive_artifact/content/knowledge_status_summary"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-07",
+        "heading": "7. 学习单元—节点映射",
+        "json_pointers": [
+          "/positive_artifact/content/unit_node_mappings"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-08",
+        "heading": "8. 先修、依赖与关联关系",
+        "json_pointers": [
+          "/positive_artifact/content/edges"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-09",
+        "heading": "9. 知识状态、角色深度与适用边界",
+        "json_pointers": [
+          "/positive_artifact/content/knowledge_status_summary",
+          "/positive_artifact/content/role_capability_ladder"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-10",
+        "heading": "10. 评估方式、阈值与补救规则",
+        "json_pointers": [
+          "/positive_artifact/content/assessment_items",
+          "/positive_artifact/content/mastery_thresholds",
+          "/positive_artifact/content/remediation_entries"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-11",
+        "heading": "11. 覆盖、缺口、冲突与重复检查",
+        "json_pointers": [
+          "/positive_artifact/content/coverage_and_gap_report"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-12",
+        "heading": "12. 全链路追溯",
+        "json_pointers": [
+          "/positive_artifact/content/source_atom_mappings",
+          "/positive_artifact/content/traceability",
+          "/traceability"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-13",
+        "heading": "13. G3 质量评价与路由",
+        "json_pointers": [
+          "/quality_evaluation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S3-SEC-14",
+        "heading": "14. 输出审计与 JSON 对应表",
+        "json_pointers": [
+          "/document_artifact",
+          "/presentation_artifact"
+        ],
+        "status": "matched"
+      }
+    ],
+    "generated_at": "2026-08-04T12:05:00Z",
+    "validation": {
+      "markdown_parse": "pass",
+      "required_sections": "pass",
+      "json_correspondence": "pass",
+      "no_placeholders": "pass"
+    },
+    "reason": null
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "capability-graph.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S3",
+      "run_id": "RUN-20260804T120500Z-S3",
+      "envelope_schema_version": "1.3.0",
+      "artifact_id": "CCG-forward-deployed-engineer-v1",
+      "artifact_schema_version": "1.2.0"
+    },
+    "view_profile": "capability_graph_explorer",
+    "data_binding": "embedded_canonical_envelope",
+    "interaction_mode": "read_only_exploration",
+    "generated_at": "2026-08-04T12:05:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "pass",
+      "interaction_smoke": "pass"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "GOAL-forward-deployed-engineer-v1",
+      "S2-domain-evidence-rev1"
+    ],
+    "source_evidence_ids": [
+      "EVID-201",
+      "EVID-202",
+      "EVID-203",
+      "EVID-204",
+      "EVID-205",
+      "EVID-206",
+      "EVID-207",
+      "EVID-208",
+      "EVID-209",
+      "EVID-210",
+      "EVID-211",
+      "EVID-212",
+      "EVID-213",
+      "EVID-214",
+      "EVID-215",
+      "EVID-216"
+    ],
+    "source_sections": [
+      "stages/s1-goal-contract/goal-contract.md",
+      "stages/s2-domain-evidence/research-answers.md",
+      "stages/s2-domain-evidence/answer-validation.md"
+    ],
+    "fixture_type": "mixed"
+  },
+  "created_at": "2026-08-04T12:05:00Z"
+}

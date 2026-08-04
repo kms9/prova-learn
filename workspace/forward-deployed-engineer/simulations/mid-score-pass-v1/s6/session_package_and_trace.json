@@ -1,0 +1,626 @@
+{
+  "schema_version": "1.3.0",
+  "stage_id": "S6",
+  "run_id": "RUN-SIM-MIDPASS-S6",
+  "learner_id": "simulated-mid-pass-learner",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "../s5/learning_and_session_plan.json",
+      "../s4/learner_snapshot.json",
+      "../../../stages/s3-capability-graph/capability_concept_graph.json"
+    ],
+    "expected_schema_versions": {
+      "s5_envelope": "1.3.0",
+      "learning_and_session_plan": "1.1.0",
+      "session_package_and_trace": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "交互事件均由虚拟学习者产生，只在本夹具内有效。",
+    "具体25%阈值是教学设定，不是行业标准。",
+    "S6 只产生候选掌握证据。"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "inform",
+    "trigger": "simulated_session",
+    "questions": [],
+    "response": {
+      "simulated_persona_participated": true,
+      "real_user_behavior": false
+    },
+    "status": "acknowledged",
+    "confirmed_at": "2026-08-04T13:15:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "SIM-S6-SRC-1",
+      "provenance": "external_evidence",
+      "source_ref": "../../../stages/s3-capability-graph/assessments.jsonl#ASM-004",
+      "summary": "N-004 评估要求选择/排除有基线且停止条件可判定。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-S6-E1",
+      "provenance": "learner_behavior",
+      "source_ref": "interaction_events/SIM-S6-E1",
+      "summary": "首次答案依赖效率和DAU代理。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-S6-E2",
+      "provenance": "learner_behavior",
+      "source_ref": "interaction_events/SIM-S6-E2",
+      "summary": "一次轻提示后补齐五槽规则。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-S6-E3",
+      "provenance": "learner_behavior",
+      "source_ref": "interaction_events/SIM-S6-E3",
+      "summary": "医疗迁移保留结构但错误沿用阈值。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "先无材料检索，避免答案泄露。",
+    "实际只使用 HINT-1-light。",
+    "完整修订形成候选推理证据。",
+    "远迁移 partial、延迟保持 absent，禁止提前宣布掌握。"
+  ],
+  "positive_artifact": {
+    "type": "session_package_and_trace",
+    "schema_version": "1.0.0",
+    "artifact_id": "SPT-SIM-MIDPASS-N004-v1",
+    "content": {
+      "session_goal": "在未见客服 AI 场景中写出可证伪价值假设与事前 stop/go 规则。",
+      "success_conditions": [
+        "五槽 baseline、owner、threshold、window、action 齐全。",
+        "能说明 DAU/ROI 不能替代业务价值与风险结果。",
+        "在新行业中主动重新校准阈值。"
+      ],
+      "current_node": {
+        "node_id": "N-004",
+        "exit_criteria": [
+          "未见场景无提示写出基线、owner、阈值、时间窗和 stop/go 动作。"
+        ]
+      },
+      "explanations": [
+        {
+          "explanation_id": "SIM-EXP-1",
+          "layer": "core_concept",
+          "representation": "symbolic",
+          "statement": "价值假设应写成 baseline→owner→threshold→window→action，并且可被观察推翻。",
+          "cognitive_level": "understand",
+          "evidence_refs": [
+            "N-004",
+            "ASM-004",
+            "EVID-205"
+          ]
+        },
+        {
+          "explanation_id": "SIM-EXP-2",
+          "layer": "procedure",
+          "representation": "worked_narrative",
+          "statement": "先量化当前流程，再指定负责决策的人、成功与伤害阈值、观察窗口和失败后的回滚/停止动作。",
+          "cognitive_level": "apply",
+          "evidence_refs": [
+            "N-003",
+            "N-004",
+            "EVID-211"
+          ]
+        },
+        {
+          "explanation_id": "SIM-EXP-3",
+          "layer": "connection",
+          "representation": "multiple",
+          "statement": "技术、采用、业务和复用是四层不同证据；DAU 只能支持采用，不能独立证明业务价值。",
+          "cognitive_level": "analyze",
+          "evidence_refs": [
+            "N-007",
+            "N-008",
+            "EVID-203",
+            "EVID-207"
+          ]
+        },
+        {
+          "explanation_id": "SIM-EXP-4",
+          "layer": "edge_case",
+          "representation": "concrete",
+          "statement": "高风险伤害指标可以成为硬停止条件，即使平均效率指标达标。",
+          "cognitive_level": "evaluate",
+          "evidence_refs": [
+            "N-006",
+            "EVID-214"
+          ]
+        }
+      ],
+      "examples": {
+        "positive": [
+          {
+            "example_id": "SIM-EX-P1",
+            "summary": "四周内标准工单人工分钟数下降25%，严重误答不高于基线，由客服运营 owner 验收；否则回滚并停止扩张。"
+          }
+        ],
+        "negative": [
+          {
+            "example_id": "SIM-EX-N1",
+            "summary": "ROI 很高且 DAU 上升就全量上线；没有基线、owner、时间窗或失败动作。"
+          }
+        ],
+        "boundary": [
+          {
+            "example_id": "SIM-EX-B1",
+            "summary": "效率达标但严重误答超过基线，仍必须停止。"
+          },
+          {
+            "example_id": "SIM-EX-B2",
+            "summary": "效率未达但样本不足，只能延长受控验证，不能直接宣告成功或失败。"
+          }
+        ],
+        "common_misconceptions": [
+          {
+            "misconception_id": "USAGE_IMPLIES_VALUE",
+            "description": "把使用量等同业务价值。",
+            "correction_ref": "SIM-EXP-3"
+          },
+          {
+            "misconception_id": "STOP_RULE_CAN_STAY_VAGUE",
+            "description": "把停止条件留到上线后再补。",
+            "correction_ref": "SIM-EXP-1"
+          }
+        ]
+      },
+      "activities": [
+        {
+          "activity_id": "SIM-ACT-1",
+          "kind": "retrieval_pretest",
+          "instruction": "不看材料，先写出你会如何判断客服 AI 是否值得扩张。",
+          "cognitive_level": "analyze",
+          "requires_learner_output": true,
+          "answer_leakage_control": "提交首次答案前不显示五槽结构。"
+        },
+        {
+          "activity_id": "SIM-ACT-2",
+          "kind": "contrast_case",
+          "instruction": "比较可证伪规则与 ROI/DAU 口号，指出缺失项。",
+          "cognitive_level": "evaluate",
+          "requires_learner_output": true,
+          "answer_leakage_control": "只提供两个案例，不标注正确项。"
+        },
+        {
+          "activity_id": "SIM-ACT-3",
+          "kind": "completion_problem",
+          "instruction": "补全 baseline、owner、threshold、window、action 五槽。",
+          "cognitive_level": "create",
+          "requires_learner_output": true,
+          "answer_leakage_control": "保留空槽，不给建议阈值。"
+        },
+        {
+          "activity_id": "SIM-ACT-4",
+          "kind": "independent_transfer",
+          "instruction": "迁移到医疗预约场景，重新设置阈值并解释差异。",
+          "cognitive_level": "create",
+          "requires_learner_output": true,
+          "answer_leakage_control": "不提供客服场景答案或医疗阈值。"
+        }
+      ],
+      "hint_ladder": [
+        {
+          "step": 1,
+          "level": "light",
+          "prompt": "谁拥有结果、何时判定、失败后做什么？",
+          "fading_condition": "学习者能自行识别五槽缺项。"
+        },
+        {
+          "step": 2,
+          "level": "medium",
+          "prompt": "把目标拆成基线、阈值和时间窗，再补 owner 与动作。",
+          "fading_condition": "学习者能在同领域新场景写完整规则。"
+        },
+        {
+          "step": 3,
+          "level": "strong",
+          "prompt": "参考一个不同场景的完整 worked example，再重新完成当前题。",
+          "fading_condition": "下一题取消 worked example 并要求独立迁移。"
+        }
+      ],
+      "feedback_rules": [
+        {
+          "rule_id": "SIM-FB-1",
+          "task": "指出当前答案缺少哪些可判定字段，不直接给阈值。",
+          "process": "要求解释每个字段如何改变 go/stop 决策。",
+          "self_regulation": "用“若失败，谁在何时做何动作”自检。"
+        }
+      ],
+      "scaffolding_fade_strategy": {
+        "initial_support": "只在首次修订时提供五槽缺项的轻提示。",
+        "fade_rule": "五槽齐全后立即撤去模板；迁移题不再提示具体结构或阈值。",
+        "terminal_support": "minimal"
+      },
+      "interaction_events": [
+        {
+          "event_id": "SIM-S6-E1",
+          "learner_response": "如果客服 AI 让处理效率提升30%，DAU也增长，就扩大上线；没有增长就停止。",
+          "hints_used": [],
+          "correction_trajectory": [
+            "识别到无基线、owner、时间窗和高风险指标。"
+          ]
+        },
+        {
+          "event_id": "SIM-S6-E2",
+          "learner_response": "以当前人工分钟数和严重误答率为基线，由客服运营 owner 在四周验收；人工分钟数下降至少25%且严重误答不高于基线才 go；否则回滚并停止扩大，样本不足则延长受控验证。",
+          "hints_used": [
+            "HINT-1-light"
+          ],
+          "correction_trajectory": [
+            "补充基线",
+            "补充 owner 与四周窗口",
+            "增加收益和伤害阈值",
+            "增加回滚/停止与样本不足动作"
+          ]
+        },
+        {
+          "event_id": "SIM-S6-E3",
+          "learner_response": "医疗预约也用四周和25%效率改善，由医疗运营验收，错误率不升才扩大。",
+          "hints_used": [],
+          "correction_trajectory": [
+            "保留五槽结构",
+            "未重新校准行业风险和25%阈值",
+            "标记远迁移 partial"
+          ]
+        }
+      ],
+      "candidate_mastery_evidence": [
+        {
+          "evidence_id": "SIM-CME-1",
+          "node_id": "N-004",
+          "dimension": "reasoning_quality",
+          "status": "candidate",
+          "limits": [
+            "一次轻提示后形成完整规则。"
+          ]
+        },
+        {
+          "evidence_id": "SIM-CME-2",
+          "node_id": "N-004",
+          "dimension": "independent_application",
+          "status": "partial",
+          "limits": [
+            "完整答案使用 HINT-1-light。"
+          ]
+        },
+        {
+          "evidence_id": "SIM-CME-3",
+          "node_id": "N-004",
+          "dimension": "transfer",
+          "status": "partial",
+          "limits": [
+            "医疗场景错误沿用客服阈值。"
+          ]
+        },
+        {
+          "evidence_id": "SIM-CME-4",
+          "node_id": "N-004",
+          "dimension": "confidence",
+          "status": "candidate",
+          "limits": [
+            "没有把单次修订宣称为掌握。"
+          ]
+        },
+        {
+          "evidence_id": "SIM-CME-5",
+          "node_id": "N-004",
+          "dimension": "delayed_retention",
+          "status": "absent",
+          "limits": [
+            "第4天复测尚未执行。"
+          ]
+        }
+      ],
+      "content_quality_status": {
+        "state": "correct",
+        "reviewed_against": [
+          "S3 N-004/ASM-004",
+          "S2 EVID-205/EVID-211",
+          "S6 stage contract"
+        ],
+        "errors_found": []
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "内容正确性与可追溯性",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据角色与时效",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "对目标和学习者的适配",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "认知层级",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "例子代表性",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "支架质量",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "答案泄露控制",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "学习者主动性",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "交付可用性",
+        "evidence": [
+          "s6-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "RUN-SIM-MIDPASS-S6-review.md",
+      "session_package_and_trace",
+      "SIM-S6-E1",
+      "SIM-S6-E2",
+      "SIM-S6-E3"
+    ],
+    "verdict": "pass",
+    "route_to": "S7"
+  },
+  "document_artifact": {
+    "format": "markdown",
+    "status": "generated",
+    "path": "RUN-SIM-MIDPASS-S6-review.md",
+    "authority": "human_review_primary",
+    "source": {
+      "stage_id": "S6",
+      "run_id": "RUN-SIM-MIDPASS-S6",
+      "artifact_id": "SPT-SIM-MIDPASS-N004-v1",
+      "artifact_schema_version": "1.0.0"
+    },
+    "document_profile": "s6_instructional_session_review",
+    "generation_order": "markdown_before_json",
+    "content_binding": "lossless_semantic_correspondence",
+    "section_mappings": [
+      {
+        "section_id": "S6-SEC-01",
+        "heading": "1. 文档与运行信息",
+        "json_pointers": [
+          "/run_id"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-02",
+        "heading": "2. 输入、当前节点与会话契约审计",
+        "json_pointers": [
+          "/input_contract"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-03",
+        "heading": "3. 来源、知识状态与内容边界",
+        "json_pointers": [
+          "/evidence_collected"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-04",
+        "heading": "4. 分层解释与多重表征",
+        "json_pointers": [
+          "/positive_artifact/content/explanations"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-05",
+        "heading": "5. 正例、反例、边界案例与常见误解",
+        "json_pointers": [
+          "/positive_artifact/content/examples"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-06",
+        "heading": "6. 学习活动与答案泄露控制",
+        "json_pointers": [
+          "/positive_artifact/content/activities"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-07",
+        "heading": "7. 提示阶梯、反馈规则与撤架策略",
+        "json_pointers": [
+          "/positive_artifact/content/hint_ladder"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-08",
+        "heading": "8. 真实交互事件与修正轨迹",
+        "json_pointers": [
+          "/positive_artifact/content/interaction_events"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-09",
+        "heading": "9. 候选掌握证据",
+        "json_pointers": [
+          "/positive_artifact/content/candidate_mastery_evidence"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-10",
+        "heading": "10. 未解决问题、内容修订与适用限制",
+        "json_pointers": [
+          "/positive_artifact/content/content_quality_status"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-11",
+        "heading": "11. G6 质量评价与路由",
+        "json_pointers": [
+          "/quality_evaluation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S6-SEC-12",
+        "heading": "12. 输出审计与 JSON 对应表",
+        "json_pointers": [
+          "/document_artifact"
+        ],
+        "status": "matched"
+      }
+    ],
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "markdown_parse": "pass",
+      "required_sections": "pass",
+      "json_correspondence": "pass",
+      "no_placeholders": "pass"
+    },
+    "reason": null
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "session-report.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S6",
+      "run_id": "RUN-SIM-MIDPASS-S6",
+      "envelope_schema_version": "1.3.0",
+      "artifact_id": "SPT-SIM-MIDPASS-N004-v1",
+      "artifact_schema_version": "1.0.0"
+    },
+    "view_profile": "instructional_session_workspace",
+    "data_binding": "embedded_canonical_envelope",
+    "interaction_mode": "read_only_exploration",
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "pass",
+      "interaction_smoke": "pass"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "LSP-SIM-MIDPASS-v1",
+      "LS-SIM-MIDPASS-v1",
+      "CCG-forward-deployed-engineer-v1"
+    ],
+    "source_evidence_ids": [
+      "ASM-004",
+      "EVID-205",
+      "EVID-211",
+      "SIM-S6-E1",
+      "SIM-S6-E2",
+      "SIM-S6-E3"
+    ],
+    "source_sections": [
+      "../s5/RUN-SIM-MIDPASS-S5-review.md",
+      "../../../stages/s3-capability-graph/assessments.jsonl"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-08-04T13:15:00Z"
+}

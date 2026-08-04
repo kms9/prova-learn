@@ -1,0 +1,13 @@
+{"edge_id":"EDGE-001","from_node":"N-001","to_node":"N-002","prerequisite_strength":"hard","rationale":"先能按责任和工件辨认角色，才能判断具体场景是否需要 FDE 模式。"}
+{"edge_id":"EDGE-002","from_node":"N-003","to_node":"N-004","prerequisite_strength":"hard","rationale":"没有工作流、基线、owner 和失败成本，价值假设与停止条件无法审查。"}
+{"edge_id":"EDGE-003","from_node":"N-004","to_node":"N-005","prerequisite_strength":"hard","rationale":"MVD 必须服务已选择且可证伪的问题，不能从技术方案反推虚构价值。"}
+{"edge_id":"EDGE-004","from_node":"N-005","to_node":"N-006","prerequisite_strength":"hard","rationale":"只有先定义真实数据、集成、权限和人工边界，才能构造上下文评估与回滚。"}
+{"edge_id":"EDGE-005","from_node":"N-003","to_node":"N-007","prerequisite_strength":"hard","rationale":"四层成功证据需要以现状基线和真实工作流作为比较起点。"}
+{"edge_id":"EDGE-006","from_node":"N-007","to_node":"N-008","prerequisite_strength":"hard","rationale":"续约、扩展、收缩或停止必须基于分层指标，而非单一使用量或直觉。"}
+{"edge_id":"EDGE-007","from_node":"N-009","to_node":"N-010","prerequisite_strength":"hard","rationale":"先识别哪些现场模式可回流产品，才能判断剩余定制是否应退出、交接或转平台。"}
+{"edge_id":"EDGE-008","from_node":"N-011","to_node":"N-012","prerequisite_strength":"hard","rationale":"主张审计以前必须能区分证据角色、独立来源、权威性与时效。"}
+{"edge_id":"EDGE-009","from_node":"N-002","to_node":"N-004","prerequisite_strength":"soft","rationale":"FDE 适用性判断会影响问题选择，但工作流取证仍可先行。"}
+{"edge_id":"EDGE-010","from_node":"N-006","to_node":"N-007","prerequisite_strength":"soft","rationale":"生产控制状态为技术和风险指标提供上下文，但四层指标模型可先独立解释。"}
+{"edge_id":"EDGE-011","from_node":"N-008","to_node":"N-009","prerequisite_strength":"soft","rationale":"采用和价值反馈帮助识别可复用模式，但早期字段信号也可先进入产品回流。"}
+{"edge_id":"EDGE-012","from_node":"N-012","to_node":"N-002","prerequisite_strength":"soft","rationale":"证据审计能提高角色适用性判断的可辩护程度，但不是理解角色边界的硬前置。"}
+{"edge_id":"EDGE-013","from_node":"N-012","to_node":"N-004","prerequisite_strength":"soft","rationale":"价值假设需要审查数据来源和外推边界，但问题观察可以先于完整审计。"}

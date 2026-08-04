@@ -1,0 +1,642 @@
+{
+  "schema_version": "1.3.0",
+  "stage_id": "S5",
+  "run_id": "RUN-SIM-MIDPASS-S5",
+  "learner_id": "simulated-mid-pass-learner",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "../s4/learner_snapshot.json",
+      "../../../stages/s1-goal-contract/INDEX.md",
+      "../../../stages/s3-capability-graph/capability_concept_graph.json"
+    ],
+    "expected_schema_versions": {
+      "s4_envelope": "1.3.0",
+      "learner_snapshot": "1.0.0",
+      "capability_concept_graph": "1.2.0",
+      "learning_and_session_plan": "1.1.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "沿用中文、每周3次、每次45分钟的已确认目标约束。",
+    "确认由虚拟学习者完成，不代替真实用户确认。",
+    "路径只在本 simulated fixture 内执行。"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "mandatory",
+    "trigger": "first_session_contract",
+    "questions": [
+      "是否确认先从 N-004 开始，并按每次45分钟执行？"
+    ],
+    "response": {
+      "confirmed_by": "simulated-mid-pass-learner",
+      "choice": "confirm_minimal_path",
+      "real_user_confirmation": false
+    },
+    "status": "confirmed",
+    "confirmed_at": "2026-08-04T13:15:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "SIM-S5-E1",
+      "provenance": "learner_behavior",
+      "source_ref": "../s4/learner_snapshot.json",
+      "summary": "虚拟画像定位 N-004 为最近学习前沿。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-S5-E2",
+      "provenance": "external_evidence",
+      "source_ref": "../../../stages/s3-capability-graph/capability_concept_graph.json",
+      "summary": "N-003→N-004 硬先修与节点退出标准。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-S5-E3",
+      "provenance": "model_hypothesis",
+      "source_ref": "RUN-SIM-MIDPASS-S5-review.md",
+      "summary": "四会话路径是基于前沿与约束的教学规划。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "从 N-004 最近前沿出发。",
+    "跳过已有夹具掌握证据的节点，只保留检索维护。",
+    "按 N-004、N-006、N-008、N-012 形成最小路径。",
+    "每节点安排即时、迁移、延迟测评和撤架条件。"
+  ],
+  "positive_artifact": {
+    "type": "learning_and_session_plan",
+    "schema_version": "1.1.0",
+    "artifact_id": "LSP-SIM-MIDPASS-v1",
+    "content": {
+      "stage_goals": [
+        {
+          "goal_id": "SIM-SG-1",
+          "statement": "能独立写出可证伪价值假设和事前 stop/go 规则。"
+        },
+        {
+          "goal_id": "SIM-SG-2",
+          "statement": "能把治理、商业和来源审计迁移到未见企业 AI 场景。"
+        }
+      ],
+      "ordered_learning_nodes": [
+        {
+          "node_id": "N-004",
+          "order": 1,
+          "selection_rationale": "最近学习前沿；N-003 已通过，先修复价值假设与事前停止条件。",
+          "evidence_basis": {
+            "knowledge_tier": "core_practice",
+            "knowledge_status": "consensus",
+            "freshness": "stable",
+            "source_refs": [
+              "EVID-205",
+              "EVID-211"
+            ],
+            "inclusion_reason": "目标直接要求且行为证据显示 stop/go 规则不完整。"
+          },
+          "teaching_strategy": [
+            "contrast_case",
+            "worked_example",
+            "practice",
+            "transfer"
+          ],
+          "scaffolding": {
+            "approach": "五槽模板",
+            "description": "用 baseline、owner、threshold、window、action 五槽形成可证伪规则。"
+          },
+          "fade_conditions": [
+            "在未见场景无提示写全五槽并解释失败动作。"
+          ]
+        },
+        {
+          "node_id": "N-006",
+          "order": 2,
+          "selection_rationale": "N-005 已通过；补强上下文 eval、人工覆盖与回滚的跨域适配。",
+          "evidence_basis": {
+            "knowledge_tier": "core_stable",
+            "knowledge_status": "consensus",
+            "freshness": "dynamic",
+            "source_refs": [
+              "EVID-206",
+              "EVID-208",
+              "EVID-214"
+            ],
+            "inclusion_reason": "虚拟诊断显示治理方向正确但迁移不完整。"
+          },
+          "teaching_strategy": [
+            "worked_example",
+            "contrast_case",
+            "practice"
+          ],
+          "scaffolding": {
+            "approach": "风险—控制清单",
+            "description": "先映射失败模式，再选择 eval、grader、人工覆盖、事件和回滚。"
+          },
+          "fade_conditions": [
+            "能按新风险独立选择控制而不是复制清单。"
+          ]
+        },
+        {
+          "node_id": "N-008",
+          "order": 3,
+          "selection_rationale": "N-007 已通过；修复使用量等同价值的误概念。",
+          "evidence_basis": {
+            "knowledge_tier": "core_practice",
+            "knowledge_status": "disputed",
+            "freshness": "dynamic",
+            "source_refs": [
+              "EVID-203",
+              "EVID-207",
+              "EVID-210",
+              "EVID-211"
+            ],
+            "inclusion_reason": "扩张与停止依赖四层证据和可逆决策。"
+          },
+          "teaching_strategy": [
+            "retrieval",
+            "contrast_case",
+            "transfer"
+          ],
+          "scaffolding": {
+            "approach": "四层证据卡",
+            "description": "把技术、采用、业务、复用证据分开并要求反事实。"
+          },
+          "fade_conditions": [
+            "能在证据冲突时给出有边界的扩张、收缩或停止决定。"
+          ]
+        },
+        {
+          "node_id": "N-012",
+          "order": 4,
+          "selection_rationale": "N-011 已通过；完成统计、案例、置信度与刷新条件审计。",
+          "evidence_basis": {
+            "knowledge_tier": "core_stable",
+            "knowledge_status": "consensus",
+            "freshness": "dynamic",
+            "source_refs": [
+              "EVID-211",
+              "EVID-216"
+            ],
+            "inclusion_reason": "D4 显示来源角色正确但独立组、刷新与远迁移不足。"
+          },
+          "teaching_strategy": [
+            "worked_example",
+            "practice",
+            "delayed_retest"
+          ],
+          "scaffolding": {
+            "approach": "来源链表头",
+            "description": "逐条记录 provenance、independent group、limitations、refresh trigger 和用途。"
+          },
+          "fade_conditions": [
+            "对未见主张无提示完成来源链与外推边界。"
+          ]
+        }
+      ],
+      "sessions": [
+        {
+          "session_id": "SIM-S5-01",
+          "goal": "写出可证伪价值假设和事前停止条件。",
+          "activities": [
+            "无材料检索预测",
+            "正反例对比",
+            "半完成五槽模板",
+            "未见场景独立迁移"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 45,
+            "session_count": 1
+          },
+          "input_materials": [
+            "S3 ASM-004",
+            "S2 EVID-205/EVID-211",
+            "脱敏保险与客服场景"
+          ]
+        },
+        {
+          "session_id": "SIM-S5-02",
+          "goal": "构建上下文 eval 与治理控制。",
+          "activities": [
+            "风险—控制映射",
+            "回滚演练",
+            "未见场景选择控制"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 45,
+            "session_count": 1
+          },
+          "input_materials": [
+            "S3 ASM-006",
+            "S2 EVID-206/EVID-208/EVID-214"
+          ]
+        },
+        {
+          "session_id": "SIM-S5-03",
+          "goal": "基于四层证据决定扩张、收缩或停止。",
+          "activities": [
+            "指标分层",
+            "反事实检查",
+            "可逆决策"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 45,
+            "session_count": 1
+          },
+          "input_materials": [
+            "S3 ASM-008",
+            "S2 EVID-203/EVID-207/EVID-210/EVID-211"
+          ]
+        },
+        {
+          "session_id": "SIM-S5-04",
+          "goal": "审计来源链并完成医疗迁移。",
+          "activities": [
+            "95%/800%/厂商案例审计",
+            "刷新条件",
+            "未见主张迁移"
+          ],
+          "estimated_time": {
+            "minutes_per_session": 45,
+            "session_count": 1
+          },
+          "input_materials": [
+            "S3 ASM-012",
+            "S2 EVID-211/EVID-216"
+          ]
+        }
+      ],
+      "assessment_schedule": {
+        "immediate": [
+          "每会话末独立完成一个未见小题并解释依据。",
+          "N-004 必须写出 baseline、owner、threshold、window、action。"
+        ],
+        "transfer": [
+          "保险/客服到医疗场景远迁移，不得沿用未经校准阈值。"
+        ],
+        "delayed": [
+          "第4天复测 N-004。",
+          "第7天复测 N-006、N-008、N-012。"
+        ]
+      },
+      "review_anchors": [
+        "次日检索",
+        "第4天无提示复测",
+        "第7天交错保持"
+      ],
+      "risks": [
+        {
+          "risk_id": "SIM-RISK-1",
+          "description": "把 DAU 或 ROI 当作充分价值证据。",
+          "mitigation": "强制写出业务基线、反事实、owner 与风险停止条件。",
+          "criticality": "high"
+        },
+        {
+          "risk_id": "SIM-RISK-2",
+          "description": "会套模板但不能跨行业迁移。",
+          "mitigation": "第二题取消模板并更换为强监管场景。",
+          "criticality": "medium"
+        }
+      ],
+      "alternative_routes": [
+        {
+          "trigger": "N-004 首会话退出标准未达",
+          "adjustment": "留在 S6 增加一次 contrast case 补救。"
+        },
+        {
+          "trigger": "暴露来源或图谱缺口",
+          "adjustment": "按最早污染点返回 S2 或 S3。"
+        },
+        {
+          "trigger": "N-010 后续复测失败",
+          "adjustment": "在 N-008 后插入 N-010。"
+        }
+      ],
+      "exit_criteria": {
+        "per_node": [
+          {
+            "node_id": "N-004",
+            "criteria": "未见场景无提示写出基线、owner、阈值、时间窗和 stop/go 动作。"
+          },
+          {
+            "node_id": "N-006",
+            "criteria": "按风险选择 eval、人工覆盖、监控和回滚。"
+          },
+          {
+            "node_id": "N-008",
+            "criteria": "不把使用量等同价值，并给可逆的扩张、收缩或停止决策。"
+          },
+          {
+            "node_id": "N-012",
+            "criteria": "对未见统计或案例说明 provenance、独立性、边界和刷新。"
+          }
+        ],
+        "overall": [
+          "至少一次无提示远迁移通过。",
+          "至少一次延迟保持通过。",
+          "四个目标节点均满足节点退出标准。"
+        ]
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "目标连通性",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "先修正确性",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "路径最小性",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "时间可行性",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "策略适配性",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据分层适配",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "教学与测评对齐度",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "认知负荷",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "调整空间",
+        "evidence": [
+          "s5-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "../s4/learner_snapshot.json",
+      "RUN-SIM-MIDPASS-S5-review.md",
+      "learning_and_session_plan"
+    ],
+    "verdict": "pass",
+    "route_to": "S6"
+  },
+  "document_artifact": {
+    "format": "markdown",
+    "status": "generated",
+    "path": "RUN-SIM-MIDPASS-S5-review.md",
+    "authority": "human_review_primary",
+    "source": {
+      "stage_id": "S5",
+      "run_id": "RUN-SIM-MIDPASS-S5",
+      "artifact_id": "LSP-SIM-MIDPASS-v1",
+      "artifact_schema_version": "1.1.0"
+    },
+    "document_profile": "s5_learning_plan_review",
+    "generation_order": "markdown_before_json",
+    "content_binding": "lossless_semantic_correspondence",
+    "section_mappings": [
+      {
+        "section_id": "S5-SEC-01",
+        "heading": "1. 文档与运行信息",
+        "json_pointers": [
+          "/run_id"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-02",
+        "heading": "2. 输入、版本与学习前沿审计",
+        "json_pointers": [
+          "/input_contract"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-03",
+        "heading": "3. 用户约束、取舍与确认结果",
+        "json_pointers": [
+          "/confirmation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-04",
+        "heading": "4. 路径选择原则与最小连通子图",
+        "json_pointers": [
+          "/processing_record"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-05",
+        "heading": "5. 有序学习节点详解",
+        "json_pointers": [
+          "/positive_artifact/content/ordered_learning_nodes"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-06",
+        "heading": "6. 会话编排与材料",
+        "json_pointers": [
+          "/positive_artifact/content/sessions"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-07",
+        "heading": "7. 支架、撤架与教学策略",
+        "json_pointers": [
+          "/positive_artifact/content/ordered_learning_nodes"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-08",
+        "heading": "8. 即时、迁移与延迟测评",
+        "json_pointers": [
+          "/positive_artifact/content/assessment_schedule"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-09",
+        "heading": "9. 复习锚点与时间预算",
+        "json_pointers": [
+          "/positive_artifact/content/review_anchors"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-10",
+        "heading": "10. 风险、备选路线与触发条件",
+        "json_pointers": [
+          "/positive_artifact/content/risks"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-11",
+        "heading": "11. 节点退出标准与总体完成条件",
+        "json_pointers": [
+          "/positive_artifact/content/exit_criteria"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-12",
+        "heading": "12. G5 质量评价与路由",
+        "json_pointers": [
+          "/quality_evaluation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S5-SEC-13",
+        "heading": "13. 输出审计与 JSON 对应表",
+        "json_pointers": [
+          "/document_artifact"
+        ],
+        "status": "matched"
+      }
+    ],
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "markdown_parse": "pass",
+      "required_sections": "pass",
+      "json_correspondence": "pass",
+      "no_placeholders": "pass"
+    },
+    "reason": null
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "learning-plan.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S5",
+      "run_id": "RUN-SIM-MIDPASS-S5",
+      "envelope_schema_version": "1.3.0",
+      "artifact_id": "LSP-SIM-MIDPASS-v1",
+      "artifact_schema_version": "1.1.0"
+    },
+    "view_profile": "learning_plan_board",
+    "data_binding": "embedded_canonical_envelope",
+    "interaction_mode": "read_only_exploration",
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "pass",
+      "interaction_smoke": "pass"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "GOAL-forward-deployed-engineer-v1",
+      "CCG-forward-deployed-engineer-v1",
+      "LS-SIM-MIDPASS-v1"
+    ],
+    "source_evidence_ids": [
+      "SIM-D3",
+      "SIM-D4",
+      "ASM-004",
+      "EVID-205",
+      "EVID-211"
+    ],
+    "source_sections": [
+      "../s4/RUN-SIM-MIDPASS-S4-review.md",
+      "../../../stages/s3-capability-graph/edges.jsonl",
+      "../../../stages/s3-capability-graph/assessments.jsonl"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-08-04T13:15:00Z"
+}

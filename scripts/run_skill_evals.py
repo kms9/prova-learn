@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Independent skill-eval harness for the seven personalized-learning stage skills
-and the seven check-* quality skills. Implements the §8 with-skill / without-skill
+Independent skill-eval harness for the personalized-learning stage skills,
+the orchestration entrypoint, and the check-* quality skills. Implements the §8 with-skill / without-skill
 benchmark contract from openspec change create-seven-stage-personalized-learning-skills:
 
   <skills-root>/<skill>-workspace/iteration-N/<eval-name>/
@@ -44,6 +44,13 @@ EXECUTOR_PREAMBLE_WITHOUT = (
     "You are executing ONE stage of a personalized-learning SOP and must produce that "
     "stage's output as a SINGLE JSON object. Think, then output ONLY the JSON (no prose)."
 )
+ORCHESTRATOR_PREAMBLE = (
+    "You are executing the user-facing orchestration entrypoint above a seven-stage "
+    "personalized-learning SOP. Interpret the request, select or invoke the correct stage, "
+    "preserve all gate and real-user-input boundaries, and return a concise evidence-backed "
+    "user response with the next action. Treat any project state embedded in the task as an "
+    "evaluation fixture; do not claim file writes that you did not perform."
+)
 
 
 def now_iso():
@@ -64,6 +71,9 @@ def load_skill_context(skill_dir):
     sc = skill_dir / "references" / "stage-contract.md"
     if sc.exists():
         parts.append("# references/stage-contract.md\n\n" + sc.read_text())
+    oc = skill_dir / "references" / "orchestration-contract.md"
+    if oc.exists():
+        parts.append("# references/orchestration-contract.md\n\n" + oc.read_text())
     for schema in sorted((skill_dir / "references").glob("*.schema.json")):
         parts.append(f"# references/{schema.name}\n\n```json\n{schema.read_text()}\n```")
     example = skill_dir / "references" / "example.md"
@@ -197,7 +207,10 @@ def eval_skill(skill_name, route, iteration, skills_root, max_turns, grade_turns
                 print(f"  [dry-run] {ename}/{config}", flush=True)
                 continue
             sys_prompt = skill_ctx if config == "with_skill" else None
-            preamble = EXECUTOR_PREAMBLE if config == "with_skill" else EXECUTOR_PREAMBLE_WITHOUT
+            if case.get("execution_mode") == "orchestrator":
+                preamble = ORCHESTRATOR_PREAMBLE
+            else:
+                preamble = EXECUTOR_PREAMBLE if config == "with_skill" else EXECUTOR_PREAMBLE_WITHOUT
             full_prompt = f"{preamble}\n\nTASK:\n{prompt}"
             t0 = time.time()
             result, exit_status, raw, elapsed = run_claude(

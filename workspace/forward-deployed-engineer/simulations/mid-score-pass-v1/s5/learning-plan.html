@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S5 · 学习路径与会话计划</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #14231d;
+      --muted: #66766f;
+      --paper: #f4f1e9;
+      --surface: rgba(255, 255, 252, 0.9);
+      --surface-strong: #fffef9;
+      --line: #d9ded8;
+      --accent: #1f7656;
+      --accent-soft: #dceee5;
+      --accent-deep: #0c4f38;
+      --warn: #a25d17;
+      --danger: #a1403e;
+      --shadow: 0 18px 50px rgba(28, 47, 39, 0.1);
+      --radius: 22px;
+      font-family: Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 9% 0%, color-mix(in srgb, var(--accent-soft) 80%, transparent), transparent 29rem),
+        radial-gradient(circle at 96% 20%, rgba(255, 255, 255, 0.92), transparent 25rem),
+        var(--paper);
+    }
+
+    button, input { font: inherit; }
+
+    button:focus-visible,
+    input:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent) 65%, white);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      left: 1rem;
+      top: -4rem;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      color: white;
+      background: var(--accent-deep);
+    }
+
+    .skip-link:focus { top: 1rem; }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .page {
+      width: min(1440px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1rem 0 4rem;
+    }
+
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      padding: clamp(1.5rem, 4vw, 4rem);
+      border-radius: 32px;
+      color: white;
+      background:
+        linear-gradient(118deg, var(--accent-deep), var(--accent) 68%, color-mix(in srgb, var(--accent) 72%, #dca24a));
+      box-shadow: var(--shadow);
+    }
+
+    .masthead::before,
+    .masthead::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+    }
+
+    .masthead::before { width: 26rem; height: 26rem; right: -8rem; top: -15rem; }
+    .masthead::after { width: 15rem; height: 15rem; right: 9rem; bottom: -12rem; }
+
+    .masthead-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.65fr);
+      gap: 2rem;
+      align-items: end;
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.82;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 0;
+      font-family: "Iowan Old Style", "Songti SC", serif;
+      font-size: clamp(2.25rem, 5.2vw, 5rem);
+      font-weight: 650;
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 1.15rem 0 0;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      line-height: 1.75;
+      opacity: 0.88;
+    }
+
+    .decision-card {
+      padding: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 20px;
+      background: rgba(6, 31, 22, 0.22);
+      backdrop-filter: blur(8px);
+    }
+
+    .decision-label {
+      margin: 0 0 0.45rem;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+    }
+
+    .decision-value {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 780;
+    }
+
+    .decision-route {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .decision-route strong {
+      display: inline-grid;
+      place-items: center;
+      min-width: 2.6rem;
+      height: 2rem;
+      padding: 0 0.65rem;
+      border-radius: 999px;
+      color: var(--accent-deep);
+      background: white;
+    }
+
+    .metrics {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin: -1.4rem clamp(1rem, 4vw, 3.5rem) 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      min-height: 108px;
+      padding: 1.1rem 1.25rem;
+      background: var(--surface-strong);
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+    }
+
+    .metric-value {
+      display: block;
+      font-size: clamp(1.1rem, 2vw, 1.55rem);
+      font-weight: 780;
+      line-height: 1.28;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.2rem;
+    }
+
+    .rail {
+      position: sticky;
+      top: 1rem;
+      align-self: start;
+      padding: 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 10px 30px rgba(28, 47, 39, 0.06);
+      backdrop-filter: blur(14px);
+    }
+
+    .rail-title {
+      margin: 0.35rem 0.55rem 0.85rem;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 780;
+      letter-spacing: 0.1em;
+    }
+
+    .tabs { display: grid; gap: 0.45rem; }
+
+    .tab {
+      width: 100%;
+      padding: 0.9rem 0.95rem;
+      border: 0;
+      border-radius: 14px;
+      color: var(--muted);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .tab[aria-selected="true"] {
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      font-weight: 780;
+    }
+
+    .rail-note {
+      margin: 1rem 0.55rem 0.35rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .main-column { min-width: 0; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .view-heading h2 {
+      margin: 0;
+      font-family: "Iowan Old Style", "Songti SC", serif;
+      font-size: clamp(1.8rem, 3vw, 2.75rem);
+      letter-spacing: -0.025em;
+    }
+
+    .view-heading p {
+      margin: 0.4rem 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .search {
+      width: min(320px, 42vw);
+      padding: 0.78rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: var(--surface-strong);
+    }
+
+    .content-stack { display: grid; gap: 1.25rem; }
+
+    .section {
+      padding: clamp(1.1rem, 2.5vw, 1.75rem);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 12px 34px rgba(31, 49, 41, 0.055);
+      backdrop-filter: blur(10px);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section h3 {
+      margin: 0;
+      font-size: 1.12rem;
+      letter-spacing: -0.01em;
+    }
+
+    .section-description {
+      margin: 0.3rem 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      font-size: 0.76rem;
+      font-weight: 780;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .card {
+      display: flex;
+      min-height: 158px;
+      flex-direction: column;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--surface-strong);
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
+      box-shadow: 0 10px 20px rgba(31, 49, 41, 0.07);
+    }
+
+    .card-kicker {
+      margin: 0 0 0.45rem;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .card h4 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .card p {
+      margin: 0.55rem 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .card-action {
+      align-self: start;
+      margin-top: auto;
+      padding: 0.55rem 0 0;
+      border: 0;
+      color: var(--accent-deep);
+      background: transparent;
+      font-weight: 780;
+      cursor: pointer;
+    }
+
+    .fact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .fact {
+      padding: 1rem;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px 16px 16px 8px;
+      background: color-mix(in srgb, var(--accent-soft) 55%, white);
+    }
+
+    .fact-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 780;
+    }
+
+    .fact-value {
+      display: block;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .bullet-list {
+      display: grid;
+      gap: 0.65rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding: 0.8rem 0.9rem 0.8rem 2rem;
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.68);
+      line-height: 1.62;
+    }
+
+    .bullet-list li::before {
+      content: "";
+      position: absolute;
+      left: 0.9rem;
+      top: 1.28rem;
+      width: 0.42rem;
+      height: 0.42rem;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .empty {
+      padding: 1.2rem;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.45);
+      line-height: 1.7;
+    }
+
+    .gap-card { border-left: 4px solid var(--danger); }
+    .gap-card .card-kicker { color: var(--danger); }
+
+    .timeline {
+      display: grid;
+      gap: 0;
+      margin-left: 0.4rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 1.2rem 1.5rem;
+      border-left: 2px solid var(--line);
+      line-height: 1.65;
+    }
+
+    .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -0.42rem;
+      top: 0.25rem;
+      width: 0.7rem;
+      height: 0.7rem;
+      border: 3px solid var(--surface-strong);
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .graph-shell {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .graph-lanes {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(180px, 1fr);
+      gap: 0.8rem;
+      overflow-x: auto;
+      padding: 0.25rem 0.1rem 0.75rem;
+    }
+
+    .graph-lane {
+      position: relative;
+      min-width: 180px;
+      padding: 0.8rem;
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--accent-soft) 42%, white);
+    }
+
+    .graph-lane:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -0.72rem;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 50%;
+      color: var(--accent-deep);
+      background: var(--surface-strong);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .graph-lane-title {
+      margin: 0 0 0.7rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 780;
+    }
+
+    .graph-node {
+      width: 100%;
+      margin-bottom: 0.55rem;
+      padding: 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--ink);
+      background: var(--surface-strong);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .graph-node[aria-pressed="true"] {
+      border-color: var(--accent);
+      color: var(--accent-deep);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .graph-focus {
+      padding: 1rem;
+      border-radius: 16px;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      line-height: 1.65;
+    }
+
+    .edge-list { display: grid; gap: 0.6rem; }
+
+    .edge {
+      display: grid;
+      grid-template-columns: minmax(120px, 0.75fr) auto minmax(120px, 0.75fr) minmax(220px, 1.5fr);
+      gap: 0.7rem;
+      align-items: center;
+      padding: 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-strong);
+      font-size: 0.86rem;
+    }
+
+    .edge-arrow { color: var(--accent); font-weight: 800; }
+    .edge-rationale { color: var(--muted); line-height: 1.5; }
+
+    .hint-list details {
+      margin-bottom: 0.65rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-strong);
+    }
+
+    .hint-list summary {
+      color: var(--accent-deep);
+      font-weight: 760;
+      cursor: pointer;
+    }
+
+    .hint-list details > div {
+      padding-top: 0.75rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .notice {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid color-mix(in srgb, var(--danger) 35%, white);
+      border-radius: 16px;
+      color: #6e2626;
+      background: #fff1ee;
+      line-height: 1.65;
+    }
+
+    dialog {
+      width: min(680px, calc(100% - 2rem));
+      max-height: min(82vh, 800px);
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 24px;
+      color: var(--ink);
+      background: var(--surface-strong);
+      box-shadow: 0 30px 90px rgba(12, 33, 24, 0.3);
+    }
+
+    dialog::backdrop { background: rgba(12, 27, 21, 0.55); backdrop-filter: blur(3px); }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.2rem 1.4rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .drawer-head h2 { margin: 0; font-size: 1.2rem; }
+
+    .drawer-close {
+      width: 2.25rem;
+      height: 2.25rem;
+      border: 0;
+      border-radius: 50%;
+      color: var(--ink);
+      background: var(--accent-soft);
+      cursor: pointer;
+    }
+
+    .drawer-body {
+      max-height: calc(82vh - 75px);
+      padding: 1.3rem 1.4rem 2rem;
+      overflow: auto;
+    }
+
+    .detail-group {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-group:last-child { border-bottom: 0; }
+
+    .detail-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 780;
+    }
+
+    .detail-value { line-height: 1.7; overflow-wrap: anywhere; }
+    .detail-value ul { margin: 0; padding-left: 1.2rem; }
+
+    .footer {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 900px) {
+      .masthead-grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .workspace { grid-template-columns: 1fr; }
+      .rail { position: static; }
+      .tabs { grid-template-columns: repeat(3, 1fr); }
+      .tab { text-align: center; }
+      .rail-note { display: none; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .search { width: 100%; }
+      .edge { grid-template-columns: 1fr auto 1fr; }
+      .edge-rationale { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 560px) {
+      .page { width: min(100% - 1rem, 1440px); }
+      .masthead { min-height: 0; border-radius: 24px; }
+      .metrics { margin-inline: 0.5rem; }
+      .metric { min-height: 90px; padding: 0.9rem; }
+      .tabs { grid-template-columns: 1fr; }
+      .tab { text-align: left; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body data-stage="S5">
+  <a class="skip-link" href="#main">跳到阶段内容</a>
+  <div class="page">
+    <header class="masthead">
+      <div class="masthead-grid">
+        <div>
+          <p class="eyebrow" id="eyebrow">S1 · 目标与成功契约</p>
+          <h1 id="headline">目标与成功契约</h1>
+          <p class="lede" id="lede">把目标、能力、验收与边界放在同一张可核对的结果视图中。</p>
+        </div>
+        <section class="decision-card" aria-labelledby="decision-title">
+          <p class="decision-label" id="decision-title">阶段判断</p>
+          <p class="decision-value" id="verdict">—</p>
+          <div class="decision-route"><span>下一步</span><strong id="route">—</strong></div>
+        </section>
+      </div>
+      <div class="notice" id="notice" role="alert"></div>
+    </header>
+
+    <section class="metrics" aria-label="阶段概览">
+      <div class="metric"><span class="metric-label">阶段状态</span><span class="metric-value" id="metric-status">—</span></div>
+      <div class="metric"><span class="metric-label" id="metric-a-label">关键项目</span><span class="metric-value" id="metric-a">—</span></div>
+      <div class="metric"><span class="metric-label" id="metric-b-label">待处理缺口</span><span class="metric-value" id="metric-b">—</span></div>
+      <div class="metric"><span class="metric-label">结果时间</span><span class="metric-value" id="metric-date">—</span></div>
+    </section>
+
+    <main class="workspace" id="main">
+      <aside class="rail" aria-label="阶段内容导航">
+        <p class="rail-title">查看内容</p>
+        <div class="tabs" role="tablist" id="tabs"></div>
+        <p class="rail-note" id="rail-note">切换、筛选和展开只改变当前阅读视图。</p>
+      </aside>
+
+      <div class="main-column">
+        <div class="toolbar">
+          <div class="view-heading">
+            <h2 id="view-title">阶段信息</h2>
+            <p id="view-description"></p>
+          </div>
+          <label>
+            <span class="visually-hidden">筛选当前内容</span>
+            <input class="search" id="search" type="search" placeholder="筛选当前内容…" autocomplete="off">
+          </label>
+        </div>
+        <div class="content-stack" id="content" role="tabpanel"></div>
+      </div>
+    </main>
+
+    <footer class="footer" id="footer-date"></footer>
+  </div>
+
+  <dialog id="drawer" aria-labelledby="drawer-title">
+    <div class="drawer-head">
+      <h2 id="drawer-title">详细信息</h2>
+      <button class="drawer-close" id="drawer-close" type="button" aria-label="关闭详情">×</button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+  </dialog>
+
+  <script id="stage-data" type="application/json">{"schema_version":"1.3.0","stage_id":"S5","run_id":"RUN-SIM-MIDPASS-S5","learner_id":"simulated-mid-pass-learner","status":"completed","input_contract":{"artifact_refs":["../s4/learner_snapshot.json","../../../stages/s1-goal-contract/INDEX.md","../../../stages/s3-capability-graph/capability_concept_graph.json"],"expected_schema_versions":{"s4_envelope":"1.3.0","learner_snapshot":"1.0.0","capability_concept_graph":"1.2.0","learning_and_session_plan":"1.1.0"}},"input_validation":{"status":"pass","missing_fields":[],"stale_inputs":[],"errors":[]},"assumptions":["沿用中文、每周3次、每次45分钟的已确认目标约束。","确认由虚拟学习者完成，不代替真实用户确认。","路径只在本 simulated fixture 内执行。"],"requirement_gaps":[],"confirmation":{"mode":"mandatory","trigger":"first_session_contract","questions":["是否确认先从 N-004 开始，并按每次45分钟执行？"],"response":{"confirmed_by":"simulated-mid-pass-learner","choice":"confirm_minimal_path","real_user_confirmation":false},"status":"confirmed","confirmed_at":"2026-08-04T13:15:00Z","assumptions_changed":[]},"evidence_collected":[{"evidence_id":"SIM-S5-E1","provenance":"learner_behavior","source_ref":"../s4/learner_snapshot.json","summary":"虚拟画像定位 N-004 为最近学习前沿。","status":"supported"},{"evidence_id":"SIM-S5-E2","provenance":"external_evidence","source_ref":"../../../stages/s3-capability-graph/capability_concept_graph.json","summary":"N-003→N-004 硬先修与节点退出标准。","status":"supported"},{"evidence_id":"SIM-S5-E3","provenance":"model_hypothesis","source_ref":"RUN-SIM-MIDPASS-S5-review.md","summary":"四会话路径是基于前沿与约束的教学规划。","status":"supported"}],"processing_record":["从 N-004 最近前沿出发。","跳过已有夹具掌握证据的节点，只保留检索维护。","按 N-004、N-006、N-008、N-012 形成最小路径。","每节点安排即时、迁移、延迟测评和撤架条件。"],"positive_artifact":{"type":"learning_and_session_plan","schema_version":"1.1.0","artifact_id":"LSP-SIM-MIDPASS-v1","content":{"stage_goals":[{"goal_id":"SIM-SG-1","statement":"能独立写出可证伪价值假设和事前 stop/go 规则。"},{"goal_id":"SIM-SG-2","statement":"能把治理、商业和来源审计迁移到未见企业 AI 场景。"}],"ordered_learning_nodes":[{"node_id":"N-004","order":1,"selection_rationale":"最近学习前沿；N-003 已通过，先修复价值假设与事前停止条件。","evidence_basis":{"knowledge_tier":"core_practice","knowledge_status":"consensus","freshness":"stable","source_refs":["EVID-205","EVID-211"],"inclusion_reason":"目标直接要求且行为证据显示 stop/go 规则不完整。"},"teaching_strategy":["contrast_case","worked_example","practice","transfer"],"scaffolding":{"approach":"五槽模板","description":"用 baseline、owner、threshold、window、action 五槽形成可证伪规则。"},"fade_conditions":["在未见场景无提示写全五槽并解释失败动作。"]},{"node_id":"N-006","order":2,"selection_rationale":"N-005 已通过；补强上下文 eval、人工覆盖与回滚的跨域适配。","evidence_basis":{"knowledge_tier":"core_stable","knowledge_status":"consensus","freshness":"dynamic","source_refs":["EVID-206","EVID-208","EVID-214"],"inclusion_reason":"虚拟诊断显示治理方向正确但迁移不完整。"},"teaching_strategy":["worked_example","contrast_case","practice"],"scaffolding":{"approach":"风险—控制清单","description":"先映射失败模式，再选择 eval、grader、人工覆盖、事件和回滚。"},"fade_conditions":["能按新风险独立选择控制而不是复制清单。"]},{"node_id":"N-008","order":3,"selection_rationale":"N-007 已通过；修复使用量等同价值的误概念。","evidence_basis":{"knowledge_tier":"core_practice","knowledge_status":"disputed","freshness":"dynamic","source_refs":["EVID-203","EVID-207","EVID-210","EVID-211"],"inclusion_reason":"扩张与停止依赖四层证据和可逆决策。"},"teaching_strategy":["retrieval","contrast_case","transfer"],"scaffolding":{"approach":"四层证据卡","description":"把技术、采用、业务、复用证据分开并要求反事实。"},"fade_conditions":["能在证据冲突时给出有边界的扩张、收缩或停止决定。"]},{"node_id":"N-012","order":4,"selection_rationale":"N-011 已通过；完成统计、案例、置信度与刷新条件审计。","evidence_basis":{"knowledge_tier":"core_stable","knowledge_status":"consensus","freshness":"dynamic","source_refs":["EVID-211","EVID-216"],"inclusion_reason":"D4 显示来源角色正确但独立组、刷新与远迁移不足。"},"teaching_strategy":["worked_example","practice","delayed_retest"],"scaffolding":{"approach":"来源链表头","description":"逐条记录 provenance、independent group、limitations、refresh trigger 和用途。"},"fade_conditions":["对未见主张无提示完成来源链与外推边界。"]}],"sessions":[{"session_id":"SIM-S5-01","goal":"写出可证伪价值假设和事前停止条件。","activities":["无材料检索预测","正反例对比","半完成五槽模板","未见场景独立迁移"],"estimated_time":{"minutes_per_session":45,"session_count":1},"input_materials":["S3 ASM-004","S2 EVID-205/EVID-211","脱敏保险与客服场景"]},{"session_id":"SIM-S5-02","goal":"构建上下文 eval 与治理控制。","activities":["风险—控制映射","回滚演练","未见场景选择控制"],"estimated_time":{"minutes_per_session":45,"session_count":1},"input_materials":["S3 ASM-006","S2 EVID-206/EVID-208/EVID-214"]},{"session_id":"SIM-S5-03","goal":"基于四层证据决定扩张、收缩或停止。","activities":["指标分层","反事实检查","可逆决策"],"estimated_time":{"minutes_per_session":45,"session_count":1},"input_materials":["S3 ASM-008","S2 EVID-203/EVID-207/EVID-210/EVID-211"]},{"session_id":"SIM-S5-04","goal":"审计来源链并完成医疗迁移。","activities":["95%/800%/厂商案例审计","刷新条件","未见主张迁移"],"estimated_time":{"minutes_per_session":45,"session_count":1},"input_materials":["S3 ASM-012","S2 EVID-211/EVID-216"]}],"assessment_schedule":{"immediate":["每会话末独立完成一个未见小题并解释依据。","N-004 必须写出 baseline、owner、threshold、window、action。"],"transfer":["保险/客服到医疗场景远迁移，不得沿用未经校准阈值。"],"delayed":["第4天复测 N-004。","第7天复测 N-006、N-008、N-012。"]},"review_anchors":["次日检索","第4天无提示复测","第7天交错保持"],"risks":[{"risk_id":"SIM-RISK-1","description":"把 DAU 或 ROI 当作充分价值证据。","mitigation":"强制写出业务基线、反事实、owner 与风险停止条件。","criticality":"high"},{"risk_id":"SIM-RISK-2","description":"会套模板但不能跨行业迁移。","mitigation":"第二题取消模板并更换为强监管场景。","criticality":"medium"}],"alternative_routes":[{"trigger":"N-004 首会话退出标准未达","adjustment":"留在 S6 增加一次 contrast case 补救。"},{"trigger":"暴露来源或图谱缺口","adjustment":"按最早污染点返回 S2 或 S3。"},{"trigger":"N-010 后续复测失败","adjustment":"在 N-008 后插入 N-010。"}],"exit_criteria":{"per_node":[{"node_id":"N-004","criteria":"未见场景无提示写出基线、owner、阈值、时间窗和 stop/go 动作。"},{"node_id":"N-006","criteria":"按风险选择 eval、人工覆盖、监控和回滚。"},{"node_id":"N-008","criteria":"不把使用量等同价值，并给可逆的扩张、收缩或停止决策。"},{"node_id":"N-012","criteria":"对未见统计或案例说明 provenance、独立性、边界和刷新。"}],"overall":["至少一次无提示远迁移通过。","至少一次延迟保持通过。","四个目标节点均满足节点退出标准。"]}}},"quality_evaluation":{"rubric_results":[{"dimension":"目标连通性","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"先修正确性","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"路径最小性","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"时间可行性","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"策略适配性","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"证据分层适配","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"教学与测评对齐度","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"认知负荷","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null},{"dimension":"调整空间","evidence":["s5-review","positive_artifact"],"score":true,"threshold":true,"passed":true,"failure_action":null,"route_to":null}],"evidence":["../s4/learner_snapshot.json","RUN-SIM-MIDPASS-S5-review.md","learning_and_session_plan"],"verdict":"pass","route_to":"S6"},"document_artifact":{"format":"markdown","status":"generated","path":"RUN-SIM-MIDPASS-S5-review.md","authority":"human_review_primary","source":{"stage_id":"S5","run_id":"RUN-SIM-MIDPASS-S5","artifact_id":"LSP-SIM-MIDPASS-v1","artifact_schema_version":"1.1.0"},"document_profile":"s5_learning_plan_review","generation_order":"markdown_before_json","content_binding":"lossless_semantic_correspondence","section_mappings":[{"section_id":"S5-SEC-01","heading":"1. 文档与运行信息","json_pointers":["/run_id"],"status":"matched"},{"section_id":"S5-SEC-02","heading":"2. 输入、版本与学习前沿审计","json_pointers":["/input_contract"],"status":"matched"},{"section_id":"S5-SEC-03","heading":"3. 用户约束、取舍与确认结果","json_pointers":["/confirmation"],"status":"matched"},{"section_id":"S5-SEC-04","heading":"4. 路径选择原则与最小连通子图","json_pointers":["/processing_record"],"status":"matched"},{"section_id":"S5-SEC-05","heading":"5. 有序学习节点详解","json_pointers":["/positive_artifact/content/ordered_learning_nodes"],"status":"matched"},{"section_id":"S5-SEC-06","heading":"6. 会话编排与材料","json_pointers":["/positive_artifact/content/sessions"],"status":"matched"},{"section_id":"S5-SEC-07","heading":"7. 支架、撤架与教学策略","json_pointers":["/positive_artifact/content/ordered_learning_nodes"],"status":"matched"},{"section_id":"S5-SEC-08","heading":"8. 即时、迁移与延迟测评","json_pointers":["/positive_artifact/content/assessment_schedule"],"status":"matched"},{"section_id":"S5-SEC-09","heading":"9. 复习锚点与时间预算","json_pointers":["/positive_artifact/content/review_anchors"],"status":"matched"},{"section_id":"S5-SEC-10","heading":"10. 风险、备选路线与触发条件","json_pointers":["/positive_artifact/content/risks"],"status":"matched"},{"section_id":"S5-SEC-11","heading":"11. 节点退出标准与总体完成条件","json_pointers":["/positive_artifact/content/exit_criteria"],"status":"matched"},{"section_id":"S5-SEC-12","heading":"12. G5 质量评价与路由","json_pointers":["/quality_evaluation"],"status":"matched"},{"section_id":"S5-SEC-13","heading":"13. 输出审计与 JSON 对应表","json_pointers":["/document_artifact"],"status":"matched"}],"generated_at":"2026-08-04T13:15:00Z","validation":{"markdown_parse":"pass","required_sections":"pass","json_correspondence":"pass","no_placeholders":"pass"},"reason":null},"presentation_artifact":{"format":"html","status":"generated","path":"learning-plan.html","authority":"derived_non_authoritative","source":{"stage_id":"S5","run_id":"RUN-SIM-MIDPASS-S5","envelope_schema_version":"1.3.0","artifact_id":"LSP-SIM-MIDPASS-v1","artifact_schema_version":"1.1.0"},"view_profile":"learning_plan_board","data_binding":"embedded_canonical_envelope","interaction_mode":"read_only_exploration","generated_at":"2026-08-04T13:15:00Z","validation":{"html_parse":"pass","accessibility_smoke":"pass","interaction_smoke":"pass"},"reason":null},"traceability":{"source_artifact_ids":["GOAL-forward-deployed-engineer-v1","CCG-forward-deployed-engineer-v1","LS-SIM-MIDPASS-v1"],"source_evidence_ids":["SIM-D3","SIM-D4","ASM-004","EVID-205","EVID-211"],"source_sections":["../s4/RUN-SIM-MIDPASS-S4-review.md","../../../stages/s3-capability-graph/edges.jsonl","../../../stages/s3-capability-graph/assessments.jsonl"],"fixture_type":"simulated_fixture"},"created_at":"2026-08-04T13:15:00Z"}</script>
+  <script>
+    (() => {
+      "use strict";
+
+      const EXPECTED_STAGE = "S5";
+      const STAGES = {
+        S1: {
+          name: "目标与成功契约",
+          subtitle: "把目标场景、可观察能力、终局验收、范围边界和确认结果放在同一张可核对的视图中。",
+          accent: ["#1f7656", "#dceee5", "#0c4f38"],
+          profile: "goal_contract_dashboard",
+          tabs: [
+            ["overview", "目标与范围", "查看目标场景、约束、范围和术语校正。"],
+            ["capability", "能力与验收", "对照每项可观察能力、验收任务与通过规则。"],
+            ["confirmation", "确认与开放问题", "查看已确认项目、遗留问题和现实边界。"]
+          ]
+        },
+        S2: {
+          name: "领域证据全景",
+          subtitle: "从研究轮次走到来源、主张、共识与分歧，保留每条结论背后的证据边界。",
+          accent: ["#3268a8", "#e0ebf7", "#183f72"],
+          profile: "evidence_landscape_workbench",
+          tabs: [
+            ["research", "研究与覆盖", "查看检索轮次、来源类别覆盖和术语范围。"],
+            ["sources", "来源与主张", "浏览来源台账、主张—证据与岗位/测评信号。"],
+            ["findings", "共识、分歧与缺口", "对照稳定结论、争议、开放问题和证据缺口。"]
+          ]
+        },
+        S3: {
+          name: "能力—概念图",
+          subtitle: "沿能力大纲进入学习单元与原子节点，并用关系图、测评和阈值核对可诊断结构。",
+          accent: ["#7652a6", "#eee6f7", "#492c73"],
+          profile: "capability_graph_explorer",
+          tabs: [
+            ["outline", "能力大纲", "查看能力主干、子能力与学习单元。"],
+            ["graph", "节点与关系", "聚焦原子节点、先修关系和单元—节点映射。"],
+            ["assessment", "测评与追溯", "核对测评项、掌握阈值、补救入口和证据追溯。"]
+          ]
+        },
+        S4: {
+          name: "学习者前沿诊断",
+          subtitle: "以行为证据定位节点状态、学习前沿、误概念与待复测项；没有作答时直接呈现可执行诊断。",
+          accent: ["#b35b2c", "#f7e7dc", "#713314"],
+          profile: "learner_frontier_diagnostic",
+          tabs: [
+            ["diagnosis", "诊断任务与节点", "查看当前诊断任务、判断规则和节点状态。"],
+            ["frontier", "前沿与误概念", "查看学习前沿、能力缺口、迁移表现与误概念。"],
+            ["evidence", "证据与复测", "对照行为证据、有效期、待复测项和当前恢复条件。"]
+          ]
+        },
+        S5: {
+          name: "学习路径与会话计划",
+          subtitle: "从已证实学习前沿到目标节点，查看最小路线、会话、测评、复习锚点与备选方案。",
+          accent: ["#177b83", "#dceff0", "#075158"],
+          profile: "learning_plan_board",
+          tabs: [
+            ["route", "路线与目标", "查看有序节点、阶段目标和从前沿到目标的连接。"],
+            ["sessions", "会话与测评", "查看会话安排、测评计划和退出标准。"],
+            ["review", "复习、风险与备选", "查看复习锚点、风险、备选路线和确认结果。"]
+          ]
+        },
+        S6: {
+          name: "教学内容与交互轨迹",
+          subtitle: "围绕当前节点查看解释、正反例、活动、渐进提示和已经发生的交互证据。",
+          accent: ["#a34b6f", "#f6e2eb", "#6d2444"],
+          profile: "instructional_session_workspace",
+          tabs: [
+            ["instruction", "教学内容", "查看当前节点、会话目标、解释、正例与反例。"],
+            ["activity", "活动与提示", "浏览活动、渐进提示、反馈规则和支架渐隐。"],
+            ["trace", "交互与候选证据", "查看已经记录的作答、提示、修正和候选掌握证据。"]
+          ]
+        },
+        S7: {
+          name: "掌握验证与重规划",
+          subtitle: "综合多维证据形成掌握判断，核对模型差异、归因、下一路由与复测安排。",
+          accent: ["#78611a", "#f4edcf", "#4f3e08"],
+          profile: "mastery_replan_console",
+          tabs: [
+            ["mastery", "掌握证据", "查看各掌握维度、证据充分性和归因。"],
+            ["model", "模型更新", "对照学习者模型更新前后差异与版本结果。"],
+            ["routing", "路由与复测", "查看下一路由、复测或复习安排及适用限制。"]
+          ]
+        }
+      };
+
+      const LABELS = {
+        capability_id: "能力编号", statement: "能力描述", observable_evidence: "可观察证据",
+        target_problem: "目标问题", target_scene: "目标场景", scope: "范围", exclusions: "排除项",
+        constraints: "学习约束", final_assessment: "终局验收", tasks: "任务", pass_rules: "通过规则",
+        original: "原术语", corrected: "校正后", evidence_refs: "证据引用", confirmed_items: "已确认项目",
+        open_questions: "开放问题", source_id: "来源编号", title: "标题", url: "地址", publisher: "发布方",
+        retrieval_date: "检索日期", source_type: "来源类型", claim: "主张", claim_id: "主张编号",
+        support: "支持情况", supporting_source_refs: "支持来源", limitations: "限制",
+        category: "类别", status: "状态", reason: "说明", gate_effect: "门禁影响",
+        capability_statement: "节点能力", common_misconceptions: "常见误概念", node_id: "节点",
+        node_type: "节点类型", from_node: "起点", to_node: "终点", prerequisite_strength: "先修强度",
+        rationale: "关系依据", unit_id: "学习单元", outcome: "学习产出", scope_role: "范围角色",
+        sub_capabilities: "子能力", typical_tasks: "典型任务", cognitive_level: "认知层级",
+        threshold: "掌握阈值", requires_transfer: "要求迁移", learner_id: "学习者",
+        model_version: "模型版本", as_of: "快照时间", current_node: "当前节点", session_goal: "会话目标",
+        success_conditions: "成功条件", response: "确认结果", questions: "待确认问题",
+        trigger: "触发条件", mode: "确认方式", confirmed_at: "确认时间", criticality: "严重程度",
+        description: "说明", evidence: "证据", verdict: "判断", route_to: "下一路由",
+        item: "测评任务", type: "类型", content: "内容", explanation: "解释", misconception: "误概念",
+        expected_model_version: "预期模型版本", update_status: "更新状态", applicability_limits: "适用限制"
+      };
+
+      const STATUS = {
+        completed: "已完成", pending: "等待关键输入", needs_confirmation: "等待确认", blocked: "当前受阻",
+        pass: "通过", revise_here: "本阶段补充", return_upstream: "返回上游", failed: "未通过"
+      };
+
+      const doc = document;
+      const contentRoot = doc.getElementById("content");
+      const drawer = doc.getElementById("drawer");
+      const drawerBody = doc.getElementById("drawer-body");
+      const drawerTitle = doc.getElementById("drawer-title");
+      const search = doc.getElementById("search");
+      let envelope;
+      let config;
+      let activeTab;
+
+      function node(tag, className, text) {
+        const item = doc.createElement(tag);
+        if (className) item.className = className;
+        if (text !== undefined && text !== null) item.textContent = String(text);
+        return item;
+      }
+
+      function asArray(value) {
+        if (value === null || value === undefined) return [];
+        return Array.isArray(value) ? value : [value];
+      }
+
+      function label(key) {
+        return LABELS[key] || String(key).replaceAll("_", " ");
+      }
+
+      function short(value, fallback = "尚无数据") {
+        if (value === null || value === undefined || value === "") return fallback;
+        if (typeof value === "string" || typeof value === "number") return String(value);
+        if (typeof value === "boolean") return value ? "是" : "否";
+        if (Array.isArray(value)) return value.map(v => short(v, "")).filter(Boolean).join("；") || fallback;
+        const preferred = ["title", "statement", "description", "summary", "item", "outcome", "claim", "content"];
+        for (const key of preferred) if (value[key]) return short(value[key], fallback);
+        return Object.entries(value).slice(0, 2).map(([key, val]) => `${label(key)}：${short(val, "—")}`).join("；") || fallback;
+      }
+
+      function dateText(value) {
+        if (!value) return "未记录";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return String(value);
+        return new Intl.DateTimeFormat("zh-CN", {
+          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        }).format(date);
+      }
+
+      function empty(text) {
+        return node("div", "empty", text);
+      }
+
+      function section(title, description, body, countValue) {
+        const wrap = node("section", "section");
+        const head = node("div", "section-head");
+        const copy = node("div");
+        copy.append(node("h3", "", title));
+        if (description) copy.append(node("p", "section-description", description));
+        head.append(copy);
+        if (countValue !== undefined) head.append(node("span", "count", `${countValue} 项`));
+        wrap.append(head, body || empty("当前没有可展示的数据。"));
+        return wrap;
+      }
+
+      function bullets(values, fallback) {
+        const items = asArray(values).filter(v => v !== null && v !== undefined && v !== "");
+        if (!items.length) return empty(fallback || "当前没有可展示的项目。");
+        const list = node("ul", "bullet-list");
+        items.forEach(value => list.append(node("li", "", short(value))));
+        return list;
+      }
+
+      function facts(entries) {
+        const grid = node("div", "fact-grid");
+        entries.filter(([, value]) => value !== undefined).forEach(([name, value]) => {
+          const item = node("div", "fact");
+          item.append(node("span", "fact-label", name), node("span", "fact-value", short(value)));
+          grid.append(item);
+        });
+        return grid;
+      }
+
+      function card(title, summary, detail, kicker, extraClass) {
+        const item = node("article", `card${extraClass ? ` ${extraClass}` : ""}`);
+        item.dataset.search = `${title} ${summary} ${short(detail, "")}`.toLowerCase();
+        if (kicker) item.append(node("p", "card-kicker", kicker));
+        item.append(node("h4", "", title));
+        if (summary) item.append(node("p", "", summary));
+        const action = node("button", "card-action", "查看详情 →");
+        action.type = "button";
+        action.addEventListener("click", () => openDetail(title, detail));
+        item.append(action);
+        return item;
+      }
+
+      function cards(values, options = {}) {
+        const items = asArray(values).filter(v => v !== null && v !== undefined);
+        if (!items.length) return empty(options.fallback || "当前没有可展示的项目。");
+        const grid = node("div", "cards");
+        items.forEach((value, index) => {
+          const title = options.title ? options.title(value, index) : short(value);
+          const summary = options.summary ? options.summary(value, index) : "";
+          const kicker = options.kicker ? options.kicker(value, index) : `项目 ${index + 1}`;
+          grid.append(card(title, summary, value, kicker, options.extraClass));
+        });
+        return grid;
+      }
+
+      function timeline(values, fallback) {
+        const items = asArray(values).filter(Boolean);
+        if (!items.length) return empty(fallback || "当前没有处理记录。");
+        const wrap = node("div", "timeline");
+        items.forEach(value => wrap.append(node("div", "timeline-item", short(value))));
+        return wrap;
+      }
+
+      function detailValue(value) {
+        if (value === null || value === undefined) return node("div", "detail-value", "未记录");
+        if (typeof value !== "object") return node("div", "detail-value", short(value));
+        if (Array.isArray(value)) {
+          if (!value.length) return node("div", "detail-value", "无");
+          const list = node("ul");
+          value.forEach(item => {
+            const li = node("li");
+            if (typeof item === "object" && item !== null) li.append(detailObject(item));
+            else li.textContent = short(item);
+            list.append(li);
+          });
+          const wrap = node("div", "detail-value");
+          wrap.append(list);
+          return wrap;
+        }
+        return detailObject(value);
+      }
+
+      function detailObject(value) {
+        const wrap = node("div", "detail-value");
+        Object.entries(value).forEach(([key, val]) => {
+          const group = node("div", "detail-group");
+          group.append(node("span", "detail-label", label(key)), detailValue(val));
+          wrap.append(group);
+        });
+        return wrap;
+      }
+
+      function openDetail(title, detail) {
+        drawerTitle.textContent = title;
+        drawerBody.replaceChildren(detailValue(detail));
+        if (typeof drawer.showModal === "function") drawer.showModal();
+        else drawer.setAttribute("open", "");
+      }
+
+      function gapsSection(title = "当前缺口") {
+        const gaps = envelope.requirement_gaps || [];
+        return section(
+          title,
+          "这些缺口来自本阶段结果；阻塞项需要先恢复，页面不会替代缺失证据。",
+          cards(gaps, {
+            title: gap => gap.description,
+            summary: gap => `严重程度：${short(gap.criticality)} · 影响：${short(gap.gate_effect)}`,
+            kicker: gap => gap.id || "缺口",
+            extraClass: "gap-card",
+            fallback: "当前没有记录到待处理缺口。"
+          }),
+          gaps.length
+        );
+      }
+
+      function confirmationSection() {
+        const value = envelope.confirmation || {};
+        return section(
+          "确认结果",
+          "展示当前已经记录的确认状态、问题与答复。",
+          facts([
+            ["当前状态", STATUS[value.status] || value.status],
+            ["确认方式", value.mode],
+            ["确认时间", dateText(value.confirmed_at)],
+            ["记录结果", value.response]
+          ])
+        );
+      }
+
+      function recoverySection(title = "恢复路径") {
+        const route = envelope.quality_evaluation?.route_to;
+        return section(
+          title,
+          "按当前结果记录的处理顺序恢复，不把缺失信息补成已经完成。",
+          facts([
+            ["当前判断", STATUS[envelope.quality_evaluation?.verdict] || envelope.quality_evaluation?.verdict],
+            ["返回阶段", route],
+            ["输入校验", envelope.input_validation?.status === "pass" ? "通过" : "未通过"],
+            ["确认状态", STATUS[envelope.confirmation?.status] || envelope.confirmation?.status]
+          ])
+        );
+      }
+
+      function renderS1(view, c) {
+        if (view === "overview") return [
+          section("目标场景", "目标问题和真实使用场景决定后续能力与验收的边界.", facts([
+            ["目标问题", c.target_problem], ["目标场景", c.target_scene]
+          ])),
+          section("范围与约束", "明确包含、排除和可用资源。", facts([
+            ["学习范围", c.scope], ["明确排除", c.exclusions], ["时间与资源", c.constraints]
+          ])),
+          section("术语校正", "保留原始说法、校正结果与依据。", cards(c.terminology_corrections, {
+            title: item => item.corrected || item.original || "术语校正",
+            summary: item => item.original ? `原始表述：${item.original}` : "",
+            kicker: () => "术语"
+          }), asArray(c.terminology_corrections).length)
+        ];
+        if (view === "capability") return [
+          section("可观察能力", "每项能力都应对应能够被观察或验收的证据。", cards(c.observable_capabilities, {
+            title: item => item.statement || item.capability_id,
+            summary: item => `可观察证据 ${asArray(item.observable_evidence).length} 项`,
+            kicker: item => item.capability_id || "能力"
+          }), asArray(c.observable_capabilities).length),
+          section("终局验收", "验收任务需要覆盖独立应用或未见迁移。", cards(c.final_assessment?.tasks, {
+            title: item => short(item),
+            summary: item => short(item.description || item.success_evidence || ""),
+            kicker: (_, index) => `验收 ${index + 1}`
+          }), asArray(c.final_assessment?.tasks).length),
+          section("通过规则", "用于判断目标是否真正达成。", bullets(c.pass_rules))
+        ];
+        return [
+          confirmationSection(),
+          section("已确认项目", "已纳入当前目标契约的关键决定。", bullets(c.confirmed_items)),
+          section("开放问题", "后续仍需澄清或在真实组织环境中补齐的内容。", bullets(c.open_questions)),
+          gapsSection("现实边界与缺口")
+        ];
+      }
+
+      function renderS2(view, c) {
+        if (view === "research") return [
+          section("研究范围", "本轮取证覆盖的主题、地域与角色边界。", facts([
+            ["研究范围", c.scope], ["是否实际执行", c.research_executed ? "已执行" : "未执行"],
+            ["研究轮次", c.research_run_manifest]
+          ])),
+          section("来源类别覆盖", "查看各类来源是否覆盖以及缺口如何影响结论。", cards(c.category_coverage, {
+            title: item => item.category || item.name || "来源类别",
+            summary: item => `${short(item.status)} · ${short(item.reason, "无补充说明")}`,
+            kicker: item => item.gate_effect || "覆盖"
+          }), asArray(c.category_coverage).length),
+          section("术语与心智模型", "区分岗位名称、任务口径与领域核心问题。", cards([
+            ...asArray(c.terminology),
+            ...asArray(c.core_questions_and_mental_models)
+          ], {kicker: (_, i) => i < asArray(c.terminology).length ? "术语" : "核心问题"}))
+        ];
+        if (view === "sources") return [
+          section("来源台账", "每条来源保留发布方、类型、检索日期和适用限制。", cards(c.source_ledger, {
+            title: item => item.title || item.source_id || item.publisher || "来源",
+            summary: item => [item.publisher, item.source_type, item.retrieval_date].filter(Boolean).join(" · "),
+            kicker: item => item.source_id || "来源"
+          }), asArray(c.source_ledger).length),
+          section("主张—证据", "查看每条主张的支持来源与限制。", cards(c.claims, {
+            title: item => item.claim || item.statement || item.claim_id || "研究主张",
+            summary: item => `${asArray(item.supporting_source_refs || item.evidence_refs).length} 个来源引用`,
+            kicker: item => item.claim_id || "主张"
+          }), asArray(c.claims).length),
+          section("岗位与选拔信号", "招聘任务与面试/实操信号分开呈现。", cards([
+            ...asArray(c.jd_capability_matrix),
+            ...asArray(c.interview_assessment_matrix)
+          ], {kicker: (_, index) => index < asArray(c.jd_capability_matrix).length ? "岗位信号" : "选拔信号"}))
+        ];
+        return [
+          section("领域共识", "由多类来源共同支持、在当前范围内相对稳定的结论。", cards(c.consensus, {kicker: () => "共识"}), asArray(c.consensus).length),
+          section("分歧与开放问题", "保留来源之间尚未统一的观点与需要继续调查的问题。", cards([
+            ...asArray(c.disagreements),
+            ...asArray(c.open_problems)
+          ], {kicker: (_, index) => index < asArray(c.disagreements).length ? "分歧" : "开放问题"})),
+          section("证据缺口", "缺失信息不会被模型常识补成事实。", cards(c.evidence_gaps, {
+            title: item => short(item),
+            kicker: () => "证据缺口",
+            extraClass: "gap-card"
+          })),
+          gapsSection()
+        ];
+      }
+
+      function graphView(nodes, edges) {
+        const wrap = node("div", "graph-shell");
+        if (!nodes.length) return empty("当前没有可展示的图谱节点。");
+        const hardEdges = edges.filter(edge => edge.prerequisite_strength === "hard");
+        const levels = new Map(nodes.map(item => [item.node_id, 0]));
+        for (let round = 0; round < nodes.length; round += 1) {
+          hardEdges.forEach(edge => {
+            const next = Math.max(levels.get(edge.to_node) || 0, (levels.get(edge.from_node) || 0) + 1);
+            levels.set(edge.to_node, Math.min(next, 4));
+          });
+        }
+        const groups = new Map();
+        nodes.forEach(item => {
+          const level = levels.get(item.node_id) || 0;
+          if (!groups.has(level)) groups.set(level, []);
+          groups.get(level).push(item);
+        });
+        const lanes = node("div", "graph-lanes");
+        const edgeList = node("div", "edge-list");
+        const focus = node("div", "graph-focus", "选择一个节点，可聚焦查看它的前置与后继关系。");
+        let selected = null;
+        const buttons = [];
+
+        function drawEdges() {
+          edgeList.replaceChildren();
+          const visible = selected ? edges.filter(edge => edge.from_node === selected || edge.to_node === selected) : edges;
+          if (!visible.length) edgeList.append(empty(selected ? "这个节点当前没有记录到直接关系。" : "当前没有关系边。"));
+          visible.forEach(edge => {
+            const row = node("div", "edge");
+            row.append(
+              node("strong", "", edge.from_node),
+              node("span", "edge-arrow", edge.prerequisite_strength === "hard" ? "━━▶" : "┄┄▶"),
+              node("strong", "", edge.to_node),
+              node("span", "edge-rationale", edge.rationale || edge.prerequisite_strength)
+            );
+            edgeList.append(row);
+          });
+        }
+
+        [...groups.entries()].sort((a, b) => a[0] - b[0]).forEach(([level, items]) => {
+          const lane = node("div", "graph-lane");
+          lane.append(node("p", "graph-lane-title", `关系层 ${level + 1}`));
+          items.forEach(item => {
+            const button = node("button", "graph-node", item.node_id);
+            button.type = "button";
+            button.setAttribute("aria-pressed", "false");
+            button.title = item.capability_statement || item.node_id;
+            button.addEventListener("click", () => {
+              selected = selected === item.node_id ? null : item.node_id;
+              buttons.forEach(entry => entry.setAttribute("aria-pressed", String(entry.dataset.id === selected)));
+              focus.textContent = selected
+                ? `${item.node_id} · ${item.capability_statement || "未记录能力描述"}`
+                : "已显示全部关系；再次选择节点可聚焦浏览。";
+              drawEdges();
+            });
+            button.dataset.id = item.node_id;
+            buttons.push(button);
+            lane.append(button);
+          });
+          lanes.append(lane);
+        });
+        drawEdges();
+        wrap.append(lanes, focus, edgeList);
+        return wrap;
+      }
+
+      function renderS3(view, c) {
+        if (view === "outline") return [
+          section("目标能力主干", "能力、子能力和典型任务形成三层可读大纲。", cards(c.target_capabilities, {
+            title: item => item.statement || item.capability_id,
+            summary: item => `${asArray(item.sub_capabilities).length} 项子能力 · ${asArray(item.typical_tasks).length} 个典型任务`,
+            kicker: item => item.capability_id || "能力"
+          }), asArray(c.target_capabilities).length),
+          section("学习单元", "学习单元用于可读分组，原子节点仍是诊断与规划真值。", cards(c.learning_units, {
+            title: item => item.title || item.unit_id,
+            summary: item => item.outcome || "",
+            kicker: item => item.unit_id || "单元"
+          }), asArray(c.learning_units).length)
+        ];
+        if (view === "graph") return [
+          section("原子节点关系图", "列表示硬先修层次；选择节点可聚焦它的直接前置与后继关系。", graphView(asArray(c.nodes), asArray(c.edges)), asArray(c.nodes).length),
+          section("节点说明", "节点保留类型、能力描述和常见误概念。", cards(c.nodes, {
+            title: item => item.capability_statement || item.node_id,
+            summary: item => `${short(item.node_type)} · ${asArray(item.common_misconceptions).length} 个常见误概念`,
+            kicker: item => item.node_id
+          })),
+          section("单元—节点映射", "多对多映射说明每个单元如何覆盖核心或支撑节点。", cards(c.unit_node_mappings, {
+            title: item => `${item.unit_id || "单元"} ↔ ${item.node_id || "节点"}`,
+            summary: item => short(item.relationship_role || item.role || item.rationale, ""),
+            kicker: () => "映射"
+          }))
+        ];
+        return [
+          section("节点测评", "每个目标节点都有可执行的识别、应用或迁移任务。", cards(c.assessment_items, {
+            title: item => item.item || item.node_id,
+            summary: item => `${item.node_id || ""} · ${item.cognitive_level || ""}`,
+            kicker: item => item.cognitive_level || "测评"
+          }), asArray(c.assessment_items).length),
+          section("掌握阈值", "阈值提前声明，避免在看到结果后移动标准。", cards(c.mastery_thresholds, {
+            title: item => item.node_id || "节点阈值",
+            summary: item => item.threshold || "",
+            kicker: item => item.requires_transfer ? "包含迁移" : "基础掌握"
+          })),
+          section("补救入口与追溯", "失败后返回对应节点，并保留目标和证据来源。", cards([
+            ...asArray(c.remediation_entries),
+            c.traceability
+          ].filter(Boolean), {kicker: (_, i) => i < asArray(c.remediation_entries).length ? "补救" : "追溯"}))
+        ];
+      }
+
+      function diagnosticMaterial() {
+        const records = envelope.processing_record || [];
+        return {
+          rules: records.filter(item => /^推断规则/.test(item)),
+          tasks: records.filter(item => /^任务D\d+/.test(item)),
+          fields: records.filter(item => /^每项作答/.test(item)),
+          other: records.filter(item => !/^推断规则|^任务D\d+|^每项作答/.test(item))
+        };
+      }
+
+      function renderS4(view, c) {
+        const material = diagnosticMaterial();
+        if (view === "diagnosis") return [
+          section("节点状态", "只有真实、多项且符合规则的行为证据才能形成节点状态。", cards(c.node_states, {
+            title: item => item.node_id || short(item),
+            summary: item => short(item.state || item.status || item.evidence_summary, ""),
+            kicker: () => "节点诊断",
+            fallback: "当前尚未形成节点状态；下面列出已经准备好的诊断任务。"
+          }), asArray(c.node_states).length),
+          section("诊断任务", "任务直接来自本阶段处理结果，可用于采集独立作答、迁移和置信度证据。", cards(material.tasks, {
+            title: item => item.split("：")[0],
+            summary: item => item.split("：").slice(1).join("："),
+            kicker: () => "待执行"
+          }), material.tasks.length),
+          section("事前判断规则", "规则在作答前已经确定。", bullets(material.rules)),
+          section("需要记录的作答字段", "这些字段用于区分独立掌握、提示依赖和修正轨迹。", bullets(material.fields))
+        ];
+        if (view === "frontier") return [
+          section("最近学习前沿", "前沿只由已证实节点状态和先修关系推导。", cards(c.learning_frontier, {kicker: () => "学习前沿", fallback: "尚无真实作答，因此当前不能形成学习前沿。"})),
+          section("误概念与能力缺口", "把错误模式、能力缺口和迁移表现分开查看。", cards([
+            ...asArray(c.misconceptions),
+            ...asArray(c.capability_gaps),
+            ...asArray(c.transfer_performance)
+          ], {kicker: (_, index) => {
+            if (index < asArray(c.misconceptions).length) return "误概念";
+            if (index < asArray(c.misconceptions).length + asArray(c.capability_gaps).length) return "能力缺口";
+            return "迁移表现";
+          }, fallback: "当前没有足够行为证据形成误概念、能力缺口或迁移判断。"})),
+          gapsSection("形成学习前沿前的缺口")
+        ];
+        return [
+          section("诊断证据", "查看节点与行为证据的映射及证据有效期。", cards([
+            ...asArray(c.diagnosis_evidence_mapping),
+            ...asArray(c.evidence_validity),
+            ...asArray(envelope.evidence_collected)
+          ], {kicker: (_, index) => index < asArray(c.diagnosis_evidence_mapping).length ? "节点证据" : "证据状态", fallback: "当前没有学习者行为证据。"})),
+          section("待复测或人工确认", "证据不足、过期或存在冲突的项目保留在这里。", cards(c.items_needing_retest_or_human_confirmation, {
+            kicker: () => "待复测",
+            fallback: "尚未进入复测清单；需要先完成当前诊断任务。"
+          })),
+          confirmationSection(),
+          recoverySection()
+        ];
+      }
+
+      function renderS5(view, c) {
+        if (view === "route") return [
+          section("有序学习节点", "路线从已证实前沿出发，并保留硬先修关系。", cards(c.ordered_learning_nodes, {
+            title: item => item.node_id || item.title || short(item),
+            summary: item => short(item.selection_rationale || item.rationale || item.goal || item.outcome, ""),
+            kicker: (_, index) => `顺序 ${index + 1}`,
+            fallback: "缺少通过 G4 的学习前沿，当前不能生成个性化节点路线。"
+          }), asArray(c.ordered_learning_nodes).length),
+          section("节点证据基础", "逐节点核对核心/实践/前沿/新兴层级、时效与纳入理由。", cards(
+            asArray(c.ordered_learning_nodes).map(item => ({node_id: item.node_id, ...item.evidence_basis})),
+            {
+              title: item => item.node_id || "节点",
+              summary: item => `${item.knowledge_tier || "未分层"} · ${item.knowledge_status || "状态未知"} · ${item.freshness || "时效未知"}`,
+              kicker: () => "证据基础"
+            }
+          )),
+          section("阶段目标", "每段路线都有可验收的阶段目标。", cards(c.stage_goals, {kicker: () => "阶段目标", fallback: "路线尚未形成，因此没有阶段目标。"})),
+          gapsSection("规划前置缺口")
+        ];
+        if (view === "sessions") return [
+          section("学习会话", "每个会话连接目标节点、活动、通关标准与时间预算。", cards(c.sessions, {
+            title: item => item.title || item.session_id || short(item),
+            summary: item => short(item.goal || item.outcome || item.duration, ""),
+            kicker: (_, index) => `会话 ${index + 1}`,
+            fallback: "前沿与路线尚未形成，因此没有可执行会话。"
+          }), asArray(c.sessions).length),
+          section("测评计划", "诊断、形成性检查、迁移与复测按路线安排。", cards(c.assessment_schedule, {kicker: () => "测评", fallback: "当前没有测评排期。"})),
+          section("退出标准", "明确什么时候可以进入教学交互或结束当前路线。", bullets(c.exit_criteria, "当前没有可用退出标准。")),
+          recoverySection()
+        ];
+        return [
+          section("复习锚点", "复习安排与关键节点、遗忘风险和迁移任务对齐。", cards(c.review_anchors, {kicker: () => "复习", fallback: "当前没有复习锚点。"})),
+          section("风险与备选路线", "风险出现时按预先声明的备选路径调整。", cards([
+            ...asArray(c.risks),
+            ...asArray(c.alternative_routes)
+          ], {kicker: (_, index) => index < asArray(c.risks).length ? "风险" : "备选路线", fallback: "路线未形成，尚无可比较的风险与备选路线。"})),
+          confirmationSection(),
+          section("当前处理", "已经执行的输入校验、阻断判断和恢复条件。", timeline(envelope.processing_record))
+        ];
+      }
+
+      function hintBlock(values) {
+        const items = asArray(values);
+        if (!items.length) return empty("当前没有可展示的提示阶梯。");
+        const wrap = node("div", "hint-list");
+        items.forEach((item, index) => {
+          const details = node("details");
+          details.append(node("summary", "", `提示 ${index + 1} · ${short(item.level || item.type || "", "逐步展开")}`));
+          const body = node("div");
+          body.append(detailValue(item));
+          details.append(body);
+          wrap.append(details);
+        });
+        return wrap;
+      }
+
+      function renderS6(view, c) {
+        if (view === "instruction") return [
+          section("当前节点与会话目标", "教学内容只围绕已确认计划中的当前节点展开。", facts([
+            ["当前节点", c.current_node], ["会话目标", c.session_goal], ["成功条件", c.success_conditions]
+          ])),
+          section("分层解释", "解释保留来源、适用层级和关键推理。", cards(c.explanations, {kicker: () => "解释", fallback: "前置计划未通过，当前没有生成教学解释。"})),
+          section("正例与反例", "正反例用于暴露边界与常见误概念。", cards(c.examples, {
+            title: item => item.title || item.type || short(item),
+            summary: item => short(item.explanation || item.rationale || "", ""),
+            kicker: item => item.type || "案例",
+            fallback: "当前没有正反例。"
+          })),
+          gapsSection("开展教学前的缺口")
+        ];
+        if (view === "activity") return [
+          section("学习活动", "活动安排先独立产出，再按证据提供反馈。", cards(c.activities, {
+            title: item => item.title || item.activity_id || short(item),
+            summary: item => short(item.instruction || item.goal || "", ""),
+            kicker: (_, index) => `活动 ${index + 1}`,
+            fallback: "当前没有可执行活动。"
+          })),
+          section("渐进提示", "提示默认折叠，可按层级逐步查看。", hintBlock(c.hint_ladder), asArray(c.hint_ladder).length),
+          section("反馈与支架渐隐", "反馈规则和支架退出条件保持可见。", cards([
+            ...asArray(c.feedback_rules),
+            ...asArray(c.scaffolding_fade_strategy)
+          ], {kicker: (_, index) => index < asArray(c.feedback_rules).length ? "反馈" : "渐隐策略", fallback: "当前没有反馈或渐隐策略。"})),
+          recoverySection()
+        ];
+        return [
+          section("已记录交互", "这里只展示已经进入规范信封的回答、提示与修正事件。", cards(c.interaction_events, {
+            title: item => item.event_id || item.type || short(item),
+            summary: item => short(item.response || item.summary || item.content, ""),
+            kicker: item => item.type || "交互事件",
+            fallback: "当前没有真实交互事件。"
+          }), asArray(c.interaction_events).length),
+          section("候选掌握证据", "候选证据仍需 S7 按预设规则综合判断。", cards(c.candidate_mastery_evidence, {kicker: () => "候选证据", fallback: "尚未产生候选掌握证据。"})),
+          section("内容质量", "记录内容的正确性、追溯、适配和泄露检查结论。", cards(c.content_quality_status, {kicker: () => "内容质量", fallback: "教学内容尚未生成，因此没有内容质量结论。"})),
+          section("当前处理与恢复顺序", "显示已经完成的检查和下一步需要补齐的真实条件。", timeline(envelope.processing_record))
+        ];
+      }
+
+      function renderS7(view, c) {
+        if (view === "mastery") return [
+          section("多维掌握验证", "正确性、推理、独立性、提示影响、迁移、置信度和保持证据综合呈现。", cards(c.mastery_verification, {
+            title: item => item.node_id || item.dimension || short(item),
+            summary: item => short(item.decision || item.status || item.evidence_summary, ""),
+            kicker: () => "掌握验证",
+            fallback: "缺少通过 G6 的真实证据，当前不能形成掌握判断。"
+          })),
+          section("阶段证据", "保留证据来源与充分性，不用单次或模拟结果替代。", cards(envelope.evidence_collected, {kicker: item => item.provenance || "证据", fallback: "当前没有可用于掌握验证的行为证据。"})),
+          gapsSection("形成掌握结论前的缺口")
+        ];
+        if (view === "model") return [
+          section("学习者模型差异", "模型更新必须能追溯到掌握验证，并通过版本检查。", cards(c.learner_model_update_and_replan, {
+            title: item => item.node_id || item.change_type || short(item),
+            summary: item => short(item.reason || item.update_status || item.patch, ""),
+            kicker: () => "模型变更",
+            fallback: "掌握验证未形成，当前没有模型更新结果。"
+          })),
+          section("版本与事务条件", "显示当前恢复模型更新所需的版本和持久化条件。", timeline(envelope.processing_record)),
+          recoverySection()
+        ];
+        return [
+          section("下一路由", "建议路线与已执行状态分开呈现。", cards(c.route, {kicker: () => "路由结果", fallback: `当前路由：${envelope.quality_evaluation?.route_to || "未确定"}`})),
+          section("复测、复习与重规划", "根据归因选择同节点补救、返回上游、延迟复测或进入下一节点。", cards(c.learner_model_update_and_replan?.replan || c.learner_model_update_and_replan, {
+            kicker: () => "重规划",
+            fallback: "证据不足，尚未生成复测或重规划方案。"
+          })),
+          section("适用限制", "说明结论适用于哪些节点、证据时段与使用场景。", bullets(c.applicability_limits, "当前没有形成可适用的掌握结论。")),
+          confirmationSection()
+        ];
+      }
+
+      function renderCurrent() {
+        const c = envelope.positive_artifact?.content || {};
+        const renderers = {S1: renderS1, S2: renderS2, S3: renderS3, S4: renderS4, S5: renderS5, S6: renderS6, S7: renderS7};
+        const items = renderers[EXPECTED_STAGE](activeTab, c);
+        contentRoot.replaceChildren(...items);
+        search.value = "";
+        applySearch();
+      }
+
+      function applySearch() {
+        const query = search.value.trim().toLowerCase();
+        contentRoot.querySelectorAll("[data-search]").forEach(item => {
+          item.hidden = Boolean(query) && !item.dataset.search.includes(query);
+        });
+      }
+
+      function activateTab(index, focus = false) {
+        activeTab = config.tabs[index][0];
+        const tabs = [...doc.querySelectorAll(".tab")];
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        contentRoot.setAttribute("aria-labelledby", tabs[index].id);
+        doc.getElementById("view-title").textContent = config.tabs[index][1];
+        doc.getElementById("view-description").textContent = config.tabs[index][2];
+        renderCurrent();
+        if (focus) tabs[index].focus();
+      }
+
+      function setupTabs() {
+        const tabsRoot = doc.getElementById("tabs");
+        config.tabs.forEach((entry, index) => {
+          const button = node("button", "tab", entry[1]);
+          button.type = "button";
+          button.role = "tab";
+          button.id = `stage-tab-${index}`;
+          button.setAttribute("aria-controls", "content");
+          button.addEventListener("click", () => activateTab(index));
+          button.addEventListener("keydown", event => {
+            if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+            event.preventDefault();
+            let next = index;
+            if (event.key === "Home") next = 0;
+            else if (event.key === "End") next = config.tabs.length - 1;
+            else if (["ArrowDown", "ArrowRight"].includes(event.key)) next = (index + 1) % config.tabs.length;
+            else next = (index - 1 + config.tabs.length) % config.tabs.length;
+            activateTab(next, true);
+          });
+          tabsRoot.append(button);
+        });
+      }
+
+      function metricCount(c) {
+        const counts = {
+          S1: ["可观察能力", asArray(c.observable_capabilities).length],
+          S2: ["来源与主张", asArray(c.source_ledger).length + asArray(c.claims).length],
+          S3: ["原子节点", asArray(c.nodes).length],
+          S4: ["诊断任务", diagnosticMaterial().tasks.length || asArray(c.node_states).length],
+          S5: ["规划会话", asArray(c.sessions).length],
+          S6: ["交互事件", asArray(c.interaction_events).length],
+          S7: ["掌握判断", asArray(c.mastery_verification).length]
+        };
+        return counts[EXPECTED_STAGE];
+      }
+
+      function initializePage() {
+        config = STAGES[EXPECTED_STAGE];
+        const reportedProfile = envelope.presentation_artifact?.view_profile;
+        if (envelope.stage_id !== EXPECTED_STAGE || (reportedProfile && reportedProfile !== config.profile)) {
+          throw new Error("内嵌结果与当前阶段不匹配。");
+        }
+        const [accent, soft, deep] = config.accent;
+        doc.documentElement.style.setProperty("--accent", accent);
+        doc.documentElement.style.setProperty("--accent-soft", soft);
+        doc.documentElement.style.setProperty("--accent-deep", deep);
+        doc.title = `${EXPECTED_STAGE} · ${config.name}`;
+        doc.getElementById("eyebrow").textContent = `${EXPECTED_STAGE} · ${config.name}`;
+        doc.getElementById("lede").textContent = config.subtitle;
+        const c = envelope.positive_artifact?.content || {};
+        const headlineCandidates = {
+          S1: c.target_problem,
+          S2: c.scope,
+          S3: c.focus_question,
+          S4: c.learning_frontier?.[0]?.statement,
+          S5: c.stage_goals?.[0]?.statement,
+          S6: c.session_goal,
+          S7: c.mastery_verification?.summary
+        };
+        doc.getElementById("headline").textContent = short(
+          headlineCandidates[EXPECTED_STAGE],
+          envelope.status === "completed" ? config.name : `${config.name} · ${STATUS[envelope.status] || envelope.status}`
+        );
+        const verdict = envelope.quality_evaluation?.verdict;
+        doc.getElementById("verdict").textContent = STATUS[verdict] || verdict || "尚未判断";
+        doc.getElementById("route").textContent = envelope.quality_evaluation?.route_to || "—";
+        doc.getElementById("metric-status").textContent = STATUS[envelope.status] || envelope.status;
+        const [metricName, metricValue] = metricCount(c);
+        doc.getElementById("metric-a-label").textContent = metricName;
+        doc.getElementById("metric-a").textContent = String(metricValue);
+        doc.getElementById("metric-b").textContent = String(asArray(envelope.requirement_gaps).length);
+        doc.getElementById("metric-date").textContent = dateText(envelope.created_at).split(" ")[0];
+        doc.getElementById("footer-date").textContent = `阶段结果时间：${dateText(envelope.created_at)}`;
+        setupTabs();
+        activateTab(0);
+      }
+
+      doc.getElementById("drawer-close").addEventListener("click", () => drawer.close());
+      drawer.addEventListener("click", event => {
+        if (event.target === drawer) drawer.close();
+      });
+      search.addEventListener("input", applySearch);
+
+      try {
+        const raw = doc.getElementById("stage-data").textContent;
+        envelope = JSON.parse(raw);
+        initializePage();
+      } catch (error) {
+        const notice = doc.getElementById("notice");
+        notice.style.display = "block";
+        notice.textContent = `页面数据暂时无法显示：${error.message}`;
+        doc.getElementById("headline").textContent = "阶段结果暂时无法显示";
+        doc.getElementById("lede").textContent = "请使用本次运行产出的完整页面文件重新打开。";
+        doc.querySelector(".workspace").hidden = true;
+        doc.querySelector(".metrics").hidden = true;
+      }
+    })();
+  </script>
+</body>
+</html>

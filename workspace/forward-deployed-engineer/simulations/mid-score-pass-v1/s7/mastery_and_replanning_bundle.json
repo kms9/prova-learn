@@ -1,0 +1,574 @@
+{
+  "schema_version": "1.3.0",
+  "stage_id": "S7",
+  "run_id": "RUN-SIM-MIDPASS-S7",
+  "learner_id": "simulated-mid-pass-learner",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "../s6/session_package_and_trace.json",
+      "../s5/learning_and_session_plan.json",
+      "../s4/learner_snapshot.json"
+    ],
+    "expected_schema_versions": {
+      "s6_envelope": "1.3.0",
+      "session_package_and_trace": "1.0.0",
+      "mastery_and_replanning_bundle": "1.1.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "掌握规则在查看 S6 结果前已确定。",
+    "无真实后端，所有模型更新均不得声称 applied。",
+    "本轮只验证 N-004。"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "evidence_insufficient_retest_route",
+    "questions": [],
+    "response": {
+      "route_disclosed": true,
+      "simulated_fixture": true
+    },
+    "status": "acknowledged",
+    "confirmed_at": "2026-08-04T13:15:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "SIM-S7-E1",
+      "provenance": "learner_behavior",
+      "source_ref": "../s6/session_package_and_trace.json#SIM-S6-E2",
+      "summary": "轻提示后形成正确五槽规则。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-S7-E2",
+      "provenance": "learner_behavior",
+      "source_ref": "../s6/session_package_and_trace.json#SIM-S6-E3",
+      "summary": "远迁移保留结构但沿用阈值。",
+      "status": "partially_supported"
+    },
+    {
+      "evidence_id": "SIM-S7-E3",
+      "provenance": "learner_behavior",
+      "source_ref": null,
+      "summary": "第4天延迟保持尚未执行。",
+      "status": "not_executed"
+    }
+  ],
+  "processing_record": [
+    "事前 mastery rule 要求正确性、推理、低提示、迁移、校准和延迟保持。",
+    "S6-E2 支持正确性和推理，提示依赖为 low。",
+    "S6-E3 显示迁移 partial。",
+    "延迟保持 not_executed，归因 EVIDENCE_INSUFFICIENT，路由 S7。",
+    "无后端，补丁只预览不应用。"
+  ],
+  "positive_artifact": {
+    "type": "mastery_and_replanning_bundle",
+    "schema_version": "1.1.0",
+    "artifact_id": "MRB-SIM-MIDPASS-N004-v1",
+    "content": {
+      "mastery_verification": {
+        "node_mastery_evidence": [
+          {
+            "node_id": "N-004",
+            "correctness": {
+              "result": "correct",
+              "detail": "修订答案包含 baseline、owner、threshold、window 和 stop/go 动作。",
+              "evidence_event_ids": [
+                "SIM-S6-E2"
+              ]
+            },
+            "reasoning_quality": {
+              "result": "sound",
+              "detail": "能解释 DAU 只能支持采用，不能替代业务和风险结果。",
+              "evidence_event_ids": [
+                "SIM-S6-E2"
+              ]
+            },
+            "hint_dependency": {
+              "level": "low",
+              "detail": "完整修订使用一次 HINT-1-light。",
+              "evidence_event_ids": [
+                "SIM-S6-E2"
+              ]
+            },
+            "transfer": {
+              "result": "partial",
+              "detail": "医疗迁移保留结构，但错误沿用客服25%阈值。",
+              "evidence_event_ids": [
+                "SIM-S6-E3"
+              ]
+            },
+            "confidence": {
+              "result": "calibrated",
+              "detail": "没有把一次修订上升为掌握。",
+              "evidence_event_ids": [
+                "SIM-S6-E1",
+                "SIM-S6-E2",
+                "SIM-S6-E3"
+              ]
+            },
+            "delayed_retention": {
+              "result": "not_executed",
+              "detail": "第4天复测尚未执行。",
+              "evidence_event_ids": []
+            }
+          }
+        ],
+        "mastery_judgment": [
+          {
+            "node_id": "N-004",
+            "status": "partial"
+          }
+        ],
+        "attribution": {
+          "primary": "EVIDENCE_INSUFFICIENT",
+          "secondary": []
+        },
+        "not_mastered_cause": "远迁移只部分通过，且延迟保持尚未执行；不满足预先确定的掌握规则。"
+      },
+      "learner_model_update_and_replan": {
+        "load": {
+          "learner_id": "simulated-mid-pass-learner",
+          "as_of": "2026-08-04T13:15:00Z",
+          "current_model_version": 1,
+          "missing_fields": [],
+          "evidence_validity": "valid"
+        },
+        "append_evidence": [
+          {
+            "event_id": "SIM-S6-E1",
+            "immutable": true,
+            "source_evidence_ids": [
+              "SIM-S6-E1"
+            ],
+            "summary": "首次答案依赖效率和DAU代理。"
+          },
+          {
+            "event_id": "SIM-S6-E2",
+            "immutable": true,
+            "source_evidence_ids": [
+              "SIM-S6-E2"
+            ],
+            "summary": "轻提示后形成完整五槽规则。"
+          },
+          {
+            "event_id": "SIM-S6-E3",
+            "immutable": true,
+            "source_evidence_ids": [
+              "SIM-S6-E3"
+            ],
+            "summary": "医疗迁移保留结构但沿用阈值。"
+          }
+        ],
+        "update": {
+          "expected_model_version": 1,
+          "loaded_model_version": 1,
+          "proposed_model_version": 2,
+          "status": "not_executed",
+          "before": {
+            "model_version": 1,
+            "N004": "tested_not_mastered",
+            "USAGE_IMPLIES_VALUE": "active"
+          },
+          "after": {
+            "model_version": 2,
+            "N004": "partial",
+            "USAGE_IMPLIES_VALUE": "weakened_but_active"
+          },
+          "reason": "无真实 learner-model backend；只预览由三条虚拟事件支持的补丁。",
+          "persistence": "not_executed"
+        },
+        "history": [
+          {
+            "event_id": "SIM-H-S7-EVIDENCE",
+            "event_type": "evidence",
+            "created_at": "2026-08-04T13:16:00Z",
+            "evidence_event_ids": [
+              "SIM-S6-E1",
+              "SIM-S6-E2",
+              "SIM-S6-E3"
+            ],
+            "decision": null,
+            "model_version": 1
+          },
+          {
+            "event_id": "SIM-H-S7-INFERENCE",
+            "event_type": "state_inference",
+            "created_at": "2026-08-04T13:17:00Z",
+            "evidence_event_ids": [
+              "SIM-S6-E1",
+              "SIM-S6-E2",
+              "SIM-S6-E3"
+            ],
+            "decision": "N-004 partial",
+            "model_version": 1
+          },
+          {
+            "event_id": "SIM-H-S7-ROUTE",
+            "event_type": "route_decision",
+            "created_at": "2026-08-04T13:18:00Z",
+            "evidence_event_ids": [
+              "SIM-S6-E2",
+              "SIM-S6-E3"
+            ],
+            "decision": "EVIDENCE_INSUFFICIENT → S7",
+            "model_version": 1
+          }
+        ],
+        "learner_id": "simulated-mid-pass-learner",
+        "expected_model_version": 1,
+        "model_version": 1,
+        "model_patch": [
+          {
+            "node_id": "N-004",
+            "before": "tested_not_mastered",
+            "after": "partial",
+            "evidence_event_ids": [
+              "SIM-S6-E2",
+              "SIM-S6-E3"
+            ],
+            "rationale": "正确性和推理改善，但迁移 partial 且延迟未执行。"
+          },
+          {
+            "node_id": "USAGE_IMPLIES_VALUE",
+            "before": "active",
+            "after": "weakened_but_active",
+            "evidence_event_ids": [
+              "SIM-S6-E1",
+              "SIM-S6-E2"
+            ],
+            "rationale": "修订时能区分DAU与业务价值，但需延迟复测确认。"
+          }
+        ],
+        "update_status": "not_executed",
+        "decision": "remediate",
+        "adjusted_path": "保持 N-004 为当前节点；次日检索五槽，第4天无提示强监管迁移复测；通过后才进入 N-006。",
+        "next_session_contract": {
+          "next_session_id": "SIM-S7-RETEST-N004-D4",
+          "target_node_id": "N-004",
+          "objective": "在未见强监管场景无提示地重新设定五槽规则并解释阈值差异。",
+          "required_evidence": [
+            "无提示完整五槽规则",
+            "行业阈值重新校准的理由",
+            "第4天延迟保持"
+          ],
+          "hint_policy": "首次提交前不提示；仅在失败后记录提示并另开一次复测。"
+        },
+        "review_schedule": {
+          "retrieval": [
+            "次日检索 baseline/owner/threshold/window/action。"
+          ],
+          "spacing": "第4天执行无提示延迟迁移复测。",
+          "interleaving": "通过后与 N-006 风险控制交错练习。",
+          "delayed_retest": {
+            "scheduled": true,
+            "interval_days": 4,
+            "target_nodes": [
+              "N-004"
+            ]
+          }
+        },
+        "evidence_feedback": []
+      },
+      "route": {
+        "attribution": "EVIDENCE_INSUFFICIENT",
+        "route_to": "S7"
+      },
+      "applicability_limits": [
+        "simulated_fixture",
+        "无真实学习者行为",
+        "无真实后端，version 2 未持久化",
+        "无延迟保持证据",
+        "不得改变主项目 revision 6 或真实 G4"
+      ]
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "掌握规则一致性",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "提示影响控制",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "迁移与延迟证据",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S7"
+      },
+      {
+        "dimension": "更新前后一致性",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "调整可解释性",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "避免单次结果过度反应",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "来源反馈闭环",
+        "evidence": [
+          "s7-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "../s6/session_package_and_trace.json",
+      "RUN-SIM-MIDPASS-S7-review.md",
+      "SIM-S6-E2",
+      "SIM-S6-E3",
+      "delayed_retention=not_executed"
+    ],
+    "verdict": "revise_here",
+    "route_to": "S7"
+  },
+  "document_artifact": {
+    "format": "markdown",
+    "status": "generated",
+    "path": "RUN-SIM-MIDPASS-S7-review.md",
+    "authority": "human_review_primary",
+    "source": {
+      "stage_id": "S7",
+      "run_id": "RUN-SIM-MIDPASS-S7",
+      "artifact_id": "MRB-SIM-MIDPASS-N004-v1",
+      "artifact_schema_version": "1.1.0"
+    },
+    "document_profile": "s7_mastery_replan_review",
+    "generation_order": "markdown_before_json",
+    "content_binding": "lossless_semantic_correspondence",
+    "section_mappings": [
+      {
+        "section_id": "S7-SEC-01",
+        "heading": "1. 文档与运行信息",
+        "json_pointers": [
+          "/run_id"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-02",
+        "heading": "2. 输入、历史模型与版本事务审计",
+        "json_pointers": [
+          "/input_contract"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-03",
+        "heading": "3. 预先确定的掌握规则",
+        "json_pointers": [
+          "/processing_record"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-04",
+        "heading": "4. 六维掌握证据",
+        "json_pointers": [
+          "/positive_artifact/content/mastery_verification/node_mastery_evidence"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-05",
+        "heading": "5. 节点级掌握判断与证据充分性",
+        "json_pointers": [
+          "/positive_artifact/content/mastery_verification/mastery_judgment"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-06",
+        "heading": "6. 问题归因与上游定位",
+        "json_pointers": [
+          "/positive_artifact/content/mastery_verification/attribution"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-07",
+        "heading": "7. 不可变证据追加与模型补丁",
+        "json_pointers": [
+          "/positive_artifact/content/learner_model_update_and_replan/append_evidence"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-08",
+        "heading": "8. 版本检查、持久化结果与前后差异",
+        "json_pointers": [
+          "/positive_artifact/content/learner_model_update_and_replan/update"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-09",
+        "heading": "9. 路由决定与下一会话",
+        "json_pointers": [
+          "/positive_artifact/content/route"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-10",
+        "heading": "10. 复测、复习与维护计划",
+        "json_pointers": [
+          "/positive_artifact/content/learner_model_update_and_replan/review_schedule"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-11",
+        "heading": "11. 来源反馈、失效下游与适用限制",
+        "json_pointers": [
+          "/positive_artifact/content/applicability_limits"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-12",
+        "heading": "12. G7 质量评价与最终路由",
+        "json_pointers": [
+          "/quality_evaluation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S7-SEC-13",
+        "heading": "13. 输出审计与 JSON 对应表",
+        "json_pointers": [
+          "/document_artifact"
+        ],
+        "status": "matched"
+      }
+    ],
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "markdown_parse": "pass",
+      "required_sections": "pass",
+      "json_correspondence": "pass",
+      "no_placeholders": "pass"
+    },
+    "reason": null
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "mastery-report.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S7",
+      "run_id": "RUN-SIM-MIDPASS-S7",
+      "envelope_schema_version": "1.3.0",
+      "artifact_id": "MRB-SIM-MIDPASS-N004-v1",
+      "artifact_schema_version": "1.1.0"
+    },
+    "view_profile": "mastery_replan_console",
+    "data_binding": "embedded_canonical_envelope",
+    "interaction_mode": "read_only_exploration",
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "pass",
+      "interaction_smoke": "pass"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "SPT-SIM-MIDPASS-N004-v1",
+      "LSP-SIM-MIDPASS-v1",
+      "LS-SIM-MIDPASS-v1"
+    ],
+    "source_evidence_ids": [
+      "SIM-S6-E1",
+      "SIM-S6-E2",
+      "SIM-S6-E3"
+    ],
+    "source_sections": [
+      "../s6/RUN-SIM-MIDPASS-S6-review.md",
+      "../s5/RUN-SIM-MIDPASS-S5-review.md"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-08-04T13:15:00Z"
+}

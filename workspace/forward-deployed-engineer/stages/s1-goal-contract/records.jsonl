@@ -1,0 +1,17 @@
+{"record_id":"REC-S1-0001","record_type":"source_added","object_ref":"SRC-001","event_ref":"EVT-20260804T111952Z-s1-004","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0002","record_type":"source_added","object_ref":"SRC-002","event_ref":"EVT-20260804T111952Z-s1-006","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0003","record_type":"source_added","object_ref":"SRC-003","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0004","record_type":"source_added","object_ref":"SRC-004","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0005","record_type":"source_added","object_ref":"SRC-005","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0006","record_type":"source_added","object_ref":"SRC-006","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0007","record_type":"source_added","object_ref":"SRC-007","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0008","record_type":"source_added","object_ref":"SRC-008","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0009","record_type":"source_added","object_ref":"SRC-009","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0010","record_type":"source_added","object_ref":"SRC-010","event_ref":"EVT-20260804T111952Z-s1-006-external","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0011","record_type":"goal_contract_updated","object_ref":"GOAL-forward-deployed-engineer-v1","event_ref":"EVT-20260804T111952Z-s1-007","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0012","record_type":"gate_evaluated","object_ref":"G1","event_ref":"EVT-20260804T111952Z-s1-008","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0013","record_type":"route_decided","object_ref":"S1","event_ref":"EVT-20260804T111952Z-s1-009","conversation_ref":"CONV-20260804T111952Z-s1-scope","project_revision":2}
+{"record_id":"REC-S1-0014","record_type":"user_confirmation","object_ref":"GOAL-forward-deployed-engineer-v1","event_ref":"EVT-20260804T113555Z-s1-003","conversation_ref":"CONV-20260804T113555Z-s1-confirm","project_revision":3}
+{"record_id":"REC-S1-0015","record_type":"goal_contract_confirmed","object_ref":"GOAL-forward-deployed-engineer-v1","event_ref":"EVT-20260804T113555Z-s1-004","conversation_ref":"CONV-20260804T113555Z-s1-confirm","project_revision":3}
+{"record_id":"REC-S1-0016","record_type":"gate_evaluated","object_ref":"G1","event_ref":"EVT-20260804T113555Z-s1-005","conversation_ref":"CONV-20260804T113555Z-s1-confirm","project_revision":3}
+{"record_id":"REC-S1-0017","record_type":"route_decided","object_ref":"S2","event_ref":"EVT-20260804T113555Z-s1-006","conversation_ref":"CONV-20260804T113555Z-s1-confirm","project_revision":3}

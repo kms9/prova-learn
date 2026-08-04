@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "PRJ-forward-deployed-engineer",
+  "project_slug": "forward-deployed-engineer",
+  "project_revision": 6,
+  "status": "active",
+  "current_stage": "S4",
+  "route_to": "S4",
+  "active_goal_id": "GOAL-forward-deployed-engineer-v1",
+  "active_goal_version": 1,
+  "active_learner_model_version": null,
+  "active_plan_id": null,
+  "active_session_id": null,
+  "last_conversation_id": "CONV-20260804T122400Z-s4-diagnostic",
+  "stage_status": {
+    "S1": {
+      "state": "completed",
+      "gate": "pass",
+      "route_to": "S2",
+      "revision": 2,
+      "entrypoint": "stages/s1-goal-contract/INDEX.md"
+    },
+    "S2": {
+      "state": "completed",
+      "gate": "pass",
+      "route_to": "S3",
+      "revision": 1,
+      "entrypoint": "stages/s2-domain-evidence/INDEX.md"
+    },
+    "S3": {
+      "state": "completed",
+      "gate": "pass",
+      "route_to": "S4",
+      "revision": 1,
+      "entrypoint": "stages/s3-capability-graph/INDEX.md"
+    },
+    "S4": {
+      "state": "pending",
+      "gate": "blocked",
+      "route_to": "S4",
+      "revision": 1,
+      "entrypoint": "stages/s4-learner-diagnosis/INDEX.md"
+    },
+    "S5": {
+      "state": "not_started",
+      "gate": "not_evaluated",
+      "route_to": "S5",
+      "revision": 0,
+      "entrypoint": null
+    },
+    "S6": {
+      "state": "not_started",
+      "gate": "not_evaluated",
+      "route_to": "S6",
+      "revision": 0,
+      "entrypoint": null
+    },
+    "S7": {
+      "state": "not_started",
+      "gate": "not_evaluated",
+      "route_to": "S7",
+      "revision": 0,
+      "entrypoint": null
+    }
+  },
+  "updated_at": "2026-08-04T12:24:00Z",
+  "updated_by_event_id": "EVT-20260804T122400Z-s4-010"
+}

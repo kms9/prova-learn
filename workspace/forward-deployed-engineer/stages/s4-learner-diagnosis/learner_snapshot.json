@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.3.0",
+  "stage_id": "S4",
+  "run_id": "RUN-20260804T122400Z-S4",
+  "learner_id": "local-learner",
+  "status": "pending",
+  "input_contract": {
+    "artifact_refs": [
+      "stages/s1-goal-contract/INDEX.md",
+      "stages/s3-capability-graph/capability_concept_graph.json"
+    ],
+    "expected_schema_versions": {
+      "project_state": "1.0.0",
+      "s3_envelope": "1.3.0",
+      "capability_concept_graph": "1.2.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "当前为冷启动，没有已验证学习者记录或可加载快照。",
+    "D1–D4 使用模拟保险、客服和医疗场景，不代表真实生产授权。",
+    "诊断计划有效至 2026-09-03；图谱语义变化或过期后先刷新任务。"
+  ],
+  "requirement_gaps": [
+    {
+      "id": "GAP-S4-001",
+      "description": "尚未收到 D1–D4 的真实答案、理由、置信度和帮助使用记录，无法形成节点状态与学习前沿。",
+      "criticality": "critical",
+      "gate_effect": "block"
+    }
+  ],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "cold_start_diagnostic_scope_disclosed",
+    "questions": [],
+    "response": {
+      "scope_disclosed": true,
+      "purpose": "locate_learning_frontier",
+      "user_skill_claimed": false
+    },
+    "status": "acknowledged",
+    "confirmed_at": "2026-08-04T12:24:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [],
+  "processing_record": [
+    "推断规则1：单题答对不判掌握；关键结论至少需要两项对齐观察。",
+    "推断规则2：只有 none/low 提示且理由与迁移达标，才可能进入 tested_mastered 候选。",
+    "推断规则3：中高提示、理由不足、置信度失配和迁移失败分别记录，不由自评覆盖。",
+    "任务D1：分析保险理赔 SaaS 的混合角色、FDE 适用性与独立代码分支风险，覆盖 N-001/N-002/N-009/N-010/N-011。",
+    "任务D2：识别上线规则中的明显错、隐蔽错、无错和必须升级项，覆盖 N-005/N-006/N-007/N-008。",
+    "任务D3：从四周减少 60% 人力的模糊诉求创建工作流、价值、MVD、指标和停止条件，覆盖 N-003–N-008。",
+    "任务D4：迁移到医疗场景，审计 95%/800%/厂商案例/NIST/岗位信号并作产品回流判断，覆盖 N-006/N-009–N-012。",
+    "每项作答记录：答案原文、关键理由、置信度 0–100、查资料/AI/提示使用和可选耗时。",
+    "当前没有 learner_behavior evidence；不创建版本 0、默认未掌握画像或最近学习前沿。"
+  ],
+  "positive_artifact": null,
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "测量与目标对齐度",
+        "evidence": [
+          "diagnostic-plan.md",
+          "S3 ASM-001..ASM-012"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "observations.jsonl#OBS-S4-0000"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "猜对识别",
+        "evidence": [
+          "no_learner_response"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "提示依赖记录",
+        "evidence": [
+          "no_hint_events"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "错误分类一致性",
+        "evidence": [
+          "no_reasoning_or_error_evidence"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "偏差控制",
+        "evidence": [
+          "learner-snapshot.md",
+          "misconceptions.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "结论可解释性",
+        "evidence": [
+          "positive_artifact=null"
+        ],
+        "score": false,
+        "threshold": true,
+        "passed": false,
+        "failure_action": "revise_here",
+        "route_to": "S4"
+      },
+      {
+        "dimension": "诊断素材有效性",
+        "evidence": [
+          "prerequisite-check.md",
+          "diagnostic-plan.md"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "prerequisite-check.md",
+      "diagnostic-plan.md",
+      "observations.jsonl",
+      "learner-snapshot.md",
+      "gate.md"
+    ],
+    "verdict": "blocked",
+    "route_to": "S4"
+  },
+  "document_artifact": {
+    "format": "markdown",
+    "status": "generated",
+    "path": "RUN-20260804T122400Z-S4-review.md",
+    "authority": "human_review_primary",
+    "source": {
+      "stage_id": "S4",
+      "run_id": "RUN-20260804T122400Z-S4",
+      "artifact_id": null,
+      "artifact_schema_version": null
+    },
+    "document_profile": "s4_learner_frontier_review",
+    "generation_order": "markdown_before_json",
+    "content_binding": "lossless_semantic_correspondence",
+    "section_mappings": [
+      {
+        "section_id": "S4-SEC-01",
+        "heading": "1. 文档与运行信息",
+        "json_pointers": [
+          "/run_id",
+          "/status",
+          "/document_artifact"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-02",
+        "heading": "2. 上游输入、模型版本与有效性审计",
+        "json_pointers": [
+          "/input_contract",
+          "/input_validation",
+          "/positive_artifact"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-03",
+        "heading": "3. 诊断目标、范围与事前判定规则",
+        "json_pointers": [
+          "/processing_record",
+          "/confirmation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-04",
+        "heading": "4. 诊断任务与覆盖设计",
+        "json_pointers": [
+          "/processing_record",
+          "/requirement_gaps"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-05",
+        "heading": "5. 学习者行为证据记录",
+        "json_pointers": [
+          "/evidence_collected"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-06",
+        "heading": "6. 节点状态逐项判断",
+        "json_pointers": [
+          "/positive_artifact"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-07",
+        "heading": "7. 错误类型、提示依赖与置信度校准",
+        "json_pointers": [
+          "/processing_record",
+          "/positive_artifact"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-08",
+        "heading": "8. 最近学习前沿及候选比较",
+        "json_pointers": [
+          "/positive_artifact",
+          "/requirement_gaps"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-09",
+        "heading": "9. 误概念、能力缺口与迁移表现",
+        "json_pointers": [
+          "/positive_artifact",
+          "/requirement_gaps"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-10",
+        "heading": "10. 待复测、人工确认与恢复条件",
+        "json_pointers": [
+          "/processing_record",
+          "/requirement_gaps"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-11",
+        "heading": "11. 证据有效期与诊断限制",
+        "json_pointers": [
+          "/assumptions",
+          "/requirement_gaps"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-12",
+        "heading": "12. G4 质量评价与路由",
+        "json_pointers": [
+          "/quality_evaluation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-13",
+        "heading": "13. 输出审计与 JSON 对应表",
+        "json_pointers": [
+          "/document_artifact",
+          "/presentation_artifact"
+        ],
+        "status": "matched"
+      }
+    ],
+    "generated_at": "2026-08-04T12:24:00Z",
+    "validation": {
+      "markdown_parse": "pass",
+      "required_sections": "pass",
+      "json_correspondence": "pass",
+      "no_placeholders": "pass"
+    },
+    "reason": null
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "learner-snapshot.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S4",
+      "run_id": "RUN-20260804T122400Z-S4",
+      "envelope_schema_version": "1.3.0",
+      "artifact_id": null,
+      "artifact_schema_version": null
+    },
+    "view_profile": "learner_frontier_diagnostic",
+    "data_binding": "embedded_canonical_envelope",
+    "interaction_mode": "read_only_exploration",
+    "generated_at": "2026-08-04T12:24:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "pass",
+      "interaction_smoke": "pass"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "GOAL-forward-deployed-engineer-v1",
+      "CCG-forward-deployed-engineer-v1"
+    ],
+    "source_evidence_ids": [
+      "ASM-001",
+      "ASM-002",
+      "ASM-003",
+      "ASM-004",
+      "ASM-005",
+      "ASM-006",
+      "ASM-007",
+      "ASM-008",
+      "ASM-009",
+      "ASM-010",
+      "ASM-011",
+      "ASM-012"
+    ],
+    "source_sections": [
+      "stages/s1-goal-contract/goal-contract.md",
+      "stages/s3-capability-graph/assessments.jsonl",
+      "stages/s4-learner-diagnosis/diagnostic-plan.md"
+    ],
+    "fixture_type": "mixed"
+  },
+  "created_at": "2026-08-04T12:24:00Z"
+}

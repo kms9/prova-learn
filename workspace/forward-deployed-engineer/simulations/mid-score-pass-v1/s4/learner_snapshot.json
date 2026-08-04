@@ -1,0 +1,724 @@
+{
+  "schema_version": "1.3.0",
+  "stage_id": "S4",
+  "run_id": "RUN-SIM-MIDPASS-S4",
+  "learner_id": "simulated-mid-pass-learner",
+  "status": "completed",
+  "input_contract": {
+    "artifact_refs": [
+      "../../../stages/s1-goal-contract/INDEX.md",
+      "../../../stages/s3-capability-graph/capability_concept_graph.json",
+      "answer.md"
+    ],
+    "expected_schema_versions": {
+      "s3_envelope": "1.3.0",
+      "capability_concept_graph": "1.2.0",
+      "learner_snapshot": "1.0.0"
+    }
+  },
+  "input_validation": {
+    "status": "pass",
+    "missing_fields": [],
+    "stale_inputs": [],
+    "errors": []
+  },
+  "assumptions": [
+    "所有 D1-D4 均由系统构造，只代表虚拟学习者。",
+    "76/100 是诊断提交得分，不是掌握分数。",
+    "主项目 revision 6 与真实 G4 blocked 状态保持不变。"
+  ],
+  "requirement_gaps": [],
+  "confirmation": {
+    "mode": "conditional",
+    "trigger": "simulated_fixture_scope",
+    "questions": [
+      "是否同意仅把本答案用于非门控演练？"
+    ],
+    "response": {
+      "simulated_persona_acknowledged": true,
+      "real_user_mastery_claimed": false
+    },
+    "status": "acknowledged",
+    "confirmed_at": "2026-08-04T13:15:00Z",
+    "assumptions_changed": []
+  },
+  "evidence_collected": [
+    {
+      "evidence_id": "SIM-D1",
+      "provenance": "learner_behavior",
+      "source_ref": "answer.md#D1",
+      "summary": "角色、适用性与产品化边界，20/25。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-D2",
+      "provenance": "learner_behavior",
+      "source_ref": "answer.md#D2",
+      "summary": "部署规则与四层证据判断，19/25。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-D3",
+      "provenance": "learner_behavior",
+      "source_ref": "answer.md#D3",
+      "summary": "工作流、MVD、价值与停止条件，18/25。",
+      "status": "supported"
+    },
+    {
+      "evidence_id": "SIM-D4",
+      "provenance": "learner_behavior",
+      "source_ref": "answer.md#D4",
+      "summary": "医疗迁移与来源审计，19/25。",
+      "status": "supported"
+    }
+  ],
+  "processing_record": [
+    "事前规则：单题答对不判掌握。",
+    "区分正确、独立、迁移、提示依赖和置信度。",
+    "总分 76/100；N-004 为最近学习前沿。",
+    "证据仅在 simulated_fixture 身份内作为 learner_behavior。"
+  ],
+  "positive_artifact": {
+    "type": "learner_snapshot",
+    "schema_version": "1.0.0",
+    "artifact_id": "LS-SIM-MIDPASS-v1",
+    "content": {
+      "learner_id": "simulated-mid-pass-learner",
+      "model_version": 1,
+      "as_of": "2026-08-04T13:15:00Z",
+      "node_states": [
+        {
+          "node_id": "N-001",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D1"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D1"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.78,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-002",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D1",
+            "SIM-D4"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D1",
+              "SIM-D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.78,
+            "observed_alignment": "overconfident"
+          }
+        },
+        {
+          "node_id": "N-003",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D3"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D3"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.72,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-004",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "SIM-D3",
+            "SIM-D4"
+          ],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D3",
+              "SIM-D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.72,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-005",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D3"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D2",
+              "SIM-D3"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.82,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-006",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D4"
+          ],
+          "error_type": "transfer_failure",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D2",
+              "SIM-D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.76,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-007",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D3"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D2",
+              "SIM-D3"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.77,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-008",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D3"
+          ],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D2",
+              "SIM-D3"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.76,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-009",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D1",
+            "SIM-D4"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D1",
+              "SIM-D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.74,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-010",
+          "status": "insufficient_evidence",
+          "evidence_refs": [
+            "SIM-D1"
+          ],
+          "error_type": "partial_reasoning",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D1"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.65,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-011",
+          "status": "tested_mastered",
+          "evidence_refs": [
+            "SIM-D4"
+          ],
+          "error_type": "none",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.7,
+            "observed_alignment": "calibrated"
+          }
+        },
+        {
+          "node_id": "N-012",
+          "status": "tested_not_mastered",
+          "evidence_refs": [
+            "SIM-D4"
+          ],
+          "error_type": "transfer_failure",
+          "hint_dependency": {
+            "level": "none",
+            "evidence_refs": [
+              "SIM-D4"
+            ]
+          },
+          "confidence_calibration": {
+            "self_confidence": 0.7,
+            "observed_alignment": "calibrated"
+          }
+        }
+      ],
+      "learning_frontier": {
+        "nearest_learnable_node_id": "N-004",
+        "evidence_refs": [
+          "SIM-D3",
+          "SIM-D4"
+        ],
+        "rationale": "N-003 已通过而 N-004 的阈值、时间窗、owner 与 stop/go 动作仍不完整；N-004 是后续 MVD 与商业闭环的最近可学习节点。",
+        "alternative_candidate_node_ids": [
+          "N-006"
+        ]
+      },
+      "misconceptions": [
+        {
+          "code": "USAGE_IMPLIES_VALUE",
+          "description": "倾向把 DAU 当作较强价值代理，未始终要求业务基线与反事实。",
+          "evidence_refs": [
+            "SIM-D2"
+          ],
+          "related_node_ids": [
+            "N-007",
+            "N-008"
+          ]
+        },
+        {
+          "code": "STOP_RULE_CAN_STAY_VAGUE",
+          "description": "知道需要停止条件，但未把阈值、时间窗、owner 与失败动作写成可执行规则。",
+          "evidence_refs": [
+            "SIM-D3"
+          ],
+          "related_node_ids": [
+            "N-004"
+          ]
+        }
+      ],
+      "capability_gaps": [
+        {
+          "node_id": "N-004",
+          "description": "价值假设与事前停止条件尚不可稳定判定。",
+          "evidence_refs": [
+            "SIM-D3",
+            "SIM-D4"
+          ]
+        },
+        {
+          "node_id": "N-006",
+          "description": "跨行业上下文 eval、人工覆盖和风险阈值适配不完整。",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D4"
+          ]
+        },
+        {
+          "node_id": "N-012",
+          "description": "独立来源组、刷新周期与远迁移审计不完整。",
+          "evidence_refs": [
+            "SIM-D4"
+          ]
+        }
+      ],
+      "transfer_performance": {
+        "status": "partial",
+        "evidence_refs": [
+          "SIM-D4"
+        ],
+        "summary": "能提高医疗场景的人审和治理要求，但没有完成跨行业阈值、独立来源组与刷新审计。"
+      },
+      "diagnosis_evidence_mapping": [
+        {
+          "conclusion": "角色与适用性边界已形成可用模型。",
+          "evidence_refs": [
+            "SIM-D1",
+            "SIM-D4"
+          ]
+        },
+        {
+          "conclusion": "生产边界与四层证据基础可用。",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D3"
+          ]
+        },
+        {
+          "conclusion": "N-004 的 value/stop 规则是最近前沿。",
+          "evidence_refs": [
+            "SIM-D3",
+            "SIM-D4"
+          ]
+        },
+        {
+          "conclusion": "跨行业迁移仍为 partial。",
+          "evidence_refs": [
+            "SIM-D2",
+            "SIM-D4"
+          ]
+        }
+      ],
+      "items_needing_retest_or_human_confirmation": [
+        {
+          "node_id": "N-004",
+          "kind": "retest",
+          "reason": "用未见场景无提示写出五槽 stop/go 规则。"
+        },
+        {
+          "node_id": "N-006",
+          "kind": "retest",
+          "reason": "补测跨行业上下文 eval、人工覆盖和回滚。"
+        },
+        {
+          "node_id": "N-010",
+          "kind": "retest",
+          "reason": "只有一次退出方向观察，证据不足。"
+        },
+        {
+          "node_id": "N-012",
+          "kind": "retest",
+          "reason": "补测独立来源组、刷新周期与远迁移。"
+        }
+      ],
+      "evidence_validity": {
+        "valid_until": "2026-09-03T00:00:00Z",
+        "stale_evidence_refs": [],
+        "policy": "仅在 mid-score-pass-v1 simulated fixture 内有效；图谱语义变化或到期后失效。"
+      }
+    }
+  },
+  "quality_evaluation": {
+    "rubric_results": [
+      {
+        "dimension": "测量与目标对齐度",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "证据充分性",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "猜对识别",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "提示依赖记录",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "错误分类一致性",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "偏差控制",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "结论可解释性",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      },
+      {
+        "dimension": "诊断素材有效性",
+        "evidence": [
+          "s4-review",
+          "positive_artifact"
+        ],
+        "score": true,
+        "threshold": true,
+        "passed": true,
+        "failure_action": null,
+        "route_to": null
+      }
+    ],
+    "evidence": [
+      "answer.md",
+      "RUN-SIM-MIDPASS-S4-review.md",
+      "learner_snapshot"
+    ],
+    "verdict": "pass",
+    "route_to": "S5"
+  },
+  "document_artifact": {
+    "format": "markdown",
+    "status": "generated",
+    "path": "RUN-SIM-MIDPASS-S4-review.md",
+    "authority": "human_review_primary",
+    "source": {
+      "stage_id": "S4",
+      "run_id": "RUN-SIM-MIDPASS-S4",
+      "artifact_id": "LS-SIM-MIDPASS-v1",
+      "artifact_schema_version": "1.0.0"
+    },
+    "document_profile": "s4_learner_frontier_review",
+    "generation_order": "markdown_before_json",
+    "content_binding": "lossless_semantic_correspondence",
+    "section_mappings": [
+      {
+        "section_id": "S4-SEC-01",
+        "heading": "1. 文档与运行信息",
+        "json_pointers": [
+          "/run_id"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-02",
+        "heading": "2. 上游输入、模型版本与有效性审计",
+        "json_pointers": [
+          "/input_contract"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-03",
+        "heading": "3. 诊断目标、范围与事前判定规则",
+        "json_pointers": [
+          "/processing_record"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-04",
+        "heading": "4. 诊断任务与覆盖设计",
+        "json_pointers": [
+          "/processing_record"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-05",
+        "heading": "5. 学习者行为证据记录",
+        "json_pointers": [
+          "/evidence_collected"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-06",
+        "heading": "6. 节点状态逐项判断",
+        "json_pointers": [
+          "/positive_artifact/content/node_states"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-07",
+        "heading": "7. 错误类型、提示依赖与置信度校准",
+        "json_pointers": [
+          "/positive_artifact/content/node_states"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-08",
+        "heading": "8. 最近学习前沿及候选比较",
+        "json_pointers": [
+          "/positive_artifact/content/learning_frontier"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-09",
+        "heading": "9. 误概念、能力缺口与迁移表现",
+        "json_pointers": [
+          "/positive_artifact/content/misconceptions"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-10",
+        "heading": "10. 待复测、人工确认与恢复条件",
+        "json_pointers": [
+          "/positive_artifact/content/items_needing_retest_or_human_confirmation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-11",
+        "heading": "11. 证据有效期与诊断限制",
+        "json_pointers": [
+          "/positive_artifact/content/evidence_validity"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-12",
+        "heading": "12. G4 质量评价与路由",
+        "json_pointers": [
+          "/quality_evaluation"
+        ],
+        "status": "matched"
+      },
+      {
+        "section_id": "S4-SEC-13",
+        "heading": "13. 输出审计与 JSON 对应表",
+        "json_pointers": [
+          "/document_artifact"
+        ],
+        "status": "matched"
+      }
+    ],
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "markdown_parse": "pass",
+      "required_sections": "pass",
+      "json_correspondence": "pass",
+      "no_placeholders": "pass"
+    },
+    "reason": null
+  },
+  "presentation_artifact": {
+    "format": "html",
+    "status": "generated",
+    "path": "learner-snapshot.html",
+    "authority": "derived_non_authoritative",
+    "source": {
+      "stage_id": "S4",
+      "run_id": "RUN-SIM-MIDPASS-S4",
+      "envelope_schema_version": "1.3.0",
+      "artifact_id": "LS-SIM-MIDPASS-v1",
+      "artifact_schema_version": "1.0.0"
+    },
+    "view_profile": "learner_frontier_diagnostic",
+    "data_binding": "embedded_canonical_envelope",
+    "interaction_mode": "read_only_exploration",
+    "generated_at": "2026-08-04T13:15:00Z",
+    "validation": {
+      "html_parse": "pass",
+      "accessibility_smoke": "pass",
+      "interaction_smoke": "pass"
+    },
+    "reason": null
+  },
+  "traceability": {
+    "source_artifact_ids": [
+      "GOAL-forward-deployed-engineer-v1",
+      "CCG-forward-deployed-engineer-v1"
+    ],
+    "source_evidence_ids": [
+      "SIM-D1",
+      "SIM-D2",
+      "SIM-D3",
+      "SIM-D4",
+      "ASM-004"
+    ],
+    "source_sections": [
+      "answer.md",
+      "../../../stages/s3-capability-graph/assessments.jsonl"
+    ],
+    "fixture_type": "simulated_fixture"
+  },
+  "created_at": "2026-08-04T13:15:00Z"
+}

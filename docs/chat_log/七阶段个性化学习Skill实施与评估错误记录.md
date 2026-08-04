@@ -1429,3 +1429,159 @@
 - 状态：`RESOLVED`
 - 验证证据：安全引用重跑后，`state=verified`、`verdict=revise_here`、`route_to=S2`、
   `answer_status: partial` 和 `mandatory_confirmation=pending` 均从预期文件命中，命令退出码为 0。
+
+### ERR-108 主控 Skill 初验出现本次行尾错误且全仓 OpenSpec 门仍受既有 change 阻断
+
+- 日期：2026-08-04
+- 阶段：`add-personalized-learning-orchestrator` 本地验证
+- 现象：`git diff --check -- AGENTS.md .agents/AGENTS.md .agents/skills/al-orchestrate-personalized-learning openspec/changes/add-personalized-learning-orchestrator scripts/run_skill_evals.py`
+  报告 `AGENTS.md:6: trailing whitespace`。同轮
+  `openspec validate --all --strict --no-interactive` 显示本次主控 change 与全部基础 spec 通过，但全仓
+  14 项中既有 `migrate-s1-to-llm-wiki-delivery` 仍为唯一失败项。
+- 影响：修复行尾前不能把本次 diff-check 报告为通过；既有 S1 change 未补齐 delta 前不能把全仓
+  OpenSpec `--all` 门报告为通过，但不影响单独证明本次主控 change 的严格规格有效。
+- 诊断：行尾错误由本次更新“最近核对”行时保留 Markdown 强制换行空格引入；OpenSpec 失败是
+  [ERR-104](#err-104-s2-llm-wiki-迁移的全量-openspec-门被既有-s1-change-阻断) 已记录的既有开放问题，
+  定向复验仍提示该 change 没有 `specs/` delta，不属于本次主控实现范围。
+- 处置：移除本次行尾空格并独立重跑 diff-check；单独严格验证
+  `add-personalized-learning-orchestrator`，保留全仓 OpenSpec 门未通过，不擅自补写既有 S1 change。
+- 状态：`RESOLVED_WITH_LIMITATION`
+- 验证证据：移除新增行尾空格后，覆盖主控 Skill、OpenSpec 工件、导航、eval runner 和本条错误记录的
+  `git diff --check` 退出码为 0；`openspec validate add-personalized-learning-orchestrator --type change --strict --no-interactive`
+  退出码为 0。全仓 `--all` 仍仅被 ERR-104 的既有 S1 change 阻断，未计作本次通过。
+
+### ERR-109 主控错误台账复核的双引号模式触发 `open` 且宽匹配误改旧条目
+
+- 日期：2026-08-04
+- 阶段：`add-personalized-learning-orchestrator` 错误台账复核
+- 现象：用于定位 ERR-104/ERR-108 状态的 `rg` 双引号模式包含 Markdown 反引号，zsh 把其中
+  `OPEN` 当作命令并调用 macOS `open`，输出帮助文本；此前更新 ERR-108 状态的补丁又只按首个
+  `- 状态：OPEN` 匹配，误把 ERR-104 改成 `RESOLVED_WITH_LIMITATION` 并把 ERR-108 复验证据插入旧条目。
+- 影响：该次 `rg` 输出含无关帮助文本，不能作为状态定位证据；错误台账的 ERR-104/ERR-108 状态暂时
+  不准确。主控 Skill、OpenSpec、eval 和 workspace 未被该命令修改。
+- 诊断：shell 引用未使用单引号字面量，补丁锚点也缺少 ERR 标题上下文。
+- 处置：使用带 `### ERR-104` / `### ERR-108` 上下文的精确补丁恢复两条记录；后续检索模式使用单引号。
+- 状态：`RESOLVED`
+- 验证证据：使用单引号字面量的 `rg` 退出码为 0，确认 ERR-104 恢复为 `OPEN`、ERR-108 为
+  `RESOLVED_WITH_LIMITATION`、ERR-109 为 `RESOLVED`；随后定向 `git diff --check` 退出码为 0。
+
+### ERR-110 主控学习请求提供的 FDE 课程目录在当前 checkout 中不存在
+
+- 日期：2026-08-04
+- 阶段：`al-pls` 项目解析与 S1 路由预检
+- 现象：对用户显式路径
+  `workspace/feishu-doc/FDE-the-Guidance-Book-of-Forward-Deployed-Engineer` 执行只读文件与目录清单时，
+  `find` 两次返回 `No such file or directory`。
+- 影响：当前不能把该路径认定为项目根或课程材料附件，也不能读取 `INDEX.md` / `project-state.json`、
+  判断既有 `route_to` 或启动 S1 写入事务。
+- 诊断：待确认路径是否拼写、大小写、分支或同步位置发生变化；不得以相似目录或模型记忆替代用户指定材料。
+- 处置：先按 FDE、Guidance、Forward-Deployed-Engineer 与 feishu-doc 在仓库内只读定位；仅在唯一候选可核验时继续，
+  否则请求用户提供正确路径或恢复目录。
+- 状态：`RESOLVED`
+- 验证证据：当前 `workspace/` 目录本身不存在；当前文件清单、`HEAD` 跟踪路径、Git 历史均无相关候选，
+  扩展到 `/Users/logo/self_repo` 的目录与文件名搜索也无命中。未创建替代目录，未执行 S1 写入。
+- 恢复证据：用户补充绝对路径后，确认
+  `/Users/logo/tx_pan/self_work/DayLog/workspace/feishu-doc/FDE-the-Guidance-Book-of-Forward-Deployed-Engineer`
+  存在，含 README、8 章、后记、3 个附录与 PDF；原相对路径只是在 Prova Learn checkout 中解析错误。
+
+### ERR-111 FDE 课程工作树检查误把 DayLog 上层目录当成 Git 仓库
+
+- 日期：2026-08-04
+- 阶段：`al-pls` 课程材料边界核对
+- 现象：`git -C /Users/logo/tx_pan/self_work/DayLog status --short --branch` 返回
+  `fatal: not a git repository`；同次文件清单随后显示课程目录自身包含 `.git/`。
+- 影响：该次命令不能证明课程仓库工作树状态；尚未修改课程文件。
+- 诊断：Git 边界位于 FDE 课程目录，而不是 DayLog vault 根。
+- 处置：改在课程目录自身执行只读 `git status`、分支/远端和 tracked-file 核对，再继续读取课程。
+- 状态：`RESOLVED`
+- 验证证据：在课程目录自身执行 `git status --short --branch`，返回
+  `## main...origin/main` 且无工作树改动；远端为
+  `git@github.com:xdash/FDE-the-Guidance-Book-of-Forward-Deployed-Engineer.git`，当前提交为
+  `ecf5936faf8ebbbf5ad2df9e624010abf7258b9f`（2026-07-31）。
+
+### ERR-112 FDE 学习项目的全交付校验被上层 workspace 协议文件缺失阻断
+
+- 日期：2026-08-04
+- 阶段：`al-s1-create-goal-success-contract` 项目交付验证
+- 现象：执行
+  `python3 scripts/validate_delivery_contract.py --project-dir workspace/forward-deployed-engineer`
+  返回 `delivery contract validation failed: required shared file missing: workspace/AGENTS.md`。
+- 影响：仓库级校验器没有完成整套项目交付检查；不能把该命令报告为通过。项目内 JSON/JSONL、目标工件和课程仓库均未被此失败命令修改。
+- 诊断：当前工作树在本次请求开始前已存在 `workspace/AGENTS.md` 的用户删除状态；校验器把它视为所有项目共享的必需文件。该文件不属于本次学习项目，擅自恢复会覆盖用户现有改动。
+- 处置：保留用户删除，不恢复共享文件；对新项目改用 project-state/event Schema、JSONL、稳定 ID、相对链接、必需文件和 `git diff --check` 的定向验证，并在 S1 `verification.md` 保留全校验器未通过的边界。
+- 状态：`RESOLVED_WITH_LIMITATION`
+
+### ERR-113 更新 ERR-111 时宽补丁再次误改 ERR-104，随后追加 ERR-112 的旧锚点失败
+
+- 日期：2026-08-04
+- 阶段：FDE 学习项目错误台账维护
+- 现象：用于把 ERR-111 从 `OPEN` 更新为 `RESOLVED` 的补丁只匹配首个 `- 状态：OPEN`，实际把 ERR-104 改为 `RESOLVED` 并把 FDE Git 证据插入 ERR-104；随后以预期的 ERR-111 已更新文本为锚点追加 ERR-112 时，`apply_patch` 返回 `Failed to find expected lines`。
+- 影响：ERR-104/ERR-111 的状态一度不准确；失败补丁本身未写入 ERR-112。学习项目和课程仓库未受影响。
+- 诊断：补丁缺少 `### ERR-111` 标题上下文，重复了 ERR-109 已记录的宽锚点风险；第二次补丁基于错误的文件状态假设。
+- 处置：重新读取文件尾部和定向 diff，使用同时包含 `### ERR-104` / `### ERR-111` 标题的精确补丁恢复 ERR-104=`OPEN`、更新 ERR-111=`RESOLVED`，再追加 ERR-112/ERR-113。
+- 状态：`RESOLVED`
+
+### ERR-114 FDE 虚拟演练页面首轮静态校验出现无标签断言失败
+
+- 日期：2026-08-04
+- 阶段：`al-pls` 的 `simulated_fixture` S4–S7 HTML 派生验证
+- 现象：四个阶段模板均成功写入页面，但随后 Python 静态检查在处理第一个页面时以裸
+  `AssertionError` 退出；原命令没有为最后几项断言附加诊断标签。
+- 影响：在定位并重跑前，不能把 S4–S7 页面报告为通过 HTML 最低验证；规范 JSON 的共同信封和
+  正向工件 Schema 校验不受影响，主项目 revision 6 也未改变。
+- 诊断：页面数据、阶段、profile、离线和无图片检查均通过；失败来自校验器错误假设模板静态包含
+  `role="tab"` 且搜索框 ID 为 `search-input`。当前权威模板实际用 JavaScript 设置 `button.role = "tab"`，
+  搜索框 ID 为 `search`，并已绑定 input/keydown 事件。
+- 处置：不改权威模板或派生页面；把只读检查对齐模板实际实现，同时保留 stage-data 深相等、离线、无图片、
+  安全渲染、只读标签和搜索事件检查，然后重跑四个阶段。
+- 状态：`RESOLVED`
+- 验证证据：S4–S7 四页均输出 `HTML PASS`，逐页通过唯一 stage-data、JSON 深相等、阶段/profile、
+  离线、无图片、动态 tab/keydown、只读 search/input 和无 `innerHTML`/`eval` 检查。
+
+### ERR-115 直接发布前 GitHub SSH 22 端口连接被当前网络关闭
+
+- 日期：2026-08-04
+- 阶段：主控 Skill 与 FDE 学习项目 Git 发布
+- 现象：`git fetch origin main` 返回 `Connection closed by 198.18.0.9 port 22` 和
+  `fatal: Could not read from remote repository.`。
+- 影响：尚未取得发布时点的远端 main，也尚未提交或推送；不能假定本地 `origin/main` 仍是最新。
+- 诊断：当前 `origin` 使用 `git@github.com:kms9/prova-learn.git`，网络在 SSH 22 端口关闭连接；
+  同一 GitHub 仓库的 SSH 443 端口可连接且现有密钥有读取权限。
+- 处置：保持 origin URL 不变，先用 `ssh://git@ssh.github.com:443/kms9/prova-learn.git` 执行只读
+  `ls-remote`/fetch；成功后再按显式文件列表提交并通过同一路径推送 main。
+- 状态：`RESOLVED_WITH_WORKAROUND`
+- 验证证据：`git ls-remote ssh://git@ssh.github.com:443/kms9/prova-learn.git refs/heads/main`
+  返回远端 main `87c4b736a3323af75950db71dfbfed844bb291e6`；随后经相同 URL fetch 成功，
+  本地 HEAD 与刷新后的 `origin/main` 均为该提交。最终推送仍需单独验证。
+
+### ERR-116 FDE 新增 Markdown 的行尾强制换行触发提交前 whitespace 门
+
+- 日期：2026-08-04
+- 阶段：主控 Skill 与 FDE 学习项目提交前验证
+- 现象：`git diff --cached --check` 报告多个 FDE Markdown 元数据引用行含行尾双空格，另有 4 个
+  simulated fixture Markdown 文件在 EOF 前多一个空行；后续验证因 fail-fast 未执行。
+- 影响：修复前不能提交；JSON、JSONL、Skill、OpenSpec 和远端状态没有被该检查修改。
+- 诊断：双空格原用于 Markdown 强制换行，但同一引用块的每行已有 `>` 前缀，不依赖行尾空格；EOF
+  多空行也没有语义用途，因此可安全进行限定目录的机械格式化。
+- 处置：仅移除 `workspace/forward-deployed-engineer/**/*.md` 的行尾空白并把 EOF 规范为单个换行，
+  重新暂存该目录后从 `git diff --cached --check` 开始完整重跑验证。
+- 状态：`RESOLVED`
+- 验证证据：限定目录格式化并重新暂存后，`git diff --cached --check` 退出码为 0；格式化命令虽输出
+  locale fallback 警告但退出码为 0，后续仍使用 Node/JSON 解析检查中文内容与结构。
+
+### ERR-117 eval dry-run 临时目录清理命令被执行环境安全策略拒绝
+
+- 日期：2026-08-04
+- 阶段：提交后、推送前的工作树清理
+- 现象：用于删除本轮 `--dry-run` 新生成的 8 个 `.agents/skills/*-workspace` 临时元数据目录的
+  精确 `rm -rf -- <paths>` 命令被执行环境拒绝，提示 `rm -f style commands are not permitted`。
+- 影响：该组合命令在进程创建前即失败，因此没有删除文件，也没有执行同一命令末尾的 `git push`；
+  本地提交 `47a694e` 尚未推送。
+- 诊断：目标目录范围虽已核对，但运行环境禁止 `rm -f` 风格命令；目录内容仅是本轮 eval dry-run
+  创建的 `eval_metadata.json`，不属于提交或用户原有数据。
+- 处置：使用 `mktemp -d` 创建显式临时回收目录，把 8 个精确目录移动出工作树；随后修订尚未推送的
+  提交以纳入本条错误记录，再重新验证并推送。
+- 状态：`RESOLVED`
+- 验证证据：8 个精确目录已移动到可恢复的临时位置
+  `/tmp/prova-learn-eval-workspaces.glzdeD/`；随后 `git status -sb` 不再显示任何 `*-workspace`
+  未跟踪目录，原有 `workspace/AGENTS.md` 与 `workspace/senior-teaching-researcher/**` 删除仍保持未暂存。

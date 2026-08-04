@@ -1,0 +1,75 @@
+{
+  "skill_name": "al-orchestrate-personalized-learning",
+  "evals": [
+    {
+      "id": 1,
+      "label": "new-goal-routes-s1",
+      "execution_mode": "orchestrator",
+      "prompt": "只调用主控 Skill 帮我开始一个新学习项目：我想学会为线上 PostgreSQL 慢查询做可靠诊断，但我还没定义成功标准。请决定阶段并告诉我下一步。",
+      "expected_output": "Select and execute S1, preserve research and mandatory confirmation boundaries, then give a concrete next action through the orchestrator.",
+      "files": [],
+      "expectations": [
+        "把新学习目标路由到 S1 / al-s1-create-goal-success-contract，而不是要求用户自己选择阶段。",
+        "不把未定义的成功标准补造成已确认事实，也不声称 G1 已通过。",
+        "区分已选择、已执行、pending 或 blocked，并以实际可核验状态汇报。",
+        "下一步给出具体的目标/验收确认问题，并保持 al-orchestrate-personalized-learning 为用户入口。"
+      ]
+    },
+    {
+      "id": 2,
+      "label": "continue-uses-project-route",
+      "execution_mode": "orchestrator",
+      "prompt": "继续这个项目。给定已核验 project-state：project_revision=12，current_stage=S4，route_to=S4；G1/G3 pass，S4 前置通过但还没有学习者真实诊断回答。",
+      "expected_output": "Use the verified route to select S4 and stop pending on a concrete learner task.",
+      "files": [],
+      "expectations": [
+        "按已核验 project-state.route_to=S4 选择 al-s4-diagnose-learner-frontier。",
+        "识别为前置通过但等待真实学习者回答的 pending，而不是 blocked 或 completed。",
+        "不模拟学习者回答，不自动调用 S5。",
+        "向用户展示要亲自完成的具体诊断任务，并说明回答后仍由主控继续。"
+      ]
+    },
+    {
+      "id": 3,
+      "label": "material-goal-change-routes-s1",
+      "execution_mode": "orchestrator",
+      "prompt": "项目当前 route_to=S6，但我不再想学 PostgreSQL 调优了，目标改成通过 Kubernetes CKA，并把最终验收改成限时集群排障。请继续。",
+      "expected_output": "Override the current downstream route and send the material goal change to S1.",
+      "files": [],
+      "expectations": [
+        "识别领域、目标结果与最终验收的实质变化并优先路由 S1。",
+        "不按旧 route_to=S6 开始教学，也不复用旧目标的下游状态作为新目标前置。",
+        "要求 S1 创建新目标版本或在边界完全不同时让用户决定新项目，并保留下游失效语义。",
+        "给出需要确认的新目标范围和验收问题。"
+      ]
+    },
+    {
+      "id": 4,
+      "label": "single-stage-missing-project",
+      "execution_mode": "orchestrator",
+      "prompt": "没有任何 workspace 项目。我只想让主控现在直接进入教学阶段教我向量数据库；没有要求从头补齐完整流程。",
+      "expected_output": "Select S6 once, preserve its project_missing route to S1, and do not fabricate a project or lesson.",
+      "files": [],
+      "expectations": [
+        "把教学语义选为 S6，但保持默认 single_stage。",
+        "执行或表达 S6 的独立调用语义 project_missing、workspace_write=none、route_to=S1。",
+        "不创建孤立 S6 工件、不开始教学、不把裸主题当作 G2-G5 已通过。",
+        "下一步解释需先校准目标，并继续通过主控进入 S1。"
+      ]
+    },
+    {
+      "id": 5,
+      "label": "guided-flow-stops-for-real-input",
+      "execution_mode": "orchestrator",
+      "prompt": "请按完整流程补齐前置并继续。给定项目的 S1-S5 均 completed、G1-G5 pass、route_to=S6，S5 mandatory confirmation 已完成；S6 已生成活动但等待学习者亲自回答。",
+      "expected_output": "Enter guided flow at S6 and stop for learner input before S7.",
+      "files": [],
+      "expectations": [
+        "使用 guided_flow 并按已验证 route_to 进入 S6，不重复运行已完成的 S1-S5。",
+        "在 S6 等待真实学习者回答时立即停止，不代写回答，也不调用 S7。",
+        "报告阶段 pending、停止原因和实际证据入口；没有落盘证据时明确证据缺口。",
+        "直接展示当前活动或要求的回答，并保持主控为下一轮入口。"
+      ]
+    }
+  ]
+}
