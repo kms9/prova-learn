@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prova-learn.local/schemas/project-event-1.0.0.json",
+  "title": "prova_learn_project_event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "project_id",
+    "conversation_id",
+    "stage_id",
+    "actor",
+    "occurred_at",
+    "immutable",
+    "refs",
+    "payload"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "event_id": {"type": "string", "pattern": "^EVT-[A-Za-z0-9._-]+$"},
+    "event_type": {
+      "enum": [
+        "conversation_started",
+        "conversation_turn",
+        "tool_result_recorded",
+        "user_confirmation",
+        "source_added",
+        "evidence_added",
+        "artifact_created",
+        "artifact_updated",
+        "artifact_superseded",
+        "gate_evaluated",
+        "learner_observation",
+        "strategy_selected",
+        "instruction_event",
+        "mastery_evidence_added",
+        "learner_model_updated",
+        "route_decided",
+        "project_state_changed",
+        "artifact_migrated",
+        "version_conflict",
+        "conversation_closed"
+      ]
+    },
+    "project_id": {"type": "string", "pattern": "^PRJ-[A-Za-z0-9._-]+$"},
+    "conversation_id": {"type": "string", "pattern": "^CONV-[A-Za-z0-9._-]+$"},
+    "stage_id": {"enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7"]},
+    "actor": {"enum": ["learner", "teacher", "agent", "tool", "system", "reviewer"]},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "immutable": {"const": true},
+    "expected_project_revision": {"type": ["integer", "null"], "minimum": 1},
+    "resulting_project_revision": {"type": ["integer", "null"], "minimum": 1},
+    "provenance": {
+      "enum": [
+        "learner_behavior",
+        "user_provided_unverified",
+        "external_evidence",
+        "market_signal",
+        "model_hypothesis",
+        "system_state",
+        "tool_observation"
+      ]
+    },
+    "refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "payload": {"type": "object"},
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applied", "reason"],
+      "properties": {
+        "applied": {"type": "boolean"},
+        "reason": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

@@ -16,12 +16,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate canonical stage delivery contract
+      - name: Compile workspace tools
+        run: >-
+          python3 -m py_compile
+          scripts/validate_delivery_contract.py
+          scripts/init_project_workspace.py
+      - name: Validate canonical project Wiki contract
         run: python3 scripts/validate_delivery_contract.py
-      - name: Validate checked-in S1/S2 example run
+      - name: Initialize and validate a project workspace
+        run: |
+          tmp_root="$(mktemp -d)"
+          python3 scripts/init_project_workspace.py ci-learning-project \
+            --title "CI Learning Project" \
+            --workspace-root "$tmp_root"
+          python3 scripts/validate_delivery_contract.py \
+            --project-dir "$tmp_root/ci-learning-project"
+      - name: Validate checked-in legacy S1/S2 run
         run: >-
           python3 scripts/validate_delivery_contract.py
-          --run-dir workspace/senior-teaching-researcher/runs/run-20260727-234421
+          --legacy-run-dir workspace/senior-teaching-researcher/runs/run-20260727-234421
       - name: Parse all JSON files
         run: |
           python3 - <<'PY'
