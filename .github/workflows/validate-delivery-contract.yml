@@ -16,13 +16,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Compile workspace tools
         run: >-
           python3 -m py_compile
           scripts/validate_delivery_contract.py
           scripts/init_project_workspace.py
+          scripts/migrate_legacy_run.py
+          scripts/validate_legacy_migration.py
+
       - name: Validate canonical project Wiki contract
         run: python3 scripts/validate_delivery_contract.py
+
       - name: Initialize and validate a project workspace
         run: |
           tmp_root="$(mktemp -d)"
@@ -31,10 +36,46 @@ jobs:
             --workspace-root "$tmp_root"
           python3 scripts/validate_delivery_contract.py \
             --project-dir "$tmp_root/ci-learning-project"
+
+      - name: Migrate legacy run without modifying source
+        run: |
+          legacy="workspace/senior-teaching-researcher/runs/run-20260727-234421"
+          tmp_root="$(mktemp -d)"
+          python3 - "$legacy" > "$tmp_root/source-before.sha256" <<'PY'
+          import hashlib, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          for path in sorted(p for p in root.rglob('*') if p.is_file()):
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              print(digest, path.relative_to(root))
+          PY
+
+          python3 scripts/migrate_legacy_run.py "$legacy" \
+            --project-slug ci-migrated-project \
+            --title "CI Migrated Project" \
+            --workspace-root "$tmp_root"
+
+          python3 scripts/validate_delivery_contract.py \
+            --project-dir "$tmp_root/ci-migrated-project"
+          python3 scripts/validate_legacy_migration.py \
+            --project-dir "$tmp_root/ci-migrated-project" \
+            --legacy-run-dir "$legacy"
+
+          python3 - "$legacy" > "$tmp_root/source-after.sha256" <<'PY'
+          import hashlib, sys
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          for path in sorted(p for p in root.rglob('*') if p.is_file()):
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              print(digest, path.relative_to(root))
+          PY
+          diff -u "$tmp_root/source-before.sha256" "$tmp_root/source-after.sha256"
+
       - name: Validate checked-in legacy S1/S2 run
         run: >-
           python3 scripts/validate_delivery_contract.py
           --legacy-run-dir workspace/senior-teaching-researcher/runs/run-20260727-234421
+
       - name: Parse all JSON files
         run: |
           python3 - <<'PY'
