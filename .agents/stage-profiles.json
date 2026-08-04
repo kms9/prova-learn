@@ -1,6 +1,18 @@
 {
   "schema_version": "1.0.0",
   "stages": {
+    "S1": {
+      "stage_id": "S1",
+      "name": "目标校准",
+      "purpose": "把学习诉求、真实使用场景、外部预检、可观察能力、验收方式和用户确认编译为项目级目标契约。",
+      "gate": "G1",
+      "stage_dir": "stages/s1-goal-contract",
+      "prerequisites": [],
+      "normal_route": "S2",
+      "required_stage_files": ["goal-contract.md","research-brief.md","sources.jsonl","evidence-table.md","coverage.md","capabilities.jsonl","terminology.jsonl","confirmation.md"],
+      "business_rules": ["创建或定位项目，记录 conversation。","执行真实外部预检并区分证据角色。","形成可观察能力、未见验收、范围、约束与排除项。","mandatory 确认后执行 G1、verification 和项目 revision 事务。"],
+      "fail_closed": ["无项目时只有 S1 可以创建。","无联网或确认未完成时保持 S1。","模型假设、市场信号和裸材料不得冒充已验证事实。"]
+    },
     "S2": {
       "stage_id": "S2",
       "name": "领域取证与逐题回答",
