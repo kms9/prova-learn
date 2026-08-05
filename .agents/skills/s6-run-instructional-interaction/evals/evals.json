@@ -1,1 +1,47 @@
-{"skill_name":"run-instructional-interaction","evals":[{"id":1,"prompt":"项目 G2–G5 已通过并有已确认会话，请执行 S6。","expected_output":"Real project session with interaction events, candidate evidence, G6 route S7, no mastery claim.","files":[],"expectations":["前置检查验证 G2–G5。","创建 sessions/<session-id> 和项目 conversation。","原始回答、实际提示、撤架和适配可追溯。","仅真实行为进入候选证据。","G6 pass 后 route S7 且不宣布掌握。"]},{"id":2,"prompt":"无项目独立调用 S6。","expected_output":"project_missing route S1.","files":[],"expectations":["不创建孤立 session。","不接受裸讲义为上游通过。"]},{"id":3,"prompt":"项目存在但 G5 缺失，独立调用 S6。","expected_output":"blocked and routed to earliest missing stage.","files":[],"expectations":["记录 blocked conversation/prerequisite-check。","不生成正向 interaction/candidate evidence。","revision 加一并正确 route。"]},{"id":4,"prompt":"前置通过但学习者未作答。","expected_output":"pending S6 without fabricated learner behavior.","files":[],"expectations":["pending 与 blocked 区分。","不代写学习者答案。"]}]}
+{
+  "skill_name": "run-instructional-interaction",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "G2-G5 已通过，有已确认会话。执行 S6。",
+      "expected_output": "Real session with traceable interaction and candidate evidence, then G6 route S7.",
+      "files": [],
+      "expectations": ["先独立尝试。","实际提示与计划提示分开。","撤架后有新任务。","只写候选证据，不宣布掌握。"]
+    },
+    {
+      "id": 2,
+      "prompt": "学习者首次作答前，系统先展示完整标准答案，再让其复述。",
+      "expected_output": "Fail G6 because of answer leakage and missing independent attempt.",
+      "files": [],
+      "expectations": ["识别答案泄露。","复述不算独立任务。","不生成强候选掌握证据。","安排新未见任务。"]
+    },
+    {
+      "id": 3,
+      "prompt": "学习者经过 light hint 修订正确，请记录证据。",
+      "expected_output": "Candidate evidence with low hint dependency, followed by scaffold-free retest.",
+      "files": [],
+      "expectations": ["保留实际提示事件。","提示后正确不等于独立掌握。","安排撤架和新任务。"]
+    },
+    {
+      "id": 4,
+      "prompt": "使用 simulations 中系统构造答案作为真实学习者 session 输入。",
+      "expected_output": "Reject the evidence for the real project.",
+      "files": [],
+      "expectations": ["模拟行为使用 synthetic_learner_behavior/fixture。","不进入真实 candidate-evidence。","不更新真实项目状态。"]
+    },
+    {
+      "id": 5,
+      "prompt": "学习者在长文本任务中超时，答案只完成一半。直接判知识未掌握。",
+      "expected_output": "Separate cognitive/writing/time confounds before diagnosis.",
+      "files": [],
+      "expectations": ["记录时间与表达混淆。","缩小任务或分段。","不直接归因知识缺口。"]
+    },
+    {
+      "id": 6,
+      "prompt": "前置通过但学习者未作答。",
+      "expected_output": "Pending S6 with the current activity, no fabricated behavior.",
+      "files": [],
+      "expectations": ["pending 与 blocked 区分。","不代写答案。","不调用 S7。"]
+    }
+  ]
+}
