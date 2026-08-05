@@ -1,1 +1,47 @@
-{"skill_name":"diagnose-learner-frontier","evals":[{"id":1,"prompt":"项目 G1/G3 已通过且有真实学习者回答，请执行 S4。","expected_output":"Project Wiki diagnosis transaction with observations, model events, G4 and route S5.","files":[],"expectations":["prerequisite-check 验证 G1/G3。","原始回答和行为观察进入 conversation/JSONL。","快照、误概念、复测和模型事件可追溯。","多项证据区分独立与迁移。","G4 pass 后 route S5。"]},{"id":2,"prompt":"无项目独立调用 S4。","expected_output":"project_missing route S1.","files":[],"expectations":["不创建孤立快照。","不把裸回答当已验证模型。"]},{"id":3,"prompt":"项目 G3 缺失，独立调用 S4。","expected_output":"blocked and routed upstream.","files":[],"expectations":["记录 prerequisite-check 和 blocked conversation。","不生成正向 observation。","route 最早缺失阶段。"]},{"id":4,"prompt":"前置通过但学习者尚未回答。","expected_output":"pending S4 with diagnostic plan, no simulated response.","files":[],"expectations":["pending 与 blocked 区分。","不伪造 learner behavior。"]}]}
+{
+  "skill_name": "diagnose-learner-frontier",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "G1/G3 已通过但没有真实回答。生成 S4 诊断计划。",
+      "expected_output": "Pending S4 with an 8–12 minute screen and adaptive probes.",
+      "files": [],
+      "expectations": ["第一层高信息短筛查。","第二层仅按需追加。","未测节点保持 unknown。","不模拟学习者行为。"]
+    },
+    {
+      "id": 2,
+      "prompt": "只有一个覆盖五个节点的开放题回答，整题表现不错，没有子项映射。请更新 learner snapshot。",
+      "expected_output": "Do not mark five nodes tested_mastered; keep evidence insufficient/retest.",
+      "files": [],
+      "expectations": ["要求子项—指标—节点映射。","单个复合回答不能直接产生多个 mastered。","必要时回 S3 修测评。","不推进 S5。"]
+    },
+    {
+      "id": 3,
+      "prompt": "N-004 有一项无提示正确回答，但没有第二项观察、迁移或延迟复测。",
+      "expected_output": "candidate_mastery or insufficient_evidence, not tested_mastered.",
+      "files": [],
+      "expectations": ["执行 minimum observations。","安排新任务复测。","不把自评或高置信度补足证据。"]
+    },
+    {
+      "id": 4,
+      "prompt": "证据审计题要求学习者不查资料判断一份从未见过的报告是否 preliminary。",
+      "expected_output": "Provide a source card and measure evidence judgment rather than recall/search.",
+      "files": [],
+      "expectations": ["消除记忆构念污染。","来源卡含角色、托管与方法边界。","按子项记录判断。"]
+    },
+    {
+      "id": 5,
+      "prompt": "真实项目 G4 blocked，但 simulations 下有虚拟答案和 pass 快照。",
+      "expected_output": "Ignore fixture for the real learner and remain pending S4.",
+      "files": [],
+      "expectations": ["模拟使用 synthetic/fixture 语义。","不写真实 learner snapshot。","不更新 active model。","要求真实回答。"]
+    },
+    {
+      "id": 6,
+      "prompt": "第一层已形成可靠最近前沿，但还有一半非关键节点未测。",
+      "expected_output": "G4 may pass with unknown nodes if the frontier is usable and traceable.",
+      "files": [],
+      "expectations": ["不要求100%覆盖。","unknown 不等于未掌握。","S5 可区分已证实和未测状态。"]
+    }
+  ]
+}
