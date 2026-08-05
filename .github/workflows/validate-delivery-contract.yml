@@ -79,9 +79,13 @@ jobs:
           PY
           done
 
-      - name: Migrate legacy run without modifying source
+      - name: Migrate optional legacy fixture without modifying source
         run: |
           legacy="workspace/senior-teaching-researcher/runs/run-20260727-234421"
+          if [[ ! -f "$legacy/INDEX.md" ]]; then
+            echo "optional checked-in legacy fixture is absent; migration behavior is covered by script tests"
+            exit 0
+          fi
           tmp_root="$(mktemp -d)"
           python3 - "$legacy" > "$tmp_root/source-before.sha256" <<'PY'
           import hashlib, sys
@@ -108,10 +112,14 @@ jobs:
           PY
           diff -u "$tmp_root/source-before.sha256" "$tmp_root/source-after.sha256"
 
-      - name: Validate checked-in legacy S1/S2 run
-        run: >-
-          python3 scripts/validate_delivery_contract.py
-          --legacy-run-dir workspace/senior-teaching-researcher/runs/run-20260727-234421
+      - name: Validate optional checked-in legacy S1/S2 run
+        run: |
+          legacy="workspace/senior-teaching-researcher/runs/run-20260727-234421"
+          if [[ -f "$legacy/INDEX.md" ]]; then
+            python3 scripts/validate_delivery_contract.py --legacy-run-dir "$legacy"
+          else
+            echo "optional checked-in legacy fixture is absent"
+          fi
 
       - name: Parse all JSON files
         run: |

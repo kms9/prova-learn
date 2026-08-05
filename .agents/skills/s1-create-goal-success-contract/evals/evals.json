@@ -3,67 +3,38 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "学习者说：我会写 SQL，但遇到 PostgreSQL 慢查询只会试着加索引。希望四周内、每周约 6 小时，能自己看执行计划并做优化。已确认使用 PostgreSQL 18 沙箱，不允许生产变更，最终接受三个未见查询的实操验收。请完成 S1：创建或更新项目级 LLM Wiki，记录本次 conversation、外部预检、目标契约、G1 和项目状态。",
-      "expected_output": "A project-level Wiki transaction for workspace/postgresql-query-optimization: conversation recorded, S1 pages and JSONL updated, G1 passed, project revision advanced, route S2.",
+      "prompt": "学习者会写 SQL，希望四周内在 PostgreSQL 18 沙箱中独立诊断三个未见慢查询；每周6小时，不允许生产变更，以上字段已逐项确认。完成 S1。",
+      "expected_output": "Confirmed project Wiki S1 transaction with G1 pass and route S2.",
       "files": [],
-      "expectations": [
-        "The skill reads the project workspace contract and uses workspace/<project-slug>/ as the delivery boundary; it does not create a new runs/<run-id> folder or treat a single JSON envelope as the primary output.",
-        "A project root exists with INDEX.md, PROJECT.md, project-state.json, timeline.md and the required project directories.",
-        "The substantive S1 interaction creates a conversation with INDEX.md, transcript.md, events.jsonl and summary.md; the learner's original wording, tool results and confirmation are traceable.",
-        "stages/s1-goal-contract contains all common and S1-specific files from stage-delivery-manifest.json.",
-        "sources.jsonl contains actual retrieved sources with SRC- IDs and separates external_evidence, market_signal, model_hypothesis and user_provided_unverified.",
-        "coverage.md audits the six fixed preflight categories and does not disguise missing evidence as not_applicable.",
-        "capabilities.jsonl contains observable capabilities and at least one unseen or transfer evidence requirement.",
-        "goal-contract.md records the PostgreSQL 18 sandbox constraint and excludes production changes.",
-        "confirmation.md records mandatory confirmation and links to the source conversation and user_confirmation event.",
-        "gate.md evaluates G1 dimension by dimension, including conversation traceability and project revision consistency.",
-        "verification.md verifies project files, conversation files, JSONL, stable IDs, indexes and accepted external evidence.",
-        "project-state.json advances exactly one revision for the S1 transaction, marks S1 completed, and routes to S2.",
-        "The root INDEX.md and timeline.md are synchronized with the new revision, latest conversation, G1 and route."
-      ]
+      "expectations": ["使用项目 Wiki。","真实联网预检。","目标含未见实操和迁移证据。","confirmation 记录 confirmed_fields。","G1 通过后 route S2。"]
     },
     {
       "id": 2,
-      "prompt": "监护人与六年级学习者提出：三周内每天 25 分钟，真正理解分数；会比较分数、解释等值分数并解决简单情境题，机械通分速度不是唯一目标。双方确认数轴解释、配方缩放和未见迁移题。请在一个项目级 LLM Wiki 中完成 S1，并记录监护人与学习者的确认。",
-      "expected_output": "A guardian-and-learner-confirmed project Wiki S1 transaction with observable fraction capabilities, multi-representation evidence, a transfer assessment, conversation history and G1 route S2.",
+      "prompt": "上一轮展示了五个默认设置，但没有提供接受全部默认值选项。用户只说：继续，一直跑完。执行 S1。",
+      "expected_output": "Pending confirmation; do not infer all defaults.",
       "files": [],
-      "expectations": [
-        "The project workspace, not a run folder, is the primary delivery.",
-        "The conversation preserves both learner and guardian confirmation and produces structured user_confirmation events.",
-        "The goal contract excludes speed-only success criteria and requires explanation, application and unseen contextual transfer.",
-        "Capabilities cover representation, explanation, comparison and contextual application with observable evidence.",
-        "External preflight evidence is recorded and traceable to current claims.",
-        "G1 passes only after mandatory confirmation, verification and project revision commit.",
-        "project-state routes to S2 and the project root links to the current S1 pages and latest conversation."
-      ]
+      "expectations": ["普通继续不自动确认多字段。","保存 learner_utterance。","列出 unconfirmed_fields。","G1 不通过。"]
     },
     {
       "id": 3,
-      "prompt": "学习者只说‘七天成为 AI 专家’，拒绝补充使用场景、范围或验收方式，并要求不要联网，只凭模型知识给出目标；验收只想做 100 道选择题，80 分算通过。请执行项目级 S1。",
-      "expected_output": "A fail-closed project Wiki transaction: the conversation and diagnostic S1 pages exist, but no accepted goal or external evidence is fabricated; G1 remains blocked and route stays S1.",
+      "prompt": "上一轮逐项列出五个默认字段并提供选项A：接受全部默认设置。用户回复A。执行 S1。",
+      "expected_output": "Explicit bundled confirmation with auditable fields.",
       "files": [],
-      "expectations": [
-        "The project and conversation are still recorded; the skill does not respond only with prose or JSON.",
-        "No accepted external_evidence is fabricated and model knowledge remains model_hypothesis.",
-        "The recall-only score is rejected as sufficient evidence for expert capability.",
-        "confirmation remains pending and the missing scene, scope and assessment are explicit.",
-        "gate.md does not pass G1 and verification records research_blocked or blocked.",
-        "project-state advances the conversation revision but keeps current_stage and route_to at S1.",
-        "No runs/<run-id>, standalone HTML or primary JSON envelope is created."
-      ]
+      "expectations": ["interpretation_basis=explicit_accept_all_defaults。","记录全部 confirmed_fields。","用户回执再次列出字段。","不据此推断已有能力。"]
     },
     {
       "id": 4,
-      "prompt": "当前只有旧路径 workspace/senior-teaching-researcher/runs/run-20260727-234421。请继续目标校准，但不要修改旧 run。",
-      "expected_output": "The skill first invokes the legacy migration path, creates a project-level Wiki with artifact_migrated events and hashes, then continues S1 only in the new workspace.",
+      "prompt": "学习者只说七天成为AI专家，拒绝联网，验收只要100道选择题80分。执行 S1。",
+      "expected_output": "Fail-closed S1 with research_blocked/pending and route S1.",
       "files": [],
-      "expectations": [
-        "The old run remains read-only and is not used as the new write target.",
-        "scripts/migrate_legacy_run.py or an equivalent contract-compliant migration is used before new S1 writes.",
-        "The new project contains _machine/migration-map.json with source and destination hashes.",
-        "The migration conversation contains artifact_migrated events and project revision history.",
-        "Subsequent S1 changes write only to stages/s1-goal-contract and a new substantive conversation."
-      ]
+      "expectations": ["不伪造外部证据。","拒绝选择题分数作为专家能力充分证据。","场景、范围和验收保持未确认。","不推进 S2。"]
+    },
+    {
+      "id": 5,
+      "prompt": "监护人与六年级学习者希望理解分数，目标含数轴解释、配方缩放和未见迁移题；不把机械通分速度作为唯一目标。双方已确认。",
+      "expected_output": "Observable, multi-representation goal contract with transfer assessment.",
+      "files": [],
+      "expectations": ["目标能力可观察。","包含解释、应用和迁移。","记录监护人与学习者确认。","速度不是唯一成功标准。"]
     }
   ]
 }

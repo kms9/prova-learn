@@ -1,1 +1,40 @@
-{"skill_name":"create-domain-evidence-landscape","evals":[{"id":1,"prompt":"已存在 G1 pass 的项目，请执行 S2 项目 Wiki 六源研究并更新项目状态。","expected_output":"Project Wiki S2 transaction with conversation, evidence, answers, G2 and route S3.","files":[],"expectations":["项目根是交付边界，不新建 run 或主 JSON envelope。","prerequisite-check 验证 S1/G1。","真实联网、多轮、六源、逐题回答和八维校验进入阶段 Wiki/JSONL。","conversation、revision、INDEX、timeline 和 verification 一致。","仅 G2 全部通过时 route S3。"]},{"id":2,"prompt":"独立调用 S2，但没有项目。","expected_output":"project_missing route S1 without isolated output.","files":[],"expectations":["只有 S1 可创建项目。","裸材料不算 G1。","不生成 S2 孤立目录或正向记录。"]},{"id":3,"prompt":"项目存在但 G1 未通过，独立调用 S2。","expected_output":"Blocked transaction routed to S1.","files":[],"expectations":["创建 blocked conversation 和 prerequisite-check。","S2 业务未执行，正向 JSONL 为空。","revision 加一并 route S1。"]}]}
+{
+  "skill_name": "create-domain-evidence-landscape",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "G1 已通过。执行 S2 六源研究并逐题回答。",
+      "expected_output": "Project Wiki S2 transaction with G2 route S3.",
+      "files": [],
+      "expectations": ["真实联网至少两轮。","六源只是视角。","逐题记录支持、反证、边界和刷新。","conversation/revision/verification 一致。"]
+    },
+    {
+      "id": 2,
+      "prompt": "有五篇同一公司的产品博客和三个转载页面，都支持同一结论。请判定独立证据数量。",
+      "expected_output": "One organization/source group, not eight independent sources.",
+      "files": [],
+      "expectations": ["同组织页面不重复计数。","转载链归同一独立组。","保留来源数量但降低独立性。","G2 不因数量多自动通过。"]
+    },
+    {
+      "id": 3,
+      "prompt": "课程声称岗位增长800%，目前找不到原始数据、时间窗和方法；有多个媒体转引。",
+      "expected_output": "Downgrade to trace_only/unverified and exclude from strong decisions.",
+      "files": [],
+      "expectations": ["不把媒体数量当原始证据。","记录 canonical source gap。","不得进入能力门或市场预测。","回答仍说明可用范围。"]
+    },
+    {
+      "id": 4,
+      "prompt": "独立调用 S2，但没有项目。",
+      "expected_output": "project_missing route S1 without isolated output.",
+      "files": [],
+      "expectations": ["只有 S1 可创建项目。","不创建孤立 S2。","裸材料不算 G1。"]
+    },
+    {
+      "id": 5,
+      "prompt": "项目存在但 G1 未通过，调用 S2。",
+      "expected_output": "Blocked transaction routed to S1.",
+      "files": [],
+      "expectations": ["记录 blocked conversation/prerequisite-check。","S2 业务 not_executed。","route S1。"]
+    }
+  ]
+}

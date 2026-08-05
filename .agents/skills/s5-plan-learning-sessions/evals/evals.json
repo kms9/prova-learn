@@ -1,1 +1,47 @@
-{"skill_name":"plan-learning-sessions","evals":[{"id":1,"prompt":"项目 G1/G3/G4 已通过，请执行 S5。","expected_output":"Project Wiki learning path and strategy transaction with G5 route S6.","files":[],"expectations":["前置检查验证目标、图谱和快照。","最小路径遵守硬先修。","strategy-policy 包含适用、禁用、依据和切换规则。","会话、日程、复习、退出标准和 mandatory 确认完整。","G5 pass 后 route S6。"]},{"id":2,"prompt":"无项目独立调用 S5，只有课程表。","expected_output":"route S1; course table is unverified.","files":[],"expectations":["不创建孤立计划。","课程表不替代 G3/G4。"]},{"id":3,"prompt":"项目存在但 G4 缺失，独立调用 S5。","expected_output":"blocked transaction routed upstream.","files":[],"expectations":["写 blocked conversation 和 prerequisite-check。","不生成正向 path/schedule。","route 最早缺失阶段。"]}]}
+{
+  "skill_name": "plan-learning-sessions",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "G1/G3/G4 已通过，有真实前沿。执行 S5。",
+      "expected_output": "Minimal connected learning path with G5 route S6.",
+      "files": [],
+      "expectations": ["遵守硬先修。","策略匹配错误类型。","会话含支架、撤架、独立任务和复测。","mandatory 确认完成后 route S6。"]
+    },
+    {
+      "id": 2,
+      "prompt": "快照中 N-003=unknown，N-004=tested_not_mastered。请把 N-003 当成未掌握并安排完整补课。",
+      "expected_output": "Do not equate unknown with not mastered; insert a short probe if prerequisite-critical.",
+      "files": [],
+      "expectations": ["unknown 不等于未掌握。","关键先修用短探针。","避免无证据扩大路径。","记录备选路线。"]
+    },
+    {
+      "id": 3,
+      "prompt": "学习者偏好视觉型，所以所有节点都用视频，不考虑错误类型和迁移表现。",
+      "expected_output": "Reject learning-style matching as the planning basis.",
+      "files": [],
+      "expectations": ["策略依据行为证据和任务。","可使用多重表征但不按学习风格定型。","记录适用/禁用和切换规则。"]
+    },
+    {
+      "id": 4,
+      "prompt": "真实项目没有有效快照，但 simulations 中有76分虚拟画像。请据此生成真实计划。",
+      "expected_output": "Reject simulation-driven planning and route S4.",
+      "files": [],
+      "expectations": ["不消费 fixture 作为真实前沿。","不创建真实 schedule。","route S4。"]
+    },
+    {
+      "id": 5,
+      "prompt": "上一轮列出多个路径默认值，但没有接受全部选项；用户只说继续。",
+      "expected_output": "Keep S5 confirmation pending.",
+      "files": [],
+      "expectations": ["不自动确认多个字段。","记录 confirmed/unconfirmed fields。","不推进 S6。"]
+    },
+    {
+      "id": 6,
+      "prompt": "一次45分钟会话计划教8个新节点并完成迁移和保持测试。",
+      "expected_output": "Reduce cognitive load and split sessions.",
+      "files": [],
+      "expectations": ["聚焦少量节点。","安排分段和渐进披露。","保持测试延后。","更新时间预算。"]
+    }
+  ]
+}
