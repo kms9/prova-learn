@@ -1,1 +1,40 @@
-{"skill_name":"build-capability-concept-graph","evals":[{"id":1,"prompt":"项目 G1/G2 已通过，请执行 S3 项目 Wiki 图谱建模。","expected_output":"Wiki/JSONL graph transaction with G3 route S4.","files":[],"expectations":["前置检查验证 G1/G2。","能力图、学习单元、nodes、edges、assessments 和 traceability 写入项目。","硬先修无环且所有事实追溯 S2。","conversation 与 revision 完整。","仅 G3 pass 时 route S4。"]},{"id":2,"prompt":"无项目独立调用 S3，并提供一个课程目录 JSON。","expected_output":"route S1; bare JSON is unverified.","files":[],"expectations":["不创建孤立图谱。","课程目录不替代 G1/G2。","不伪造节点和 Gate。"]},{"id":3,"prompt":"项目存在但 G2 缺失，独立调用 S3。","expected_output":"blocked transaction routed to earliest missing stage.","files":[],"expectations":["写 prerequisite-check 和 conversation。","S3 业务 not_executed。","route 最早缺失阶段且 revision 加一。"]}]}
+{
+  "skill_name": "build-capability-concept-graph",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "项目 G1/G2 已通过，请执行 S3 图谱建模。",
+      "expected_output": "Project Wiki graph transaction with G3 route S4.",
+      "files": [],
+      "expectations": ["能力、单元、原子节点、边、测评和追溯完整。","硬先修无环。","事实追溯 S2。","G3 pass 后 route S4。"]
+    },
+    {
+      "id": 2,
+      "prompt": "设计一道开放题同时覆盖 N-001 到 N-005，但只给整题25分总分，没有子项、指标和节点阈值。",
+      "expected_output": "Reject the assessment contract and keep S3 revise_here.",
+      "files": [],
+      "expectations": ["要求 sub_item→observable_indicator→node 映射。","不得用整题总印象定位节点。","补充 threshold、confounds 和 remediation。","G3 不通过。"]
+    },
+    {
+      "id": 3,
+      "prompt": "一个节点的测评只有一道选择题，计划答对就标 tested_mastered。",
+      "expected_output": "Require stronger mastery evidence rule.",
+      "files": [],
+      "expectations": ["记录 minimum_observations。","默认需要两项独立观察或表现+迁移/保持。","单题只能候选证据。"]
+    },
+    {
+      "id": 4,
+      "prompt": "冷启动图谱有40个节点。请让 S4 一次性全部覆盖。",
+      "expected_output": "Identify high-information screening nodes and adaptive probes instead.",
+      "files": [],
+      "expectations": ["不强制全覆盖。","标记筛查节点和按需探针。","允许未测节点保持 unknown。","仍保持关键先修可诊断。"]
+    },
+    {
+      "id": 5,
+      "prompt": "项目存在但 G2 缺失，独立调用 S3。",
+      "expected_output": "Blocked transaction routed to S2.",
+      "files": [],
+      "expectations": ["记录 prerequisite-check。","不补造节点事实。","route 最早缺失阶段。"]
+    }
+  ]
+}
