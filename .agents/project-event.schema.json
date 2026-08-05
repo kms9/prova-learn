@@ -55,6 +55,7 @@
     "provenance": {
       "enum": [
         "learner_behavior",
+        "synthetic_learner_behavior",
         "user_provided_unverified",
         "external_evidence",
         "market_signal",
