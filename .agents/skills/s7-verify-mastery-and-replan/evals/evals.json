@@ -1,1 +1,54 @@
-{"skill_name":"verify-mastery-and-replan","evals":[{"id":1,"prompt":"项目 G3–G6 已通过，具有历史模型和多维证据，请执行 S7。","expected_output":"Project Wiki mastery transaction with versioned update, attribution and deterministic route.","files":[],"expectations":["前置检查验证 G3–G6 和历史模型版本。","多维证据不折叠为单题分数。","模型更新记录 before/after、证据和持久化事实。","策略选择与执行归因可区分。","project revision 与 route 正确。"]},{"id":2,"prompt":"无项目独立调用 S7。","expected_output":"project_missing route S1.","files":[],"expectations":["不创建孤立掌握结论。","不接受裸单题为上游通过。"]},{"id":3,"prompt":"项目存在但 G6 缺失，独立调用 S7。","expected_output":"blocked transaction routed upstream.","files":[],"expectations":["写 blocked conversation/prerequisite-check。","不生成掌握或模型更新。","route 最早缺失阶段。"]},{"id":4,"prompt":"前置通过但没有历史 learner snapshot。","expected_output":"route S4 without version zero or all-not-mastered model.","files":[],"expectations":["禁止 model_version=0。","缺记录不等于全部未掌握。"]}]}
+{
+  "skill_name": "verify-mastery-and-replan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "G3-G6 已通过，具有历史真实模型和多维证据。执行 S7。",
+      "expected_output": "Versioned mastery transaction with attribution and deterministic route.",
+      "files": [],
+      "expectations": ["综合正确性、推理、提示、独立性、迁移、置信度和保持。","模型更新可追溯。","按最早污染点路由。","G7 工件通过不等于目标完成。"]
+    },
+    {
+      "id": 2,
+      "prompt": "N-004 一次无提示答对，但没有第二项观察、迁移或保持。判定掌握。",
+      "expected_output": "candidate_mastery/insufficient_evidence, not tested_mastered.",
+      "files": [],
+      "expectations": ["执行最小证据数。","安排新任务复测。","不以单题更新 mastered。"]
+    },
+    {
+      "id": 3,
+      "prompt": "学习者提示后修订正确，近迁移部分通过，延迟保持尚未执行。",
+      "expected_output": "Partial/candidate result and route S7 or S6, not complete.",
+      "files": [],
+      "expectations": ["保留提示依赖。","保持 not_executed 阻止 mastered。","根据问题决定复测或补救。"]
+    },
+    {
+      "id": 4,
+      "prompt": "没有 learner-model backend，但生成 proposed model version 2。请更新 active model。",
+      "expected_output": "Do not persist; keep active version unchanged.",
+      "files": [],
+      "expectations": ["update.status=not_executed。","persistence=not_executed。","proposed version 不当事实。","项目指针不更新。"]
+    },
+    {
+      "id": 5,
+      "prompt": "真实项目引用 simulations 中的虚拟 session 和 mastery evidence。",
+      "expected_output": "Block the model update and route to repair the real evidence chain.",
+      "files": [],
+      "expectations": ["拒绝 synthetic/fixture 进入真实模型。","不更新 project-state。","route S4 或 S6。"]
+    },
+    {
+      "id": 6,
+      "prompt": "所有即时题通过，但最终未见综合任务、远迁移和第7天保持尚未执行。请 complete。",
+      "expected_output": "Do not set GOAL_ACHIEVED or complete.",
+      "files": [],
+      "expectations": ["最终验收未通过。","迁移/保持缺失。","保持 S7 或相应补救路由。"]
+    },
+    {
+      "id": 7,
+      "prompt": "前置通过但没有历史 learner snapshot。",
+      "expected_output": "Route S4 without model version zero.",
+      "files": [],
+      "expectations": ["禁止 version 0。","缺记录不等于全部未掌握。","不生成孤立掌握结论。"]
+    }
+  ]
+}
